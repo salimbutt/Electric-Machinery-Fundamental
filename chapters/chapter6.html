@@ -743,43 +743,153 @@ P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τω<sub>m</sub> = <span class="
 /* ===== 6.3 Armature reaction / commutation ===== */
 section('commutation','DC Fundamentals','6.5 · Armature Reaction & Commutation',(el)=>{
   el.innerHTML=`
+  <style>@media(max-width:900px){.cmgrid{grid-template-columns:1fr!important}}</style>
   <h2 class="title">Problems with Commutation</h2>
   <p class="subttl">§8.4 · Armature reaction, the neutral-plane shift, and the fixes</p>
   <p class="note">Armature current makes its own field that <b>distorts</b> the main pole flux, shifting the <b>magnetic neutral plane</b> (where brushes should sit). The shift grows with load — in the direction of rotation for a <b>generator</b>, against it for a <b>motor</b> — causing brush sparking. It also <b>weakens</b> the net flux (saturation).</p>
+
+  <h3>▶ Commutation lab — watch the neutral plane move, and the brushes spark</h3>
+  <p class="note">End view along the shaft: N pole on top, S below, armature turning anticlockwise. Each brush short‑circuits whichever coil is passing it. If that coil is <b>not</b> on the magnetic neutral plane it still has a voltage in it, the short‑circuit current arcs across the brush face, and you see sparks. Blue = main‑field MMF, pink = armature MMF (grows with load), white = their resultant. Pick a fix and watch what each one actually does.</p>
   <div class="card">
-    <div class="grid2">
-      <div>
-        <label class="ctl"><span class="lab">Load (armature current) <span class="val" id="cm_l_v"></span></span><input type="range" id="cm_l" min="0" max="100" value="50" step="1"></label>
-        <label class="ctl"><span class="lab">Machine</span><select id="cm_t"><option value="gen">generator</option><option value="mot">motor</option></select></label>
-        <label class="ctl" style="margin:6px 0"><input type="checkbox" id="cm_comp" style="width:auto"> interpoles + compensating windings</label>
-        <div class="out" id="cm_out"></div>
-      </div>
-      <div><canvas id="cm_can" width="380" height="300"></canvas></div>
+    <div class="tabs" id="cm_fix" style="margin:0 0 6px">
+      <div class="t on" data-f="none">✗ No fix</div>
+      <div class="t" data-f="field">① Strong field</div>
+      <div class="t" data-f="brush">② Shift brushes</div>
+      <div class="t" data-f="comp">③ Compensating winding</div>
+      <div class="t" data-f="inter">④ Interpoles</div>
     </div>
+    <div class="cmgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start;margin-top:8px">
+      <div>
+        <div class="tabs" id="cm_mode" style="margin:0 0 8px"><div class="t on" data-m="gen">⚡ Generator</div><div class="t" data-m="mot">⚙ Motor</div></div>
+        <label class="ctl"><span class="lab"><span>Load — armature current I<sub>A</sub></span> <span class="val" id="cm_ia_v"></span></span><input type="range" id="cm_ia" min="0" max="100" step="1" value="60"></label>
+        <label class="ctl" id="cm_if_row"><span class="lab"><span>Main field strength I<sub>F</sub></span> <span class="val" id="cm_if_v"></span></span><input type="range" id="cm_if" min="50" max="200" step="5" value="100"></label>
+        <label class="ctl" id="cm_b_row"><span class="lab"><span>Brush position (from geometric neutral)</span> <span class="val" id="cm_b_v"></span></span><input type="range" id="cm_b" min="-40" max="40" step="1" value="0"></label>
+        <div class="flex" style="gap:8px"><button class="btn" id="cm_run" style="flex:1">⏸ Pause</button><button class="btn ghost" id="cm_auto" style="flex:1">🎯 Put brushes on the neutral</button></div>
+        <div class="out" id="cm_out" style="font-size:12.5px"></div>
+      </div>
+      <canvas id="cm_can" width="640" height="480" style="width:100%"></canvas>
+    </div>
+    <div id="cm_why" class="warnbox" style="margin-top:12px"></div>
   </div>
-  <div class="grid3">
-    <div class="card tight"><b>Interpoles</b><br>small poles on the neutral axis, series‑connected so they track load; cancel the L·di/dt commutation voltage. Polarity = next main pole (gen) / previous (motor).</div>
-    <div class="card tight"><b>Compensating windings</b><br>conductors in the pole faces carrying armature current in opposition → cancel the flux distortion <i>everywhere</i> under the poles (expensive).</div>
-    <div class="card tight"><b>Brush shifting</b><br>the old fix: rotate brushes to the new neutral — but the neutral moves with load, so it only works at one load. Obsolete.</div>
+
+  <h3>The four fixes, side by side</h3>
+  <div class="grid2">
+    <div class="card tight"><b>① Strong main field</b><br>make the pole MMF large next to the armature MMF, so the same armature current tilts the resultant less (θ ≈ tan⁻¹ F<sub>A</sub>/F<sub>F</sub>). High‑reluctance pole tips (chamfered / laminated with slits) work the same way. Cheap, but only <i>reduces</i> the shift.</div>
+    <div class="card tight"><b>② Brush shifting</b><br>the old fix: rotate brushes to the new neutral — but the neutral moves with load, so it only works at one load. Obsolete.</div>
+    <div class="card tight"><b>③ Compensating windings</b><br>conductors in the pole faces carrying armature current in opposition → cancel the flux distortion <i>everywhere</i> under the poles (expensive).</div>
+    <div class="card tight"><b>④ Interpoles</b><br>small poles on the neutral axis, series‑connected so they track load; cancel the L·di/dt commutation voltage. Polarity = next main pole (gen) / previous (motor).</div>
   </div>`;
-  const cx=$('#cm_can').getContext('2d');
-  const upd=()=>{const l=+$('#cm_l').value,t=$('#cm_t').value,comp=$('#cm_comp').checked;$('#cm_l_v').textContent=l+'%';
-    const shift=comp?0:(t==='gen'?1:-1)*l/100*35;
-    $('#cm_out').innerHTML=comp?`Neutral plane held fixed ✓ (armature reaction cancelled)\nNo brush sparking at any load.`:
-`Neutral‑plane shift ≈ <span class="k">${fmt(Math.abs(shift),0)}°</span> ${shift>0?'(with rotation)':shift<0?'(against rotation)':''}\n${l>60?'⚠ heavy sparking likely at the brushes':'brushes off the true neutral'}`;
-    cx.clearRect(0,0,380,300);const ox=190,oy=150,R=110;
-    // stator poles N (top) S (bottom)
-    cx.fillStyle='#3a4570';cx.font='16px system-ui';cx.fillText('N',ox-8,40);cx.fillText('S',ox-6,275);
-    cx.strokeStyle='#2a2f4a';cx.beginPath();cx.arc(ox,oy,R,0,7);cx.stroke();
-    // main flux vertical (down)
-    cx.strokeStyle='#5b8cff';cx.lineWidth=2;cx.beginPath();cx.moveTo(ox,oy-R);cx.lineTo(ox,oy+R);cx.stroke();
-    // neutral plane (should be horizontal), shifted by 'shift' deg
-    const a=(90+shift)*Math.PI/180;
-    cx.strokeStyle='#ff6b81';cx.lineWidth=2;cx.setLineDash([6,4]);cx.beginPath();cx.moveTo(ox-R*Math.cos(a),oy-R*Math.sin(a));cx.lineTo(ox+R*Math.cos(a),oy+R*Math.sin(a));cx.stroke();cx.setLineDash([]);
-    cx.fillStyle='#ff6b81';cx.font='12px system-ui';cx.fillText('brush axis',ox+R*Math.cos(a)-30,oy+R*Math.sin(a)+16);
-    // brushes
-    cx.fillStyle='#ffcc66';cx.beginPath();cx.arc(ox-R*Math.cos(a),oy-R*Math.sin(a),5,0,7);cx.arc(ox+R*Math.cos(a),oy+R*Math.sin(a),5,0,7);cx.fill();};
-  ['cm_l'].forEach(id=>$('#'+id).oninput=upd);$('#cm_t').onchange=upd;$('#cm_comp').onchange=upd;upd();
+
+  const can=$('#cm_can'),c=can.getContext('2d'),W=640,H=480,ox=290,oy=240,D2R=Math.PI/180;
+  const R_ST=178,R_PS=150,R_AR=118,R_SL=103,R_CM=46,NC=20,POLE=55,STEP=0.5;
+  let fix='none',mode='gen',run=true,th=0;
+  const pt=(r,d)=>({x:ox+r*Math.cos(d*D2R),y:oy-r*Math.sin(d*D2R)});
+  const P=()=>({Ia:+$('#cm_ia').value,If:+$('#cm_if').value,b:+$('#cm_b').value});
+  /* pedagogical model — relative MMFs. F_A/F_F = 0.47 at rated load & rated field gives a ≈25° neutral-plane shift. */
+  const M=()=>{const p=P(),dir=mode==='gen'?1:-1,Ff=p.If/100,Fa0=0.47*p.Ia/100,Fa=fix==='comp'?Fa0*0.06:Fa0;
+    const thLean=Math.atan2(Fa,Ff)/D2R*dir,thMNP=fix==='inter'?0:thLean,beta=fix==='brush'?p.b:0,mis=Math.abs(thMNP-beta);
+    const sN=mis*p.Ia/100,sR=(fix==='inter'?0:1)*0.03*p.Ia,S=sN+sR;
+    const wC=(fix==='comp'?0:1)*6*Math.pow((p.Ia/100)/Ff,2),wD=15*(p.Ia/100)/Ff*Math.abs(Math.sin(beta*D2R))/0.5,wk=wC+wD;
+    const v=S<1.5?['Clean ✓','#38d39f','okbox']:S<5?['Minor sparking','#ffcc66','warnbox']:S<15?['Sparking ⚠','#ff9f43','warnbox']:['Severe sparking ✗','#ff6b81','badbox'];
+    return {...p,dir,Ff,Fa,Fa0,thLean,thMNP,beta,mis,sN,sR,S,wC,wD,wk,v};};
+
+  function arrow(x1,y1,x2,y2,col,w,head){c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w||2;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();const a=Math.atan2(y2-y1,x2-x1),h=head||8;c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-h*Math.cos(a-.42),y2-h*Math.sin(a-.42));c.lineTo(x2-h*Math.cos(a+.42),y2-h*Math.sin(a+.42));c.closePath();c.fill();}
+  function dotCross(x,y,r,out,col,w){c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w||1.4;c.beginPath();c.arc(x,y,r,0,7);c.stroke();if(out){c.beginPath();c.arc(x,y,r*.38,0,7);c.fill();}else{const d=r*.6;c.beginPath();c.moveTo(x-d,y-d);c.lineTo(x+d,y+d);c.moveTo(x-d,y+d);c.lineTo(x+d,y-d);c.stroke();}}
+  function axisLine(deg,r,col,dash,w){const a=pt(r,deg),b=pt(r,deg+180);c.strokeStyle=col;c.lineWidth=w||1.5;c.setLineDash(dash||[6,5]);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.setLineDash([]);}
+  function label(txt,x,y,col,size,align,bold){c.fillStyle=col||'#9aa3c4';c.font=(bold?'bold ':'')+(size||11)+'px system-ui';c.textAlign=align||'start';c.fillText(txt,x,y);c.textAlign='start';}
+  function sparks(x,y,S,ang){if(S<1.5)return;const n=Math.min(16,Math.round(S/1.4)+1),rad=9+Math.min(22,S*.8);
+    const g=c.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,'rgba(255,236,170,'+Math.min(.95,.3+S*.03)+')');g.addColorStop(.5,'rgba(255,170,60,'+Math.min(.5,.1+S*.015)+')');g.addColorStop(1,'rgba(255,120,40,0)');c.fillStyle=g;c.beginPath();c.arc(x,y,rad,0,7);c.fill();
+    for(let i=0;i<n;i++){let a=(ang+(Math.random()-.5)*150)*D2R,px=x,py=y;const segs=2+Math.floor(Math.random()*3);c.strokeStyle=Math.random()<.45?'#fff4c2':Math.random()<.5?'#ffcc66':'#ff9f43';c.lineWidth=.7+Math.random()*1.3;c.globalAlpha=.45+Math.random()*.55;c.beginPath();c.moveTo(px,py);
+      for(let s=0;s<segs;s++){const len=3+Math.random()*(5+S*.45);a+=(Math.random()-.5)*1.5;px+=Math.cos(a)*len;py-=Math.sin(a)*len;c.lineTo(px,py);}c.stroke();}
+    c.globalAlpha=1;}
+
+  function draw(){const m=M();c.clearRect(0,0,W,H);
+    /* ---- stator yoke ---- */
+    c.strokeStyle='#2a2f4a';c.lineWidth=14;c.beginPath();c.arc(ox,oy,R_ST+7,0,7);c.stroke();
+    c.strokeStyle='#3a4063';c.lineWidth=1;c.beginPath();c.arc(ox,oy,R_ST+14,0,7);c.stroke();
+    /* ---- main poles N (top) & S (bottom) ---- */
+    const strong=fix==='field';
+    const shoe=(deg,txt)=>{const a1=-(deg+POLE)*D2R,a2=-(deg-POLE)*D2R;c.fillStyle=strong?'#46548f':'#3a4570';c.strokeStyle=strong?'#9fb0ea':'#7d8ab8';c.lineWidth=1.3;c.beginPath();c.arc(ox,oy,R_ST,a1,a2,false);c.arc(ox,oy,R_PS,a2,a1,true);c.closePath();c.fill();c.stroke();const l=pt((R_ST+R_PS)/2,deg);label(txt,l.x,l.y+6,'#e8ebf7',17,'center',true);};
+    shoe(90,'N');shoe(270,'S');
+    /* ---- compensating winding (③): conductors in the pole faces, opposite to the armature below ---- */
+    if(fix==='comp'){for(const [deg,topOut] of [[90,false],[270,true]]){for(const k of [-2,-1,1,2]){const q=pt(R_PS+9,deg+k*19);const out=mode==='gen'?topOut:!topOut;dotCross(q.x,q.y,5,out,'#38d39f',1.5);}}
+      label('green ⊙⊗ = compensating winding in the pole faces · in series with the armature · current opposite to the conductors beneath',W/2,H-24,'#38d39f',10,'center');}
+    /* ---- interpoles (④): small series poles on the neutral axis ---- */
+    if(fix==='inter'){const pol=mode==='gen'?['N','S']:['S','N'];[0,180].forEach((deg,i)=>{const a1=-(deg+9)*D2R,a2=-(deg-9)*D2R;c.fillStyle='#17483a';c.strokeStyle='#38d39f';c.lineWidth=1.4;c.beginPath();c.arc(ox,oy,R_ST,a1,a2,false);c.arc(ox,oy,R_PS+4,a2,a1,true);c.closePath();c.fill();c.stroke();
+      const l=pt((R_ST+R_PS+4)/2,deg);label(pol[i],l.x,l.y+5,'#bff0dc',13,'center',true);
+      const inward=pol[i]==='N',s=pt(R_PS+2,deg),e=pt(R_PS-22,deg);if(inward)arrow(s.x,s.y,e.x,e.y,'#38d39f',2,7);else arrow(e.x,e.y,s.x,s.y,'#38d39f',2,7);
+      for(const k of [-1,1]){const q=pt(164,deg+k*13);let out=k>0;if(deg===180)out=!out;if(mode==='mot')out=!out;dotCross(q.x,q.y,4.5,out,'#38d39f',1.4);}});
+      label('green = interpoles on the neutral axis · in series with the armature · polarity = '+(mode==='gen'?'next':'previous')+' main pole in the direction of rotation',W/2,H-24,'#38d39f',10,'center');}
+    /* ---- flux lines between the poles: lean with the resultant, crowd at the trailing tip (thicker) and thin at the leading tip ---- */
+    const nL=Math.round(3+4*m.If/100)|1,lean=m.thLean,crowdK=Math.min(1,Math.abs(lean)/25);
+    for(let i=0;i<nL;i++){const d=-30+60*i/(nL-1),s=pt(R_PS-1,90+d+lean),e=pt(R_PS-1,270-d+lean);
+      const crowd=m.dir*(d/30)*crowdK;const wdt=Math.max(.45,1.35+1.25*crowd),al=Math.max(.18,Math.min(1,.6+.38*crowd));
+      c.strokeStyle='rgba(91,140,255,'+al.toFixed(2)+')';c.lineWidth=wdt;c.beginPath();c.moveTo(s.x,s.y);c.lineTo(e.x,e.y);c.stroke();
+      const mid={x:(s.x+e.x)/2,y:(s.y+e.y)/2},dx=(e.x-s.x),dy=(e.y-s.y),L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L;c.fillStyle=c.strokeStyle;c.beginPath();c.moveTo(mid.x+ux*5,mid.y+uy*5);c.lineTo(mid.x-ux*3-uy*3.5,mid.y-uy*3+ux*3.5);c.lineTo(mid.x-ux*3+uy*3.5,mid.y-uy*3-ux*3.5);c.closePath();c.fill();}
+    /* ---- armature core, conductors ---- */
+    c.fillStyle='#141830';c.strokeStyle='#2f3659';c.lineWidth=1.5;c.beginPath();c.arc(ox,oy,R_AR,0,7);c.fill();c.stroke();
+    const commZone=[];for(let j=0;j<NC;j++){const ph=th+j*360/NC,s=Math.sin((ph-m.beta)*D2R),out=(s>0)===(mode==='gen'),q=pt(R_SL,ph);const inZone=Math.abs(s)<Math.sin(9.5*D2R);
+      dotCross(q.x,q.y,7,out,inZone?'#ffe9b0':'#ff9f43',inZone?1.8:1.4);if(inZone)commZone.push({ph,q});}
+    /* ---- axes: geometric neutral (fixed), magnetic neutral (moves), brush axis ---- */
+    axisLine(0,R_ST+2,'#5c6484',[5,6],1.2);label('geometric neutral',ox+R_ST+18,oy+14,'#5c6484',10.5);
+    const mnpCol='#ff6b81',near=Math.abs(m.thMNP)<1.5,mnpRight=m.thMNP>=2;axisLine(m.thMNP,R_PS-4,mnpCol,[7,5],1.8);
+    if(near){label(fix==='inter'?'neutral held at brushes ✓':fix==='comp'?'neutral back on geometric ✓':'magnetic neutral = geometric',ox+R_ST+18,oy+30,fix!=='none'?'#38d39f':mnpCol,10);}
+    else{const q=pt(R_ST+20,m.thMNP+(mnpRight?0:180));label('magnetic neutral',q.x,q.y-2,mnpCol,10.5,mnpRight?'start':'end');}
+    if(fix==='brush'&&Math.abs(m.beta)>0.5){axisLine(m.beta,R_PS-4,'#ffcc66',[3,4],1.3);const q=pt(R_ST+20,m.beta+(mnpRight?180:0));label('brush axis',q.x,q.y-2,'#ffcc66',10.5,mnpRight?'end':'start');}
+    /* ---- commutator + brushes ---- */
+    for(let j=0;j<NC;j++){const a1=-(th+j*360/NC)*D2R,a2=-(th+(j+1)*360/NC)*D2R;c.fillStyle=j%2?'#a86a45':'#8f5636';c.beginPath();c.arc(ox,oy,R_CM,a1,a2,true);c.arc(ox,oy,R_CM-13,a2,a1,false);c.closePath();c.fill();c.strokeStyle='#4a2d1c';c.lineWidth=.8;c.stroke();}
+    c.fillStyle='#1b1e30';c.beginPath();c.arc(ox,oy,R_CM-13,0,7);c.fill();c.fillStyle='#3a4063';c.beginPath();c.arc(ox,oy,7,0,7);c.fill();
+    commZone.forEach(z=>{const a=pt(R_CM+1,z.ph);c.strokeStyle='rgba(255,233,176,.55)';c.lineWidth=1.2;c.setLineDash([2,3]);c.beginPath();c.moveTo(z.q.x,z.q.y);c.lineTo(a.x,a.y);c.stroke();c.setLineDash([]);});
+    [0,180].forEach(k=>{const bd=m.beta+k,ctr=pt(R_CM+9,bd);c.save();c.translate(ctr.x,ctr.y);c.rotate(-bd*D2R);c.fillStyle='#3b3f52';c.strokeStyle='#b8c0d8';c.lineWidth=1.2;c.beginPath();c.rect(-9,-7,18,14);c.fill();c.stroke();c.fillStyle='#9aa3c4';c.fillRect(9,-1.5,10,3);c.restore();
+      const cp=pt(R_CM,bd);sparks(cp.x,cp.y,m.S,bd);});
+    {const q=pt(R_CM+22,m.beta+210);label('brush',q.x,q.y+4,'#b8c0d8',10.5,'center');}
+    /* ---- rotation arrow ---- */
+    c.strokeStyle='#9aa3c4';c.lineWidth=1.6;c.beginPath();c.arc(ox,oy,R_ST+30,-(112)*D2R,-(142)*D2R,true);c.stroke();{const e=pt(R_ST+30,142),a=pt(R_ST+30,138);arrow(a.x,a.y,e.x,e.y,'#9aa3c4',1.6,7);}
+    {const q=pt(R_ST+46,127);label('rotation',q.x,q.y+4,'#9aa3c4',10.5,'center');}
+    /* ---- corner captions ---- */
+    label(mode==='gen'?'GENERATOR — driven anticlockwise':'MOTOR — running anticlockwise',8,18,'#e8ebf7',12);
+    label(mode==='gen'?'neutral shifts WITH rotation':'neutral shifts AGAINST rotation',8,34,'#ff6b81',11);
+    const fixName={none:'no correction',field:'① strong main field',brush:'② brushes shifted',comp:'③ compensating winding',inter:'④ interpoles'}[fix];
+    label('fix: '+fixName,W-8,18,fix==='none'?'#9aa3c4':'#38d39f',12,'end');
+    label('commutation: '+m.v[0],W-8,36,m.v[1],12,'end',true);
+    /* ---- MMF vector inset ---- */
+    const ix=565,iy=360,sc=38;c.fillStyle='rgba(23,26,43,.92)';c.strokeStyle='#2a2f4a';c.lineWidth=1;c.beginPath();c.rect(ix-62,iy-58,126,136);c.fill();c.stroke();label('MMF vectors',ix,iy-44,'#9aa3c4',10.5,'center');
+    /* F_A always lies along the brush axis: with the brushes shifted by β it turns with them and gains a component against F_F */
+    const sgn=m.dir>0?1:-1,al=m.dir>0?'start':'end',alO=m.dir>0?'end':'start',fax=m.Fa*sc*m.dir*Math.cos(m.beta*D2R),fay=-m.Fa*sc*m.dir*Math.sin(m.beta*D2R),ffy=iy+sc*m.Ff;
+    arrow(ix,iy,ix,ffy,'#5b8cff',2.4,8);label('F_F',ix-sgn*6,ffy+3,'#5b8cff',11,alO);
+    if(Math.abs(fax)+Math.abs(fay)>1.5){arrow(ix,iy,ix+fax,iy+fay,'#ff6b81',2.4,8);label('F_A',ix+fax+sgn*5,iy+fay-4,'#ff6b81',11,al);}else label('F_A ≈ 0',ix+6,iy-5,'#38d39f',10.5);
+    arrow(ix,iy,ix+fax,ffy+fay,'#e8ebf7',2,8);label('F_R',ix+fax+sgn*6,ffy+fay+4,'#e8ebf7',11,al);
+    if(fix==='brush'&&Math.abs(fay)>1.2){c.setLineDash([3,3]);arrow(ix,iy,ix,iy+fay,'#ff6b81',1.6,6);c.setLineDash([]);label('demag.',ix-sgn*6,iy+fay-3,'#ff6b81',9.5,alO);}
+    /* ---- legend ---- */
+    label('⊙ out of page   ⊗ into page   ·   bright ring = coil being commutated (short‑circuited by the brush)   ·   copper ring = commutator',8,H-8,'#6b7398',10);}
+
+  const bar=(v,mx,n)=>{const k=Math.round(Math.max(0,Math.min(1,v/mx))*n);return '▮'.repeat(k)+'▯'.repeat(n-k);};
+  function readout(){const m=M();$('#cm_ia_v').textContent=m.Ia+'%';$('#cm_if_v').textContent=m.If+'%';$('#cm_b_v').textContent=(m.b>0?'+':'')+m.b+'°';
+    const shiftTxt=Math.abs(m.thLean)<0.5?'0°':fmt(Math.abs(m.thLean),0)+'° '+(m.thLean>0?'(anticlockwise — with rotation)':'(clockwise — against rotation)');
+    const atBrush=fix==='inter'?' → <span class="k">0° at the brushes</span> (interpoles)':'';
+    $('#cm_out').innerHTML=`Neutral‑plane shift  <span class="k">${shiftTxt}</span>${atBrush}
+Brushes sit at       <span class="k">${(m.beta>0?'+':'')+fmt(m.beta,0)}°</span>  →  mismatch <span class="k">${fmt(m.mis,0)}°</span>
+Sparking  neutral‑plane  <span style="color:#ff9f43">${bar(m.sN,25,8)}</span>
+          L·di/dt        <span style="color:#ff9f43">${bar(m.sR,3,8)}</span>
+          <b style="color:${m.v[1]}">${m.v[0]}</b>
+Flux weakening       <span class="k">${fmt(m.wk,1)}%</span>${m.wD>0.2?'  (of which brush‑shift demagnetising '+fmt(m.wD,1)+'%)':''}`;
+    const why={none:`<b>What is going wrong.</b> Load current in the armature builds its own MMF at right angles to the main field. The resultant tilts, the magnetic neutral plane tilts with it — but the brushes are still on the geometric neutral. So each brush now short‑circuits a coil that still has an induced voltage in it, and the circulating current arcs across the brush face. Slide the load up and watch the arcing grow; the flux also crowds into one pole tip (thicker lines) and, through saturation, the net flux drops.`,
+      field:`<b>① Make the main field strong.</b> The tilt is θ ≈ tan⁻¹(F<sub>A</sub>/F<sub>F</sub>): the same armature MMF is now a smaller fraction of the total, so the neutral moves less and sparking falls. Pole tips of high reluctance (chamfered, or laminated with slits) work the same way by starving the cross‑flux path. Cheap — but it only <i>reduces</i> the shift, never removes it, and you cannot raise the field without limit (saturation, field I²R heating).`,
+      brush:`<b>② Shift the brushes.</b> Rotate the brush axis onto the new neutral and the sparking stops — <i>at this load only</i>. Change the load and the neutral runs away from the brushes again. Worse: with the brush axis tilted, part of the armature MMF now points straight against the main field (the dashed “demagnetising” arrow in the inset), so the flux is weakened even more. Obsolete except on very small machines.`,
+      comp:`<b>③ Compensating winding.</b> Conductors laid in slots cut into the pole faces, connected in series with the armature, carrying current <i>opposite</i> to the armature conductors directly beneath them. Their MMF cancels the armature MMF under the poles at every load — no tilt, no flux crowding, no flux weakening. What it does not fix is the L·di/dt reactance voltage in the coil being commutated, so it is fitted <i>together with</i> interpoles. Expensive: large machines and heavy, fast‑changing loads.`,
+      inter:`<b>④ Interpoles (commutating poles).</b> Narrow poles on the neutral axis, in series with the armature so their strength tracks the load automatically. Their flux cancels the armature cross‑flux in the neutral zone, and it also induces a voltage in the coil being commutated that cancels the L·di/dt kick — so sparking stops at every load, with no adjustment. The flux under the main poles is still distorted (only a compensating winding fixes that), but the brushes no longer care. The standard solution on almost every modern DC machine.`}[fix];
+    const w=$('#cm_why');w.className=m.v[2];w.innerHTML=why;}
+  function cmLoop(){if($('#sec-commutation').classList.contains('on')){if(run)th=(th+STEP)%360;draw();}requestAnimationFrame(cmLoop);}
+  function setFix(f){fix=f;$$('#cm_fix .t').forEach(x=>x.classList.toggle('on',x.dataset.f===f));
+    $('#cm_if_row').style.display=f==='field'?'':'none';$('#cm_b_row').style.display=f==='brush'?'':'none';$('#cm_auto').style.display=f==='brush'?'':'none';
+    if(f==='field'){if(+$('#cm_if').value<=100)$('#cm_if').value=160;}else $('#cm_if').value=100;
+    if(f!=='brush')$('#cm_b').value=0;readout();}
+  $$('#cm_fix .t').forEach(t=>t.onclick=()=>setFix(t.dataset.f));
+  $$('#cm_mode .t').forEach(t=>t.onclick=()=>{$$('#cm_mode .t').forEach(x=>x.classList.toggle('on',x===t));mode=t.dataset.m;readout();});
+  ['cm_ia','cm_if','cm_b'].forEach(id=>$('#'+id).oninput=readout);
+  $('#cm_run').onclick=()=>{run=!run;$('#cm_run').textContent=run?'⏸ Pause':'▶ Play';};
+  $('#cm_auto').onclick=()=>{const m=M();$('#cm_b').value=Math.round(m.thLean);readout();};
+  setFix('none');draw();cmLoop();
 });
 
 /* ===== 6.4 power flow / efficiency ===== */
