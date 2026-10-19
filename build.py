@@ -3695,7 +3695,7 @@ def build():
           </div>
           <div class="instructor-details">
             <span class="instructor-badge">INSTRUCTOR</span>
-            <h4 class="instructor-name">Dr. Muhammad Salim Butt, Assistant Professor</h4>
+            <h4 class="instructor-name">Dr. Muhammad Salim Butt<br><span style="font-size:13.5px;font-weight:500;color:var(--text-muted);">Assistant Professor</span></h4>
             <p class="instructor-title">Electrical Engineering Department</p>
             <p class="instructor-affil">UET</p>
             <a href="mailto:salimbutt@uet.edu.pk" class="instructor-email">salimbutt@uet.edu.pk</a>
