@@ -797,6 +797,18 @@ section('commutation','DC Fundamentals','6.5 · Armature Reaction & Commutation'
   function dotCross(x,y,r,out,col,w){c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w||1.4;c.beginPath();c.arc(x,y,r,0,7);c.stroke();if(out){c.beginPath();c.arc(x,y,r*.38,0,7);c.fill();}else{const d=r*.6;c.beginPath();c.moveTo(x-d,y-d);c.lineTo(x+d,y+d);c.moveTo(x-d,y+d);c.lineTo(x+d,y-d);c.stroke();}}
   function axisLine(deg,r,col,dash,w){const a=pt(r,deg),b=pt(r,deg+180);c.strokeStyle=col;c.lineWidth=w||1.5;c.setLineDash(dash||[6,5]);c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();c.setLineDash([]);}
   function label(txt,x,y,col,size,align,bold){c.fillStyle=col||'#9aa3c4';c.font=(bold?'bold ':'')+(size||11)+'px system-ui';c.textAlign=align||'start';c.fillText(txt,x,y);c.textAlign='start';}
+  /* tiny math typesetter for canvas labels: text inside $…$ is maths — letters italic serif, _x or _{xx} = subscript, ^x or ^{xx} = superscript. Returns the width; dry=true measures only. */
+  function mtxt(ctx,t,x,y,col,size,align,bold,dry){size=size||11;const SER='"Cambria Math","Times New Roman",Georgia,serif',LET=/[A-Za-zα-ωΑ-Ω]/,runs=[];
+    const push=(s,f,dy,k)=>{const l=runs[runs.length-1];if(l&&l.f===f&&l.dy===dy&&l.k===k)l.s+=s;else runs.push({s,f,dy,k});};
+    t.split('$').forEach((p,i)=>{if(i%2===0){if(p)push(p,'plain',0,1);return;}
+      let j=0;while(j<p.length){const ch=p[j];
+        if(ch==='_'||ch==='^'){let s='';if(p[j+1]==='{'){const e=p.indexOf('}',j+2);s=p.slice(j+2,e<0?p.length:e);j=e<0?p.length:e+1;}else{s=p[j+1]||'';j+=2;}
+          const single=s.length===1&&LET.test(s);push(s,single?'ital':'up',ch==='_'?0.3:-0.42,0.72);continue;}
+        push(ch,LET.test(ch)?'ital':'up',0,1);j++;}});
+    const font=r=>(r.f==='ital'?'italic ':'')+(bold?'bold ':'')+(size*r.k).toFixed(1)+'px '+(r.f==='plain'?'system-ui':SER);
+    let w=0;for(const r of runs){ctx.font=font(r);r.w=ctx.measureText(r.s).width;w+=r.w;}if(dry)return w;
+    let cx=align==='center'?x-w/2:align==='end'?x-w:x;ctx.textAlign='start';ctx.fillStyle=col||'#9aa3c4';
+    for(const r of runs){ctx.font=font(r);ctx.fillText(r.s,cx,y+r.dy*size);cx+=r.w;}return w;}
   function sparks(x,y,S,ang){if(S<1.5)return;const n=Math.min(16,Math.round(S/1.4)+1),rad=9+Math.min(22,S*.8);
     const g=c.createRadialGradient(x,y,0,x,y,rad);g.addColorStop(0,'rgba(255,236,170,'+Math.min(.95,.3+S*.03)+')');g.addColorStop(.5,'rgba(255,170,60,'+Math.min(.5,.1+S*.015)+')');g.addColorStop(1,'rgba(255,120,40,0)');c.fillStyle=g;c.beginPath();c.arc(x,y,rad,0,7);c.fill();
     for(let i=0;i<n;i++){let a=(ang+(Math.random()-.5)*150)*D2R,px=x,py=y;const segs=2+Math.floor(Math.random()*3);c.strokeStyle=Math.random()<.45?'#fff4c2':Math.random()<.5?'#ffcc66':'#ff9f43';c.lineWidth=.7+Math.random()*1.3;c.globalAlpha=.45+Math.random()*.55;c.beginPath();c.moveTo(px,py);
@@ -856,9 +868,9 @@ section('commutation','DC Fundamentals','6.5 · Armature Reaction & Commutation'
     const ix=565,iy=360,sc=38;c.fillStyle='rgba(23,26,43,.92)';c.strokeStyle='#2a2f4a';c.lineWidth=1;c.beginPath();c.rect(ix-62,iy-58,126,136);c.fill();c.stroke();label('MMF vectors',ix,iy-44,'#9aa3c4',10.5,'center');
     /* F_A always lies along the brush axis: with the brushes shifted by β it turns with them and gains a component against F_F */
     const sgn=m.dir>0?1:-1,al=m.dir>0?'start':'end',alO=m.dir>0?'end':'start',fax=m.Fa*sc*m.dir*Math.cos(m.beta*D2R),fay=-m.Fa*sc*m.dir*Math.sin(m.beta*D2R),ffy=iy+sc*m.Ff;
-    arrow(ix,iy,ix,ffy,'#5b8cff',2.4,8);label('F_F',ix-sgn*6,ffy+3,'#5b8cff',11,alO);
-    if(Math.abs(fax)+Math.abs(fay)>1.5){arrow(ix,iy,ix+fax,iy+fay,'#ff6b81',2.4,8);label('F_A',ix+fax+sgn*5,iy+fay-4,'#ff6b81',11,al);}else label('F_A ≈ 0',ix+6,iy-5,'#38d39f',10.5);
-    arrow(ix,iy,ix+fax,ffy+fay,'#e8ebf7',2,8);label('F_R',ix+fax+sgn*6,ffy+fay+4,'#e8ebf7',11,al);
+    arrow(ix,iy,ix,ffy,'#5b8cff',2.4,8);mtxt(c,'$F_F$',ix-sgn*6,ffy+3,'#5b8cff',12,alO);
+    if(Math.abs(fax)+Math.abs(fay)>1.5){arrow(ix,iy,ix+fax,iy+fay,'#ff6b81',2.4,8);mtxt(c,'$F_A$',ix+fax+sgn*5,iy+fay-4,'#ff6b81',12,al);}else mtxt(c,'$F_A$ ≈ 0',ix+6,iy-5,'#38d39f',11);
+    arrow(ix,iy,ix+fax,ffy+fay,'#e8ebf7',2,8);mtxt(c,'$F_R$',ix+fax+sgn*6,ffy+fay+4,'#e8ebf7',12,al);
     if(fix==='brush'&&Math.abs(fay)>1.2){c.setLineDash([3,3]);arrow(ix,iy,ix,iy+fay,'#ff6b81',1.6,6);c.setLineDash([]);label('demag.',ix-sgn*6,iy+fay-3,'#ff6b81',9.5,alO);}
     /* ---- legend ---- */
     label('⊙ out of page   ⊗ into page   ·   bright ring = coil being commutated (short‑circuited by the brush)   ·   copper ring = commutator',8,H-8,'#6b7398',10);}
@@ -895,40 +907,180 @@ Flux weakening       <span class="k">${fmt(m.wk,1)}%</span>${m.wD>0.2?'  (of whi
 /* ===== 6.4 power flow / efficiency ===== */
 section('power','DC Fundamentals','6.6 · Power Flow & Efficiency',(el)=>{
   el.innerHTML=`
+  <style>@media(max-width:900px){.pfgrid{grid-template-columns:1fr!important}}</style>
   <h2 class="title">Power Flow, Losses & Efficiency</h2>
   <p class="subttl">§8.7 / §9.10 · Where the power goes</p>
-  <div class="eq">η = <span class="frac"><span class="n">P<sub>out</sub></span><span class="d">P<sub>in</sub></span></span> ×100%  ;  P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τ<sub>ind</sub>ω<sub>m</sub><span class="tag">(8‑50),(8‑55/56)</span></div>
+  <p class="note">Power enters a DC machine at one end and leaves at the other; on the way, five kinds of loss peel off. In a <b>motor</b> the input is electrical (V<sub>T</sub>I<sub>L</sub>) and the copper losses are paid first; in a <b>generator</b> the input is mechanical (τ<sub>app</sub>ω<sub>m</sub>) and the rotational losses are paid first. The hand‑over point in both is <b>P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τ<sub>ind</sub>ω<sub>m</sub></b> — the one place where the electrical and the mechanical power are equal.</p>
+
+  <h3>▶ Power‑flow lab — drag the load and watch where the watts go</h3>
+  <p class="note">The band is drawn to scale: its thickness is the power still flowing. Each pink branch is a loss (very small branches are given a 4 px minimum so they stay visible). Everything left of the dashed P<sub>conv</sub> line is on one side of the energy conversion, everything right of it on the other. Defaults are Chapman <span class="badge">Example 9‑8</span>: a 250 V shunt motor at 175 A → P<sub>out</sub> ≈ 36.8 kW, η ≈ 84.2 %. Switch to <b>Generator</b> and the same machine runs backwards — the losses come off in the opposite order.</p>
+  <div class="card">
+    <div class="pfgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <div class="tabs" id="pf_mode" style="margin:0 0 8px"><div class="t on" data-m="mot">⚙ Motor</div><div class="t" data-m="gen">⚡ Generator</div></div>
+        <label class="ctl"><span class="lab"><span>Load — line current I<sub>L</sub></span> <span class="val" id="pf_IL_v"></span></span><input type="range" id="pf_IL" min="0" max="350" step="1" value="175"></label>
+        <div class="grid2" style="gap:4px 10px">
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>V<sub>T</sub> (V)</span></span><input type="number" id="pf_VT" value="250" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>I<sub>F</sub> (A)</span></span><input type="number" id="pf_IF" value="5" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>R<sub>A</sub> (Ω)</span></span><input type="number" id="pf_RA" value="0.06" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>V<sub>BD</sub> (V)</span></span><input type="number" id="pf_VBD" value="2" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>Core loss (W)</span></span><input type="number" id="pf_core" value="1584" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>Mechanical loss (W)</span></span><input type="number" id="pf_mech" value="1584" step="any"></label>
+          <label class="ctl" style="margin:4px 0"><span class="lab"><span>Stray (% of P<sub>in</sub>)</span></span><input type="number" id="pf_stray" value="1" step="any"></label>
+        </div>
+        <div class="out" id="pf_out" style="font-size:12.5px"></div>
+      </div>
+      <div>
+        <canvas id="pf_can" width="640" height="336" style="width:100%"></canvas>
+        <canvas id="pf_eta" width="640" height="172" style="width:100%;margin-top:10px"></canvas>
+      </div>
+    </div>
+    <div id="pf_why" class="okbox" style="margin-top:12px"></div>
+  </div>
+
+  <h3>The equations</h3>
+  <div class="card">
+    <div class="eq">η = <span class="frac"><span class="n">P<sub>out</sub></span><span class="d">P<sub>in</sub></span></span> × 100 %<span class="tag">(8‑50)</span></div>
+    <div class="eq">P<sub>conv</sub> = E<sub>A</sub> I<sub>A</sub> = τ<sub>ind</sub> ω<sub>m</sub><span class="tag">(8‑55), (8‑56)</span></div>
+    <div class="eq">P<sub>A</sub> = I<sub>A</sub>² R<sub>A</sub> &nbsp;&nbsp;&nbsp; P<sub>F</sub> = I<sub>F</sub>² R<sub>F</sub> = V<sub>F</sub> I<sub>F</sub> &nbsp;&nbsp;&nbsp; P<sub>BD</sub> = V<sub>BD</sub> I<sub>A</sub><span class="tag">(8‑52), (8‑53), (8‑54)</span></div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="card tight" style="margin:0">
+        <b>⚙ Shunt motor — electrical in, mechanical out</b>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>in</sub> = V<sub>T</sub> I<sub>L</sub></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">I<sub>A</sub> = I<sub>L</sub> − I<sub>F</sub> &nbsp;;&nbsp; E<sub>A</sub> = V<sub>T</sub> − I<sub>A</sub>R<sub>A</sub> − V<sub>BD</sub><span class="tag">(9‑3)</span></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>conv</sub> = P<sub>in</sub> − P<sub>A</sub> − P<sub>F</sub> − P<sub>BD</sub> = E<sub>A</sub> I<sub>A</sub></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>out</sub> = P<sub>conv</sub> − P<sub>core</sub> − P<sub>mech</sub> − P<sub>stray</sub> = τ<sub>load</sub> ω<sub>m</sub></div>
+      </div>
+      <div class="card tight" style="margin:0">
+        <b>⚡ Shunt generator — mechanical in, electrical out</b>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>in</sub> = τ<sub>app</sub> ω<sub>m</sub></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>conv</sub> = P<sub>in</sub> − P<sub>stray</sub> − P<sub>mech</sub> − P<sub>core</sub> = τ<sub>ind</sub> ω<sub>m</sub></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">I<sub>A</sub> = I<sub>L</sub> + I<sub>F</sub> &nbsp;;&nbsp; E<sub>A</sub> = V<sub>T</sub> + I<sub>A</sub>R<sub>A</sub> + V<sub>BD</sub></div>
+        <div class="eq" style="font-size:15.5px;margin:7px 0;padding:7px 10px">P<sub>out</sub> = P<sub>conv</sub> − P<sub>A</sub> − P<sub>F</sub> − P<sub>BD</sub> = V<sub>T</sub> I<sub>L</sub></div>
+      </div>
+    </div>
+    <p class="note" style="margin:10px 0 0">Best efficiency: dη/dI<sub>L</sub> = 0 happens where the load‑dependent losses (≈ I<sub>A</sub>²R<sub>A</sub>) equal the fixed losses (field + core + mechanical). Below that load the fixed losses dominate; above it the copper losses grow as the square of the current. The lower graph marks the point.</p>
+  </div>
   <div class="grid2">
     <div class="card tight"><b>Copper</b> — armature P<sub>A</sub>=I<sub>A</sub>²R<sub>A</sub> (8‑52); field P<sub>F</sub>=I<sub>F</sub>²R<sub>F</sub> (8‑53); brush P<sub>BD</sub>=V<sub>BD</sub>I<sub>A</sub> (8‑54, V<sub>BD</sub>≈2 V)</div>
     <div class="card tight"><b>Rotational</b> — core (∝B²n<sup>1.5</sup>) + mechanical (∝n³); <b>stray</b> ≈ 1% of full load</div>
-  </div>
-  <h3>Efficiency calculator <span class="badge">Example 9‑8</span></h3>
-  <div class="card">
-    <div class="grid3">
-      <label class="ctl"><span class="lab">V<sub>T</sub> (V)</span><input type="number" id="ef_V" value="250" step="any"></label>
-      <label class="ctl"><span class="lab">Line I<sub>L</sub> (A)</span><input type="number" id="ef_IL" value="175" step="any"></label>
-      <label class="ctl"><span class="lab">Field I<sub>F</sub> (A)</span><input type="number" id="ef_IF" value="5" step="any"></label>
-      <label class="ctl"><span class="lab">R<sub>A</sub> (Ω)</span><input type="number" id="ef_RA" value="0.06" step="any"></label>
-      <label class="ctl"><span class="lab">V<sub>BD</sub> (V)</span><input type="number" id="ef_VBD" value="2" step="any"></label>
-      <label class="ctl"><span class="lab">Rotational loss (W)</span><input type="number" id="ef_rot" value="3168" step="any"></label>
-      <label class="ctl"><span class="lab">Stray (% of P<sub>in</sub>)</span><input type="number" id="ef_stray" value="1" step="any"></label>
-    </div>
-    <div class="grid2"><div class="out" id="ef_out"></div><div><canvas id="ef_can" width="380" height="150"></canvas></div></div>
-    <p class="note">Defaults = Example 9‑8 → P<sub>out</sub>≈36.8 kW, η≈84.2%.</p>
   </div>`;
-  const cx=$('#ef_can').getContext('2d');
-  const upd=()=>{const V=+$('#ef_V').value,IL=+$('#ef_IL').value,IF=+$('#ef_IF').value,RA=+$('#ef_RA').value,VBD=+$('#ef_VBD').value,rot=+$('#ef_rot').value,stray=+$('#ef_stray').value/100;
-    const IA=IL-IF,Pin=V*IL,PA=IA*IA*RA,PF=V*IF,Pbr=VBD*IA,Pstray=stray*Pin,loss=PA+PF+Pbr+rot+Pstray,Pout=Pin-loss,eff=Pout/Pin*100;
-    $('#ef_out').innerHTML=`I<sub>A</sub> = I<sub>L</sub>−I<sub>F</sub> = <span class="k">${fmt(IA,0)} A</span>
-P<sub>in</sub> = V<sub>T</sub>I<sub>L</sub> = <span class="k">${fmt(Pin/1000,2)} kW</span>
-P<sub>A</sub>=<span class="k">${fmt(PA,0)}</span> P<sub>F</sub>=<span class="k">${fmt(PF,0)}</span> P<sub>brush</sub>=<span class="k">${fmt(Pbr,0)}</span> W
-P<sub>rot</sub>=<span class="k">${fmt(rot,0)}</span> P<sub>stray</sub>=<span class="k">${fmt(Pstray,0)}</span> W
-P<sub>out</sub> = <span class="k">${fmt(Pout/1000,2)} kW</span>   <b>η = <span class="k">${fmt(eff,1)}%</span></b>`;
-    cx.clearRect(0,0,380,150);const items=[['P_in',Pin,'#5b8cff'],['P_out',Pout,'#38d39f']];const mx=Pin;
-    cx.fillStyle='#5b8cff';cx.fillRect(60,20,Pin/mx*300,26);cx.fillStyle='#38d39f';cx.fillRect(60,60,Pout/mx*300,26);
-    cx.fillStyle='#ff6b81';cx.fillRect(60,100,loss/mx*300,26);
-    cx.fillStyle='#9aa3c4';cx.font='11px system-ui';cx.fillText('P_in',8,37);cx.fillText('P_out',8,77);cx.fillText('losses',8,117);};
-  ['ef_V','ef_IL','ef_IF','ef_RA','ef_VBD','ef_rot','ef_stray'].forEach(id=>$('#'+id).oninput=upd);upd();
+
+  const can=$('#pf_can'),c=can.getContext('2d'),W=640,H=336,ec=$('#pf_eta').getContext('2d'),EW=640,EH=172;
+  let mode='mot',dashOff=0,cur=null,best=null;
+  const P=()=>({IL:+$('#pf_IL').value,VT:+$('#pf_VT').value,IF:+$('#pf_IF').value,RA:+$('#pf_RA').value,VBD:+$('#pf_VBD').value,core:+$('#pf_core').value,mech:+$('#pf_mech').value,s:Math.min(.5,Math.max(0,+$('#pf_stray').value/100))});
+  const kW=x=>Math.abs(x)>=1000?fmt(x/1000,2)+' kW':fmt(x,0)+' W';
+  /* shunt machine: the field is fed from the terminals, so I_A = I_L ∓ I_F */
+  function calc(p,IL,md){IL=IL===undefined?p.IL:IL;md=md||mode;
+    if(md==='mot'){const IA=Math.max(0,IL-p.IF),Pin=p.VT*IL,PF=p.VT*p.IF,PA=IA*IA*p.RA,PBD=p.VBD*IA,Pconv=Pin-PF-PA-PBD,EA=IA>0?Pconv/IA:p.VT,Pstray=p.s*Pin,Pout=Pconv-p.core-p.mech-Pstray,eta=Pin>0?Pout/Pin*100:0;
+      return {IA,Pin,PF,PA,PBD,Pconv,EA,Pstray,Pout,eta,cu:PA+PF+PBD,fixed:PF+p.core+p.mech,loss:Pin-Pout};}
+    const IA=IL+p.IF,Pout=p.VT*IL,PF=p.VT*p.IF,PA=IA*IA*p.RA,PBD=p.VBD*IA,Pconv=Pout+PF+PA+PBD,EA=IA>0?Pconv/IA:p.VT,Pin=(Pconv+p.core+p.mech)/(1-p.s),Pstray=p.s*Pin,eta=Pin>0?Pout/Pin*100:0;
+    return {IA,Pin,PF,PA,PBD,Pconv,EA,Pstray,Pout,eta,cu:PA+PF+PBD,fixed:PF+p.core+p.mech,loss:Pin-Pout};}
+  function bestPoint(p){let b={eta:-1,IL:0},ILmin=null;const mx=+$('#pf_IL').max;for(let i=0;i<=mx;i++){const q=calc(p,i);if(q.Pout<=0||q.Pin<=0)continue;if(ILmin===null)ILmin=i;if(q.eta>b.eta)b={eta:q.eta,IL:i,pa:q.PA,fixed:q.fixed};}b.ILmin=ILmin;return b;}
+
+  function txt(t,x,y,col,size,align,bold){c.fillStyle=col||'#9aa3c4';c.font=(bold?'bold ':'')+(size||11)+'px system-ui';c.textAlign=align||'start';c.fillText(t,x,y);c.textAlign='start';}
+  /* tiny math typesetter for canvas labels: text inside $…$ is maths — letters italic serif, _x or _{xx} = subscript, ^x or ^{xx} = superscript. Returns the width; dry=true measures only. */
+  function mtxt(ctx,t,x,y,col,size,align,bold,dry){size=size||11;const SER='"Cambria Math","Times New Roman",Georgia,serif',LET=/[A-Za-zα-ωΑ-Ω]/,runs=[];
+    const push=(s,f,dy,k)=>{const l=runs[runs.length-1];if(l&&l.f===f&&l.dy===dy&&l.k===k)l.s+=s;else runs.push({s,f,dy,k});};
+    t.split('$').forEach((p,i)=>{if(i%2===0){if(p)push(p,'plain',0,1);return;}
+      let j=0;while(j<p.length){const ch=p[j];
+        if(ch==='_'||ch==='^'){let s='';if(p[j+1]==='{'){const e=p.indexOf('}',j+2);s=p.slice(j+2,e<0?p.length:e);j=e<0?p.length:e+1;}else{s=p[j+1]||'';j+=2;}
+          const single=s.length===1&&LET.test(s);push(s,single?'ital':'up',ch==='_'?0.3:-0.42,0.72);continue;}
+        push(ch,LET.test(ch)?'ital':'up',0,1);j++;}});
+    const font=r=>(r.f==='ital'?'italic ':'')+(bold?'bold ':'')+(size*r.k).toFixed(1)+'px '+(r.f==='plain'?'system-ui':SER);
+    let w=0;for(const r of runs){ctx.font=font(r);r.w=ctx.measureText(r.s).width;w+=r.w;}if(dry)return w;
+    let cx=align==='center'?x-w/2:align==='end'?x-w:x;ctx.textAlign='start';ctx.fillStyle=col||'#9aa3c4';
+    for(const r of runs){ctx.font=font(r);ctx.fillText(r.s,cx,y+r.dy*size);cx+=r.w;}return w;}
+  function drawFlow(r){const p=P();c.clearRect(0,0,W,H);if(!r)return;
+    const yT=64,x0=96,xE=548,Tin=130,minT=4,mot=mode==='mot';
+    const colEl='rgba(91,140,255,.88)',colMe='rgba(56,211,159,.85)',colA=mot?colEl:colMe,colB=mot?colMe:colEl;
+    const stations=mot?[{k:'cu',x:150},{k:'conv',x:262},{k:'core',x:316},{k:'mech',x:408},{k:'stray',x:500}]
+                      :[{k:'stray',x:128},{k:'mech',x:206},{k:'core',x:290},{k:'conv',x:356},{k:'cu',x:440}];
+    const lossVal={cu:r.cu,core:p.core,mech:p.mech,stray:r.Pstray},lossName={cu:'$I^2R$ losses',core:'Core losses',mech:'Mechanical losses',stray:'Stray losses'};
+    const scale=Tin/Math.max(1,r.Pin);
+    /* thickness profile along the band */
+    let Tcur=Tin,convX=null,Tconv=null;const br=[],prof=[{x:x0,T:Tin}];
+    for(const st of stations){if(st.k==='conv'){convX=st.x;Tconv=Tcur;prof.push({x:st.x,T:Tcur});continue;}
+      let t=Math.max(minT,Math.max(0,lossVal[st.k])*scale);if(Tcur-t<0)t=Tcur;br.push({...st,t,v:lossVal[st.k],yb:yT+Tcur});prof.push({x:st.x,T:Tcur});Tcur-=t;prof.push({x:st.x,T:Tcur});}
+    const Tout=Math.max(0,Tcur),stalled=r.Pout<=0||r.Pin<=0;prof.push({x:xE,T:Tout});
+    /* main band */
+    const g=c.createLinearGradient(x0,0,xE,0),cf=(convX-x0)/(xE-x0);g.addColorStop(0,colA);g.addColorStop(Math.max(0,cf-.04),colA);g.addColorStop(Math.min(1,cf+.04),colB);g.addColorStop(1,colB);
+    c.fillStyle=g;c.beginPath();c.moveTo(x0,yT);c.lineTo(xE,yT);c.lineTo(xE,yT+Tout);
+    for(let i=br.length-1;i>=0;i--){const b=br[i];c.lineTo(b.x,b.yb-b.t);c.lineTo(b.x,b.yb);}
+    c.lineTo(x0,yT+Tin);c.closePath();c.fill();
+    /* output arrow */
+    c.fillStyle=stalled?'rgba(255,107,129,.25)':colB;c.strokeStyle=stalled?'#ff6b81':'rgba(0,0,0,0)';c.lineWidth=1.5;c.beginPath();c.moveTo(xE,yT-10);c.lineTo(xE+48,yT+Tout/2);c.lineTo(xE,yT+Tout+10);c.closePath();c.fill();if(stalled){c.setLineDash([4,3]);c.stroke();c.setLineDash([]);}
+    /* loss branches */
+    for(const b of br){const t=Math.max(1,b.t),k=t/2+8,xc=b.x+10+k;c.strokeStyle='rgba(255,107,129,.92)';c.lineWidth=t;c.lineCap='butt';c.lineJoin='round';
+      c.beginPath();c.moveTo(b.x,b.yb-t/2);c.lineTo(b.x+10,b.yb-t/2);c.quadraticCurveTo(xc,b.yb-t/2,xc,b.yb+20);c.lineTo(xc,b.yb+44);c.stroke();
+      c.fillStyle='rgba(255,107,129,.92)';c.beginPath();c.moveTo(xc-(t/2+6),b.yb+44);c.lineTo(xc+(t/2+6),b.yb+44);c.lineTo(xc,b.yb+58);c.closePath();c.fill();
+      mtxt(c,lossName[b.k],xc,b.yb+73,'#e8ebf7',11,'center');txt(kW(b.v),xc,b.yb+87,'#ff9fb0',11,'center',true);
+      if(b.k==='cu')txt('armature '+kW(r.PA)+' · field '+kW(r.PF)+' · brush '+kW(r.PBD),xc,b.yb+101,'#9aa3c4',9.5,'center');}
+    /* animated flow dashes along the band centre and down each branch */
+    c.save();c.strokeStyle='rgba(255,255,255,.32)';c.lineWidth=2;c.setLineDash([7,11]);c.lineDashOffset=-dashOff;c.beginPath();prof.forEach((q,i)=>{const y=yT+q.T/2;i?c.lineTo(q.x,y):c.moveTo(q.x,y);});c.stroke();
+    for(const b of br){const k=b.t/2+8,xc=b.x+10+k;c.beginPath();c.moveTo(b.x+4,b.yb-b.t/2);c.lineTo(b.x+10,b.yb-b.t/2);c.quadraticCurveTo(xc,b.yb-b.t/2,xc,b.yb+20);c.lineTo(xc,b.yb+44);c.stroke();}c.restore();
+    /* P_conv divider */
+    if(convX!==null){c.strokeStyle='#e8ebf7';c.lineWidth=1.3;c.setLineDash([5,4]);c.beginPath();c.moveTo(convX,yT-8);c.lineTo(convX,yT+Tconv+22);c.stroke();c.setLineDash([]);
+      mtxt(c,'$P_{conv}$',convX,yT-30,'#e8ebf7',13,'center',true);mtxt(c,mot?'$E_A I_A = τ_{ind} ω_m$':'$τ_{ind} ω_m = E_A I_A$',convX,yT-15,'#9aa3c4',11.5,'center');
+      txt(kW(r.Pconv),convX,yT+Tconv/2+4,'#ffffff',12,'center',true);}
+    /* P_in: label + thickness marker */
+    mtxt(c,mot?'$P_{in} = V_T I_L$':'$P_{in} = τ_{app} ω_m$',x0,34,mot?'#9fb8ff':'#7fe3bd',13,'start',true);txt('= '+kW(r.Pin),x0,50,'#e8ebf7',12);
+    c.strokeStyle='#9aa3c4';c.lineWidth=1;c.beginPath();c.moveTo(x0-12,yT);c.lineTo(x0-12,yT+Tin);c.moveTo(x0-16,yT+5);c.lineTo(x0-12,yT);c.lineTo(x0-8,yT+5);c.moveTo(x0-16,yT+Tin-5);c.lineTo(x0-12,yT+Tin);c.lineTo(x0-8,yT+Tin-5);c.stroke();
+    /* P_out */
+    mtxt(c,mot?'$P_{out} = τ_{load} ω_m$':'$P_{out} = V_T I_L$',W-8,34,mot?'#7fe3bd':'#9fb8ff',13,'end',true);txt(stalled?'✗ no output — losses exceed input':'= '+kW(r.Pout),W-8,50,stalled?'#ff6b81':'#e8ebf7',12,'end',stalled);
+    /* efficiency badge + legend */
+    mtxt(c,stalled?'$η$ = —':'$η$ = '+fmt(r.eta,1)+' %',W-8,H-10,stalled?'#ff6b81':r.eta>=80?'#38d39f':'#ffcc66',16,'end',true);
+    mtxt(c,'losses '+kW(r.loss)+(r.Pin>0?' ('+fmt(r.loss/r.Pin*100,1)+' % of $P_{in}$)':''),W-8,H-30,'#9aa3c4',10.5,'end');
+    txt('band thickness ∝ power  ·  blue = electrical  ·  green = mechanical  ·  pink = losses',8,H-10,'#6b7398',10);
+    txt(mot?'MOTOR — electrical in, mechanical out':'GENERATOR — mechanical in, electrical out',8,18,'#e8ebf7',12);}
+
+  function drawEta(r,b){const p=P();const pad={l:46,r:14,t:16,b:26};axes(ec,EW,EH,pad,'','');const mx=+$('#pf_IL').max;
+    mtxt(ec,'$I_L$ (A)',EW-pad.r,EH-6,'#9aa3c4',11,'end');ec.save();ec.translate(12,pad.t+10);ec.rotate(-Math.PI/2);mtxt(ec,'$η$ (%)',0,0,'#9aa3c4',11,'end');ec.restore();
+    const X=i=>pad.l+(i/mx)*(EW-pad.l-pad.r),Y=e=>EH-pad.b-(e/100)*(EH-pad.t-pad.b);
+    ec.strokeStyle='#232a49';ec.lineWidth=1;ec.setLineDash([2,4]);[25,50,75,100].forEach(e=>{ec.beginPath();ec.moveTo(pad.l,Y(e));ec.lineTo(EW-pad.r,Y(e));ec.stroke();ec.fillStyle='#6b7398';ec.font='10px system-ui';ec.fillText(e+'',pad.l-18,Y(e)+3);});ec.setLineDash([]);
+    [0,50,100,150,200,250,300,350].filter(i=>i<=mx).forEach(i=>{ec.fillStyle='#6b7398';ec.font='10px system-ui';ec.fillText(i+'',X(i)-6,EH-pad.b+13);});
+    ec.strokeStyle='#38d39f';ec.lineWidth=2.2;ec.beginPath();let on=false;
+    for(let i=0;i<=mx;i++){const q=calc(p,i);if(q.Pout<=0||q.Pin<=0){on=false;continue;}const x=X(i),y=Y(q.eta);on?ec.lineTo(x,y):ec.moveTo(x,y);on=true;}ec.stroke();
+    if(b&&b.eta>0){const x=X(b.IL),y=Y(b.eta),atEdge=b.IL>=mx;ec.strokeStyle='#ffcc66';ec.lineWidth=1.2;ec.setLineDash([3,3]);ec.beginPath();ec.moveTo(x,y);ec.lineTo(x,EH-pad.b);ec.stroke();ec.setLineDash([]);
+      ec.fillStyle='#0b0e1c';ec.beginPath();ec.arc(x,y,5,0,7);ec.fill();ec.strokeStyle='#ffcc66';ec.lineWidth=2;ec.beginPath();ec.arc(x,y,5,0,7);ec.stroke();
+      /* annotation sits at the foot of the dashed line, where the plot is empty */
+      const right=x>EW*0.55,al=right?'end':'start',ax=right?x-7:x+7;
+      mtxt(ec,atEdge?'$η$ still rising at '+b.IL+' A — peak is beyond this range':'$η_{max}$ ≈ '+fmt(b.eta,1)+' % at $I_L$ ≈ '+b.IL+' A',ax,EH-pad.b-20,'#ffcc66',11,al);
+      mtxt(ec,atEdge?'($I^2R$ losses have not yet caught up with the fixed losses)':'$I_A^2R_A$ ≈ '+kW(b.pa)+'  vs  fixed (field + core + mech) ≈ '+kW(b.fixed)+' — about equal',ax,EH-pad.b-7,'#9aa3c4',10,al);}
+    if(r&&r.Pout>0){const x=X(p.IL),y=Y(r.eta);ec.fillStyle='#38d39f';ec.beginPath();ec.arc(x,y,5.5,0,7);ec.fill();ec.strokeStyle='#0b0e1c';ec.lineWidth=1.5;ec.stroke();
+      const lab='$η$ = '+fmt(r.eta,1)+' % at '+p.IL+' A',lw=mtxt(ec,lab,0,0,null,11,'start',true,true);mtxt(ec,lab,x+9+lw>EW-pad.r?x-9-lw:x+9,y+15,'#e8ebf7',11,'start',true);}
+    ec.fillStyle='#9aa3c4';ec.font='11px system-ui';ec.fillText('Efficiency vs load — '+(mode==='mot'?'shunt motor':'shunt generator'),pad.l+6,pad.t-3);}
+
+  function readout(){const p=P(),r=cur,b=best;$('#pf_IL_v').textContent=p.IL+' A';const stalled=r.Pout<=0||r.Pin<=0;
+    const k=v=>`<span class="k">${v}</span>`;
+    $('#pf_out').innerHTML=mode==='mot'?
+`I<sub>A</sub> = I<sub>L</sub> − I<sub>F</sub> = ${p.IL} − ${p.IF} = ${k(fmt(r.IA,1)+' A')}
+P<sub>in</sub> = V<sub>T</sub>I<sub>L</sub> = ${p.VT} × ${p.IL} = ${k(kW(r.Pin))}
+P<sub>A</sub> = I<sub>A</sub>²R<sub>A</sub> = ${k(kW(r.PA))}   P<sub>F</sub> = V<sub>T</sub>I<sub>F</sub> = ${k(kW(r.PF))}   P<sub>BD</sub> = ${k(kW(r.PBD))}
+P<sub>conv</sub> = P<sub>in</sub> − copper = ${k(kW(r.Pconv))} = E<sub>A</sub>I<sub>A</sub>  →  E<sub>A</sub> = ${k(fmt(r.EA,1)+' V')}
+− core ${k(kW(p.core))} − mech ${k(kW(p.mech))} − stray ${k(kW(r.Pstray))}
+P<sub>out</sub> = τ<sub>load</sub>ω<sub>m</sub> = ${stalled?'<b style="color:#ff6b81">'+kW(r.Pout)+' ✗</b>':k(kW(r.Pout))}   <b>η = ${stalled?'—':k(fmt(r.eta,1)+' %')}</b>`
+:
+`I<sub>A</sub> = I<sub>L</sub> + I<sub>F</sub> = ${p.IL} + ${p.IF} = ${k(fmt(r.IA,1)+' A')}
+P<sub>out</sub> = V<sub>T</sub>I<sub>L</sub> = ${p.VT} × ${p.IL} = ${k(kW(r.Pout))}
+P<sub>A</sub> = I<sub>A</sub>²R<sub>A</sub> = ${k(kW(r.PA))}   P<sub>F</sub> = V<sub>T</sub>I<sub>F</sub> = ${k(kW(r.PF))}   P<sub>BD</sub> = ${k(kW(r.PBD))}
+P<sub>conv</sub> = P<sub>out</sub> + copper = ${k(kW(r.Pconv))} = E<sub>A</sub>I<sub>A</sub>  →  E<sub>A</sub> = ${k(fmt(r.EA,1)+' V')}
++ core ${k(kW(p.core))} + mech ${k(kW(p.mech))} + stray ${k(kW(r.Pstray))}
+P<sub>in</sub> = τ<sub>app</sub>ω<sub>m</sub> = ${k(kW(r.Pin))}   <b>η = ${k(fmt(r.eta,1)+' %')}</b>`;
+    const w=$('#pf_why');
+    if(mode==='mot'&&stalled){w.className='badbox';w.innerHTML=`<b>Not a possible operating point.</b> At I<sub>L</sub> = ${p.IL} A the input of ${kW(r.Pin)} cannot even pay the field, core and mechanical losses (${kW(r.fixed)}). A real motor at light load draws whatever current it needs to cover these — drag I<sub>L</sub> up to at least ≈ ${b.ILmin??'?'} A for the shaft to deliver anything.`;return;}
+    const above=r.PA>r.fixed,mx=+$('#pf_IL').max,peakTxt=b.IL>=mx?`beyond ${mx} A for this machine — its armature resistance is so low that the copper losses have not caught up with the fixed losses even there`:`near I<sub>L</sub> ≈ ${b.IL} A, where the two are about equal`;
+    w.className=mode==='mot'?(above?'warnbox':'okbox'):'okbox';
+    w.innerHTML=mode==='mot'?
+`<b>Reading the diagram.</b> Left of P<sub>conv</sub> the machine is just an electrical circuit: V<sub>T</sub>I<sub>L</sub> comes in and the copper losses — armature I<sub>A</sub>²R<sub>A</sub>, field V<sub>T</sub>I<sub>F</sub>, brush V<sub>BD</sub>I<sub>A</sub> — are paid first. At P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> the power turns mechanical (τ<sub>ind</sub>ω<sub>m</sub> on the rotor), and the rotational losses (core, friction &amp; windage) plus stray are paid before the shaft. At this load the load‑dependent armature loss I<sub>A</sub>²R<sub>A</sub> is <b>${kW(r.PA)}</b> and the fixed losses (field + core + mechanical) are <b>${kW(r.fixed)}</b> — ${above?'you are <b>above</b> the best‑efficiency load, so the copper losses dominate and η is sliding down the right‑hand side of the curve.':'you are <b>below</b> the best‑efficiency load, so the fixed losses dominate and η is still climbing.'} The peak sits ${peakTxt}.`
+:
+`<b>Reading the diagram.</b> Now the prime mover is on the left: τ<sub>app</sub>ω<sub>m</sub> enters and the stray, mechanical and core losses are paid first — the shaft pays them before any conversion happens. At P<sub>conv</sub> = τ<sub>ind</sub>ω<sub>m</sub> the power turns electrical (E<sub>A</sub>I<sub>A</sub> in the armature), and the copper losses come out before the terminals deliver V<sub>T</sub>I<sub>L</sub>. This is a shunt generator, so the field takes its own I<sub>F</sub> from the terminals: the armature carries I<sub>L</sub> + I<sub>F</sub> = ${fmt(r.IA,0)} A and E<sub>A</sub> must sit ${fmt(r.EA-p.VT,1)} V <i>above</i> V<sub>T</sub> to push it through R<sub>A</sub> and the brushes. Efficiency peaks ${peakTxt}.`;}
+
+  function upd(){const p=P();cur=calc(p);best=bestPoint(p);readout();drawEta(cur,best);drawFlow(cur);}
+  function pfLoop(){if($('#sec-power').classList.contains('on')&&cur){dashOff+=0.7;drawFlow(cur);}requestAnimationFrame(pfLoop);}
+  $$('#pf_mode .t').forEach(t=>t.onclick=()=>{$$('#pf_mode .t').forEach(x=>x.classList.toggle('on',x===t));mode=t.dataset.m;upd();});
+  ['pf_IL','pf_VT','pf_IF','pf_RA','pf_VBD','pf_core','pf_mech','pf_stray'].forEach(id=>$('#'+id).oninput=upd);
+  upd();pfLoop();
 });
 
 /* ===== 6.5 Motor equivalent circuit + mag curve ===== */
