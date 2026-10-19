@@ -1,0 +1,2188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electric Machinery Fundamentals — Interactive Course</title>
+<meta name="description" content="Explore the principles, operation and control of electrical machines through interactive simulations, clear explanations and real-world examples. Based on Chapman's Electric Machinery Fundamentals.">
+<meta name="theme-color" content="#070e1e">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<style>
+:root {
+  --navy-dark: #070e1e;
+  --navy-nav: #081226;
+  --navy-hero: #070e1e;
+  --hero-background: linear-gradient(110deg, #f8fafc 0%, #f8fafc 48%, #eaf3ff 100%);
+  --hero-text: #0b1730;
+  --hero-lead: #334155;
+  --hero-kicker: #0e7490;
+  --hero-highlight: radial-gradient(circle at 75% 40%, rgba(37, 99, 235, 0.08) 0%, transparent 65%);
+  --hero-art-glow: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.18) 0%, rgba(56, 189, 248, 0.12) 36%, transparent 72%);
+  --hero-bottom-glow: radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+  --hero-secondary-text: #0b1730;
+  --hero-secondary-background: rgba(15, 23, 42, 0.025);
+  --hero-secondary-border: rgba(15, 23, 42, 0.22);
+  --hero-secondary-hover-background: rgba(15, 23, 42, 0.07);
+  --hero-secondary-hover-border: rgba(15, 23, 42, 0.38);
+  --hero-art-border: linear-gradient(135deg, rgba(56, 189, 248, 0.48), rgba(37, 99, 235, 0.25) 60%, rgba(255, 255, 255, 0.85));
+  --hero-art-shadow: 0 18px 40px rgba(11, 23, 48, 0.14), 0 0 30px rgba(37, 99, 235, 0.12);
+  --features-section-start: #eef4fc;
+  --navy-heading: #0b1730;
+  --blue-primary: #2563eb;
+  --blue-hover: #1d4ed8;
+  --blue-light: #eff6ff;
+  --blue-border: #dbeafe;
+  --cyan-accent: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.35);
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --line: #e2e8f0;
+  --card-shadow: 0 4px 20px rgba(11, 42, 91, 0.05);
+  --card-hover-shadow: 0 12px 30px rgba(11, 42, 91, 0.1);
+  --chapter-card-shadow: 0 4px 18px rgba(11, 42, 91, 0.08), 0 0 22px rgba(37, 99, 235, 0.22);
+  --chapter-card-hover-shadow: 0 12px 28px rgba(11, 42, 91, 0.14), 0 0 30px rgba(37, 99, 235, 0.32), 0 0 52px rgba(37, 99, 235, 0.16);
+  --feature-card-shadow: 0 6px 18px rgba(11, 42, 91, 0.06);
+  --feature-card-hover-shadow: 0 10px 24px rgba(11, 42, 91, 0.1);
+  --feature-glow: rgba(37, 99, 235, 0.08);
+  --feature-glow-hover: rgba(37, 99, 235, 0.15);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
+
+body.dark-mode {
+  --bg-page: #0b132b;
+  --hero-background: linear-gradient(135deg, #0b1730 0%, #0a1733 55%, #0e2759 100%);
+  --hero-text: #ffffff;
+  --hero-lead: #cbd5e1;
+  --hero-kicker: var(--cyan-accent);
+  --hero-highlight: radial-gradient(circle at 75% 40%, rgba(37, 99, 235, 0.22) 0%, transparent 65%);
+  --hero-art-glow: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.24) 0%, rgba(56, 189, 248, 0.16) 36%, transparent 72%);
+  --hero-bottom-glow: radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  --hero-secondary-text: #ffffff;
+  --hero-secondary-background: rgba(255, 255, 255, 0.035);
+  --hero-secondary-border: rgba(255, 255, 255, 0.34);
+  --hero-secondary-hover-background: rgba(255, 255, 255, 0.1);
+  --hero-secondary-hover-border: rgba(255, 255, 255, 0.56);
+  --hero-art-border: linear-gradient(135deg, rgba(56, 189, 248, 0.4), rgba(37, 99, 235, 0.2) 60%, rgba(255, 255, 255, 0.05));
+  --hero-art-shadow: 0 24px 50px rgba(0, 0, 0, 0.55), 0 0 40px rgba(37, 99, 235, 0.25);
+  --features-section-start: #0b132b;
+  --bg-card: #111d3d;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --navy-heading: #f8fafc;
+  --line: #1e2c50;
+  --blue-light: rgba(37, 99, 235, 0.15);
+  --blue-border: rgba(56, 189, 248, 0.25);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  --chapter-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.32), 0 0 20px rgba(56, 189, 248, 0.22);
+  --chapter-card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 32px rgba(56, 189, 248, 0.34), 0 0 52px rgba(37, 99, 235, 0.18);
+  --feature-card-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
+  --feature-card-hover-shadow: 0 10px 24px rgba(0, 0, 0, 0.42);
+  --feature-glow: rgba(56, 189, 248, 0.14);
+  --feature-glow-hover: rgba(56, 189, 248, 0.23);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-main);
+  font: 16px/1.6 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+@keyframes emf-page-enter {
+  from { opacity: 0.92; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+body.emf-page-enter > :not(.nav):not(#top):not(.search-overlay) {
+  animation: emf-page-enter 220ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  body.emf-page-enter > :not(.nav):not(#top):not(.search-overlay) { animation: none; }
+}
+
+h1, h2, h3, h4 {
+  color: var(--navy-heading);
+  margin: 0 0 0.4em;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+a { color: var(--blue-primary); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--blue-primary); outline-offset: 2px; }
+
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+@media (max-width: 480px) { .wrap { padding: 0 16px; } }
+
+/* Navigation */
+.nav {
+  --nav-height: 60px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(8, 18, 38, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: var(--nav-height);
+}
+.nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: calc((min(100vw, 1200px) - 100vw) / 2);
+  min-width: 0;
+  gap: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .brand { font-size: 15px; }
+  .brand .brand-text { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+}
+.brand .mark {
+  color: var(--cyan-accent);
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+}
+.brand-text { font-weight: 700; }
+.nav-menu { display: flex; align-items: center; gap: 20px; margin-left: auto; }
+@media (min-width: 1201px) {
+  .nav-menu { margin-right: calc(592px - 50vw); }
+}
+.nav-links { display: flex; align-items: center; gap: 18px; list-style: none; margin: 0; padding: 0; }
+.nav-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 5px 3px;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: #ffffff; }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan-accent);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--cyan-accent);
+}
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.icon-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.burger {
+  display: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  width: 40px;
+  height: 38px;
+  padding: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 860px) {
+  .burger { display: flex; }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: var(--nav-height); left: 0; right: 0;
+    background: #081226;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 24px;
+    gap: 16px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  }
+  .nav-menu.open { display: flex; }
+  .nav-links { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+  .nav-links a { font-size: 16px; display: block; padding: 6px 0; }
+  .nav-actions { width: 100%; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+}
+@media (max-width: 480px) {
+  .nav-wrap { gap: 12px; }
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 72px;
+  background: #070e1e;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 36px 0;
+}
+.footer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.footer-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+.footer-brand { font-weight: 700; color: #ffffff; }
+.footer-dot, .footer-sep { color: rgba(255, 255, 255, 0.3); }
+.footer-right { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 14px; }
+.footer-sub { padding-top: 20px; font-size: 13px; color: #64748b; line-height: 1.6; }
+.footer-sub p { margin: 0; }
+.footer-sub code {
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Back to top button */
+#top {
+  position: fixed;
+  right: 24px; bottom: 24px;
+  z-index: 50;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: var(--blue-primary);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+#top svg { width: 22px; height: 22px; stroke-width: 3; }
+#top:hover { transform: translateY(-2px); background: var(--blue-hover); box-shadow: 0 8px 18px rgba(37, 99, 235, 0.38); }
+#top:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 3px; }
+#top.show { opacity: 1; pointer-events: auto; }
+@media (prefers-reduced-motion: reduce) {
+  #top { transition: none; }
+  #top:hover { transform: none; }
+}
+
+/* Search Dialog */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(7, 14, 30, 0.75);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: flex-start center;
+  padding: 80px 20px 20px;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.search-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 640px;
+  max-height: 75vh;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.search-header svg { color: var(--text-muted); flex-shrink: 0; }
+.search-header input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text-main);
+  font-family: inherit;
+}
+.search-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.search-results {
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.search-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: background 0.1s;
+}
+.search-item:hover {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+}
+.search-item small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+.search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Hero Section */
+.hero {
+  padding: 130px 0 68px;
+  background: var(--hero-background);
+  position: relative;
+  overflow: hidden;
+  color: var(--hero-text);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 650px; height: 100%;
+  background: var(--hero-highlight);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10%; width: 500px; height: 300px;
+  background: var(--hero-bottom-glow);
+  pointer-events: none;
+}
+.hero-wrap {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-kicker {
+  color: var(--hero-kicker);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-title {
+  color: var(--hero-text);
+  font-size: clamp(32px, 4.2vw, 54px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+}
+.hero-lead {
+  color: var(--hero-lead);
+  font-size: clamp(15.5px, 1.8vw, 18px);
+  line-height: 1.65;
+  max-width: 580px;
+  margin: 0 0 32px;
+}
+.hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15.5px;
+  line-height: 1.25;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.hero-action-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 9px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--blue-primary);
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.hero-action-icon svg {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+.hero-actions .btn-secondary:hover .hero-action-icon {
+  background: rgba(37, 99, 235, 0.17);
+  color: var(--blue-hover);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.18);
+}
+body.dark-mode .hero-action-icon {
+  background: rgba(56, 189, 248, 0.12);
+  color: #7dd3fc;
+}
+body.dark-mode .hero-actions .btn-secondary:hover .hero-action-icon {
+  background: rgba(56, 189, 248, 0.2);
+  color: #bae6fd;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+.hero-actions .btn-primary {
+  background: var(--blue-primary);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.hero-actions .btn-primary:hover {
+  background: var(--blue-hover);
+}
+.hero-actions .btn-secondary {
+  color: var(--hero-secondary-text);
+  background: var(--hero-secondary-background);
+  border-color: var(--hero-secondary-border);
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.hero-actions .btn-secondary:hover {
+  background: var(--hero-secondary-hover-background);
+  border-color: var(--hero-secondary-hover-border);
+}
+.hero-actions a:focus-visible {
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22), 0 6px 16px rgba(37, 99, 235, 0.2);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero-actions a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
+  }
+  .hero-actions .btn-primary:not(.btn-secondary):hover {
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.32);
+  }
+}
+.hero-actions a:focus-visible {
+  outline: 3px solid #7dd3fc;
+  outline-offset: 3px;
+}
+@media (max-width: 560px) {
+  .hero-actions { align-items: stretch; }
+  .hero-actions a { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-actions a { transition: none; }
+  .hero-actions a:hover { transform: none; }
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+}
+.hero-visual::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background: var(--hero-art-glow);
+  pointer-events: none;
+}
+.hero-img-card {
+  position: relative;
+  z-index: 1;
+  border-radius: 20px;
+  padding: 4px;
+  background: var(--hero-art-border);
+  box-shadow: var(--hero-art-shadow);
+  max-width: 440px;
+  width: 100%;
+}
+.motor-img { width: 100%; height: auto; border-radius: 16px; display: block; }
+
+@media (max-width: 960px) {
+  .hero-wrap { grid-template-columns: 1fr; gap: 40px; text-align: left; }
+  .hero { padding: 110px 0 56px; }
+  .hero-visual { max-width: 420px; margin: 0 auto; }
+}
+
+/* Features */
+.features-section {
+  position: relative;
+  background: linear-gradient(180deg, var(--features-section-start) 0%, var(--bg-page) 280px);
+  padding: 64px 0;
+}
+.feature-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  margin-top: 0;
+  position: relative;
+  z-index: 10;
+  margin-bottom: 32px;
+}
+.feature-card {
+  min-width: 0;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--feature-card-shadow), 0 0 18px var(--feature-glow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--blue-border);
+    box-shadow: var(--feature-card-hover-shadow), 0 0 26px var(--feature-glow-hover);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feature-card { transition: none; }
+  .feature-card:hover { transform: none; }
+}
+.feature-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+}
+.feature-icon svg { display: none; }
+.feature-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+.icon-blue { background: #eff6ff; color: #2563eb; }
+.icon-cyan { background: #f0f9ff; color: #0284c7; }
+.icon-indigo { background: #eef2ff; color: #4f46e5; }
+body.dark-mode .icon-blue, body.dark-mode .icon-cyan, body.dark-mode .icon-indigo {
+  background: rgba(37, 99, 235, 0.2);
+  color: var(--cyan-accent);
+}
+.feature-card h3 { font-size: 19px; margin: 0; font-weight: 700; color: var(--navy-heading); }
+.feature-card p { margin: 0; font-size: 14.5px; color: var(--text-muted); line-height: 1.55; }
+
+@media (max-width: 600px) {
+  .features-section { padding: 44px 0; }
+}
+
+/* About */
+.about-section {
+  border-top: 1px solid var(--line);
+  padding-top: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 44px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.about-info h2 { font-size: 28px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.01em; }
+.about-info p { color: var(--text-muted); font-size: 15.5px; line-height: 1.68; margin: 0 0 24px; }
+.btn-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-primary);
+  color: #ffffff;
+  padding: 11px 22px;
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.3);
+  transition: all 0.15s ease;
+}
+.btn-learn-more:hover { background: var(--blue-hover); transform: translateY(-1px); }
+.btn-learn-more svg { transition: transform 0.15s ease; }
+.btn-learn-more:hover svg { transform: translateX(3px); }
+
+.instructor-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.instructor-avatar-wrap { flex-shrink: 0; }
+.instructor-avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--blue-primary);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  display: block;
+}
+.instructor-details { display: flex; flex-direction: column; }
+.instructor-badge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+  background: var(--blue-light);
+  padding: 2px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+  margin-bottom: 6px;
+}
+body.dark-mode .instructor-badge { color: var(--cyan-accent); }
+.instructor-name { font-size: 18px; font-weight: 700; margin: 0 0 2px; color: var(--navy-heading); }
+.instructor-title, .instructor-affil { font-size: 13.5px; color: var(--text-muted); margin: 0; line-height: 1.4; }
+.instructor-email {
+  font-size: 13px;
+  color: var(--blue-primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 6px;
+  transition: color 0.15s;
+}
+.instructor-email:hover { text-decoration: underline; }
+
+.wave-decoration {
+  margin-top: 36px;
+  height: 60px;
+  overflow: hidden;
+  position: relative;
+  pointer-events: none;
+}
+.wave-decoration svg { width: 100%; height: 100%; display: block; }
+
+@media (max-width: 860px) {
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* Chapters Grid */
+.chapters-section {
+  scroll-margin-top: 72px;
+  padding: 64px 0 36px;
+  background: var(--bg-page);
+  border-top: 1px solid var(--line);
+}
+.chapters-header { margin-bottom: 32px; }
+.section-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+  display: block;
+  margin-bottom: 6px;
+}
+body.dark-mode .section-kicker { color: var(--cyan-accent); }
+.chapters-header h2 { font-size: 32px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em; }
+.chapters-header p { color: var(--text-muted); font-size: 16px; margin: 0; }
+
+.home-video-section {
+  scroll-margin-top: 72px;
+  padding: 64px 0 72px;
+  background: linear-gradient(180deg, var(--features-section-start) 0%, var(--bg-page) 280px);
+  border-top: 1px solid var(--line);
+}
+.home-video-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: start;
+  gap: clamp(28px, 5vw, 64px);
+  margin-bottom: 28px;
+}
+.home-video-intro { min-width: 0; }
+.home-video-heading h2 { font-size: 32px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em; }
+.home-video-heading p { color: var(--text-muted); font-size: 16px; margin: 0; }
+.home-video-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+.home-video-search svg { width: 20px; height: 20px; flex: 0 0 20px; }
+.home-video-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 14px;
+}
+.home-video-search:focus-within { border-color: var(--blue-primary); box-shadow: 0 0 0 3px var(--feature-glow); }
+.home-video-filters {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.7fr) minmax(0, 1.3fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.home-video-filters label { min-width: 0; }
+.home-video-filters select, .home-video-reset {
+  min-width: 0; width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg-card); color: var(--text-main); font: inherit; font-size: 14px;
+}
+.home-video-filters select { max-width: 100%; }
+.home-video-filters .home-video-search { grid-column: 1 / 3; }
+.home-video-reset { width: auto; cursor: pointer; font-weight: 650; white-space: nowrap; }
+.home-video-reset:hover { border-color: var(--blue-primary); }
+.home-video-heading .home-video-result-count { margin: 18px 0 0; color: var(--text-muted); font-size: 14px; }
+.home-video-section input:focus-visible, .home-video-section select:focus-visible, .home-video-section button:focus-visible {
+  outline: 3px solid var(--blue-primary); outline-offset: 2px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.home-video-topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.home-lecture-topic {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  box-shadow: var(--card-shadow), 0 0 20px var(--feature-glow);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .home-lecture-topic:hover {
+    transform: translateY(-3px);
+    border-color: var(--blue-border);
+    box-shadow: var(--card-hover-shadow), 0 0 24px var(--feature-glow-hover);
+  }
+}
+.home-lecture-topic-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.week-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--blue-light);
+  color: var(--blue-primary);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.topic-video-count { color: var(--text-muted); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.home-lecture-topic h3 { margin: 0 0 16px; color: var(--navy-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.home-lecture-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+.home-lecture-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--bg-page);
+}
+.home-lecture-thumbnail {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #0b1730;
+}
+.home-lecture-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.home-lecture-play {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  background: rgba(7, 14, 30, 0.12);
+  transition: background-color 0.2s ease;
+}
+.home-lecture-play svg { width: 42px; height: 42px; filter: drop-shadow(0 2px 5px rgba(0,0,0,.4)); }
+.home-lecture-thumbnail:hover .home-lecture-play,
+.home-lecture-thumbnail:focus-visible .home-lecture-play { background: rgba(7, 14, 30, 0.35); }
+.home-lecture-card h4 { min-height: 60px; margin: 0; padding: 12px 12px 6px; color: var(--text-main); font-size: 13.5px; line-height: 1.45; }
+.home-lecture-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  margin: 0 12px 12px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--blue-primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.home-lecture-button:hover { background: var(--blue-hover); }
+.home-lecture-button svg { width: 16px; height: 16px; }
+.home-video-empty { padding: 18px; border: 1px solid var(--line); border-radius: 10px; color: var(--text-muted); background: var(--bg-card); }
+@media (prefers-reduced-motion: reduce) {
+  .home-lecture-topic,
+  .home-lecture-play { transition: none; }
+  .home-lecture-topic:hover { transform: none; }
+}
+@media (max-width: 760px) {
+  .home-video-topic-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 900px) {
+  .home-video-heading { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .home-video-filters { grid-template-columns: minmax(120px, 0.7fr) minmax(0, 1.3fr) auto; }
+}
+@media (max-width: 600px) {
+  .home-video-section { padding: 48px 0 56px; }
+  .home-video-heading { gap: 18px; }
+  .home-video-filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 8px; }
+  .home-video-filters .home-video-search { grid-column: 1 / 3; }
+  .home-video-reset { grid-column: 1 / 3; justify-self: end; }
+  .home-lecture-topic { padding: 16px; }
+}
+
+.chapter-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.ch-card {
+  min-width: 0;
+  min-height: 148px;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  box-shadow: var(--chapter-card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+.ch-card:focus-visible {
+  outline: 3px solid var(--blue-primary);
+  outline-offset: 3px;
+}
+.ch-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #07152f;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.ch-icon-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+.ch-body { flex: 1; min-width: 0; }
+.ch-code {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  display: block;
+}
+.ch-title { font-size: 18px; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; color: var(--navy-heading); margin: 0 0 6px; }
+.ch-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; overflow-wrap: anywhere; margin: 0; }
+.ch-arrow {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--blue-primary);
+  margin-left: 8px;
+  align-self: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.ch-arrow svg { display: block; width: 22px; height: 22px; }
+.ch-card:focus-visible .ch-arrow { filter: brightness(1.2) drop-shadow(0 0 3px currentColor); }
+@media (hover: hover) and (pointer: fine) {
+  .ch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--chapter-card-hover-shadow);
+    border-color: var(--blue-border);
+  }
+  .ch-card:hover .ch-arrow { transform: translateX(3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ch-card { transition: none; }
+  .ch-arrow { transition: none; }
+  .ch-card:hover,
+  .ch-card:hover .ch-arrow,
+  .ch-card:focus-visible .ch-arrow { transform: none; }
+}
+
+/* Shared homepage card hover treatment */
+.instructor-card {
+  transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease, filter 0.24s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .instructor-card:hover {
+    transform: translateY(-3px);
+    filter: drop-shadow(0 0 12px var(--feature-glow-hover));
+  }
+  .instructor-card:hover,
+  .ch-card:hover {
+    border-color: var(--blue-border);
+  }
+}
+.ch-card:focus-visible,
+.instructor-card:focus-within {
+  border-color: var(--blue-border);
+  filter: drop-shadow(0 0 12px var(--feature-glow-hover));
+}
+@media (prefers-reduced-motion: reduce) {
+  .instructor-card { transition: none; }
+  .instructor-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .chapter-cards-grid { grid-template-columns: 1fr; }
+}
+
+.ch-info-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--blue-light);
+  border: 1px solid var(--blue-border);
+  color: var(--blue-primary);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 48px;
+}
+body.dark-mode .ch-info-note { color: var(--cyan-accent); }
+
+/* Table of Contents */
+.toc-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 56px;
+}
+.toc-header h3 { font-size: 20px; margin: 0 0 4px; }
+.toc-header p { color: var(--text-muted); font-size: 14px; margin: 0 0 20px; }
+.toc {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.toc details {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.toc summary {
+  cursor: pointer;
+  padding: 11px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-main);
+  background: var(--bg-page);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toc summary::-webkit-details-marker { display: none; }
+.toc summary::after { content: "+"; color: var(--blue-primary); font-weight: 700; font-size: 16px; }
+.toc details[open] summary::after { content: "–"; }
+.toc ol { margin: 0; padding: 10px 16px 12px 32px; font-size: 13.5px; }
+.toc li { padding: 3px 0; }
+.toc li a { text-decoration: none; color: var(--text-main); transition: color 0.15s; }
+.toc li a:hover { color: var(--blue-primary); text-decoration: underline; }
+
+/* Interactive Chapter Labs */
+.chapter {
+  scroll-margin-top: 80px;
+  padding: 56px 0 24px;
+  border-top: 1px solid var(--line);
+}
+.chapter .head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 20px;
+  margin-bottom: 14px;
+}
+.chapter .head .num {
+  color: var(--blue-primary);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+  display: block;
+}
+.chapter .head h2 { font-size: 28px; margin: 0; }
+.chapter .head .tools { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.chapter .head .tools a, .chapter .head .tools button {
+  font: 600 13px 'Inter', system-ui, sans-serif;
+  color: var(--blue-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chapter .head .tools a:hover, .chapter .head .tools button:hover {
+  background: var(--blue-light);
+  border-color: var(--blue-border);
+}
+.chapter .desc { color: var(--text-muted); max-width: 900px; font-size: 15px; margin: 0 0 18px; }
+.lab {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0f1220;
+  height: min(900px, 88vh);
+  min-height: 560px;
+  box-shadow: 0 12px 32px rgba(11, 42, 91, 0.12);
+}
+.lab-fullscreen-controls {
+  display: none;
+}
+.lab:fullscreen,
+.lab.is-fullscreen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.lab:fullscreen .lab-fullscreen-controls,
+.lab.is-fullscreen .lab-fullscreen-controls {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-height: 60px;
+  padding: max(8px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) 8px max(12px, env(safe-area-inset-left, 0px));
+  background: #070e1e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+.lab-fullscreen-controls button,
+.lab-fullscreen-controls a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9px;
+  background: #17243a;
+  color: #f8fafc;
+  font: 600 14px 'Inter', system-ui, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.lab-fullscreen-controls button:hover,
+.lab-fullscreen-controls a:hover {
+  background: #253a5a;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.lab-fullscreen-controls button:focus-visible,
+.lab-fullscreen-controls a:focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+}
+.lab iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0f1220;
+}
+.lab:fullscreen iframe,
+.lab.is-fullscreen iframe {
+  position: relative;
+  inset: auto;
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+}
+.lab .ph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #9aa3c4;
+  font-size: 15px;
+}
+@media (max-width: 700px) {
+  .lab { height: 80vh; min-height: 480px; }
+  .lab:fullscreen .lab-fullscreen-controls,
+  .lab.is-fullscreen .lab-fullscreen-controls {
+    justify-content: stretch;
+    gap: 8px;
+    padding-right: max(8px, env(safe-area-inset-right, 0px));
+    padding-left: max(8px, env(safe-area-inset-left, 0px));
+  }
+  .lab-fullscreen-controls button,
+  .lab-fullscreen-controls a {
+    flex: 1 1 0;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="top-nav">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="index.html#home">
+      <span class="mark">⚡</span>
+      <span class="brand-text">Electric Machinery Fundamentals</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Toggle navigation" aria-controls="links">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu" id="links">
+      <ul class="nav-links">
+        <li><a href="index.html#home" class="active">Home</a></li>
+        <li><a href="index.html#chapters" class="">Chapters</a></li>
+        <li><a href="index.html#video-lectures" class="">Video Lectures</a></li>
+        <li><a href="index.html#about" class="">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button class="icon-btn" id="search-toggle" aria-label="Search topics" title="Search topics (Ctrl+K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+  <div class="wrap hero-wrap">
+    <div class="hero-content">
+      <div class="hero-kicker">ELECTRICAL ENGINEERING COURSE</div>
+      <h1 class="hero-title">Electric Machinery Fundamentals</h1>
+      <p class="hero-lead">Explore the principles, operation and control of electrical machines through interactive simulations, clear explanations and real-world examples.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#chapters">
+          Explore Chapters
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <a class="btn-primary btn-secondary" href="https://drive.google.com/file/d/1NZYZV8si5BRyqteX9DAg-fVmUIBETosb/view?usp=sharing" target="_blank" rel="noopener noreferrer" aria-label="Read the Electric Machinery Fundamentals textbook PDF in a new tab">
+          <span class="hero-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5v14"></path><path d="M12 7c-1.4-1.4-3.2-2-5.2-2H5a2 2 0 0 0-2 2v10.5a2 2 0 0 0 2 2h2.5c2 0 3.5.5 4.5 1.5"></path><path d="M12 7c1.4-1.4 3.2-2 5.2-2H19a2 2 0 0 1 2 2v10.5a2 2 0 0 1-2 2h-2.5c-2 0-3.5.5-4.5 1.5"></path></svg></span>
+          Read Book
+        </a>
+        <a class="btn-primary btn-secondary" href="#video-lectures" aria-label="Browse video lectures by chapter and topic">
+          <span class="hero-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polygon points="10 9 15 12 10 15 10 9" fill="currentColor" stroke="none"></polygon></svg></span>
+          Video Lectures
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-card">
+        <img src="assets/motor_hero.webp" alt="Electric Motor Blueprint Illustration" class="motor-img" width="512" height="512" fetchpriority="high" decoding="async">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features & About Section -->
+<section class="features-section">
+  <div class="wrap">
+    <!-- 3 Feature Cards -->
+    <div class="feature-cards">
+      <div class="feature-card">
+        <div class="feature-icon icon-blue">
+          <img src="assets/interactive-learning.png" alt="" width="72" height="72" loading="lazy" decoding="async">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <h3>Interactive Learning</h3>
+        <p>Simulations, visualizations and hands-on calculations.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-cyan">
+          <img src="assets/reference-book-lectures.png" alt="" width="72" height="72" loading="lazy" decoding="async">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </div>
+        <h3>Learning Resources</h3>
+        <p>Access reference books, video lectures, and additional materials to support your learning.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon icon-indigo">
+          <img src="assets/learn-anytime.png" alt="" width="72" height="72" loading="lazy" decoding="async">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+        </div>
+        <h3>Learn Anytime</h3>
+        <p>Access from any device, anywhere in the world.</p>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section" id="about">
+      <div class="about-grid">
+        <div class="about-info">
+          <h2>About the Course</h2>
+          <p>This course provides a comprehensive understanding of electrical machines, including transformers, induction motors, synchronous machines, DC machines and special machines. It is designed for students, engineers and anyone interested in the field of electrical power or machines.</p>
+          <a href="#chapters" class="btn-learn-more">
+            Learn More
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+        <div class="instructor-card">
+          <div class="instructor-avatar-wrap">
+            <img data-src="assets/instructor_avatar.webp" alt="Prof. Salim Butt" class="instructor-avatar" width="78" height="78" loading="lazy" decoding="async">
+          </div>
+          <div class="instructor-details">
+            <span class="instructor-badge">INSTRUCTOR</span>
+            <h4 class="instructor-name">Prof. Salim Butt</h4>
+            <p class="instructor-title">Electrical Engineering Department</p>
+            <p class="instructor-affil">UET</p>
+            <a href="mailto:salimbutt@uet.edu.pk" class="instructor-email">salimbutt@uet.edu.pk</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wave-decoration" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none" fill="none">
+          <path d="M0,30 C150,55 350,5 500,30 C650,55 850,5 1000,30 C1080,45 1150,20 1200,30" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+          <path d="M0,38 C200,60 400,15 600,38 C800,60 1000,15 1200,38" stroke="#38bdf8" stroke-width="1.5" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Choose a Chapter Section on Home -->
+<main class="chapters-section" id="chapters">
+  <div class="wrap">
+    <div class="chapters-header">
+      <span class="section-kicker">EXPLORE CHAPTERS</span>
+      <h2>Choose a Chapter</h2>
+      <p>Select a chapter to view its overview and open an interactive lesson.</p>
+    </div>
+
+    <div class="chapter-cards-grid">
+      
+      <a class="ch-card" href="chapter-pages/chapter0.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-00-ac-systems.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#2563eb">CHAPTER 00</span>
+          <h3 class="ch-title">AC Systems &amp; Reactive Components</h3>
+          <p class="ch-desc">AC Systems &amp; Reactive Components. Preparatory material.</p>
+        </div>
+        <div class="ch-arrow" style="color:#2563eb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter1.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-01-machinery-principles.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#0284c7">CHAPTER 01</span>
+          <h3 class="ch-title">Machinery Principles</h3>
+          <p class="ch-desc">Basic principles, magnetic fields, Faraday&#x27;s law and more.</p>
+        </div>
+        <div class="ch-arrow" style="color:#0284c7" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter2.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-02-transformers.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#059669">CHAPTER 02</span>
+          <h3 class="ch-title">Transformers</h3>
+          <p class="ch-desc">Construction, operation, equivalent circuits and testing.</p>
+        </div>
+        <div class="ch-arrow" style="color:#059669" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter3.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-03-ac-machinery.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#7c3aed">CHAPTER 03</span>
+          <h3 class="ch-title">AC Machinery</h3>
+          <p class="ch-desc">Single &amp; three phase induction machines, synchronous machines.</p>
+        </div>
+        <div class="ch-arrow" style="color:#7c3aed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter4.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-04-synchronous-machines.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#d97706">CHAPTER 04</span>
+          <h3 class="ch-title">Synchronous Machines</h3>
+          <p class="ch-desc">Operation, performance, excitation and power factor.</p>
+        </div>
+        <div class="ch-arrow" style="color:#d97706" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter5.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-05-induction-motors.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#db2777">CHAPTER 05</span>
+          <h3 class="ch-title">Induction Motors</h3>
+          <p class="ch-desc">Principle, torque-speed, starting methods and control.</p>
+        </div>
+        <div class="ch-arrow" style="color:#db2777" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter6.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-06-dc-machines.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#0d9488">CHAPTER 06</span>
+          <h3 class="ch-title">DC Machines</h3>
+          <p class="ch-desc">Construction, operation, speed control and applications.</p>
+        </div>
+        <div class="ch-arrow" style="color:#0d9488" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+      <a class="ch-card" href="chapter-pages/chapter7.html">
+        <div class="ch-icon-wrap">
+          <img src="assets/chapter-07-special-motors.png" alt="" width="52" height="52" loading="lazy" decoding="async">
+        </div>
+        <div class="ch-body">
+          <span class="ch-code" style="color:#ea580c">CHAPTER 07</span>
+          <h3 class="ch-title">Special Motors</h3>
+          <p class="ch-desc">Stepper, servo, linear and other special machines.</p>
+        </div>
+        <div class="ch-arrow" style="color:#ea580c" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="19" y2="12"></line><polyline points="13 6 19 12 13 18"></polyline></svg></div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<section class="home-video-section" id="video-lectures" aria-labelledby="home-video-heading">
+  <div class="wrap">
+    <div class="home-video-heading">
+      <div class="home-video-intro">
+        <span class="section-kicker">DIGITAL LEARNING RESOURCES</span>
+        <h2 id="home-video-heading">Video Lectures</h2>
+        <p>Browse topic-wise lectures and watch a lesson on its dedicated page.</p>
+        <p class="home-video-result-count" id="home-video-result-count" aria-live="polite"></p>
+      </div>
+      <div class="home-video-filters" role="group" aria-label="Filter video lectures">
+        <label><span class="sr-only">Filter by week</span><select id="home-video-week"><option value="">All weeks</option><option value="1">Week 1</option><option value="3">Week 3</option><option value="5">Week 5</option><option value="6">Week 6</option><option value="7">Week 7</option><option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option></select></label>
+        <label><span class="sr-only">Filter by topic</span><select id="home-video-topic"><option value="">All topics</option><option value="DC motors and speed control">DC motors and speed control</option><option value="DC-machine losses, maximum efficiency and armature reaction">DC-machine losses, maximum efficiency and armature reaction</option><option value="DC-motor speed/load and torque/load characteristics">DC-motor speed/load and torque/load characteristics</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and power-loss calculations">Induction-motor tests and power-loss calculations</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Transformer equivalent circuit, voltage regulation and efficiency">Transformer equivalent circuit, voltage regulation and efficiency</option></select></label>
+        <label class="home-video-search">
+          <span class="sr-only">Search video lectures</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+          <input id="home-video-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="home-video-topic-grid">
+        </label>
+        <button class="home-video-reset" id="home-video-reset" type="button">Clear filters</button>
+      </div>
+    </div>
+    <p class="home-video-empty" id="home-video-empty" role="status" hidden>No matching lectures found</p>
+    <div class="home-video-topic-grid" id="home-video-topic-grid">
+      
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 1</span>
+          <span class="topic-video-count">3 lectures</span>
+        </div>
+        <h3>Magnetic circuits and numerical examples</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuits https://youtu.be/uds_qwueyny uds_qwueyny" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/UdS_qWUEynY" aria-label="Play Magnetic Circuits">
+              <img src="https://img.youtube.com/vi/UdS_qWUEynY/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Magnetic Circuits</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/UdS_qWUEynY"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuits numerical example https://youtu.be/atkp-zjnnzm atkp-zjnnzm" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/aTKp-zjnnZM" aria-label="Play Magnetic Circuits Numerical Example">
+              <img src="https://img.youtube.com/vi/aTKp-zjnnZM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Magnetic Circuits Numerical Example</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/aTKp-zjnnZM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuit numerical 2 https://youtu.be/_0smktzzhzs _0smktzzhzs" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/_0SMkTzzHzs" aria-label="Play Magnetic Circuit Numerical 2">
+              <img src="https://img.youtube.com/vi/_0SMkTzzHzs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Magnetic Circuit Numerical 2</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/_0SMkTzzHzs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 3</span>
+          <span class="topic-video-count">4 lectures</span>
+        </div>
+        <h3>Transformer equivalent circuit, voltage regulation and efficiency</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency equivalent circuit diagram of transformers (part 1) https://youtu.be/mgctrl9gviq mgctrl9gviq" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/MGCTRL9GvIQ" aria-label="Play Equivalent Circuit Diagram of Transformers (Part 1)">
+              <img src="https://img.youtube.com/vi/MGCTRL9GvIQ/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Equivalent Circuit Diagram of Transformers (Part 1)</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/MGCTRL9GvIQ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency equivalent circuit diagram of transformers (part 2) https://youtu.be/2oqqtiv9agi 2oqqtiv9agi" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/2OQQTiv9AgI" aria-label="Play Equivalent Circuit Diagram of Transformers (Part 2)">
+              <img src="https://img.youtube.com/vi/2OQQTiv9AgI/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Equivalent Circuit Diagram of Transformers (Part 2)</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/2OQQTiv9AgI"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency effect of loads on transformer https://youtu.be/lez4i2vlbt8 lez4i2vlbt8" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/lEz4i2VlbT8" aria-label="Play Effect of loads on transformer">
+              <img src="https://img.youtube.com/vi/lEz4i2VlbT8/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Effect of loads on transformer</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/lEz4i2VlbT8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency open circuit and short circuit test of transformer (complete numerical ) https://youtu.be/kkuoiivudc4 kkuoiivudc4" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/KKuoiivUDC4" aria-label="Play Open Circuit and Short Circuit test of transformer (Complete Numerical )">
+              <img src="https://img.youtube.com/vi/KKuoiivUDC4/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Open Circuit and Short Circuit test of transformer (Complete Numerical )</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/KKuoiivUDC4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 5</span>
+          <span class="topic-video-count">1 lecture</span>
+        </div>
+        <h3>DC-machine losses, maximum efficiency and armature reaction</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 5 dc-machine losses, maximum efficiency and armature reaction armature reaction effect on dc machines https://youtu.be/8ucji-af1s0 8ucji-af1s0" data-lecture-week="5" data-lecture-topic="DC-machine losses, maximum efficiency and armature reaction">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/8ucji-Af1S0" aria-label="Play Armature Reaction Effect on DC Machines">
+              <img src="https://img.youtube.com/vi/8ucji-Af1S0/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Armature Reaction Effect on DC Machines</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/8ucji-Af1S0"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 6</span>
+          <span class="topic-video-count">2 lectures</span>
+        </div>
+        <h3>DC motors and speed control</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 6 dc motors and speed control speed control of dc motor https://youtu.be/231ettejano 231ettejano" data-lecture-week="6" data-lecture-topic="DC motors and speed control">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/231etTEJANo" aria-label="Play Speed Control of DC Motor">
+              <img src="https://img.youtube.com/vi/231etTEJANo/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Speed Control of DC Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/231etTEJANo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 6 dc motors and speed control torque speed characteristics of dc motor https://youtu.be/54gxqryh3j4 54gxqryh3j4" data-lecture-week="6" data-lecture-topic="DC motors and speed control">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/54GXQRYh3J4" aria-label="Play Torque Speed Characteristics of DC Motor">
+              <img src="https://img.youtube.com/vi/54GXQRYh3J4/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Torque Speed Characteristics of DC Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/54GXQRYh3J4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 7</span>
+          <span class="topic-video-count">1 lecture</span>
+        </div>
+        <h3>DC-motor speed/load and torque/load characteristics</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 7 dc-motor speed/load and torque/load characteristics emf and torque equation of dc machines https://youtu.be/0jd7dsckqtm 0jd7dsckqtm" data-lecture-week="7" data-lecture-topic="DC-motor speed/load and torque/load characteristics">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/0jd7dSCKQtM" aria-label="Play EMF and Torque Equation Of DC Machines">
+              <img src="https://img.youtube.com/vi/0jd7dSCKQtM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>EMF and Torque Equation Of DC Machines</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/0jd7dSCKQtM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 10</span>
+          <span class="topic-video-count">3 lectures</span>
+        </div>
+        <h3>Induction-motor induced EMF, rotor frequency, speed and torque</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque revolving magnetic field in ac machine stator https://youtu.be/fhojk_sos5q fhojk_sos5q" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/FHOJK_soS5Q" aria-label="Play REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR">
+              <img src="https://img.youtube.com/vi/FHOJK_soS5Q/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/FHOJK_soS5Q"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque types of stator winding https://youtu.be/zb1w9db9clk zb1w9db9clk" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/Zb1W9dB9Clk" aria-label="Play TYPES OF STATOR WINDING">
+              <img src="https://img.youtube.com/vi/Zb1W9dB9Clk/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>TYPES OF STATOR WINDING</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/Zb1W9dB9Clk"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque effect of poles and frequency on revolving magnetic field https://youtu.be/e5gcd-huxwm e5gcd-huxwm" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/E5Gcd-HuXWM" aria-label="Play Effect of poles and frequency on revolving magnetic field">
+              <img src="https://img.youtube.com/vi/E5Gcd-HuXWM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Effect of poles and frequency on revolving magnetic field</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/E5Gcd-HuXWM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 11</span>
+          <span class="topic-video-count">6 lectures</span>
+        </div>
+        <h3>Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow slip https://youtu.be/8rratyqqii8 8rratyqqii8" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/8rraTyqqii8" aria-label="Play Slip">
+              <img src="https://img.youtube.com/vi/8rraTyqqii8/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Slip</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/8rraTyqqii8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow difference between squirrel cage and wound rotor induction motor. https://youtu.be/4fff58yjh3e 4fff58yjh3e" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/4fFF58yJh3E" aria-label="Play Difference between squirrel cage and wound rotor induction motor.">
+              <img src="https://img.youtube.com/vi/4fFF58yJh3E/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Difference between squirrel cage and wound rotor induction motor.</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/4fFF58yJh3E"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 1) https://youtu.be/v8rfq9zgsqc v8rfq9zgsqc" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/V8RFq9ZgsQc" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 1)">
+              <img src="https://img.youtube.com/vi/V8RFq9ZgsQc/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Equivalent Circuit diagram of Induction Motor (part 1)</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/V8RFq9ZgsQc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 2) https://youtu.be/x_-z_wvxtfa x_-z_wvxtfa" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/X_-z_wvXTfA" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 2)">
+              <img src="https://img.youtube.com/vi/X_-z_wvXTfA/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Equivalent Circuit diagram of Induction Motor (part 2)</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/X_-z_wvXTfA"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 3) https://youtu.be/ibr2iei0ass ibr2iei0ass" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/IBR2Iei0aSs" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 3)">
+              <img src="https://img.youtube.com/vi/IBR2Iei0aSs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Equivalent Circuit diagram of Induction Motor (part 3)</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/IBR2Iei0aSs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow approximate equivalent circuit diagram of induction motor https://youtu.be/rgshqcyhgog rgshqcyhgog" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/RgsHqcyhGOg" aria-label="Play Approximate Equivalent Circuit diagram of Induction Motor">
+              <img src="https://img.youtube.com/vi/RgsHqcyhGOg/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Approximate Equivalent Circuit diagram of Induction Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/RgsHqcyhGOg"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 12</span>
+          <span class="topic-video-count">2 lectures</span>
+        </div>
+        <h3>Induction-motor tests and power-loss calculations</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and power-loss calculations power flow and losses in induction motor https://youtu.be/hcdqhbm53gq hcdqhbm53gq" data-lecture-week="12" data-lecture-topic="Induction-motor tests and power-loss calculations">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/HCDqHBm53GQ" aria-label="Play Power Flow and Losses in Induction Motor">
+              <img src="https://img.youtube.com/vi/HCDqHBm53GQ/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Power Flow and Losses in Induction Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/HCDqHBm53GQ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and power-loss calculations power and losses relations of induction motor https://youtu.be/j-rwq2nkirs j-rwq2nkirs" data-lecture-week="12" data-lecture-topic="Induction-motor tests and power-loss calculations">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/J-Rwq2nKIRs" aria-label="Play Power and Losses relations of Induction Motor">
+              <img src="https://img.youtube.com/vi/J-Rwq2nKIRs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Power and Losses relations of Induction Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/J-Rwq2nKIRs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="week-label">Week 12</span>
+          <span class="topic-video-count">4 lectures</span>
+        </div>
+        <h3>Induction-motor tests and torque/speed characteristics</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics torque speed characteristics part 1 https://youtu.be/uz3hvgbyyoi uz3hvgbyyoi" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/uZ3HvgbYyoI" aria-label="Play Torque Speed Characteristics Part 1">
+              <img src="https://img.youtube.com/vi/uZ3HvgbYyoI/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Torque Speed Characteristics Part 1</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/uZ3HvgbYyoI"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics torque and speed characteristics part 2 https://youtu.be/pnfddfgmkxw pnfddfgmkxw" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/PNFDDfgmkXw" aria-label="Play Torque and Speed Characteristics part 2">
+              <img src="https://img.youtube.com/vi/PNFDDfgmkXw/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Torque and Speed Characteristics part 2</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/PNFDDfgmkXw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics maximum torque equation derivation https://youtu.be/0bagd_ydl58 0bagd_ydl58" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/0bagD_YDL58" aria-label="Play Maximum Torque Equation Derivation">
+              <img src="https://img.youtube.com/vi/0bagD_YDL58/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Maximum Torque Equation Derivation</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/0bagD_YDL58"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics numerical 3 on torque and speed characteristics https://youtu.be/ndllazgrxqe ndllazgrxqe" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/nDLLAzgrxQE" aria-label="Play Numerical 3 on Torque and Speed Characteristics">
+              <img src="https://img.youtube.com/vi/nDLLAzgrxQE/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Numerical 3 on Torque and Speed Characteristics</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/nDLLAzgrxQE"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var returnKey='emfVideoListReturn';
+  var search=document.getElementById('home-video-search');
+  var weekFilter=document.getElementById('home-video-week');
+  var topicFilter=document.getElementById('home-video-topic');
+  var reset=document.getElementById('home-video-reset');
+  var resultCount=document.getElementById('home-video-result-count');
+  window.addEventListener('pageshow',function(){
+    if(sessionStorage.getItem(returnKey)!=='1') return;
+    sessionStorage.removeItem(returnKey);
+    var savedQuery=sessionStorage.getItem('emfVideoListSearch')||'';
+    var savedWeek=sessionStorage.getItem('emfVideoListWeek')||'';
+    var savedTopic=sessionStorage.getItem('emfVideoListTopic')||'';
+    var savedScroll=Number(sessionStorage.getItem('emfVideoListScrollY'));
+    sessionStorage.removeItem('emfVideoListSearch');
+    sessionStorage.removeItem('emfVideoListWeek');
+    sessionStorage.removeItem('emfVideoListTopic');
+    sessionStorage.removeItem('emfVideoListScrollY');
+    search.value=savedQuery;
+    weekFilter.value=savedWeek;
+    topicFilter.value=savedTopic;
+    search.dispatchEvent(new Event('input'));
+    if(Number.isFinite(savedScroll)) window.requestAnimationFrame(function(){window.scrollTo(0,savedScroll);});
+  });
+  document.querySelectorAll('.home-lecture-thumbnail,.home-lecture-button').forEach(function(link){
+    link.addEventListener('click',function(){
+      sessionStorage.setItem(returnKey,'1');
+      sessionStorage.setItem('emfVideoListSearch',search.value);
+      sessionStorage.setItem('emfVideoListWeek',weekFilter.value);
+      sessionStorage.setItem('emfVideoListTopic',topicFilter.value);
+      sessionStorage.setItem('emfVideoListScrollY',String(window.scrollY));
+    });
+  });
+  var topics=Array.prototype.slice.call(document.querySelectorAll('.home-lecture-topic'));
+  var empty=document.getElementById('home-video-empty');
+  if(!search) return;
+  function updateLectureResults(){
+    var query=search.value.trim().toLowerCase();
+    var visibleCount=0;
+    topics.forEach(function(topic){
+      var cards=Array.prototype.slice.call(topic.querySelectorAll('.home-lecture-card'));
+      var visibleInTopic=0;
+      cards.forEach(function(card){
+        var visible=(!query || card.dataset.lectureSearch.indexOf(query)!==-1) &&
+          (!weekFilter.value || card.dataset.lectureWeek===weekFilter.value) &&
+          (!topicFilter.value || card.dataset.lectureTopic===topicFilter.value);
+        card.hidden=!visible;
+        if(visible) visibleInTopic++;
+      });
+      topic.hidden=visibleInTopic===0;
+      visibleCount+=visibleInTopic;
+    });
+    empty.hidden=visibleCount!==0;
+    resultCount.textContent=visibleCount+' lecture'+(visibleCount===1?'':'s')+' found';
+  }
+  search.addEventListener('input',updateLectureResults);
+  weekFilter.addEventListener('change',updateLectureResults);
+  topicFilter.addEventListener('change',updateLectureResults);
+  reset.addEventListener('click',function(){
+    search.value='';
+    weekFilter.value='';
+    topicFilter.value='';
+    updateLectureResults();
+    search.focus();
+  });
+  updateLectureResults();
+})();
+</script>
+
+<footer class="site-footer">
+  <div class="wrap footer-wrap">
+    <div class="footer-left">
+      <span class="footer-brand">Electric Machinery Fundamentals</span>
+      <span class="footer-dot">•</span>
+      <span>Learn</span>
+      <span class="footer-dot">•</span>
+      <span>Explore</span>
+      <span class="footer-dot">•</span>
+      <span>Build Your Future</span>
+    </div>
+    <div class="footer-right">
+      <span>UET</span>
+      <span class="footer-sep">|</span>
+      <span>Electrical Engineering</span>
+    </div>
+  </div>
+  <div class="wrap footer-sub">
+    <p>© Dr. Muhammad Salim Butt · University of Engineering &amp; Technology · Built as a teaching aid for <em>Electric Machinery Fundamentals</em> (S. J. Chapman). Stand-alone chapter modules are in the <code>chapters/</code> directory.</p>
+  </div>
+</footer>
+
+<button id="top" aria-label="Back to top" title="Scroll to top">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="6"></line><polyline points="7 11 12 6 17 11"></polyline></svg>
+</button>
+<div class="search-overlay" id="search-overlay" style="display:none">
+  <div class="search-modal">
+    <div class="search-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="Search topics, equations, machines..." autocomplete="off">
+      <button class="search-close" id="search-close" aria-label="Close search">&times;</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
+<script>
+
+(function(){
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.body.classList.add('emf-page-enter');
+  }
+
+  var deferredImages=document.querySelectorAll('img[data-src]');
+  if('IntersectionObserver' in window){
+    var imageObserver=new IntersectionObserver(function(entries,observer){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var image=entry.target;
+          image.src=image.dataset.src;
+          image.removeAttribute('data-src');
+          observer.unobserve(image);
+        }
+      });
+    },{rootMargin:'300px 0px'});
+    deferredImages.forEach(function(image){ imageObserver.observe(image); });
+  } else {
+    deferredImages.forEach(function(image){
+      image.src=image.dataset.src;
+      image.removeAttribute('data-src');
+    });
+  }
+
+  // Theme toggle
+  var themeBtn=document.getElementById('theme-toggle');
+  if(themeBtn){
+    var syncThemeIcon=function(){
+      var dark=document.body.classList.contains('dark-mode');
+      themeBtn.innerHTML=dark
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    };
+    var savedTheme=localStorage.getItem('emf_theme');
+    if(savedTheme==='dark'){
+      document.body.classList.add('dark-mode');
+    } else if(savedTheme==='light'){
+      document.body.classList.remove('dark-mode');
+    }
+    syncThemeIcon();
+    new MutationObserver(syncThemeIcon).observe(document.body,{attributes:true,attributeFilter:['class']});
+    themeBtn.onclick=function(){
+      var isDark=document.body.classList.toggle('dark-mode');
+      localStorage.setItem('emf_theme', isDark ? 'dark' : 'light');
+      syncThemeIcon();
+    };
+  }
+
+  // Mobile menu
+  var burger=document.getElementById('burger'), menu=document.getElementById('links');
+  if(burger && menu){
+    burger.onclick=function(){ menu.classList.toggle('open'); };
+    menu.addEventListener('click',function(e){
+      if(e.target.tagName==='A') menu.classList.remove('open');
+    });
+  }
+
+  // Keep the primary navigation indicator in sync with routes and homepage sections.
+  var navLinks=Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var navBar=document.querySelector('.nav');
+  function normalizedPagePath(path){
+    path=path.toLowerCase();
+    if(path.endsWith('/index.html')) path=path.slice(0,-10);
+    if(!path.endsWith('/')) path+='/';
+    return path;
+  }
+  function setActiveNav(link){
+    navLinks.forEach(function(item){ item.classList.toggle('active',item===link); });
+  }
+  function navLinkFor(label){
+    return navLinks.find(function(link){ return link.textContent.trim().toLowerCase()===label; });
+  }
+  function updateActiveNav(){
+    if(!navLinks.length) return;
+    var path=window.location.pathname.toLowerCase();
+    if(path.endsWith('/video-lectures.html')){
+      setActiveNav(navLinkFor('video lectures'));
+      return;
+    }
+    if(path.endsWith('/chapters.html') || path.indexOf('/chapter-pages/')!==-1){
+      setActiveNav(navLinkFor('chapters'));
+      return;
+    }
+    if(!(path.endsWith('/index.html') || path.endsWith('/'))){
+      return;
+    }
+    if(window.scrollY<2 && location.hash){
+      var initialSection=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if(initialSection){
+        var initialId=initialSection.id;
+        if(initialId==='chapters' || initialId==='video-lectures' || initialId==='about' || initialId==='home'){
+          setActiveNav(navLinkFor(initialId==='video-lectures' ? 'video lectures' : initialId));
+          return;
+        }
+      }
+    }
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var marker=window.scrollY+headerHeight+Math.min(window.innerHeight*0.32,240);
+    var activeSection='home';
+    ['home','about','chapters','video-lectures'].forEach(function(id){
+      var section=document.getElementById(id);
+      if(section && section.getBoundingClientRect().top+window.scrollY<=marker){
+        activeSection=id;
+      }
+    });
+    setActiveNav(navLinkFor(activeSection==='chapters' ? 'chapters' : activeSection==='video-lectures' ? 'video lectures' : activeSection));
+  }
+  var navUpdatePending=false;
+  function scheduleActiveNavUpdate(){
+    if(navUpdatePending) return;
+    navUpdatePending=true;
+    window.requestAnimationFrame(function(){
+      navUpdatePending=false;
+      updateActiveNav();
+    });
+  }
+  function scrollToSection(section, instant){
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var sectionTop=window.scrollY+section.getBoundingClientRect().top-headerHeight-8;
+    var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:Math.max(0,sectionTop),behavior:instant?'instant':reducedMotion?'auto':'smooth'});
+    setActiveNav(navLinkFor(section.id==='video-lectures' ? 'video lectures' : section.id));
+  }
+  navLinks.forEach(function(link){
+    link.addEventListener('click',function(){
+      setActiveNav(link);
+      window.setTimeout(updateActiveNav,0);
+    });
+  });
+  document.addEventListener('click',function(event){
+    var anchor=event.target.closest&&event.target.closest('a[href]');
+    if(!anchor) return;
+    var targetUrl=new URL(anchor.href,window.location.href);
+    if(targetUrl.origin!==window.location.origin ||
+       normalizedPagePath(targetUrl.pathname)!==normalizedPagePath(window.location.pathname) ||
+       !targetUrl.hash) return;
+    var target=document.getElementById(decodeURIComponent(targetUrl.hash.slice(1)));
+    if(!target || !['home','about','chapters','video-lectures'].includes(target.id)) return;
+    event.preventDefault();
+    if(window.location.hash!==targetUrl.hash) history.pushState(null,'',targetUrl.hash);
+    scrollToSection(target);
+    scheduleActiveNavUpdate();
+  });
+  function scrollToInitialHash(){
+    if(!(window.location.pathname.toLowerCase().endsWith('/index.html') || window.location.pathname.endsWith('/')) || !window.location.hash) return;
+    var initialTarget=document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+    if(initialTarget && ['home','about','chapters','video-lectures'].includes(initialTarget.id)){
+      scrollToSection(initialTarget,true);
+      updateActiveNav();
+    }
+  }
+  var initialHashScrollTimer=0;
+  function scheduleInitialHashScroll(){
+    window.clearTimeout(initialHashScrollTimer);
+    initialHashScrollTimer=window.setTimeout(function(){
+      initialHashScrollTimer=0;
+      window.setTimeout(scrollToInitialHash,0);
+    },0);
+  }
+  scheduleInitialHashScroll();
+  window.addEventListener('pageshow',scheduleInitialHashScroll);
+  window.addEventListener('load',scheduleInitialHashScroll);
+  window.addEventListener('hashchange',scheduleInitialHashScroll);
+  window.addEventListener('scroll',scheduleActiveNavUpdate,{passive:true});
+  window.addEventListener('resize',scheduleActiveNavUpdate);
+  window.addEventListener('hashchange',scheduleActiveNavUpdate);
+  window.addEventListener('popstate',scheduleActiveNavUpdate);
+  window.addEventListener('pageshow',scheduleActiveNavUpdate);
+  updateActiveNav();
+
+  // Back to top
+  var topBtn=document.getElementById('top');
+  if(topBtn){
+    window.addEventListener('scroll',function(){
+      topBtn.classList.toggle('show', window.scrollY > 400);
+    },{passive:true});
+    topBtn.onclick=function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+  }
+
+  // Search dialog
+  var searchOverlay=document.getElementById('search-overlay');
+  var searchBtn=document.getElementById('search-toggle');
+  var searchInput=document.getElementById('search-input');
+  var searchResults=document.getElementById('search-results');
+  var searchClose=document.getElementById('search-close');
+  var searchIndex=null;
+  var searchIndexRequest=null;
+  var rootPrefix='';
+
+  function loadSearchIndex(){
+    if(searchIndex) return Promise.resolve(searchIndex);
+    if(!searchIndexRequest){
+      searchIndexRequest=fetch(rootPrefix+'search-index.json').then(function(response){
+        if(!response.ok) throw new Error('Search index request failed with HTTP '+response.status);
+        return response.json();
+      }).then(function(data){
+        if(!Array.isArray(data)) throw new TypeError('Search index must contain an array');
+        searchIndex=data;
+        return searchIndex;
+      }).catch(function(error){
+        searchIndexRequest=null;
+        throw error;
+      });
+    }
+    return searchIndexRequest;
+  }
+
+  function showSearchLoadError(error){
+    console.error('Topic search could not be loaded.',error);
+    searchResults.innerHTML='';
+    var message=document.createElement('div');
+    message.className='search-empty';
+    message.appendChild(document.createTextNode('Could not load topic search. '));
+    var retry=document.createElement('button');
+    retry.type='button';
+    retry.textContent='Retry';
+    retry.onclick=loadAndRenderSearch;
+    message.appendChild(retry);
+    searchResults.appendChild(message);
+  }
+
+  function loadAndRenderSearch(){
+    if(!searchResults) return;
+    searchResults.innerHTML='<div class="search-empty">Loading topics…</div>';
+    loadSearchIndex().then(function(){ renderSearchResults(searchInput.value); }).catch(showSearchLoadError);
+  }
+
+  function openSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='grid';
+    searchInput.value='';
+    loadAndRenderSearch();
+    setTimeout(function(){ searchInput.focus(); }, 50);
+  }
+  function closeSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='none';
+  }
+  if(searchBtn) searchBtn.onclick=openSearch;
+  if(searchClose) searchClose.onclick=closeSearch;
+  if(searchOverlay){
+    searchOverlay.onclick=function(e){
+      if(e.target===searchOverlay) closeSearch();
+    };
+  }
+  if(searchResults){
+    searchResults.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('.search-item')) closeSearch();
+    });
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSearch();
+    if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openSearch(); }
+  });
+
+  function renderSearchResults(q){
+    if(!searchResults || !searchIndex) return;
+    q=(q||'').trim().toLowerCase();
+    var matches = searchIndex.filter(function(item){
+      return !q || item.title.toLowerCase().indexOf(q)!==-1 || item.chTitle.toLowerCase().indexOf(q)!==-1 || item.desc.toLowerCase().indexOf(q)!==-1;
+    }).slice(0, 20);
+
+    if(!matches.length){
+      searchResults.innerHTML='<div class="search-empty">No matching topics found</div>';
+      return;
+    }
+    searchResults.innerHTML=matches.map(function(m){
+      var linkUrl = rootPrefix + 'chapter-pages/view' + m.chIndex + '.html#' + encodeURIComponent(m.id);
+      return '<a href="' + linkUrl + '" class="search-item">' +
+             '<strong>' + m.title + '</strong>' +
+             '<small>' + m.chCode + ' · ' + m.chTitle + '</small>' +
+             '</a>';
+    }).join('');
+
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input',function(){
+      if(searchIndex) renderSearchResults(searchInput.value);
+    });
+  }
+})();
+
+</script>
+</body>
+</html>

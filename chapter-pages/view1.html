@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHAPTER 01 — Interactive Chapter | Electric Machinery Fundamentals</title>
+<meta name="description" content="Interactive chapter application for Machinery Principles.">
+<meta name="theme-color" content="#070e1e">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<style>
+* { box-sizing: border-box; }
+:root { --cyan-accent: #38bdf8; --bg-card: #fff; --line: #e2e8f0; --radius-lg: 16px; --text-muted: #64748b; --text-main: #0f172a; --blue-light: #eff6ff; --blue-primary: #2563eb; }
+html, body { width: 100%; min-height: 100%; margin: 0; overflow-x: hidden; }
+body { padding-top: 64px; background: #0b132b; color: #f8fafc; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 24px; }
+a:focus-visible, button:focus-visible { outline: 3px solid #38bdf8; outline-offset: 2px; }
+.lesson-shell { display: flex; flex-direction: column; width: 100%; height: calc(100vh - 64px); height: calc(100dvh - 64px); background: #0b132b; }
+.lesson-toolbar {
+  display: grid; flex: 0 0 auto; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; column-gap: 14px; min-height: 64px; padding: 8px 16px;
+  background: #070e1e; border-bottom: 1px solid rgba(255,255,255,.14);
+}
+.lesson-breadcrumbs { display: flex; align-items: center; gap: 8px; min-width: 0; overflow: hidden; white-space: nowrap; }
+.lesson-breadcrumbs a { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lesson-breadcrumbs .current { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lesson-breadcrumbs a { color: #cbd5e1; text-decoration: none; font-weight: 600; }
+.lesson-breadcrumbs a:hover { color: #7dd3fc; }
+.lesson-breadcrumbs .separator { color: #64748b; }
+.lesson-breadcrumbs .current { color: #f8fafc; font-weight: 700; }
+.lesson-actions { display: flex; flex: 0 0 auto; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.lesson-topic-controls { display: none; align-items: center; gap: 8px; }
+.lesson-shell:fullscreen .lesson-topic-controls, .lesson-shell.is-fullscreen .lesson-topic-controls { display: flex; }
+.topics-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.22);
+  border-radius: 9px; background: #17243a; color: #f8fafc;
+  font: 600 14px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  white-space: nowrap; cursor: pointer; touch-action: manipulation;
+}
+.topics-toggle:hover { background: #253a5a; border-color: rgba(255,255,255,.45); }
+.topics-toggle svg { flex: 0 0 auto; }
+.lesson-actions a, .lesson-actions button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 9px 13px; border: 1px solid rgba(255,255,255,.22);
+  border-radius: 9px; background: #17243a; color: #f8fafc;
+  font: 600 14px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  text-decoration: none; cursor: pointer; touch-action: manipulation; white-space: nowrap;
+}
+.lesson-actions a:hover, .lesson-actions button:hover { background: #253a5a; border-color: rgba(255,255,255,.45); }
+.lesson-toolbar > .topics-toggle { grid-column: 1; grid-row: 1; }
+.lesson-toolbar > .lesson-breadcrumbs { grid-column: 2; grid-row: 1; }
+.lesson-toolbar > .lesson-actions { grid-column: 3; grid-row: 1; }
+.lesson-shell:fullscreen, .lesson-shell.is-fullscreen { width: 100%; height: 100vh; height: 100dvh; margin-top: -64px; }
+.lesson-shell:fullscreen [data-enter-fullscreen], .lesson-shell.is-fullscreen [data-enter-fullscreen] { display: none; }
+.lesson-shell:not(:fullscreen):not(.is-fullscreen) [data-exit-fullscreen] { display: none; }
+.lesson-frame { display: block; flex: 1 1 auto; width: 100%; min-height: 0; border: 0; background: #0f1220; }
+@media (max-width: 720px) {
+  .lesson-toolbar { grid-template-columns: auto minmax(0, 1fr); row-gap: 7px; column-gap: 10px; padding: 8px max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px)); }
+  .lesson-toolbar > .topics-toggle { grid-column: 1; grid-row: 1; }
+  .lesson-toolbar > .lesson-actions { grid-column: 2; grid-row: 1; }
+  .lesson-toolbar > .lesson-breadcrumbs { grid-column: 1 / -1; grid-row: 2; min-height: 28px; font-size: 13px; }
+  .topics-toggle { width: 44px; padding: 10px; }
+  .topics-toggle span { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .lesson-actions { display: flex; }
+  .lesson-actions a, .lesson-actions button { min-width: 0; padding: 8px 6px; font-size: 12px; }
+  .lesson-topic-controls { flex-wrap: wrap; justify-content: flex-end; }
+}
+@media (max-width: 860px) {
+  .lesson-toolbar { grid-template-columns: auto minmax(0, 1fr); }
+  .lesson-toolbar > .topics-toggle { grid-column: 1; grid-row: 1; }
+  .lesson-toolbar > .lesson-actions { grid-column: 2; grid-row: 1; }
+  .lesson-toolbar > .lesson-breadcrumbs { grid-column: 1 / -1; grid-row: 2; }
+  .lesson-actions { min-width: 0; max-width: 100%; }
+  .lesson-actions a, .lesson-actions button { min-width: 0; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+  .lesson-topic-controls { min-width: 0; max-width: 100%; flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .wrap { padding: 0 16px; }
+}
+@media (max-width: 380px) {
+  .lesson-breadcrumbs { gap: 5px; font-size: 12px; }
+  .lesson-actions { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lesson-topic-controls { grid-column: 1 / -1; }
+  .lesson-topic-controls button { flex: 1 1 0; }
+  .lesson-actions a, .lesson-actions button { gap: 5px; padding: 8px 4px; font-size: 11px; }
+  .lesson-actions svg { width: 15px; height: 15px; }
+}
+/* Navigation */
+.nav {
+  --nav-height: 60px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(8, 18, 38, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: var(--nav-height);
+}
+.nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: calc((min(100vw, 1200px) - 100vw) / 2);
+  min-width: 0;
+  gap: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .brand { font-size: 15px; }
+  .brand .brand-text { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+}
+.brand .mark {
+  color: var(--cyan-accent);
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+}
+.brand-text { font-weight: 700; }
+.nav-menu { display: flex; align-items: center; gap: 20px; margin-left: auto; }
+@media (min-width: 1201px) {
+  .nav-menu { margin-right: calc(592px - 50vw); }
+}
+.nav-links { display: flex; align-items: center; gap: 18px; list-style: none; margin: 0; padding: 0; }
+.nav-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 5px 3px;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: #ffffff; }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan-accent);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--cyan-accent);
+}
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.icon-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.burger {
+  display: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  width: 40px;
+  height: 38px;
+  padding: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 860px) {
+  .burger { display: flex; }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: var(--nav-height); left: 0; right: 0;
+    background: #081226;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 24px;
+    gap: 16px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  }
+  .nav-menu.open { display: flex; }
+  .nav-links { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+  .nav-links a { font-size: 16px; display: block; padding: 6px 0; }
+  .nav-actions { width: 100%; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+}
+@media (max-width: 480px) {
+  .nav-wrap { gap: 12px; }
+}
+
+
+/* Search Dialog */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(7, 14, 30, 0.75);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: flex-start center;
+  padding: 80px 20px 20px;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.search-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 640px;
+  max-height: 75vh;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.search-header svg { color: var(--text-muted); flex-shrink: 0; }
+.search-header input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text-main);
+  font-family: inherit;
+}
+.search-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.search-results {
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.search-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: background 0.1s;
+}
+.search-item:hover {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+}
+.search-item small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+.search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+</style>
+</head>
+<body>
+<header class="nav" id="top-nav">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="../index.html#home">
+      <span class="mark">⚡</span>
+      <span class="brand-text">Electric Machinery Fundamentals</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Toggle navigation" aria-controls="links">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu" id="links">
+      <ul class="nav-links">
+        <li><a href="../index.html#home" class="">Home</a></li>
+        <li><a href="../index.html#chapters" class="active">Chapters</a></li>
+        <li><a href="../index.html#video-lectures" class="">Video Lectures</a></li>
+        <li><a href="../index.html#about" class="">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button class="icon-btn" id="search-toggle" aria-label="Search topics" title="Search topics (Ctrl+K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="lesson-shell" id="lesson-shell">
+  <div class="lesson-toolbar">
+    <button type="button" class="topics-toggle" id="toggle-topics" aria-label="Hide topics" aria-expanded="true" title="Hide topics">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path><path d="m16 9-3 3 3 3"></path></svg>
+      <span>Hide topics</span>
+    </button>
+    <nav class="lesson-breadcrumbs" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator" aria-hidden="true">›</span>
+      <a href="../index.html#chapters">Chapters</a><span class="separator" aria-hidden="true">›</span>
+      <a href="chapter1.html">Machinery Principles</a><span class="separator" aria-hidden="true">›</span>
+      <span class="current" id="lesson-kind">Interactive Topic</span>
+    </nav>
+    <div class="lesson-actions" role="toolbar" aria-label="Chapter navigation">
+      <div class="lesson-topic-controls" id="fullscreen-topic-navigation" role="group" aria-label="Topic navigation">
+        <button type="button" id="fullscreen-previous-topic" disabled>← Previous Topic</button>
+        <button type="button" id="fullscreen-next-topic" disabled>Next Topic →</button>
+      </div>
+      <button type="button" id="enter-fullscreen" data-enter-fullscreen aria-label="Enter fullscreen" title="Enter fullscreen">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 3 5 3 5 8"></polyline><polyline points="16 3 19 3 19 8"></polyline><polyline points="8 21 5 21 5 16"></polyline><polyline points="16 21 19 21 19 16"></polyline></svg>
+        Fullscreen
+      </button>
+      <button type="button" id="exit-fullscreen" data-exit-fullscreen aria-label="Exit fullscreen" title="Exit fullscreen">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 3 8 8 3 8"></polyline><polyline points="16 3 16 8 21 8"></polyline><polyline points="8 21 8 16 3 16"></polyline><polyline points="16 21 16 16 21 16"></polyline></svg>
+        Exit Fullscreen
+      </button>
+      <a href="chapter1.html" id="back-to-chapter" aria-label="Back to Machinery Principles chapter overview" title="Return to the chapter overview">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span id="back-label">Back to Chapter</span>
+      </a>
+    </div>
+  </div>
+  <iframe class="lesson-frame" id="lesson-frame" title="CHAPTER 01 — Machinery Principles"></iframe>
+</main>
+<div class="search-overlay" id="search-overlay" style="display:none">
+  <div class="search-modal">
+    <div class="search-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="Search topics, equations, machines..." autocomplete="off">
+      <button class="search-close" id="search-close" aria-label="Close search">&times;</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+<script>
+
+(function(){
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.body.classList.add('emf-page-enter');
+  }
+
+  var deferredImages=document.querySelectorAll('img[data-src]');
+  if('IntersectionObserver' in window){
+    var imageObserver=new IntersectionObserver(function(entries,observer){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var image=entry.target;
+          image.src=image.dataset.src;
+          image.removeAttribute('data-src');
+          observer.unobserve(image);
+        }
+      });
+    },{rootMargin:'300px 0px'});
+    deferredImages.forEach(function(image){ imageObserver.observe(image); });
+  } else {
+    deferredImages.forEach(function(image){
+      image.src=image.dataset.src;
+      image.removeAttribute('data-src');
+    });
+  }
+
+  // Theme toggle
+  var themeBtn=document.getElementById('theme-toggle');
+  if(themeBtn){
+    var syncThemeIcon=function(){
+      var dark=document.body.classList.contains('dark-mode');
+      themeBtn.innerHTML=dark
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    };
+    var savedTheme=localStorage.getItem('emf_theme');
+    if(savedTheme==='dark'){
+      document.body.classList.add('dark-mode');
+    } else if(savedTheme==='light'){
+      document.body.classList.remove('dark-mode');
+    }
+    syncThemeIcon();
+    new MutationObserver(syncThemeIcon).observe(document.body,{attributes:true,attributeFilter:['class']});
+    themeBtn.onclick=function(){
+      var isDark=document.body.classList.toggle('dark-mode');
+      localStorage.setItem('emf_theme', isDark ? 'dark' : 'light');
+      syncThemeIcon();
+    };
+  }
+
+  // Mobile menu
+  var burger=document.getElementById('burger'), menu=document.getElementById('links');
+  if(burger && menu){
+    burger.onclick=function(){ menu.classList.toggle('open'); };
+    menu.addEventListener('click',function(e){
+      if(e.target.tagName==='A') menu.classList.remove('open');
+    });
+  }
+
+  // Keep the primary navigation indicator in sync with routes and homepage sections.
+  var navLinks=Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var navBar=document.querySelector('.nav');
+  function normalizedPagePath(path){
+    path=path.toLowerCase();
+    if(path.endsWith('/index.html')) path=path.slice(0,-10);
+    if(!path.endsWith('/')) path+='/';
+    return path;
+  }
+  function setActiveNav(link){
+    navLinks.forEach(function(item){ item.classList.toggle('active',item===link); });
+  }
+  function navLinkFor(label){
+    return navLinks.find(function(link){ return link.textContent.trim().toLowerCase()===label; });
+  }
+  function updateActiveNav(){
+    if(!navLinks.length) return;
+    var path=window.location.pathname.toLowerCase();
+    if(path.endsWith('/video-lectures.html')){
+      setActiveNav(navLinkFor('video lectures'));
+      return;
+    }
+    if(path.endsWith('/chapters.html') || path.indexOf('/chapter-pages/')!==-1){
+      setActiveNav(navLinkFor('chapters'));
+      return;
+    }
+    if(!(path.endsWith('/index.html') || path.endsWith('/'))){
+      return;
+    }
+    if(window.scrollY<2 && location.hash){
+      var initialSection=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if(initialSection){
+        var initialId=initialSection.id;
+        if(initialId==='chapters' || initialId==='video-lectures' || initialId==='about' || initialId==='home'){
+          setActiveNav(navLinkFor(initialId==='video-lectures' ? 'video lectures' : initialId));
+          return;
+        }
+      }
+    }
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var marker=window.scrollY+headerHeight+Math.min(window.innerHeight*0.32,240);
+    var activeSection='home';
+    ['home','about','chapters','video-lectures'].forEach(function(id){
+      var section=document.getElementById(id);
+      if(section && section.getBoundingClientRect().top+window.scrollY<=marker){
+        activeSection=id;
+      }
+    });
+    setActiveNav(navLinkFor(activeSection==='chapters' ? 'chapters' : activeSection==='video-lectures' ? 'video lectures' : activeSection));
+  }
+  var navUpdatePending=false;
+  function scheduleActiveNavUpdate(){
+    if(navUpdatePending) return;
+    navUpdatePending=true;
+    window.requestAnimationFrame(function(){
+      navUpdatePending=false;
+      updateActiveNav();
+    });
+  }
+  function scrollToSection(section){
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var sectionTop=window.scrollY+section.getBoundingClientRect().top-headerHeight-8;
+    var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:Math.max(0,sectionTop),behavior:reducedMotion?'auto':'smooth'});
+    setActiveNav(navLinkFor(section.id==='video-lectures' ? 'video lectures' : section.id));
+  }
+  navLinks.forEach(function(link){
+    link.addEventListener('click',function(){
+      setActiveNav(link);
+      window.setTimeout(updateActiveNav,0);
+    });
+  });
+  document.addEventListener('click',function(event){
+    var anchor=event.target.closest&&event.target.closest('a[href]');
+    if(!anchor) return;
+    var targetUrl=new URL(anchor.href,window.location.href);
+    if(targetUrl.origin!==window.location.origin ||
+       normalizedPagePath(targetUrl.pathname)!==normalizedPagePath(window.location.pathname) ||
+       !targetUrl.hash) return;
+    var target=document.getElementById(decodeURIComponent(targetUrl.hash.slice(1)));
+    if(!target || !['home','about','chapters','video-lectures'].includes(target.id)) return;
+    event.preventDefault();
+    if(window.location.hash!==targetUrl.hash) history.pushState(null,'',targetUrl.hash);
+    scrollToSection(target);
+    scheduleActiveNavUpdate();
+  });
+  function scrollToInitialHash(){
+    if(!(window.location.pathname.toLowerCase().endsWith('/index.html') || window.location.pathname.endsWith('/')) || !window.location.hash) return;
+    var initialTarget=document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+    if(initialTarget && ['home','about','chapters','video-lectures'].includes(initialTarget.id)){
+      window.requestAnimationFrame(function(){scrollToSection(initialTarget);updateActiveNav();});
+    }
+  }
+  scrollToInitialHash();
+  window.addEventListener('pageshow',scrollToInitialHash);
+  window.addEventListener('load',scrollToInitialHash);
+  window.addEventListener('hashchange',scrollToInitialHash);
+  window.addEventListener('scroll',scheduleActiveNavUpdate,{passive:true});
+  window.addEventListener('resize',scheduleActiveNavUpdate);
+  window.addEventListener('hashchange',scheduleActiveNavUpdate);
+  window.addEventListener('popstate',scheduleActiveNavUpdate);
+  window.addEventListener('pageshow',scheduleActiveNavUpdate);
+  updateActiveNav();
+
+  // Back to top
+  var topBtn=document.getElementById('top');
+  if(topBtn){
+    window.addEventListener('scroll',function(){
+      topBtn.classList.toggle('show', window.scrollY > 400);
+    },{passive:true});
+    topBtn.onclick=function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+  }
+
+  // Search dialog
+  var searchOverlay=document.getElementById('search-overlay');
+  var searchBtn=document.getElementById('search-toggle');
+  var searchInput=document.getElementById('search-input');
+  var searchResults=document.getElementById('search-results');
+  var searchClose=document.getElementById('search-close');
+  var searchIndex=null;
+  var searchIndexRequest=null;
+  var rootPrefix='../';
+
+  function loadSearchIndex(){
+    if(searchIndex) return Promise.resolve(searchIndex);
+    if(!searchIndexRequest){
+      searchIndexRequest=fetch(rootPrefix+'search-index.json').then(function(response){
+        if(!response.ok) throw new Error('Search index request failed with HTTP '+response.status);
+        return response.json();
+      }).then(function(data){
+        if(!Array.isArray(data)) throw new TypeError('Search index must contain an array');
+        searchIndex=data;
+        return searchIndex;
+      }).catch(function(error){
+        searchIndexRequest=null;
+        throw error;
+      });
+    }
+    return searchIndexRequest;
+  }
+
+  function showSearchLoadError(error){
+    console.error('Topic search could not be loaded.',error);
+    searchResults.innerHTML='';
+    var message=document.createElement('div');
+    message.className='search-empty';
+    message.appendChild(document.createTextNode('Could not load topic search. '));
+    var retry=document.createElement('button');
+    retry.type='button';
+    retry.textContent='Retry';
+    retry.onclick=loadAndRenderSearch;
+    message.appendChild(retry);
+    searchResults.appendChild(message);
+  }
+
+  function loadAndRenderSearch(){
+    if(!searchResults) return;
+    searchResults.innerHTML='<div class="search-empty">Loading topics…</div>';
+    loadSearchIndex().then(function(){ renderSearchResults(searchInput.value); }).catch(showSearchLoadError);
+  }
+
+  function openSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='grid';
+    searchInput.value='';
+    loadAndRenderSearch();
+    setTimeout(function(){ searchInput.focus(); }, 50);
+  }
+  function closeSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='none';
+  }
+  if(searchBtn) searchBtn.onclick=openSearch;
+  if(searchClose) searchClose.onclick=closeSearch;
+  if(searchOverlay){
+    searchOverlay.onclick=function(e){
+      if(e.target===searchOverlay) closeSearch();
+    };
+  }
+  if(searchResults){
+    searchResults.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('.search-item')) closeSearch();
+    });
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSearch();
+    if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openSearch(); }
+  });
+
+  function renderSearchResults(q){
+    if(!searchResults || !searchIndex) return;
+    q=(q||'').trim().toLowerCase();
+    var matches = searchIndex.filter(function(item){
+      return !q || item.title.toLowerCase().indexOf(q)!==-1 || item.chTitle.toLowerCase().indexOf(q)!==-1 || item.desc.toLowerCase().indexOf(q)!==-1;
+    }).slice(0, 20);
+
+    if(!matches.length){
+      searchResults.innerHTML='<div class="search-empty">No matching topics found</div>';
+      return;
+    }
+    searchResults.innerHTML=matches.map(function(m){
+      var linkUrl = rootPrefix + 'chapter-pages/view' + m.chIndex + '.html#' + encodeURIComponent(m.id);
+      return '<a href="' + linkUrl + '" class="search-item">' +
+             '<strong>' + m.title + '</strong>' +
+             '<small>' + m.chCode + ' · ' + m.chTitle + '</small>' +
+             '</a>';
+    }).join('');
+
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input',function(){
+      if(searchIndex) renderSearchResults(searchInput.value);
+    });
+  }
+})();
+
+</script>
+<script>
+(function(){
+  var shell=document.getElementById('lesson-shell');
+  var frame=document.getElementById('lesson-frame');
+  var fullscreenPreviousTopic=document.getElementById('fullscreen-previous-topic');
+  var fullscreenNextTopic=document.getElementById('fullscreen-next-topic');
+  var enter=document.getElementById('enter-fullscreen');
+  var exitButton=document.getElementById('exit-fullscreen');
+  var back=document.getElementById('back-to-chapter');
+  var topicsToggle=document.getElementById('toggle-topics');
+  var topicsHidden=false;
+  var isFullChapter=new URLSearchParams(location.search).get('full')==='1';
+  var chapterUrl='../chapters/chapter1.html';
+
+  function refreshLessonLayout(){
+    var lessonWindow=frame.contentWindow;
+    if(lessonWindow) lessonWindow.dispatchEvent(new lessonWindow.Event('resize'));
+  }
+  function applyTopicsLayout(lessonDocument){
+    var app=lessonDocument&&lessonDocument.querySelector('.app');
+    var sidebar=lessonDocument&&lessonDocument.querySelector('.side');
+    var workspace=lessonDocument&&lessonDocument.querySelector('.main');
+    if(!app||!sidebar||!workspace||!topicsToggle) return false;
+    app.classList.toggle('emf-topics-collapsed',topicsHidden);
+    if(topicsHidden){
+      var isMobile=window.matchMedia('(max-width: 860px)').matches;
+      app.style.setProperty('grid-template-columns',isMobile?'1fr':'0px 1fr');
+      if(isMobile) sidebar.style.setProperty('display','none');
+      else sidebar.style.removeProperty('display');
+      workspace.style.setProperty('width','100%');
+      workspace.style.setProperty('max-width','none');
+    }else{
+      app.style.removeProperty('grid-template-columns');
+      sidebar.style.removeProperty('display');
+      workspace.style.removeProperty('width');
+      workspace.style.removeProperty('max-width');
+    }
+    return true;
+  }
+  function setTopicsHidden(hidden){
+    topicsHidden=hidden;
+    var lessonDocument=frame.contentDocument;
+    applyTopicsLayout(lessonDocument);
+    if(!topicsToggle)return;
+    topicsToggle.setAttribute('aria-expanded',String(!hidden));
+    topicsToggle.setAttribute('aria-label',hidden?'Show topics':'Hide topics');
+    topicsToggle.title=hidden?'Show topics':'Hide topics';
+    topicsToggle.querySelector('span').textContent=hidden?'Show topics':'Hide topics';
+    topicsToggle.querySelector('svg').innerHTML=hidden
+      ? '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path><path d="m12 9 3 3-3 3"></path>'
+      : '<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path><path d="m16 9-3 3 3 3"></path>';
+    requestAnimationFrame(function(){setTimeout(refreshLessonLayout,250);});
+  }
+  document.getElementById('lesson-kind').textContent=isFullChapter?'Full Interactive Chapter':'Interactive Topic';
+  document.getElementById('back-label').textContent=isFullChapter?'Back to Chapter Overview':'Back to Chapter';
+  frame.src=chapterUrl+location.hash;
+
+  frame.addEventListener('load',function(){
+    var lessonDocument=frame.contentDocument;
+    if(!lessonDocument)return;
+    if(!lessonDocument.getElementById('emf-topics-collapse-style')){
+      var collapseStyle=lessonDocument.createElement('style');
+      collapseStyle.id='emf-topics-collapse-style';
+      collapseStyle.textContent='.app{transition:none}.app>.side{transition:opacity .22s ease,transform .22s ease}.app.emf-topics-collapsed>.side{min-width:0;padding-left:0;padding-right:0;border-right-width:0;overflow:hidden;opacity:0;transform:translateX(-8px)}.app.emf-topics-collapsed>.main{width:100%;max-width:none;min-width:0}.emf-topic-navigation{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px;margin:0 0 18px;padding:0;border:0}.emf-topic-navigation>div:first-child{justify-self:start}.emf-topic-navigation>div:last-child{justify-self:end}.emf-topic-navigation .emf-topic-nav-center{display:flex;flex-direction:column;align-items:center;gap:4px}.emf-topic-navigation .emf-nav-btn{width:auto;max-width:100%;white-space:normal;text-align:center}.emf-topic-navigation .emf-nav-btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}.emf-topic-progress{color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}.emf-fullscreen-topic-toolbar #emf-bottom-bar{display:none!important}@keyframes emf-topic-enter{from{opacity:.92;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.sec.emf-topic-transition{animation:emf-topic-enter 220ms ease-out both}@media(max-width:640px){.emf-topic-navigation{gap:6px}.emf-topic-navigation .emf-nav-btn{padding:8px 9px;font-size:12px}}@media(max-width:860px){.app.emf-topics-collapsed>.side{display:none}}@media(prefers-reduced-motion:reduce){.app,.app>.side{transition:none!important}.sec.emf-topic-transition{animation:none}}';
+      lessonDocument.head.appendChild(collapseStyle);
+    }
+    if(!lessonDocument.querySelector('.app')||!lessonDocument.querySelector('.side')||!lessonDocument.querySelector('.main')){
+      topicsToggle.disabled=true;
+      topicsToggle.title='Topics sidebar is unavailable on this page';
+      console.error('Cannot collapse topics: expected .app, .side, and .main in the chapter lesson.');
+      return;
+    }
+    topicsToggle.disabled=false;
+    var lessonWindow=frame.contentWindow;
+    lessonWindow.eval('window.SECTIONS = SECTIONS;');
+    if(!Array.isArray(lessonWindow.SECTIONS)||!lessonWindow.SECTIONS.length||typeof lessonWindow.render!=='function'){
+      console.error('Cannot initialize topic navigation: expected chapter SECTIONS and render().');
+    }else{
+      function updateTopicNavigation(activeId){
+        var sections=lessonWindow.SECTIONS;
+        var sectionIndex=sections.findIndex(function(section){return section.id===activeId;});
+        var main=lessonDocument.querySelector('.main');
+        var topicNavigation=main&&main.querySelector('#emf-bottom-bar');
+        var activeSection=main&&main.querySelector('.sec.on');
+        if(sectionIndex<0||!main||!activeSection){
+          console.error('Cannot update topic navigation: expected an active section in the main content area.');
+          return;
+        }
+        if(!topicNavigation){
+          topicNavigation=lessonDocument.createElement('div');
+          topicNavigation.id='emf-bottom-bar';
+          main.appendChild(topicNavigation);
+        }
+        main.querySelectorAll('.sec.emf-topic-transition').forEach(function(section){
+          section.classList.remove('emf-topic-transition');
+        });
+        activeSection.classList.add('emf-topic-transition');
+        var topAction=main.querySelector('#emf-top-bar .emf-btn-next-top');
+        if(topAction&&topAction.parentNode) topAction.parentNode.remove();
+        topicNavigation.classList.remove('emf-topic-footer-nav');
+        topicNavigation.classList.add('emf-topic-navigation');
+        var previousSection=sectionIndex>0?sections[sectionIndex-1]:null;
+        var nextSection=sectionIndex<sections.length-1?sections[sectionIndex+1]:null;
+        var previousButton=lessonDocument.createElement('button');
+        previousButton.type='button';
+        previousButton.className='emf-nav-btn';
+        previousButton.textContent=previousSection?'← Previous: '+previousSection.label:'← Previous Topic';
+        previousButton.disabled=!previousSection;
+        previousButton.setAttribute('aria-label',previousSection?'Previous topic: '+previousSection.label:'No previous topic');
+        previousButton.title=previousSection?'Previous: '+previousSection.label:'No previous topic';
+        if(previousSection) previousButton.onclick=function(){lessonWindow.render(previousSection.id);};
+        var nextButton=lessonDocument.createElement('button');
+        nextButton.type='button';
+        nextButton.className='emf-nav-btn';
+        nextButton.textContent=nextSection?'Next: '+nextSection.label+' →':'Next Topic →';
+        nextButton.disabled=!nextSection;
+        nextButton.setAttribute('aria-label',nextSection?'Next topic: '+nextSection.label:'No next topic');
+        nextButton.title=nextSection?'Next: '+nextSection.label:'No next topic';
+        if(nextSection) nextButton.onclick=function(){lessonWindow.render(nextSection.id);};
+        var previousSlot=lessonDocument.createElement('div');
+        previousSlot.appendChild(previousButton);
+        var center=lessonDocument.createElement('div');
+        center.className='emf-topic-nav-center';
+        var progress=lessonDocument.createElement('span');
+        progress.className='emf-topic-progress';
+        progress.textContent='Topic '+(sectionIndex+1)+' of '+sections.length;
+        var overviewLink=lessonDocument.createElement('a');
+        overviewLink.href='../chapter-pages/chapter1.html';
+        overviewLink.className='emf-overview-link';
+        overviewLink.textContent='Back to Chapter Overview';
+        center.appendChild(overviewLink);
+        center.appendChild(progress);
+        var nextSlot=lessonDocument.createElement('div');
+        nextSlot.appendChild(nextButton);
+        topicNavigation.replaceChildren(previousSlot,center,nextSlot);
+        main.insertBefore(topicNavigation,activeSection);
+        fullscreenPreviousTopic.disabled=!previousSection;
+        fullscreenPreviousTopic.textContent=previousSection?'← Previous: '+previousSection.label:'← Previous Topic';
+        fullscreenPreviousTopic.setAttribute('aria-label',previousSection?'Previous topic: '+previousSection.label:'No previous topic');
+        fullscreenPreviousTopic.title=previousSection?'Previous: '+previousSection.label:'No previous topic';
+        fullscreenPreviousTopic.onclick=previousSection?function(){lessonWindow.render(previousSection.id);}:null;
+        fullscreenNextTopic.disabled=!nextSection;
+        fullscreenNextTopic.textContent=nextSection?'Next: '+nextSection.label+' →':'Next Topic →';
+        fullscreenNextTopic.setAttribute('aria-label',nextSection?'Next topic: '+nextSection.label:'No next topic');
+        fullscreenNextTopic.title=nextSection?'Next: '+nextSection.label:'No next topic';
+        fullscreenNextTopic.onclick=nextSection?function(){lessonWindow.render(nextSection.id);}:null;
+      }
+      var chapterRender=lessonWindow.render;
+      lessonWindow.render=function(id){
+        var topic=lessonWindow.SECTIONS.find(function(section){return section.id===id;});
+        if(topic){
+          var topicHash='#'+topic.id;
+          if(lessonWindow.location.hash!==topicHash) lessonWindow.history.replaceState(null,'',topicHash);
+          if(location.hash!==topicHash) history.pushState(null,'',topicHash);
+        }
+        var result=chapterRender.apply(this,arguments);
+        updateTopicNavigation(id);
+        return result;
+      };
+      var requestedSection=(lessonWindow.location.hash||'').slice(1);
+      var initialSection=lessonWindow.SECTIONS.find(function(section){return section.id===requestedSection;});
+      lessonWindow.render((initialSection||lessonWindow.SECTIONS[0]).id);
+      function syncTopicFromRoute(){
+        var topicId=decodeURIComponent(location.hash.slice(1));
+        var topic=lessonWindow.SECTIONS.find(function(section){return section.id===topicId;});
+        if(topic&&lessonWindow.location.hash!=='#'+topic.id) lessonWindow.render(topic.id);
+      }
+      window.addEventListener('popstate',syncTopicFromRoute);
+      window.addEventListener('hashchange',syncTopicFromRoute);
+    }
+    applyTopicsLayout(lessonDocument);
+    updateFullscreenState();
+    refreshLessonLayout();
+    lessonDocument.addEventListener('click',function(event){
+      var link=event.target.closest&&event.target.closest('a[href]');
+      if(!link)return;
+      var href=link.getAttribute('href')||'';
+      var overview=href.match(/^\.\.\/chapter-pages\/chapter([0-7])\.html(?:#.*)?$/);
+      if(overview){
+        event.preventDefault();
+        location.assign('chapter'+overview[1]+'.html');
+        return;
+      }
+      var chapter=href.match(/^chapter([0-7])\.html(?:#.*)?$/);
+      if(chapter){
+        event.preventDefault();
+        location.assign('view'+chapter[1]+'.html?full=1'+(link.hash||''));
+      }
+    },true);
+  });
+  topicsToggle.addEventListener('click',function(){setTopicsHidden(!topicsHidden);});
+
+  function fullscreenError(action,error){
+    console.error(action,error);
+    window.alert(action+(error&&error.message?' '+error.message:' Please try again.'));
+  }
+  function updateFullscreenState(){
+    var active=document.fullscreenElement===shell||document.webkitFullscreenElement===shell;
+    shell.classList.toggle('is-fullscreen',active);
+    exitButton.hidden=!active;
+    var lessonDocument=frame.contentDocument;
+    if(lessonDocument&&lessonDocument.body) lessonDocument.body.classList.toggle('emf-fullscreen-topic-toolbar',active);
+  }
+  function exitFullscreen(){
+    if(document.fullscreenElement!==shell&&document.webkitFullscreenElement!==shell)return Promise.resolve();
+    var method=document.exitFullscreen||document.webkitExitFullscreen;
+    if(!method)return Promise.resolve();
+    try{return Promise.resolve(method.call(document));}
+    catch(error){return Promise.reject(error);}
+  }
+
+  if(!(shell.requestFullscreen||shell.webkitRequestFullscreen))enter.hidden=true;
+  updateFullscreenState();
+  enter.addEventListener('click',function(){
+    var method=shell.requestFullscreen||shell.webkitRequestFullscreen;
+    if(!method)return;
+    try{
+      var request=method.call(shell);
+      requestAnimationFrame(updateFullscreenState);
+      Promise.resolve(request).then(updateFullscreenState).catch(function(error){fullscreenError('Could not enter fullscreen.',error);});
+    }
+    catch(error){fullscreenError('Could not enter fullscreen.',error);}
+  });
+  exitButton.addEventListener('click',function(){
+    exitFullscreen().then(updateFullscreenState).catch(function(error){fullscreenError('Could not exit fullscreen.',error);});
+  });
+  back.addEventListener('click',function(event){
+    event.preventDefault();
+    exitFullscreen().then(function(){updateFullscreenState();location.assign(back.href);},function(error){
+      fullscreenError('Could not exit fullscreen before returning to the chapter overview.',error);
+      location.assign(back.href);
+    });
+  });
+  document.addEventListener('keydown',function(event){
+    if(event.key==='Escape'&&(document.fullscreenElement===shell||document.webkitFullscreenElement===shell)){
+      exitFullscreen().then(updateFullscreenState).catch(function(error){fullscreenError('Could not exit fullscreen.',error);});
+    }
+  });
+  document.addEventListener('fullscreenchange',updateFullscreenState);
+  document.addEventListener('webkitfullscreenchange',updateFullscreenState);
+  shell.addEventListener('fullscreenchange',updateFullscreenState);
+  shell.addEventListener('webkitfullscreenchange',updateFullscreenState);
+  var topicViewport=window.matchMedia('(max-width: 860px)');
+  function updateTopicsForViewport(){
+    if(!topicsHidden)return;
+    applyTopicsLayout(frame.contentDocument);
+    refreshLessonLayout();
+  }
+  window.addEventListener('resize',updateTopicsForViewport);
+  if(topicViewport.addEventListener) topicViewport.addEventListener('change',updateTopicsForViewport);
+  else if(topicViewport.addListener) topicViewport.addListener(updateTopicsForViewport);
+})();
+</script>
+</body>
+</html>

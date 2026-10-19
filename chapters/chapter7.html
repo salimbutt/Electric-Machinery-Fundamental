@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.7 — Single-Phase & Special Motors (Interactive)</title>
+<style>
+:root{--bg:#0f1220;--panel:#171a2b;--panel2:#1e2237;--ink:#e8ebf7;--muted:#9aa3c4;--acc:#5b8cff;--acc2:#38d39f;--warn:#ffcc66;--bad:#ff6b81;--line:#2a2f4a;--chip:#242a44;--good:#38d39f}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}.brand h1{font-size:16px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.brand a{font-size:12px}
+.nav{padding:8px;flex:1}.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}.credit b{color:var(--ink);font-weight:600}.credit a{color:var(--acc)}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:17px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}.frac .d{display:block;padding:0 6px}
+.vec{font-weight:700}sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:center}th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.quiz .q{margin:10px 0}.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}.quiz .opt:hover{border-color:var(--acc)}.quiz .opt.correct{border-color:var(--good);background:#0c1a14}.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.tbar{height:14px;border-radius:4px;background:linear-gradient(90deg,var(--acc2),#2fbf8f)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Chapter 7 — Single-Phase & Special Motors<br><span style="color:#6b7398">(Chapman Ch. 10 · eq. numbers follow the book)</span></p>
+      <p><a href="chapter6.html">← Chapter 6</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit"><div><b>Dr. Muhammad Salim Butt</b></div><a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{if(x===null||x===undefined||!isFinite(x))return '—';if(x!==0&&(Math.abs(x)<1e-3||Math.abs(x)>=1e5))return x.toExponential(Math.max(0,d-1));return (+x.toFixed(d)).toString();};
+const D2R=Math.PI/180,R2D=180/Math.PI;
+const C=(re,im=0)=>({re,im}),cAdd=(a,b)=>C(a.re+b.re,a.im+b.im),cMul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re),cDiv=(a,b)=>{const d=b.re*b.re+b.im*b.im;return C((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d);},cAbs=a=>Math.hypot(a.re,a.im),cAng=a=>Math.atan2(a.im,a.re)*R2D;
+const cPar=(a,b)=>cDiv(cMul(a,b),cAdd(a,b));
+function axes(ctx,W,H,pad,xlab,ylab){ctx.clearRect(0,0,W,H);ctx.strokeStyle='#232a49';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}}
+function arrow(ctx,x0,y0,x1,y1,c,w=2.5,lab){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();const a=Math.atan2(y1-y0,x1-x0);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a-0.4),y1-9*Math.sin(a-0.4));ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a+0.4),y1-9*Math.sin(a+0.4));ctx.stroke();if(lab){ctx.fillStyle=c;ctx.font='12px system-ui';ctx.fillText(lab,x1+4,y1-2);}}
+const SECTIONS=[];function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* ===== 7.1 universal motor ===== */
+section('universal','Single-Phase','7.1 · The Universal Motor',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Universal Motor</h2>
+  <p class="subttl">§10.1 · A series DC motor that also runs on AC</p>
+  <div class="card">
+    <p>A series DC motor works on AC too: when the supply reverses, <b>both</b> the field flux and the armature current reverse, so the torque τ = KφI<sub>A</sub> stays in the <b>same direction</b>. Hence "universal" — it runs on AC or DC. High speed, high torque per size; used in drills, blenders, vacuum cleaners.</p>
+    <div class="eq">τ<sub>ind</sub> = K φ I<sub>A</sub>  (φ ∝ I<sub>A</sub> for a series field → τ ∝ I<sub>A</sub>²)<span class="tag">(8‑49)</span></div>
+    <p class="note">On AC the winding reactance drops some voltage, so back‑emf E<sub>A</sub>=Kφω is a little lower → the AC torque–speed curve sits <b>below</b> the DC one. Speed is set by the applied rms voltage.</p>
+  </div>
+  <div class="card">
+    <label class="ctl"><span class="lab">Applied rms voltage (V) <span class="val" id="u_v_v"></span></span><input type="range" id="u_v" min="60" max="240" value="120" step="5"></label>
+    <canvas id="u_can" width="420" height="300"></canvas>
+    <div class="note">Series/universal characteristic: high torque at low speed, runs fast when lightly loaded (like a series DC motor).</div>
+  </div>`;
+  const cx=$('#u_can').getContext('2d');
+  const upd=()=>{const V=+$('#u_v').value;$('#u_v_v').textContent=V+' V';
+    axes(cx,420,300,{l:44,r:10,t:14,b:26},'torque τ (N·m)','speed n (r/min)');
+    const RA=1.5,Kc=0.02,taumax=20,nmax=12000;
+    const xX=t=>44+t/taumax*(420-54),yY=n=>(300-26)-Math.min(n,nmax)/nmax*(300-40);
+    const line=(V,col,dash,lab,yoff)=>{cx.strokeStyle=col;cx.lineWidth=2.2;if(dash)cx.setLineDash([5,4]);cx.beginPath();let st=false;
+      for(let IA=1;IA<=32;IA+=0.25){const tau=Kc*IA*IA,E=V-IA*RA;if(E<=0)break;const w=E/(Kc*IA),n=w*60/(2*Math.PI);const x=xX(tau),y=yY(n);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();cx.setLineDash([]);cx.fillStyle=col;cx.font='11px system-ui';cx.fillText(lab,54,yoff);};
+    line(V*1.12,'#39507a',true,'same motor on DC',26);
+    line(V,'#38d39f',false,'on AC (V rms)',40);};
+  $('#u_v').oninput=upd;upd();
+});
+
+/* ===== 7.2 double revolving field ===== */
+section('intro','Single-Phase','7.2 · Double-Revolving Field ★',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Single-Phase Induction Motors — Why No Starting Torque</h2>
+  <p class="subttl">§10.2 · The double-revolving-field theory</p>
+  <div class="card">
+    <p>A single-phase winding makes a field that only <b>pulses</b> (doesn't rotate). Decompose it into two <b>counter-rotating</b> fields, each half amplitude:</p>
+    <div class="grid2">
+      <div class="eq" style="text-align:center"><span class="vec">B</span><sub>s</sub> = <span class="vec">B</span><sub>cw</sub> + <span class="vec">B</span><sub>ccw</sub><span class="tag">(10‑4)</span></div>
+      <div class="eq" style="text-align:center">|<span class="vec">B</span><sub>cw</sub>| = |<span class="vec">B</span><sub>ccw</sub>| = ½B<sub>max</sub><span class="tag">(10‑1)</span></div>
+    </div>
+    <p class="note">At <b>standstill</b> both fields spin at ±n<sub>sync</sub>; their torques are equal and opposite → <b>net starting torque = 0</b> (sin 180° = 0, Eq. 4‑58). But once the rotor is nudged to speed, the forward field's torque dominates and the motor keeps running — in whichever direction it was started.</p>
+  </div>
+  <h3>Torque–speed: forward, backward & net</h3>
+  <p class="note">Forward field acts at slip s; backward field at slip (2−s). The net curve crosses <b>zero at standstill</b> (s=1) — that's the whole problem, and why a starting method is needed.</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">R<sub>2</sub> (Ω) <span class="val" id="i_R2_v"></span></span><input type="range" id="i_R2" min="1" max="8" value="3.13" step="0.1"></label>
+        <label class="ctl"><span class="lab">X<sub>M</sub> (Ω) <span class="val" id="i_XM_v"></span></span><input type="range" id="i_XM" min="20" max="80" value="58.2" step="1"></label>
+        <label class="ctl"><span class="lab">V (V)</span><input type="number" id="i_V" value="110" step="any"></label>
+        <div class="flex"><label class="ctl" style="margin:3px 0"><input type="checkbox" id="i_fb" checked style="width:auto"> show forward/backward components</label></div>
+        <div class="out" id="i_out"></div>
+      </div>
+      <div><canvas id="i_can" width="440" height="320"></canvas></div>
+    </div>
+  </div>`;
+  const cx=$('#i_can').getContext('2d');
+  const base={R1:1.52,X1:2.10,X2:1.56};
+  function comp(s,V,R2,XM){const Zf=cMul(C(0.5),cPar(C(R2/s,base.X2),C(0,XM)));const Zb=cMul(C(0.5),cPar(C(R2/(2-s),base.X2),C(0,XM)));
+    const Zt=cAdd(cAdd(C(base.R1,base.X1),Zf),Zb);const I=V/cAbs(Zt);const Paf=I*I*Zf.re,Pab=I*I*Zb.re;return{Paf,Pab};}
+  const upd=()=>{const R2=+$('#i_R2').value,XM=+$('#i_XM').value,V=+$('#i_V').value,ns=1200,ws=2*Math.PI*ns/60;
+    $('#i_R2_v').textContent=fmt(R2,2)+' Ω';$('#i_XM_v').textContent=XM+' Ω';
+    axes(cx,440,320,{l:48,r:12,t:14,b:26},'speed n (r/min)','torque τ (N·m)');
+    let tmax=0;for(let s=0.001;s<1;s+=0.01){const {Paf,Pab}=comp(s,V,R2,XM);tmax=Math.max(tmax,Math.abs(Paf-Pab)/ws,Paf/ws);}tmax*=1.15;
+    const xX=n=>48+n/ns*(440-60),yY=t=>(320-26)-t/tmax*(320-40)*0.5- (320-40)*0.05;
+    const y0=yY(0);cx.strokeStyle='#333c60';cx.beginPath();cx.moveTo(48,y0);cx.lineTo(440-12,y0);cx.stroke();
+    const plot=(f,col,lab,yl)=>{cx.strokeStyle=col;cx.lineWidth=2.2;cx.beginPath();let st=false;
+      for(let s=0.999;s>=0.001;s-=0.004){const n=(1-s)*ns,{Paf,Pab}=comp(s,V,R2,XM),t=f(Paf,Pab)/ws;const x=xX(n),y=yY(t);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();cx.fillStyle=col;cx.font='11px system-ui';cx.fillText(lab,54,yl);};
+    if($('#i_fb').checked){plot((f,b)=>f,'#38d39f','forward',26);plot((f,b)=>-b,'#ff6b81','backward',39);}
+    plot((f,b)=>f-b,'#5b8cff','net',52);
+    // mark start (n=0)
+    cx.fillStyle='#ffcc66';cx.beginPath();cx.arc(xX(0),y0,4,0,7);cx.fill();cx.fillText('net τ = 0 at start',xX(0)+6,y0-6);
+    $('#i_out').innerHTML=`At standstill (s=1): forward & backward torques cancel → <span class="k">zero starting torque</span>.\nOnce running, the net curve is positive → the motor sustains itself.`;};
+  ['i_R2','i_XM','i_V'].forEach(id=>$('#'+id).oninput=upd);$('#i_fb').onchange=upd;upd();
+});
+
+/* ===== 7.3 starting methods ===== */
+section('starting','Single-Phase','7.3 · Starting Methods',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Starting Single-Phase Induction Motors</h2>
+  <p class="subttl">§10.3 · Make a second, phase-shifted field to break the symmetry</p>
+  <p class="note">All methods add an <b>auxiliary winding</b> whose current is phase-shifted from the main winding, creating a (rough) rotating field to start. The bigger the phase split (toward 90°) and the more balanced the MMFs, the higher the starting torque.</p>
+  <div class="card">
+    <div class="tabs" id="s_tabs">
+      <div class="t on" data-m="split">Split-phase</div>
+      <div class="t" data-m="capstart">Capacitor-start</div>
+      <div class="t" data-m="psc">PSC</div>
+      <div class="t" data-m="both">Cap-start / cap-run</div>
+      <div class="t" data-m="shaded">Shaded-pole</div>
+    </div>
+    <div class="grid2">
+      <div><canvas id="s_can" width="380" height="260"></canvas></div>
+      <div class="out" id="s_out"></div>
+    </div>
+  </div>
+  <h3>Comparison</h3>
+  <div class="card"><table>
+    <tr><th>Method</th><th>Starting torque</th><th>Cost</th><th>Reversible</th><th>Typical use</th></tr>
+    <tr><td>Split-phase</td><td>moderate</td><td>low</td><td>yes</td><td>fans, blowers, pumps</td></tr>
+    <tr><td>Capacitor-start</td><td>high (&gt;300%)</td><td>medium</td><td>yes</td><td>compressors, loaded starts</td></tr>
+    <tr><td>PSC</td><td>low–moderate</td><td>medium</td><td>yes</td><td>smooth, efficient run</td></tr>
+    <tr><td>Cap-start/cap-run</td><td>very high + smooth</td><td>highest</td><td>yes</td><td>best all-round</td></tr>
+    <tr><td>Shaded-pole</td><td>very low</td><td>lowest</td><td>hard</td><td>tiny (&lt;1/20 hp) loads, clocks</td></tr>
+  </table></div>`;
+  const cx=$('#s_can').getContext('2d');
+  const M={split:[25,0.5,'Split-phase','Auxiliary winding has higher R/X (thin wire) → its current leads the main current by a <b>small angle (~25°)</b>. A centrifugal switch disconnects it near 75% speed. Modest starting torque.'],
+    capstart:[90,1.0,'Capacitor-start','A capacitor in series with the auxiliary winding makes I<sub>A</sub> lead by ≈<b>90°</b> with balanced MMFs → nearly uniform rotating field → <b>high</b> starting torque (>300%). Cap + switch removed at speed.'],
+    psc:[80,0.7,'Permanent split-capacitor','A run-sized capacitor stays in permanently (no switch). Balanced at <b>normal load</b>, not at start → <b>lower</b> starting torque but very smooth, quiet, efficient running.'],
+    both:[90,1.0,'Cap-start / cap-run','A large start capacitor (switched out) + a small permanent run capacitor → <b>very high</b> starting torque AND smooth balanced running. Best performance, highest cost.'],
+    shaded:[15,0.25,'Shaded-pole','A shorted "shading" coil on part of each pole delays flux there, so the field sweeps unshaded→shaded. Cheapest, <b>very low</b> starting torque, low efficiency; hard to reverse.']};
+  let cur='split';
+  const draw=()=>{const [ang,bal,name,desc]=M[cur];cx.clearRect(0,0,380,260);const ox=120,oy=140,R=90;
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(20,oy);cx.lineTo(360,oy);cx.moveTo(ox,20);cx.lineTo(ox,250);cx.stroke();
+    arrow(cx,ox,oy,ox+R,oy,'#38d39f',3,'I_M');
+    arrow(cx,ox,oy,ox+R*bal*Math.cos(-ang*D2R),oy+R*bal*Math.sin(-ang*D2R),'#ff9f43',3,'I_A');
+    cx.fillStyle='#ffcc66';cx.font='12px system-ui';cx.fillText('split ≈ '+ang+'°',ox+10,oy-R-4);
+    $('#s_out').innerHTML=`<b>${name}</b>\n\n${desc}`;};
+  $$('#s_tabs .t').forEach(t=>t.onclick=()=>{$$('#s_tabs .t').forEach(x=>x.classList.toggle('on',x===t));cur=t.dataset.m;draw();});draw();
+});
+
+/* ===== 7.4 speed control ===== */
+section('speedctl','Single-Phase','7.4 · Speed Control',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Speed Control of Single-Phase Induction Motors</h2>
+  <p class="subttl">§10.4 · Limited options for a fixed-frequency machine</p>
+  <div class="grid3">
+    <div class="card tight"><b>Reduced voltage</b><br>Lower stator voltage → higher slip → lower speed (only for high-slip fan/blower loads, since τ ∝ V²). Common in ceiling fans (tapped autotransformer / triac).</div>
+    <div class="card tight"><b>Tapped windings</b><br>An autotransformer/tapped winding changes the effective voltage; a smaller tapped fraction gives higher winding voltage → higher speed.</div>
+    <div class="card tight"><b>Variable frequency</b><br>A solid-state drive varies f (and V) — full-range control, as with 3-φ machines, now common in small appliances.</div>
+  </div>
+  <div class="warnbox">Because torque ∝ V², voltage/slip control only works on loads whose torque falls fast with speed (fans, blowers). Constant-torque loads would just stall.</div>`;
+});
+
+/* ===== 7.5 circuit model ===== */
+section('circuit','Single-Phase','7.5 · Equivalent-Circuit Solver',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Circuit Model</h2>
+  <p class="subttl">§10.5 · Forward + backward branches, and a full power solve</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">I<sub>1</sub> = <span class="frac"><span class="n">V</span><span class="d">R<sub>1</sub>+jX<sub>1</sub>+0.5Z<sub>F</sub>+0.5Z<sub>B</sub></span></span><span class="tag">(10‑7)</span></div>
+    <div class="eq" style="text-align:center">τ = <span class="frac"><span class="n">P<sub>AG,F</sub> − P<sub>AG,B</sub></span><span class="d">ω<sub>sync</sub></span></span><span class="tag">(10‑10,10‑11)</span></div>
+  </div>
+  <details class="deriv"><summary>The forward / backward impedances</summary>
+    <div class="step">Z<sub>F</sub> = (R<sub>2</sub>/s + jX<sub>2</sub>) ∥ jX<sub>M</sub>  ;  Z<sub>B</sub> = (R<sub>2</sub>/(2−s) + jX<sub>2</sub>) ∥ jX<sub>M</sub>.<span class="why">Forward field at slip s, backward at slip 2−s; each enters the stator loop with a 0.5 factor (10‑5,10‑6).</span></div>
+    <div class="step">P<sub>AG,F</sub>=I<sub>1</sub>²(0.5R<sub>F</sub>), P<sub>AG,B</sub>=I<sub>1</sub>²(0.5R<sub>B</sub>); P<sub>conv</sub>=(1−s)(P<sub>AG,F</sub>−P<sub>AG,B</sub>).</div>
+  </details>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">V (V)</span><input type="number" id="c_V" value="110" step="any"></label>
+      <label class="ctl"><span class="lab">Poles P</span><input type="number" id="c_P" value="6" step="2"></label>
+      <label class="ctl"><span class="lab">Slip s</span><input type="number" id="c_s" value="0.05" step="any"></label>
+      <label class="ctl"><span class="lab">R<sub>1</sub> (Ω)</span><input type="number" id="c_R1" value="1.52" step="any"></label>
+      <label class="ctl"><span class="lab">X<sub>1</sub> (Ω)</span><input type="number" id="c_X1" value="2.10" step="any"></label>
+      <label class="ctl"><span class="lab">R<sub>2</sub> (Ω)</span><input type="number" id="c_R2" value="3.13" step="any"></label>
+      <label class="ctl"><span class="lab">X<sub>2</sub> (Ω)</span><input type="number" id="c_X2" value="1.56" step="any"></label>
+      <label class="ctl"><span class="lab">X<sub>M</sub> (Ω)</span><input type="number" id="c_XM" value="58.2" step="any"></label>
+      <label class="ctl"><span class="lab">Losses core+F&W (W)</span><input type="number" id="c_loss" value="51" step="any"></label>
+    </div>
+    <div class="out" id="c_out"></div>
+    <p class="note">Defaults = Example 10‑1 (⅓ hp, 110 V, 6‑pole; core 35 W + F&W 16 W = 51 W) → n≈1140 r/min, I<sub>1</sub>≈4.6 A, τ<sub>ind</sub>≈2.1 N·m, η≈60%.</p>
+  </div>`;
+  const upd=()=>{const V=+$('#c_V').value,P=+$('#c_P').value,s=+$('#c_s').value,R1=+$('#c_R1').value,X1=+$('#c_X1').value,R2=+$('#c_R2').value,X2=+$('#c_X2').value,XM=+$('#c_XM').value,loss=+$('#c_loss').value;
+    const ns=120*60/P,ws=2*Math.PI*ns/60,nm=(1-s)*ns,wm=2*Math.PI*nm/60;
+    const Zf=cMul(C(0.5),cPar(C(R2/s,X2),C(0,XM))),Zb=cMul(C(0.5),cPar(C(R2/(2-s),X2),C(0,XM)));
+    const Zt=cAdd(cAdd(C(R1,X1),Zf),Zb),I1=cDiv(C(V,0),Zt),I1m=cAbs(I1),ang=cAng(I1),pf=Math.cos(ang*D2R);
+    const Pin=V*I1m*pf,Paf=I1m*I1m*Zf.re,Pab=I1m*I1m*Zb.re,Pag=Paf-Pab,tau=Pag/ws,Pconv=(1-s)*Pag,Pout=Pconv-loss,tload=Pout/wm,eff=Pout/Pin*100;
+    $('#c_out').innerHTML=`n<sub>sync</sub>=${fmt(ns,0)} r/min, n<sub>m</sub>=<span class="k">${fmt(nm,0)} r/min</span>
+Z<sub>F</sub>=${fmt(Zf.re*2,2)}∠… (0.5R<sub>F</sub>=<span class="k">${fmt(Zf.re,2)}</span>)  Z<sub>B</sub>: 0.5R<sub>B</sub>=<span class="k">${fmt(Zb.re,3)}</span>
+I<sub>1</sub> = <span class="k">${fmt(I1m,2)} ∠${fmt(ang,1)}° A</span>   PF=<span class="k">${fmt(pf,3)} lag</span>
+P<sub>in</sub>=<span class="k">${fmt(Pin,0)} W</span>  P<sub>AG,F</sub>=<span class="k">${fmt(Paf,0)}</span>  P<sub>AG,B</sub>=<span class="k">${fmt(Pab,0)}</span>  P<sub>AG</sub>=<span class="k">${fmt(Pag,0)} W</span>
+τ<sub>ind</sub>=<span class="k">${fmt(tau,2)} N·m</span>   P<sub>conv</sub>=<span class="k">${fmt(Pconv,0)} W</span>
+P<sub>out</sub>=<span class="k">${fmt(Pout,0)} W</span>  τ<sub>load</sub>=<span class="k">${fmt(tload,2)} N·m</span>  <b>η=<span class="k">${fmt(eff,1)}%</span></b>`;};
+  ['c_V','c_P','c_s','c_R1','c_X1','c_R2','c_X2','c_XM','c_loss'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== 7.6 special motors ===== */
+section('special','Special Motors','7.6 · Reluctance, Hysteresis & BLDC',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Other Special-Purpose Motors</h2>
+  <p class="subttl">§10.6 · Reluctance, hysteresis and brushless DC</p>
+  <div class="grid3">
+    <div class="card tight"><b>Reluctance motor</b><br>A salient rotor with no field winding aligns to minimize reluctance. Runs at synchronous speed; torque τ ∝ sin 2δ, peaking at δ=45°. Needs an induction cage to start.</div>
+    <div class="card tight"><b>Hysteresis motor</b><br>A smooth ferromagnetic rotor; hysteresis in the rotor iron gives a nearly constant torque up to synchronous speed, then the rotor acts as a permanent magnet. Very smooth, quiet — clocks, turntables.</div>
+    <div class="card tight"><b>Brushless DC</b><br>A permanent-magnet rotor + electronic commutation (position sensor switches the stator coils in sequence) → DC-motor behaviour with no brushes to wear. τ = k B<sub>R</sub>×B<sub>S</sub>.</div>
+  </div>
+  <h3>Reluctance torque — τ ∝ sin 2δ</h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Rotor angle δ (°) <span class="val" id="r_d_v"></span></span><input type="range" id="r_d" min="0" max="180" value="45" step="1"></label>
+        <div class="out" id="r_out"></div>
+      </div>
+      <div><canvas id="r_can" width="420" height="240"></canvas></div>
+    </div>
+  </div>`;
+  const cx=$('#r_can').getContext('2d');
+  const upd=()=>{const d=+$('#r_d').value,tau=Math.sin(2*d*D2R);$('#r_d_v').textContent=d+'°';
+    $('#r_out').innerHTML=`τ ∝ sin 2δ = <span class="k">${fmt(tau,3)}</span> (relative)\nMaximum at δ = <span class="k">45°</span>; zero at 0°, 90°, 180°.`;
+    axes(cx,420,240,{l:44,r:10,t:14,b:24},'δ (°)','τ (rel)');
+    const mid=(240-24+14)/2,yY=v=>mid-v*(240-40)/2*0.9,xX=a=>44+a/180*(420-54);
+    cx.strokeStyle='#333c60';cx.beginPath();cx.moveTo(44,mid);cx.lineTo(410,mid);cx.stroke();
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2.5;cx.beginPath();for(let a=0;a<=180;a++){const x=xX(a),y=yY(Math.sin(2*a*D2R));a===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();
+    cx.fillStyle='#ff6b81';cx.beginPath();cx.arc(xX(d),yY(tau),4,0,7);cx.fill();};
+  $('#r_d').oninput=upd;upd();
+});
+
+/* ===== 7.7 stepper ===== */
+section('stepper','Special Motors','7.7 · Stepper Motors',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Stepper Motors</h2>
+  <p class="subttl">§10.6 · Precise open-loop positioning — one step per pulse</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">step angle = <span class="frac"><span class="n">360°</span><span class="d">N · P</span></span>  ,  steps/rev = N·P</div>
+    <div class="eq" style="text-align:center">n<sub>m</sub> = <span class="frac"><span class="n">1</span><span class="d">N · P</span></span> n<sub>pulses</sub><span class="tag">(10‑21)</span></div>
+  </div>
+  <p class="note">N = phases, P = poles. Each input pulse advances the rotor exactly one step, so position = pulse count (no feedback needed).</p>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">Phases N</span><input type="number" id="sp_N" value="3" step="1"></label>
+      <label class="ctl"><span class="lab">Poles P</span><input type="number" id="sp_P" value="16" step="2"></label>
+      <label class="ctl"><span class="lab">Target speed (r/min)</span><input type="number" id="sp_n" value="300" step="any"></label>
+    </div>
+    <div class="out" id="sp_out"></div>
+    <p class="note">Defaults = Example 10‑2 (3‑phase, 16 poles) → step 7.5°, 48 steps/rev, 240 pulses/s at 300 r/min.</p>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div><canvas id="sp_can" width="260" height="260"></canvas></div>
+      <div>
+        <h4>Solve for poles from a wanted step</h4>
+        <label class="ctl"><span class="lab">Desired step angle (°)</span><input type="number" id="sp_step" value="7.5" step="any"></label>
+        <div class="out" id="sp_out2"></div>
+        <p class="note">P = 360/(N·step). More poles/phases → finer steps.</p>
+      </div>
+    </div>
+  </div>`;
+  const cx=$('#sp_can').getContext('2d');
+  const upd=()=>{const N=+$('#sp_N').value,P=+$('#sp_P').value,n=+$('#sp_n').value;
+    const step=360/(N*P),spr=N*P,pps=N*P*n/60;
+    $('#sp_out').innerHTML=`step angle = 360/(N·P) = <span class="k">${fmt(step,2)}°</span>\nsteps per revolution = <span class="k">${fmt(spr,0)}</span>\npulse rate at ${n} r/min = <span class="k">${fmt(pps,0)} pulses/s</span> (${fmt(pps*60,0)}/min)`;
+    // draw rotor with 'spr' notches, highlight one step
+    cx.clearRect(0,0,260,260);const ox=130,oy=130,R=100;cx.strokeStyle='#2a2f4a';cx.beginPath();cx.arc(ox,oy,R,0,7);cx.stroke();
+    const marks=Math.min(spr,72);for(let k=0;k<marks;k++){const a=k/marks*2*Math.PI;cx.strokeStyle='#39507a';cx.beginPath();cx.moveTo(ox+(R-8)*Math.cos(a),oy+(R-8)*Math.sin(a));cx.lineTo(ox+R*Math.cos(a),oy+R*Math.sin(a));cx.stroke();}
+    cx.strokeStyle='#38d39f';cx.lineWidth=3;cx.beginPath();cx.moveTo(ox,oy);cx.lineTo(ox+R*Math.cos(0),oy);cx.stroke();
+    cx.strokeStyle='#ffcc66';cx.beginPath();cx.moveTo(ox,oy);cx.lineTo(ox+R*Math.cos(step*D2R),oy+R*Math.sin(step*D2R));cx.stroke();
+    cx.fillStyle='#ffcc66';cx.font='11px system-ui';cx.fillText('one step = '+fmt(step,1)+'°',ox-30,oy+R+20);};
+  ['sp_N','sp_P','sp_n'].forEach(id=>$('#'+id).oninput=upd);
+  const upd2=()=>{const N=+$('#sp_N').value,step=+$('#sp_step').value,P=360/(N*step);
+    $('#sp_out2').innerHTML=`P = 360/(N·step) = 360/(${N}·${step}) = <span class="k">${fmt(P,1)} poles</span>${Math.abs(P-Math.round(P))<0.01?'':' (round to a valid pole count)'}`;};
+  $('#sp_step').oninput=upd2;upd();upd2();
+});
+
+/* ===== practice ===== */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — single-phase & special motors</h2>
+  <p class="subttl">Fresh numbers each time; check against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="step">7.7 · Stepper step angle</option>
+        <option value="poles">7.7 · Poles from step angle</option>
+        <option value="pps">7.7 · Pulse rate for a speed</option>
+        <option value="slip">7.5 · Slip / rotor speed</option>
+        <option value="tau">7.5 · Torque from air-gap power</option>
+        <option value="eff">7.5 · Efficiency</option>
+        <option value="rel">7.6 · Reluctance torque (∝ sin2δ)</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    step:()=>{const N=[3,4][Math.floor(Math.random()*2)],P=rnd(4,24,2);return{q:`A stepper has N=<b>${N}</b> phases and P=<b>${P}</b> poles. Step angle (°)?`,ans:360/(N*P),unit:'°',tol:0.02,sol:`step=360/(N·P)=360/(${N}·${P})=<b>${fmt(360/(N*P),2)}°</b>`};},
+    poles:()=>{const N=[3,4][Math.floor(Math.random()*2)],P=rnd(4,24,2),step=360/(N*P);return{q:`N=<b>${N}</b> phases, desired step=<b>${fmt(step,2)}°</b>. Number of poles P?`,ans:P,unit:'poles',tol:0.03,sol:`P=360/(N·step)=360/(${N}·${fmt(step,2)})=<b>${P}</b>`};},
+    pps:()=>{const N=[3,4][Math.floor(Math.random()*2)],P=rnd(4,20,2),n=rnd(60,600,30);return{q:`N=<b>${N}</b>, P=<b>${P}</b>, target speed <b>${n} r/min</b>. Pulse rate (pulses/s)?`,ans:N*P*n/60,unit:'/s',tol:0.02,sol:`n<sub>pulses</sub>=N·P·n=${N}·${P}·${n}=${fmt(N*P*n,0)}/min = <b>${fmt(N*P*n/60,0)}/s</b>`};},
+    slip:()=>{const ns=[1200,1800,3600,900][Math.floor(Math.random()*4)],s=rnd(2,7,0.5)/100;return{q:`1‑φ motor: n<sub>sync</sub>=<b>${ns} r/min</b>, slip s=<b>${(s*100)}%</b>. Rotor speed n<sub>m</sub> (r/min)?`,ans:(1-s)*ns,unit:'r/min',tol:0.01,sol:`n<sub>m</sub>=(1−s)n<sub>sync</sub>=<b>${fmt((1-s)*ns,0)} r/min</b>`};},
+    tau:()=>{const Pag=rnd(100,400,10),ns=[1200,1800,900][Math.floor(Math.random()*3)],ws=2*Math.PI*ns/60;return{q:`Net air‑gap power P<sub>AG</sub>=<b>${Pag} W</b>, n<sub>sync</sub>=<b>${ns} r/min</b>. Induced torque τ (N·m)?`,ans:Pag/ws,unit:'N·m',tol:0.02,sol:`τ=P<sub>AG</sub>/ω<sub>sync</sub>=${Pag}/${fmt(ws,1)}=<b>${fmt(Pag/ws,2)} N·m</b>`};},
+    eff:()=>{const Pin=rnd(200,800,20),loss=rnd(60,300,10);return{q:`P<sub>in</sub>=<b>${Pin} W</b>, total losses=<b>${loss} W</b>. Efficiency (%)?`,ans:(Pin-loss)/Pin*100,unit:'%',tol:0.02,sol:`η=(P<sub>in</sub>−losses)/P<sub>in</sub>=<b>${fmt((Pin-loss)/Pin*100,1)}%</b>`};},
+    rel:()=>{const d=rnd(10,80,5),tmax=rnd(5,30,1);return{q:`Reluctance motor peak torque=<b>${tmax} N·m</b>, angle δ=<b>${d}°</b>. Torque τ=τ<sub>max</sub>·sin2δ (N·m)?`,ans:tmax*Math.sin(2*d*D2R),unit:'N·m',tol:0.03,sol:`τ=τ<sub>max</sub>sin2δ=${tmax}·sin(${2*d}°)=<b>${fmt(tmax*Math.sin(2*d*D2R),2)} N·m</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;$('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;$('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;$('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ===== summary ===== */
+section('summary','Practice','7.8 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self-Test</h2><p class="subttl">§10.7</p>
+  <div class="card"><table>
+    <tr><th>Eq.</th><th>Relation</th><th>Meaning</th></tr>
+    <tr><td>10‑4</td><td>B<sub>s</sub>=B<sub>cw</sub>+B<sub>ccw</sub></td><td>two counter-rotating half fields</td></tr>
+    <tr><td>10‑7</td><td>I<sub>1</sub>=V/(R<sub>1</sub>+jX<sub>1</sub>+0.5Z<sub>F</sub>+0.5Z<sub>B</sub>)</td><td>circuit model</td></tr>
+    <tr><td>10‑11</td><td>τ=(P<sub>AG,F</sub>−P<sub>AG,B</sub>)/ω<sub>sync</sub></td><td>net torque</td></tr>
+    <tr><td>10‑17</td><td>P<sub>conv</sub>=(1−s)P<sub>AG</sub></td><td>converted power</td></tr>
+    <tr><td>10‑21</td><td>n<sub>m</sub>=n<sub>pulses</sub>/(N·P)</td><td>stepper speed</td></tr>
+    <tr><td>—</td><td>step=360/(N·P)</td><td>stepper step angle</td></tr>
+    <tr><td>—</td><td>τ∝sin2δ</td><td>reluctance torque</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3><div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['A single-phase induction motor by itself produces a starting torque of…',['300%','150%','zero','100%'],2],
+    ['A universal motor can run on…',['AC only','DC only','both AC and DC','neither'],2],
+    ['The double-revolving-field theory splits the pulsating field into…',['two co-rotating fields','two counter-rotating half fields','three fields','a DC field'],1],
+    ['The highest starting torque single-phase design is…',['shaded-pole','split-phase','capacitor-start / cap-run','PSC'],2],
+    ['The cheapest, lowest-torque single-phase motor is…',['capacitor-start','shaded-pole','PSC','cap-start/cap-run'],1],
+    ['In the circuit model, the forward branch uses slip…',['2−s','s','1−s','2s'],1],
+    ['Net induced torque = (P_AG,F − P_AG,B)/…',['ω_m','ω_sync','2ω_sync','s'],1],
+    ['A stepper with N phases and P poles has step angle…',['360/N','360/P','360/(N·P)','N·P'],2],
+    ['A reluctance motor develops torque proportional to…',['sin δ','sin 2δ','cos δ','δ²'],1],
+    ['A brushless DC motor replaces the mechanical commutator with…',['slip rings','electronic switching + position sensor','a capacitor','a shaded pole'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;$$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];$$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');$('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+const main=$('#main'),nav=$('#nav');
+function render(id){const s=SECTIONS.find(x=>x.id===id);if(!s)return;let el=$('#sec-'+id);if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}$$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));window.scrollTo(0,0);location.hash=id;}
+function go(id){render(id);}
+let lastGrp=null;SECTIONS.forEach(s=>{if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);});
+render((location.hash||'#universal').slice(1)||'universal');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 7;
+  var chCode = "CHAPTER 07";
+  var chTitle = "Chapter 7: Special Motors";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

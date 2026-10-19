@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.3 — AC Machinery Fundamentals (Interactive)</title>
+<style>
+:root{
+  --bg:#0f1220; --panel:#171a2b; --panel2:#1e2237; --ink:#e8ebf7; --muted:#9aa3c4;
+  --acc:#5b8cff; --acc2:#38d39f; --warn:#ffcc66; --bad:#ff6b81; --line:#2a2f4a;
+  --chip:#242a44; --good:#38d39f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}
+a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}
+.brand h1{font-size:16px;margin:0}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.brand a{font-size:12px}
+.nav{padding:8px;flex:1}
+.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}
+.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}
+.credit b{color:var(--ink);font-weight:600}
+.credit a{color:var(--acc)}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}
+.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}
+.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}
+h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+p{margin:8px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}
+.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}
+.frac .d{display:block;padding:0 6px}
+.vec{font-weight:700}
+sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}
+label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}
+label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}
+.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}
+.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}
+.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}
+details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}
+.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}
+.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}
+svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}
+th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}
+.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.gauge{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center}
+.gauge .g-l{color:var(--muted);font-size:12px}
+.gauge .g-v{font-size:19px;font-weight:700;color:var(--acc2);font-variant-numeric:tabular-nums}
+.quiz .q{margin:10px 0}
+.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.quiz .opt:hover{border-color:var(--acc)}
+.quiz .opt.correct{border-color:var(--good);background:#0c1a14}
+.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Chapter 3 — AC Machinery Fundamentals<br><span style="color:#6b7398">(Chapman Ch. 4 · eq. numbers follow the book)</span></p>
+      <p><a href="chapter2.html">← Chapter 2</a> · <a href="chapter4.html">Chapter 4 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit">
+      <div><b>Dr. Muhammad Salim Butt</b></div>
+      <a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+/* ============ helpers ============ */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{
+  if(x===null||x===undefined||!isFinite(x))return '—';
+  if(x!==0 && (Math.abs(x)<1e-3||Math.abs(x)>=1e5)) return x.toExponential(Math.max(0,d-1));
+  return (+x.toFixed(d)).toString();
+};
+const D2R=Math.PI/180,R2D=180/Math.PI;
+function axes(ctx,W,H,pad,xlab,ylab){
+  ctx.clearRect(0,0,W,H);ctx.strokeStyle='#232a49';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+  ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';
+  if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);
+  if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}
+}
+function arrow(ctx,x0,y0,x1,y1,c,w=2.5){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();
+  const a=Math.atan2(y1-y0,x1-x0);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a-0.4),y1-9*Math.sin(a-0.4));ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a+0.4),y1-9*Math.sin(a+0.4));ctx.stroke();}
+
+const SECTIONS=[];
+function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* ===================================================================
+   3.1  Rotating loop
+=================================================================== */
+section('loop','Fundamentals','3.1 · Rotating Loop (AC voltage)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">A Simple Loop in a Uniform Magnetic Field</h2>
+  <p class="subttl">§4.1 · The simplest AC generator — where the sinusoid comes from</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = 2vBl sin θ<span class="tag">(4‑6)</span></div>
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = φ<sub>max</sub> ω sin ωt<span class="tag">(4‑11)</span></div>
+  </div>
+  <details class="deriv"><summary>From four wire segments to a clean sinusoid</summary>
+    <div class="step">① Only the two axial sides (ab, cd) cut flux; each gives vBl sin θ, and they add: e = 2vBl sin θ.<span class="why">Sides bc, da are parallel to v×B → zero (4‑2,4‑4).</span></div>
+    <div class="step">② Tangential speed v = rω, and loop area A = 2rl, so e = 2rl·Bω sin ωt = ABω sin ωt.<span class="why">θ = ωt for constant speed (4‑7,4‑8,4‑9).</span></div>
+    <div class="step">③ Peak flux through the loop φ<sub>max</sub> = AB, giving <b>e = φ<sub>max</sub> ω sin ωt</b>.<span class="why">Voltage = flux × speed. True of every real AC machine (4‑10,4‑11).</span></div>
+  </details>
+  <div class="okbox">The generated voltage depends on <b>(1) the flux, (2) the speed of rotation, (3) a construction constant</b> — the master rule for all AC machines.</div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Flux density B (T) <span class="val" id="lp_B_v"></span></span><input type="range" id="lp_B" min="0.1" max="1" value="0.5" step="0.05"></label>
+        <label class="ctl"><span class="lab">Loop area A (m²) <span class="val" id="lp_A_v"></span></span><input type="range" id="lp_A" min="0.02" max="0.3" value="0.1" step="0.01"></label>
+        <label class="ctl"><span class="lab">Angular speed ω (rad/s) <span class="val" id="lp_w_v"></span></span><input type="range" id="lp_w" min="20" max="120" value="60" step="2"></label>
+        <div class="flex"><button class="btn" id="lp_run">⏸ Pause</button></div>
+        <div class="out" id="lp_out"></div>
+      </div>
+      <div><canvas id="lp_can" width="420" height="300"></canvas></div>
+    </div>
+    <p class="note">Left: the loop rotating (edge-on) in a left→right field, its two conductors marked. Right: the induced voltage traced in real time.</p>
+  </div>`;
+  const can=$('#lp_can'),cx=can.getContext('2d');let ph=0,run=true,raf=null,hist=[];
+  const P=()=>({B:+$('#lp_B').value,A:+$('#lp_A').value,w:+$('#lp_w').value});
+  const lbl=()=>{const p=P();$('#lp_B_v').textContent=p.B+' T';$('#lp_A_v').textContent=p.A+' m²';$('#lp_w_v').textContent=p.w+' rad/s';};
+  function draw(){
+    const p=P(),phimax=p.A*p.B,Emax=phimax*p.w,e=Emax*Math.sin(ph);
+    lbl();
+    $('#lp_out').innerHTML=`φ<sub>max</sub> = AB = <span class="k">${fmt(phimax,4)} Wb</span>\nE<sub>max</sub> = φ<sub>max</sub>ω = <span class="k">${fmt(Emax,2)} V</span>\ninstantaneous e = <span class="k">${fmt(e,2)} V</span>`;
+    cx.clearRect(0,0,420,300);
+    // field arrows left->right (top area)
+    cx.strokeStyle='#232a49';for(let y=30;y<=170;y+=28){arrow(cx,20,y,150,y,'#232a49',1);}
+    cx.fillStyle='#9aa3c4';cx.font='11px system-ui';cx.fillText('B field →',20,20);
+    // rotor circle
+    const ccx=90,ccy=100,R=55;cx.strokeStyle='#3a4570';cx.lineWidth=2;cx.beginPath();cx.arc(ccx,ccy,R,0,7);cx.stroke();
+    // loop edge-on: the plane is a line at angle ph; conductors at +/- along it
+    const dx=Math.cos(ph)*R,dy=Math.sin(ph)*R*0.35;
+    cx.strokeStyle='#38d39f';cx.lineWidth=3;cx.beginPath();cx.moveTo(ccx-dx,ccy-dy);cx.lineTo(ccx+dx,ccy+dy);cx.stroke();
+    cx.fillStyle='#ff6b81';cx.beginPath();cx.arc(ccx+dx,ccy+dy,5,0,7);cx.fill();
+    cx.fillStyle='#ffcc66';cx.beginPath();cx.arc(ccx-dx,ccy-dy,5,0,7);cx.fill();
+    cx.fillStyle='#9aa3c4';cx.fillText('loop',ccx-14,ccy+R+16);
+    // waveform
+    hist.push(e/Math.max(Emax,1e-6));if(hist.length>200)hist.shift();
+    const wx=180,ww=230,wmid=100,wamp=70;
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(wx,wmid);cx.lineTo(wx+ww,wmid);cx.stroke();
+    cx.strokeStyle='#38d39f';cx.lineWidth=2;cx.beginPath();
+    hist.forEach((v,i)=>{const x=wx+i/200*ww,y=wmid-v*wamp;i===0?cx.moveTo(x,y):cx.lineTo(x,y);});cx.stroke();
+    cx.fillStyle='#38d39f';cx.fillText('e(t) = E_max sin ωt',wx+4,wmid-wamp-6);
+    // bottom: torque/energy note
+    if(run)ph+=p.w*0.016*0.15;
+  }
+  function loop(){if($('#sec-loop').classList.contains('on'))draw();raf=requestAnimationFrame(loop);}
+  $('#lp_run').onclick=()=>{run=!run;$('#lp_run').textContent=run?'⏸ Pause':'▶ Play';};
+  ['lp_B','lp_A','lp_w'].forEach(id=>$('#'+id).oninput=draw);
+  lbl();draw();loop();
+});
+
+/* ===================================================================
+   3.2  Rotating magnetic field (flagship)
+=================================================================== */
+section('rmf','Rotating Field','3.2 · Rotating Magnetic Field ★',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Production of a Rotating Magnetic Field</h2>
+  <p class="subttl">§4.2 · How stator windings make a field — single-phase <b>pulsates</b>, two-phase &amp; three-phase <b>rotate</b>. All three run off one clock below.</p>
+
+  <div class="card">
+    <div class="flex">
+      <button class="btn" id="rf_play">▶ Play</button>
+      <button class="btn ghost" id="rf_reset">↺ Reset</button>
+      <label class="ctl" style="flex:1;min-width:150px;margin:0"><span class="lab">Speed <span class="val" id="rf_sp_v"></span></span><input type="range" id="rf_sp" min="0.2" max="3" step="0.1" value="1"></label>
+      <label class="ctl" style="flex:1;min-width:150px;margin:0"><span class="lab">ωt <span class="val" id="rf_t_v"></span></span><input type="range" id="rf_t" min="0" max="720" step="1" value="0"></label>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="flex" style="justify-content:space-between"><h4 style="margin:0">Single-phase system</h4><span class="badge" style="font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)">pulsating field</span></div>
+      <svg viewBox="-165 -175 330 350" id="svgSingle" style="display:block;width:100%;max-height:330px;margin:2px auto;overflow:visible"></svg>
+      <svg viewBox="0 0 400 130" id="waveSingle" style="display:block;width:100%;height:118px;margin-top:4px"></svg>
+      <div class="note" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px"><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ff6b81"></span> i<sub>a</sub>=I<sub>m</sub>cos ωt</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ffcc66"></span> resultant MMF</span></div>
+      <div id="readoutSingle" style="margin-top:8px;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;font-variant-numeric:tabular-nums">
+        <span>i<sub>a</sub>: <b id="rs_ia" style="color:var(--ink)">+1.00</b></span><span>|F|: <b id="rs_mag" style="color:var(--ink)">1.00</b> F<sub>max</sub></span><span>∠F: <b id="rs_ang" style="color:var(--ink)">0°</b></span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="flex" style="justify-content:space-between"><h4 style="margin:0">Two-phase system (space quadrature)</h4><span class="badge" style="font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)">rotating field</span></div>
+      <svg viewBox="-165 -175 330 350" id="svgTwo" style="display:block;width:100%;max-height:330px;margin:2px auto;overflow:visible"></svg>
+      <svg viewBox="0 0 400 130" id="waveTwo" style="display:block;width:100%;height:118px;margin-top:4px"></svg>
+      <div class="note" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px"><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ff6b81"></span> i<sub>a</sub>=cos ωt</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#5b8cff"></span> i<sub>b</sub>=sin ωt</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ffcc66"></span> MMF</span></div>
+      <div id="readoutTwo" style="margin-top:8px;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;font-variant-numeric:tabular-nums">
+        <span>i<sub>a</sub>: <b id="rt_ia" style="color:var(--ink)">+1.00</b></span><span>i<sub>b</sub>: <b id="rt_ib" style="color:var(--ink)">0.00</b></span><span>|F|: <b id="rt_mag" style="color:var(--ink)">1.00</b></span><span>∠F: <b id="rt_ang" style="color:var(--ink)">0°</b></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Winding diagram — 2-pole stator: which winding energises, how the field turns</h3>
+  <div class="card">
+    <p><b style="color:#ff6b81">Phase A</b>'s magnetic axis is horizontal, so its coil sides sit in slots at <b>12 &amp; 6 o'clock</b>. When i<sub>a</sub>&gt;0, current flows <em>out of the page</em> at the top (⊙) and <em>into the page</em> at the bottom (⊗); by the right-hand rule the MMF points along <b>+x (3 o'clock)</b>. The dot/cross markers in the diagrams above light up with the live current.</p>
+    <p><b style="color:#5b8cff">Phase B</b>'s axis is vertical, 90° from A, with coil sides at <b>3 &amp; 9 o'clock</b>. When i<sub>b</sub>&gt;0, current is <em>into the page</em> at the right (⊗) and <em>out of the page</em> at the left (⊙); MMF points along <b>+y (12 o'clock)</b>.</p>
+    <p>Watch the amber resultant: at ωt=0° it lies along +x (phase A alone); at 90° it swings to +y (phase B alone); at 180° to −x; at 270° to −y — a <b>constant-magnitude field rotating once per electrical cycle</b>. In a 2-pole machine one electrical cycle = one mechanical revolution, so <span class="eq" style="display:inline;padding:2px 8px">n<sub>s</sub> = 120 f / P</span> (3000 r/min at 50 Hz, p=1).</p>
+  </div>
+
+  <h3>Three-phase winding — 2-pole stator: three axes 120° apart</h3>
+  <div class="card">
+    <div class="flex" style="justify-content:space-between"><h4 style="margin:0">Three-phase system (space 120°)</h4><span class="badge" style="font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)">rotating field · 1.5 F<sub>max</sub></span></div>
+    <div class="grid2" style="align-items:center">
+      <svg viewBox="-165 -175 330 350" id="svgThree" style="display:block;width:100%;max-height:340px;margin:2px auto;overflow:visible"></svg>
+      <div>
+        <svg viewBox="0 0 400 130" id="waveThree" style="display:block;width:100%;height:118px;margin-top:4px"></svg>
+        <div class="note" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px"><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ff6b81"></span> i<sub>a</sub>=cos ωt</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#5b8cff"></span> i<sub>b</sub>=cos(ωt−120°)</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#c774e6"></span> i<sub>c</sub>=cos(ωt−240°)</span><span><span style="display:inline-block;width:14px;height:3px;border-radius:2px;background:#ffcc66"></span> MMF</span></div>
+        <div id="readoutThree" style="margin-top:8px;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;font-variant-numeric:tabular-nums">
+          <span>i<sub>a</sub>: <b id="r3_ia" style="color:var(--ink)">+1.00</b></span><span>i<sub>b</sub>: <b id="r3_ib" style="color:var(--ink)">−0.50</b></span><span>i<sub>c</sub>: <b id="r3_ic" style="color:var(--ink)">−0.50</b></span><span>|F|: <b id="r3_mag" style="color:var(--ink)">1.50</b></span><span>∠F: <b id="r3_ang" style="color:var(--ink)">0°</b></span>
+        </div>
+      </div>
+    </div>
+    <p style="margin:10px 0 0"><b style="color:#ff6b81">A</b> axis at 0° (slots at 12 &amp; 6 o'clock), <b style="color:#5b8cff">B</b> at 120°, <b style="color:#c774e6">C</b> at 240° — each pair of coil sides 180° apart. Currents peak in turn, so the amber resultant sweeps around at constant length <b>1.5 F<sub>max</sub></b>: at ωt=0 only i<sub>a</sub> is at +1 (i<sub>b</sub>=i<sub>c</sub>=−0.5) and F lies on +x; a quarter cycle later it has turned to +y. Unlike the two-phase case, the three currents sum to zero at every instant — <b>no neutral wire needed</b>.</p>
+  </div>
+
+  <h3>Three-phase — the net field of constant magnitude 1.5 B<sub>M</sub></h3>
+  <div class="grid3">
+    <div class="eq" style="text-align:center">i<sub>a</sub>=I<sub>M</sub>sin ωt</div>
+    <div class="eq" style="text-align:center">i<sub>b</sub>=I<sub>M</sub>sin(ωt−120°)</div>
+    <div class="eq" style="text-align:center">i<sub>c</sub>=I<sub>M</sub>sin(ωt−240°)</div>
+  </div>
+  <div class="card">
+    <div class="flex"><button class="btn ghost" id="rf_swap">⇄ Swap phases B↔C (reverse)</button><span class="note">shares the Play / Speed / ωt controls above</span></div>
+    <canvas id="rf_can" width="440" height="380" style="width:100%;max-width:460px;display:block;margin:0 auto"></canvas>
+    <div class="out" id="rf_out"></div>
+    <p class="note">White/blue/magenta = the three component fields (they pulse along fixed axes); <b>red = the net field</b>, riding the dashed 1.5 B<sub>M</sub> circle. Swapping two phases reverses the direction — exactly how you reverse an AC motor.</p>
+  </div>
+
+  <h3>Why single-phase has no starting torque</h3>
+  <div class="card">
+    <p>A single winding gives an MMF that stays on its own axis and only swings in amplitude — <span class="eq" style="display:inline;padding:2px 8px">F(θ,t)=F<sub>max</sub>·cos ωt·cos θ</span>. The product-to-sum identity splits it into two counter-rotating half-fields:</p>
+    <div class="eq">F(θ,t) = ½ F<sub>max</sub> [ cos(ωt − θ) + cos(ωt + θ) ]</div>
+    <p>The forward and backward waves exert equal-and-opposite torques on a stationary rotor → <b>net starting torque = 0</b>. That's why a single-phase induction motor needs a start winding, a capacitor, or shading (Ch.7). Adding a second winding 90° in space fed by a current 90° in time gives <span class="eq" style="display:inline;padding:2px 8px">F = F<sub>max</sub>·cos(ωt − θ)</span> — one wave of constant magnitude rotating at ω, so it self-starts. Three-phase does the same with three axes 120° apart, giving 1.5 F<sub>max</sub> and no neutral current.</p>
+  </div>
+
+  <h3>Electrical frequency ↔ mechanical speed</h3>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">f<sub>e</sub> = <span class="frac"><span class="n">P</span><span class="d">2</span></span> f<sub>m</sub><span class="tag">(4‑31)</span></div>
+    <div class="eq" style="text-align:center">n<sub>m</sub> = <span class="frac"><span class="n">120 f<sub>e</sub></span><span class="d">P</span></span><span class="tag">(4‑34)</span></div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <label class="ctl"><span class="lab">Electrical frequency f<sub>e</sub> (Hz)</span><input type="number" id="fp_f" value="60" step="any"></label>
+      <label class="ctl"><span class="lab">Number of poles P</span><input type="number" id="fp_P" value="4" step="2" min="2"></label>
+    </div>
+    <div class="out" id="fp_out"></div>
+    <details><summary>Synchronous-speed table (Problem 4‑2)</summary><div id="fp_tab"></div></details>
+  </div>`;
+
+  /* ---- colours (chapter theme) ---- */
+  const CA='#ff6b81', CB='#5b8cff', CF='#ffcc66', IRON='#4a5570', IRONF='rgba(120,132,146,0.10)',
+    AIR='#0c1020', ROTORF='rgba(140,150,165,0.10)', BORD='#2a2f4a', FAINT='#9aa3c4', AXIS='#2a2f4a', PANEL='#171a2b',
+    TRA='rgba(255,107,129,0.30)', TRB='rgba(91,140,255,0.30)', FTR='rgba(255,204,102,0.35)';
+  const CC='#c774e6', TRC='rgba(199,116,230,0.30)';
+  const NS='http://www.w3.org/2000/svg';
+  const svgEl=(name,attrs={},kids=[])=>{const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);for(const c of kids)e.appendChild(c);return e;};
+  const txt=t=>document.createTextNode(t);
+  const SO=138,SI=104,RR=58,SHR=6,SLR=15,SLP=82,FL=88,WAVE_W=400,WAVE_H=130,WM={l:34,r:12,t:14,b:22};
+  const H3=SLP*Math.sqrt(3)/2, HH=SLP/2;
+  const positions={aTop:{x:0,y:-SLP,id:'aTop'},aBot:{x:0,y:SLP,id:'aBot'},bRig:{x:SLP,y:0,id:'bRig'},bLef:{x:-SLP,y:0,id:'bLef'},
+    a3d:{x:0,y:-SLP,id:'a3d'},a3x:{x:0,y:SLP,id:'a3x'},b3d:{x:-H3,y:HH,id:'b3d'},b3x:{x:H3,y:-HH,id:'b3x'},c3d:{x:H3,y:HH,id:'c3d'},c3x:{x:-H3,y:-HH,id:'c3x'}};
+
+  function drawStator(svg,includeB){
+    svg.innerHTML='';
+    const defs=svgEl('defs');defs.innerHTML=`<marker id="arrow-${svg.id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:${CF};"/></marker>`;svg.appendChild(defs);
+    svg.appendChild(svgEl('line',{x1:-SI+6,x2:SI-6,y1:0,y2:0,style:`stroke:${TRA};stroke-width:1.5;stroke-dasharray:5 4;`}));
+    if(includeB)svg.appendChild(svgEl('line',{x1:0,x2:0,y1:-SI+6,y2:SI-6,style:`stroke:${TRB};stroke-width:1.5;stroke-dasharray:5 4;`}));
+    if(includeB)svg.appendChild(svgEl('circle',{cx:0,cy:0,r:FL,style:`fill:none;stroke:${FTR};stroke-width:1;stroke-dasharray:2 3;`}));
+    else svg.appendChild(svgEl('line',{x1:-FL,x2:FL,y1:0,y2:0,style:`stroke:${FTR};stroke-width:1;stroke-dasharray:2 3;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SO,style:`fill:${IRONF};stroke:${IRON};stroke-width:1.5;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SI,style:`fill:${AIR};stroke:${IRON};stroke-width:1;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:RR,style:`fill:${ROTORF};stroke:${IRON};stroke-width:1;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SHR,style:`fill:${IRON};`}));
+    [[0,-SO-8,'12'],[SO+14,4,'3'],[0,SO+16,'6'],[-SO-14,4,'9']].forEach(c=>svg.appendChild(svgEl('text',{x:c[0],y:c[1],style:`fill:${FAINT};font-size:10px;text-anchor:middle;font-family:monospace;`},[txt(c[2])])));
+    svg.appendChild(svgEl('text',{x:SI+6,y:-6,style:`fill:${CA};font-size:10px;text-anchor:start;font-family:monospace;font-weight:600;`},[txt('A axis')]));
+    if(includeB)svg.appendChild(svgEl('text',{x:6,y:-SI,style:`fill:${CB};font-size:10px;text-anchor:start;font-family:monospace;font-weight:600;`},[txt('B axis')]));
+    makeSlot(svg,positions.aTop,'A',CA);makeSlot(svg,positions.aBot,"A'",CA);
+    if(includeB){makeSlot(svg,positions.bRig,'B',CB);makeSlot(svg,positions.bLef,"B'",CB);}
+    const fg=svgEl('g',{id:`field-${svg.id}`});
+    fg.appendChild(svgEl('line',{x1:0,y1:0,x2:0,y2:0,style:`stroke:${CF};stroke-width:3.5;stroke-linecap:round;`,'marker-end':`url(#arrow-${svg.id})`}));
+    svg.appendChild(fg);
+  }
+  function drawStator3(svg){
+    svg.innerHTML='';
+    const defs=svgEl('defs');defs.innerHTML=`<marker id="arrow-${svg.id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:${CF};"/></marker>`;svg.appendChild(defs);
+    [[0,TRA],[120,TRB],[240,TRC]].forEach(([deg,tr])=>{const a=deg*D2R,ex=(SI-6)*Math.cos(a),ey=-(SI-6)*Math.sin(a);svg.appendChild(svgEl('line',{x1:ex,y1:ey,x2:-ex,y2:-ey,style:`stroke:${tr};stroke-width:1.5;stroke-dasharray:5 4;`}));});
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:FL,style:`fill:none;stroke:${FTR};stroke-width:1;stroke-dasharray:2 3;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SO,style:`fill:${IRONF};stroke:${IRON};stroke-width:1.5;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SI,style:`fill:${AIR};stroke:${IRON};stroke-width:1;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:RR,style:`fill:${ROTORF};stroke:${IRON};stroke-width:1;`}));
+    svg.appendChild(svgEl('circle',{cx:0,cy:0,r:SHR,style:`fill:${IRON};`}));
+    [[0,-SO-8,'12'],[SO+14,4,'3'],[0,SO+16,'6'],[-SO-14,4,'9']].forEach(c=>svg.appendChild(svgEl('text',{x:c[0],y:c[1],style:`fill:${FAINT};font-size:10px;text-anchor:middle;font-family:monospace;`},[txt(c[2])])));
+    [[0,'A',CA],[120,'B',CB],[240,'C',CC]].forEach(([deg,lab,col])=>{const a=deg*D2R,rL=122;svg.appendChild(svgEl('text',{x:rL*Math.cos(a),y:-rL*Math.sin(a)+3,style:`fill:${col};font-size:12px;text-anchor:middle;font-family:monospace;font-weight:700;`},[txt(lab)]));});
+    makeSlot(svg,positions.a3d,'A',CA);makeSlot(svg,positions.a3x,"A'",CA);
+    makeSlot(svg,positions.b3d,'B',CB);makeSlot(svg,positions.b3x,"B'",CB);
+    makeSlot(svg,positions.c3d,'C',CC);makeSlot(svg,positions.c3x,"C'",CC);
+    const fg=svgEl('g',{id:`field-${svg.id}`});
+    fg.appendChild(svgEl('line',{x1:0,y1:0,x2:0,y2:0,style:`stroke:${CF};stroke-width:3.5;stroke-linecap:round;`,'marker-end':`url(#arrow-${svg.id})`}));
+    svg.appendChild(fg);
+  }
+  function makeSlot(svg,pos,label,col){
+    svg.appendChild(svgEl('circle',{cx:pos.x,cy:pos.y,r:SLR,style:`fill:${PANEL};stroke:${BORD};stroke-width:1.2;`}));
+    const rr=Math.hypot(pos.x,pos.y)||1,ux=pos.x/rr,uy=pos.y/rr;
+    const lx=pos.x+ux*(SLR+10),ly=pos.y+uy*(SLR+10)+4;
+    svg.appendChild(svgEl('text',{x:lx,y:ly,style:`fill:${col};font-size:12px;text-anchor:middle;font-family:monospace;font-weight:700;`},[txt(label)]));
+    svg.appendChild(svgEl('g',{id:`ind-${pos.id}-${svg.id}`}));
+  }
+  function updateSlot(svgId,slotKey,mag,isDot,col){
+    const g=document.getElementById(`ind-${slotKey}-${svgId}`);if(!g)return;g.innerHTML='';
+    if(mag<0.015)return;const pos=positions[slotKey],op=Math.max(0.25,Math.min(1,mag));
+    if(isDot){g.appendChild(svgEl('circle',{cx:pos.x,cy:pos.y,r:4.5,style:`fill:${col};opacity:${op};`}));
+      g.appendChild(svgEl('circle',{cx:pos.x,cy:pos.y,r:10,style:`fill:none;stroke:${col};stroke-width:1.6;opacity:${op};`}));}
+    else{const s=6;const st=`stroke:${col};stroke-width:2;stroke-linecap:round;opacity:${op};`;
+      g.appendChild(svgEl('line',{x1:pos.x-s,y1:pos.y-s,x2:pos.x+s,y2:pos.y+s,style:st}));
+      g.appendChild(svgEl('line',{x1:pos.x-s,y1:pos.y+s,x2:pos.x+s,y2:pos.y-s,style:st}));
+      g.appendChild(svgEl('circle',{cx:pos.x,cy:pos.y,r:10,style:`fill:none;stroke:${col};stroke-width:1.6;opacity:${op};`}));}
+  }
+  function updateField(svgId,fx,fy){
+    const g=document.getElementById(`field-${svgId}`);if(!g)return;const line=g.querySelector('line');
+    if(Math.hypot(fx,fy)<0.5){line.setAttribute('x2',0);line.setAttribute('y2',0);line.style.opacity=0.2;}
+    else{line.setAttribute('x2',fx);line.setAttribute('y2',-fy);line.style.opacity=1;}
+  }
+  function drawWave(svg,signals){
+    svg.innerHTML='';const W=WAVE_W-WM.l-WM.r,H=WAVE_H-WM.t-WM.b,midY=WM.t+H/2;
+    svg.appendChild(svgEl('line',{x1:WM.l,x2:WAVE_W-WM.r,y1:midY,y2:midY,style:`stroke:${AXIS};stroke-width:1;`}));
+    svg.appendChild(svgEl('line',{x1:WM.l,x2:WM.l,y1:WM.t,y2:WM.t+H,style:`stroke:${AXIS};stroke-width:1;`}));
+    const yl=`fill:${FAINT};font-size:10px;text-anchor:end;font-family:monospace;`;
+    svg.appendChild(svgEl('text',{x:WM.l-5,y:WM.t+4,style:yl},[txt('+1')]));svg.appendChild(svgEl('text',{x:WM.l-5,y:WM.t+H+4,style:yl},[txt('−1')]));svg.appendChild(svgEl('text',{x:WM.l-5,y:midY+3,style:yl},[txt('0')]));
+    const xl=`fill:${FAINT};font-size:10px;text-anchor:middle;font-family:monospace;`;
+    for(let d=0;d<=720;d+=90){const x=WM.l+(d/720)*W;svg.appendChild(svgEl('line',{x1:x,x2:x,y1:midY-3,y2:midY+3,style:`stroke:${AXIS};stroke-width:1;`}));if(d%180===0)svg.appendChild(svgEl('text',{x,y:WM.t+H+13,style:xl},[txt(d+'°')]));}
+    for(const s of signals){let dd='';for(let i=0;i<=W;i++){const deg=(i/W)*720,val=s.fn(deg*Math.PI/180),x=WM.l+i,y=midY-val*(H/2-4);dd+=(i===0?'M':'L')+x+','+y.toFixed(1)+' ';}
+      svg.appendChild(svgEl('path',{d:dd,style:`fill:none;stroke:${s.color};stroke-width:1.8;stroke-linecap:round;`}));}
+    svg.appendChild(svgEl('line',{id:`cursor-${svg.id}`,x1:WM.l,x2:WM.l,y1:WM.t-3,y2:WM.t+H+3,style:`stroke:${FAINT};stroke-width:1.2;opacity:0.55;`}));
+    for(const s of signals)svg.appendChild(svgEl('circle',{id:`dot-${svg.id}-${s.key}`,cx:WM.l,cy:midY,r:4.5,style:`fill:${s.color};stroke:${PANEL};stroke-width:2;`}));
+  }
+  function updateCursor(svg,signals,tDeg){
+    const W=WAVE_W-WM.l-WM.r,H=WAVE_H-WM.t-WM.b,midY=WM.t+H/2,c=((tDeg%720)+720)%720,x=WM.l+(c/720)*W;
+    const cur=document.getElementById(`cursor-${svg.id}`);if(cur){cur.setAttribute('x1',x);cur.setAttribute('x2',x);}
+    for(const s of signals){const dot=document.getElementById(`dot-${svg.id}-${s.key}`);if(dot){const val=s.fn(c*Math.PI/180);dot.setAttribute('cx',x);dot.setAttribute('cy',midY-val*(H/2-4));}}
+  }
+  const iA=r=>Math.cos(r), iB=r=>Math.sin(r);
+  const sigS=[{key:'a',color:CA,fn:iA}], sigT=[{key:'a',color:CA,fn:iA},{key:'b',color:CB,fn:iB}];
+  const i3a=r=>Math.cos(r), i3b=r=>Math.cos(r-2*Math.PI/3), i3c=r=>Math.cos(r-4*Math.PI/3);
+  const sigTh=[{key:'a',color:CA,fn:i3a},{key:'b',color:CB,fn:i3b},{key:'c',color:CC,fn:i3c}];
+  const svgSingle=$('#svgSingle'),svgTwo=$('#svgTwo'),waveSingle=$('#waveSingle'),waveTwo=$('#waveTwo');
+  const svgThree=$('#svgThree'),waveThree=$('#waveThree');
+  const can=$('#rf_can'),cx=can.getContext('2d');
+
+  /* ---- three-phase canvas ---- */
+  let swap=false;
+  function draw3(rad){
+    const BM=1,cxp=220,cyp=140,scale=80;cx.clearRect(0,0,440,380);
+    cx.strokeStyle='#2a2f4a';cx.setLineDash([4,4]);cx.beginPath();cx.arc(cxp,cyp,1.5*BM*scale,0,7);cx.stroke();cx.setLineDash([]);
+    const off=swap?[0,240,120]:[0,120,240];
+    let nx=0,ny=0;const cols=['#e8ebf7','#5b8cff','#c774e6'];
+    [0,120,240].forEach((ax,i)=>{const mag=BM*Math.sin(rad-off[i]*D2R),dir=ax*D2R,vx=mag*Math.cos(dir),vy=mag*Math.sin(dir);nx+=vx;ny+=vy;arrow(cx,cxp,cyp,cxp+vx*scale,cyp-vy*scale,cols[i],2);});
+    arrow(cx,cxp,cyp,cxp+nx*scale,cyp-ny*scale,'#ff6b81',3.5);
+    const mag=Math.hypot(nx,ny),ang=Math.atan2(ny,nx)*R2D;
+    cx.fillStyle='#ff6b81';cx.font='13px system-ui';cx.fillText('N',cxp+nx*scale*1.08-4,cyp-ny*scale*1.08+4);
+    cx.fillStyle='#5b8cff';cx.fillText('S',cxp-nx*scale*1.08-4,cyp+ny*scale*1.08+4);
+    cx.fillStyle='#9aa3c4';cx.font='11px system-ui';
+    ['a','b','c'].forEach((L,i)=>{const dir=[0,120,240][i]*D2R;cx.fillText(L,cxp+Math.cos(dir)*(scale*1.55)-3,cyp-Math.sin(dir)*(scale*1.55)+4);});
+    const wy=300,wamp=44,ww=420;cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(10,wy);cx.lineTo(10+ww,wy);cx.stroke();
+    for(let i=0;i<3;i++){cx.strokeStyle=cols[i];cx.lineWidth=1.8;cx.beginPath();for(let x=0;x<=ww;x++){const tt=rad-2*Math.PI+x/ww*4*Math.PI;const y=wy-Math.sin(tt-off[i]*D2R)*wamp;x===0?cx.moveTo(10+x,y):cx.lineTo(10+x,y);}cx.stroke();}
+    cx.strokeStyle='#38d39f';cx.setLineDash([3,3]);cx.beginPath();cx.moveTo(10+ww/2,wy-wamp-6);cx.lineTo(10+ww/2,wy+wamp+6);cx.stroke();cx.setLineDash([]);
+    cx.fillStyle='#9aa3c4';cx.fillText('phase currents i_a, i_b, i_c',14,wy-wamp-10);
+    $('#rf_out').innerHTML=`|B<sub>net</sub>| = <span class="k">${fmt(mag,3)} B<sub>M</sub></span> (const ≈ 1.5)   ∠ = <span class="k">${fmt(ang,0)}°</span>   ${swap?'clockwise (reversed)':'counter-clockwise'}`;
+  }
+
+  /* ---- shared clock + render ---- */
+  let t=0,playing=false,speed=1,lastTs=0,raf=null;
+  function renderAll(){
+    const rad=t*Math.PI/180,ia=iA(rad),ib=iB(rad);
+    updateSlot('svgSingle','aTop',Math.abs(ia),ia>0,CA);updateSlot('svgSingle','aBot',Math.abs(ia),ia<0,CA);
+    updateField('svgSingle',ia*FL,0);updateCursor(waveSingle,sigS,t);
+    updateSlot('svgTwo','aTop',Math.abs(ia),ia>0,CA);updateSlot('svgTwo','aBot',Math.abs(ia),ia<0,CA);
+    updateSlot('svgTwo','bRig',Math.abs(ib),ib<0,CB);updateSlot('svgTwo','bLef',Math.abs(ib),ib>0,CB);
+    updateField('svgTwo',ia*FL,ib*FL);updateCursor(waveTwo,sigT,t);
+    const magS=Math.abs(ia);
+    $('#rs_ia').textContent=(ia>=0?'+':'')+ia.toFixed(2);$('#rs_mag').textContent=magS.toFixed(2);$('#rs_ang').textContent=magS<0.02?'—':(ia>=0?0:180)+'°';
+    const magT=Math.hypot(ia,ib),angT=((Math.atan2(ib,ia)*180/Math.PI)+360)%360;
+    $('#rt_ia').textContent=(ia>=0?'+':'')+ia.toFixed(2);$('#rt_ib').textContent=(ib>=0?'+':'')+ib.toFixed(2);$('#rt_mag').textContent=magT.toFixed(2);$('#rt_ang').textContent=angT.toFixed(0)+'°';
+    const i3av=i3a(rad),i3bv=i3b(rad),i3cv=i3c(rad);
+    updateSlot('svgThree','a3d',Math.abs(i3av),i3av>0,CA);updateSlot('svgThree','a3x',Math.abs(i3av),i3av<0,CA);
+    updateSlot('svgThree','b3d',Math.abs(i3bv),i3bv>0,CB);updateSlot('svgThree','b3x',Math.abs(i3bv),i3bv<0,CB);
+    updateSlot('svgThree','c3d',Math.abs(i3cv),i3cv>0,CC);updateSlot('svgThree','c3x',Math.abs(i3cv),i3cv<0,CC);
+    const F3x=i3av-0.5*i3bv-0.5*i3cv,F3y=Math.sqrt(3)/2*(i3bv-i3cv);
+    updateField('svgThree',F3x*FL/1.5,F3y*FL/1.5);updateCursor(waveThree,sigTh,t);
+    const mag3=Math.hypot(F3x,F3y),ang3=((Math.atan2(F3y,F3x)*180/Math.PI)+360)%360;
+    $('#r3_ia').textContent=(i3av>=0?'+':'')+i3av.toFixed(2);$('#r3_ib').textContent=(i3bv>=0?'+':'')+i3bv.toFixed(2);$('#r3_ic').textContent=(i3cv>=0?'+':'')+i3cv.toFixed(2);$('#r3_mag').textContent=mag3.toFixed(2);$('#r3_ang').textContent=ang3.toFixed(0)+'°';
+    draw3(rad);
+    $('#rf_t_v').textContent=Math.round(t)+'°';$('#rf_t').value=Math.round(t)%720;
+  }
+  function loop(ts){
+    if($('#sec-rmf').classList.contains('on')){
+      if(playing){if(!lastTs)lastTs=ts;t+=speed*90*((ts-lastTs)/1000);lastTs=ts;if(t>=720)t-=720;}else lastTs=0;
+      renderAll();
+    }else lastTs=0;
+    raf=requestAnimationFrame(loop);
+  }
+  $('#rf_play').onclick=()=>{playing=!playing;$('#rf_play').textContent=playing?'❚❚ Pause':'▶ Play';lastTs=0;};
+  $('#rf_reset').onclick=()=>{t=0;renderAll();};
+  $('#rf_sp').oninput=function(){speed=+this.value;$('#rf_sp_v').textContent=speed.toFixed(1)+'×';};
+  $('#rf_t').oninput=function(){t=+this.value;renderAll();};
+  $('#rf_swap').onclick=()=>{swap=!swap;renderAll();};
+  $('#rf_sp_v').textContent='1.0×';
+  drawStator(svgSingle,false);drawStator(svgTwo,true);drawStator3(svgThree);drawWave(waveSingle,sigS);drawWave(waveTwo,sigT);drawWave(waveThree,sigTh);
+  renderAll();requestAnimationFrame(loop);
+
+  /* ---- freq / pole ---- */
+  const fpUpd=()=>{const f=+$('#fp_f').value,P=+$('#fp_P').value,nm=120*f/P,fm=f/(P/2);
+    $('#fp_out').innerHTML=`n<sub>m</sub> = 120f<sub>e</sub>/P = <span class="k">${fmt(nm,1)} r/min</span>\nf<sub>m</sub> = f<sub>e</sub>/(P/2) = <span class="k">${fmt(fm,3)} rev/s</span>`;};
+  ['fp_f','fp_P'].forEach(id=>$('#'+id).oninput=fpUpd);fpUpd();
+  const poles=[2,4,6,8,10,12,14],freqs=[50,60,400];
+  $('#fp_tab').innerHTML=`<table><tr><th>Poles</th>${freqs.map(f=>`<th>${f} Hz</th>`).join('')}</tr>`+
+    poles.map(P=>`<tr><td>${P}</td>${freqs.map(f=>`<td>${fmt(120*f/P,0)}</td>`).join('')}</tr>`).join('')+`</table><div class="note">synchronous speed n = 120 f / P (r/min)</div>`;
+});
+
+/* ===================================================================
+   3.3  MMF & flux distribution
+=================================================================== */
+section('mmf','Rotating Field','3.3 · MMF & Flux Distribution',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Magnetomotive Force & Flux Distribution</h2>
+  <p class="subttl">§4.3 · Making the air-gap field sinusoidal in space</p>
+  <p>For a sinusoidal voltage, B (and mmf) must vary <b>sinusoidally around the air gap</b>. Designers approximate this by distributing conductors so the count per slot follows</p>
+  <div class="eq">n<sub>C</sub> = N<sub>C</sub> cos α <span class="tag">(4‑36)</span></div>
+  <p class="note">More slots → the stepped mmf approaches an ideal sinusoid. Drag the slot count to see the staircase smooth out.</p>
+  <div class="card">
+    <label class="ctl"><span class="lab">Number of slots <span class="val" id="mm_n_v"></span></span><input type="range" id="mm_n" min="6" max="48" value="12" step="2"></label>
+    <canvas id="mm_can" width="820" height="260" style="width:100%"></canvas>
+    <div class="note">Bars = mmf contribution per slot (∝ conductors) · smooth curve = ideal sinusoid.</div>
+  </div>`;
+  const cx=$('#mm_can').getContext('2d');
+  const upd=()=>{const n=+$('#mm_n').value;$('#mm_n_v').textContent=n;
+    const W=820,H=260,mid=H/2,pl=20;axes(cx,W,H,{l:pl,r:10,t:14,b:20},'angle α (0–360°)','mmf');
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(pl,mid);cx.lineTo(W-10,mid);cx.stroke();
+    // ideal sinusoid (cumulative mmf ~ sin). Show conductor distribution ncos(a) as bars, and integral (mmf staircase) approx sin.
+    // bars: n slots around 360, height ∝ cos(center angle)
+    const bw=(W-pl-10)/n;
+    for(let k=0;k<n;k++){const a=(k+0.5)/n*360;const h=Math.cos(a*D2R);const x=pl+k*bw;
+      cx.fillStyle=h>=0?'rgba(91,140,255,0.5)':'rgba(255,107,129,0.5)';
+      cx.fillRect(x+2,mid,bw-4,-h*90);}
+    // ideal sinusoid overlay (the mmf they approximate ~ sin shape)
+    cx.strokeStyle='#38d39f';cx.lineWidth=2;cx.beginPath();
+    for(let x=0;x<=W-pl-10;x++){const a=x/(W-pl-10)*360;const y=mid-Math.cos(a*D2R)*90;x===0?cx.moveTo(pl+x,y):cx.lineTo(pl+x,y);}cx.stroke();
+    cx.fillStyle='#38d39f';cx.font='12px system-ui';cx.fillText('ideal n_C = N_C cos α',pl+6,26);};
+  $('#mm_n').oninput=upd;upd();
+});
+
+/* ===================================================================
+   3.4  Induced voltage
+=================================================================== */
+section('voltage','Voltage & Torque','3.4 · Induced Voltage',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Induced Voltage in AC Machines</h2>
+  <p class="subttl">§4.4 · A rotating field generates a three-phase voltage set</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = N<sub>C</sub> φ ω cos ωt<span class="tag">(4‑45)</span></div>
+    <div class="eq" style="text-align:center">E<sub>A</sub> = √2 π N<sub>C</sub> φ f<span class="tag">(4‑50)</span></div>
+  </div>
+  <details class="deriv"><summary>From one coil to the rms phase voltage</summary>
+    <div class="step">① One coil in the rotating field: e = N<sub>C</sub> φ ω cos ωt → peak E<sub>max</sub> = N<sub>C</sub> φ ω.<span class="why">Same "flux × speed × turns" rule (4‑44,4‑45).</span></div>
+    <div class="step">② With ω = 2πf: E<sub>max</sub> = 2π N<sub>C</sub> φ f.<span class="why">(4‑48)</span></div>
+    <div class="step">③ rms = E<sub>max</sub>/√2 → <b>E<sub>A</sub> = √2 π N<sub>C</sub> φ f</b>.<span class="why">(4‑50)</span></div>
+    <div class="step">④ Terminal voltage: Y → V<sub>T</sub>=√3·E<sub>A</sub>; Δ → V<sub>T</sub>=E<sub>A</sub>.</div>
+  </details>
+  <h3>Generator voltage calculator <span class="badge">Example 4‑2</span></h3>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">Peak flux density B (T)</span><input type="number" id="vg_B" value="0.2" step="any"></label>
+      <label class="ctl"><span class="lab">Stator diameter d (m)</span><input type="number" id="vg_d" value="0.5" step="any"></label>
+      <label class="ctl"><span class="lab">Coil length l (m)</span><input type="number" id="vg_l" value="0.3" step="any"></label>
+      <label class="ctl"><span class="lab">Turns / coil N<sub>C</sub></span><input type="number" id="vg_N" value="15" step="any"></label>
+      <label class="ctl"><span class="lab">Speed n (r/min)</span><input type="number" id="vg_n" value="3600" step="any"></label>
+      <label class="ctl"><span class="lab">Connection</span><select id="vg_c"><option value="Y">Y (wye)</option><option value="D">Δ (delta)</option></select></label>
+    </div>
+    <div class="out" id="vg_out"></div>
+    <p class="note">Defaults = Example 4‑2 → φ=0.03 Wb, E<sub>max</sub>=169.7 V, E<sub>A(rms)</sub>=120 V, V<sub>T</sub>=208 V (Y).</p>
+  </div>`;
+  const upd=()=>{const B=+$('#vg_B').value,d=+$('#vg_d').value,l=+$('#vg_l').value,N=+$('#vg_N').value,n=+$('#vg_n').value,conn=$('#vg_c').value;
+    const phi=d*l*B,w=2*Math.PI*n/60,Emax=N*phi*w,Erms=Emax/Math.SQRT2,VT=conn==='Y'?Math.sqrt(3)*Erms:Erms;
+    $('#vg_out').innerHTML=`φ = dlB = <span class="k">${fmt(phi,4)} Wb</span>\nω = 2πn/60 = <span class="k">${fmt(w,1)} rad/s</span>\nE<sub>max</sub> = N<sub>C</sub>φω = <span class="k">${fmt(Emax,1)} V</span>\nE<sub>A</sub> (rms) = E<sub>max</sub>/√2 = <span class="k">${fmt(Erms,1)} V</span>\nV<sub>T</sub> (${conn}) = <span class="k">${fmt(VT,1)} V</span>`;};
+  ['vg_B','vg_d','vg_l','vg_N','vg_n','vg_c'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   3.5  Induced torque
+=================================================================== */
+section('torque','Voltage & Torque','3.5 · Induced Torque',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Induced Torque in an AC Machine</h2>
+  <p class="subttl">§4.5 · Two fields try to line up — the torque between them</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center"><span class="vec">τ</span><sub>ind</sub> = k <span class="vec">B</span><sub>R</sub> × <span class="vec">B</span><sub>net</sub><span class="tag">(4‑60)</span></div>
+    <div class="eq" style="text-align:center">τ<sub>ind</sub> = k B<sub>R</sub> B<sub>net</sub> sin δ<span class="tag">(4‑61)</span></div>
+  </div>
+  <p class="note">δ is the angle between the rotor field B<sub>R</sub> and the net field B<sub>net</sub>. Torque is maximum at δ=90° and zero when the fields are aligned. Drag δ and watch the vectors and the torque curve.</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Angle δ between fields (°) <span class="val" id="tq_d_v"></span></span><input type="range" id="tq_d" min="0" max="360" value="90" step="1"></label>
+        <label class="ctl"><span class="lab">k·B<sub>R</sub>·B<sub>net</sub> (peak torque, N·m) <span class="val" id="tq_k_v"></span></span><input type="range" id="tq_k" min="10" max="200" value="100" step="5"></label>
+        <div class="out" id="tq_out"></div>
+      </div>
+      <div><canvas id="tq_can" width="380" height="240"></canvas></div>
+    </div>
+    <canvas id="tq_curve" width="820" height="200" style="width:100%;margin-top:10px"></canvas>
+  </div>`;
+  const vcx=$('#tq_can').getContext('2d'),ccx=$('#tq_curve').getContext('2d');
+  const upd=()=>{const d=+$('#tq_d').value,k=+$('#tq_k').value,tau=k*Math.sin(d*D2R);
+    $('#tq_d_v').textContent=d+'°';$('#tq_k_v').textContent=k+' N·m';
+    const dir=tau>0?'counter-clockwise':(tau<0?'clockwise':'zero');
+    $('#tq_out').innerHTML=`τ<sub>ind</sub> = kB<sub>R</sub>B<sub>net</sub> sin δ = ${k}·sin ${d}°\n= <span class="k">${fmt(tau,1)} N·m</span>  (${dir})\n${Math.abs(Math.abs(d%360)-90)<3||Math.abs(Math.abs(d%360)-270)<3?'→ maximum torque (δ≈90°)':''}`;
+    // vectors
+    vcx.clearRect(0,0,380,240);const ox=190,oy=120,R=80;
+    vcx.strokeStyle='#232a49';vcx.beginPath();vcx.arc(ox,oy,R,0,7);vcx.stroke();
+    arrow(vcx,ox,oy,ox+R,oy,'#38d39f',3); // Bnet along +x
+    vcx.fillStyle='#38d39f';vcx.font='12px system-ui';vcx.fillText('B_net',ox+R+2,oy);
+    const rx=ox+R*Math.cos(-d*D2R),ry=oy+R*Math.sin(-d*D2R);
+    arrow(vcx,ox,oy,rx,ry,'#ff6b81',3);vcx.fillStyle='#ff6b81';vcx.fillText('B_R',rx+2,ry);
+    vcx.fillStyle='#ffcc66';vcx.fillText('δ='+d+'°',ox-16,oy+R+18);
+    // curve
+    axes(ccx,820,200,{l:44,r:10,t:14,b:24},'δ (°)','τ (N·m)');
+    const mid=100+0;const yY=v=>100-v/k*70;
+    ccx.strokeStyle='#333c60';ccx.beginPath();ccx.moveTo(44,100);ccx.lineTo(810,100);ccx.stroke();
+    ccx.strokeStyle='#5b8cff';ccx.lineWidth=2;ccx.beginPath();
+    for(let a=0;a<=360;a++){const x=44+a/360*(820-54),y=yY(k*Math.sin(a*D2R));a===0?ccx.moveTo(x,y):ccx.lineTo(x,y);}ccx.stroke();
+    const mx=44+d/360*(820-54);ccx.fillStyle='#ff6b81';ccx.beginPath();ccx.arc(mx,yY(tau),4,0,7);ccx.fill();};
+  ['tq_d','tq_k'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   3.6  Winding insulation
+=================================================================== */
+section('insulation','Performance','3.6 · Winding Insulation',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Winding Insulation</h2>
+  <p class="subttl">§4.6 · Temperature sets the machine's power limit</p>
+  <div class="card note">Insulation degrades with heat, so the maximum winding temperature limits the continuous power. Old rule of thumb: insulation life roughly <b>halves for every ~10°C rise</b> above rating. NEMA defines insulation classes:</div>
+  <div class="card"><table>
+    <tr><th>NEMA class</th><th>Typical temp rise above ambient</th></tr>
+    <tr><td>B</td><td>80 °C</td></tr>
+    <tr><td>F</td><td>105 °C</td></tr>
+    <tr><td>H</td><td>125 °C</td></tr>
+  </table></div>
+  <div class="card">
+    <label class="ctl"><span class="lab">Temperature above rating (°C) <span class="val" id="in_t_v"></span></span><input type="range" id="in_t" min="0" max="40" value="0" step="1"></label>
+    <div class="out" id="in_out"></div>
+    <p class="note">Illustrative life model: life ≈ 100% × (½)^(ΔT/10).</p>
+  </div>`;
+  const upd=()=>{const dt=+$('#in_t').value,life=100*Math.pow(0.5,dt/10);$('#in_t_v').textContent='+'+dt+' °C';
+    $('#in_out').innerHTML=`Relative insulation life ≈ <span class="k">${fmt(life,1)} %</span> of rated${dt>=20?'  ⚠ sharply reduced':''}`;};
+  $('#in_t').oninput=upd;upd();
+});
+
+/* ===================================================================
+   3.7  Power flows & losses
+=================================================================== */
+section('power','Performance','3.7 · Power Flows & Losses',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">AC Machine Power Flows & Losses</h2>
+  <p class="subttl">§4.7 · Where the power goes</p>
+  <div class="eq">η = <span class="frac"><span class="n">P<sub>out</sub></span><span class="d">P<sub>in</sub></span></span> ×100% ,   P<sub>in</sub> − P<sub>out</sub> = Σ losses <span class="tag">(4‑62,4‑63)</span></div>
+  <div class="grid2">
+    <div class="card tight"><b>Copper (I²R)</b> — stator: SCL=3I<sub>A</sub>²R<sub>A</sub> (4‑64); rotor field: RCL=I<sub>F</sub>²R<sub>F</sub> (4‑65)</div>
+    <div class="card tight"><b>Core</b> — hysteresis + eddy (∝ B², ∝ n<sup>1.5</sup>)</div>
+    <div class="card tight"><b>Mechanical</b> — friction + windage (∝ n³)</div>
+    <div class="card tight"><b>Stray load</b> — the leftovers (~1% of full load)</div>
+  </div>
+  <h3>Power-flow diagram (generator)</h3>
+  <div class="card">
+    <svg viewBox="0 0 700 130" width="100%">
+      <rect x="20" y="40" width="120" height="40" fill="#12162a" stroke="#38d39f"/><text x="80" y="64" fill="#38d39f" font-size="11" text-anchor="middle">P_in (mech)</text>
+      <line x1="140" y1="60" x2="300" y2="60" stroke="#5b8cff" stroke-width="3"/>
+      <text x="300" y="55" fill="#38d39f" font-size="11" text-anchor="middle">P_conv=τ_ind·ω_m</text>
+      <line x1="300" y1="60" x2="560" y2="60" stroke="#5b8cff" stroke-width="3"/>
+      <rect x="560" y="40" width="120" height="40" fill="#12162a" stroke="#5b8cff"/><text x="620" y="64" fill="#5b8cff" font-size="11" text-anchor="middle">P_out (elec)</text>
+      <g stroke="#ff6b81" stroke-width="2"><line x1="180" y1="60" x2="180" y2="110"/><line x1="230" y1="60" x2="230" y2="110"/><line x1="420" y1="60" x2="420" y2="110"/></g>
+      <text x="150" y="124" fill="#ff6b81" font-size="10">stray</text><text x="205" y="124" fill="#ff6b81" font-size="10">mech</text><text x="255" y="124" fill="#ff6b81" font-size="10">core</text>
+      <text x="405" y="124" fill="#ff6b81" font-size="10">I²R (copper)</text>
+    </svg>
+    <p class="note">Motor = the same diagram reversed (electrical in, mechanical out).</p>
+  </div>
+  <h3>Efficiency calculator</h3>
+  <div class="card">
+    <div class="grid2">
+      <label class="ctl"><span class="lab">Output power P<sub>out</sub> (W)</span><input type="number" id="pw_out" value="9000" step="any"></label>
+      <label class="ctl"><span class="lab">Total losses (W)</span><input type="number" id="pw_loss" value="800" step="any"></label>
+    </div>
+    <div class="out" id="pw_res"></div>
+  </div>`;
+  const upd=()=>{const Po=+$('#pw_out').value,L=+$('#pw_loss').value,Pin=Po+L,eff=Po/Pin*100;
+    $('#pw_res').innerHTML=`P<sub>in</sub> = P<sub>out</sub>+losses = <span class="k">${fmt(Pin,0)} W</span>\nη = P<sub>out</sub>/P<sub>in</sub> = <span class="k">${fmt(eff,2)} %</span>`;};
+  ['pw_out','pw_loss'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   3.8  Voltage & speed regulation
+=================================================================== */
+section('regulation','Performance','3.8 · Voltage & Speed Regulation',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Voltage & Speed Regulation</h2>
+  <p class="subttl">§4.8 · Figures of merit for generators and motors</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">VR = <span class="frac"><span class="n">V<sub>nl</sub> − V<sub>fl</sub></span><span class="d">V<sub>fl</sub></span></span> ×100%<span class="tag">(4‑67)</span></div>
+    <div class="eq" style="text-align:center">SR = <span class="frac"><span class="n">n<sub>nl</sub> − n<sub>fl</sub></span><span class="d">n<sub>fl</sub></span></span> ×100%<span class="tag">(4‑69)</span></div>
+  </div>
+  <p class="note">Generators: small VR ⇒ steady terminal voltage as load varies (a positive VR is a "drooping" characteristic). Motors: small SR ⇒ speed holds up under load.</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>Voltage regulation (generator)</h4>
+      <label class="ctl"><span class="lab">No-load voltage V<sub>nl</sub> (V)</span><input type="number" id="rg_vnl" value="480" step="any"></label>
+      <label class="ctl"><span class="lab">Full-load voltage V<sub>fl</sub> (V)</span><input type="number" id="rg_vfl" value="460" step="any"></label>
+      <div class="out" id="rg_vout"></div>
+    </div>
+    <div class="card">
+      <h4>Speed regulation (motor)</h4>
+      <label class="ctl"><span class="lab">No-load speed n<sub>nl</sub> (r/min)</span><input type="number" id="rg_nnl" value="1800" step="any"></label>
+      <label class="ctl"><span class="lab">Full-load speed n<sub>fl</sub> (r/min)</span><input type="number" id="rg_nfl" value="1750" step="any"></label>
+      <div class="out" id="rg_nout"></div>
+    </div>
+  </div>`;
+  const upd=()=>{const vnl=+$('#rg_vnl').value,vfl=+$('#rg_vfl').value,nnl=+$('#rg_nnl').value,nfl=+$('#rg_nfl').value;
+    $('#rg_vout').innerHTML=`VR = (V<sub>nl</sub>−V<sub>fl</sub>)/V<sub>fl</sub> = <span class="k">${fmt((vnl-vfl)/vfl*100,2)} %</span>`;
+    $('#rg_nout').innerHTML=`SR = (n<sub>nl</sub>−n<sub>fl</sub>)/n<sub>fl</sub> = <span class="k">${fmt((nnl-nfl)/nfl*100,2)} %</span>`;};
+  ['rg_vnl','rg_vfl','rg_nnl','rg_nfl'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   Practice
+=================================================================== */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — randomized AC-machine problems</h2>
+  <p class="subttl">Fresh numbers each time; check against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="speed">3.2 · Synchronous speed n=120f/P</option>
+        <option value="freq">3.2 · Electrical frequency f=P·n/120</option>
+        <option value="flux">3.4 · Machine flux φ=dlB</option>
+        <option value="volt">3.4 · rms phase voltage E_A</option>
+        <option value="term">3.4 · Y terminal voltage</option>
+        <option value="torque">3.5 · Induced torque</option>
+        <option value="eff">3.7 · Efficiency</option>
+        <option value="vr">3.8 · Voltage regulation</option>
+        <option value="sr">3.8 · Speed regulation</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    speed:()=>{const f=[50,60,400][Math.floor(Math.random()*3)],P=rnd(2,14,2);return{q:`f<sub>e</sub>=<b>${f} Hz</b>, P=<b>${P}</b> poles. Find synchronous speed <b>n</b> (r/min).`,ans:120*f/P,unit:'r/min',sol:`n=120f/P=120·${f}/${P}=<b>${fmt(120*f/P,1)} r/min</b>`};},
+    freq:()=>{const P=rnd(2,12,2),n=rnd(300,3600,60);return{q:`P=<b>${P}</b> poles, field speed n=<b>${n} r/min</b>. Find electrical <b>f<sub>e</sub></b> (Hz).`,ans:P*n/120,unit:'Hz',sol:`f<sub>e</sub>=Pn/120=${P}·${n}/120=<b>${fmt(P*n/120,2)} Hz</b>`};},
+    flux:()=>{const d=rnd(0.2,0.8,0.05),l=rnd(0.2,0.6,0.05),B=rnd(0.1,0.9,0.05);return{q:`Stator diameter d=<b>${d} m</b>, length l=<b>${l} m</b>, peak B=<b>${B} T</b>. Find machine flux <b>φ</b> (Wb).`,ans:d*l*B,unit:'Wb',tol:0.02,sol:`φ=dlB=${d}·${l}·${B}=<b>${fmt(d*l*B,4)} Wb</b>`};},
+    volt:()=>{const N=rnd(10,60,5),phi=rnd(0.01,0.05,0.005),f=[50,60][Math.floor(Math.random()*2)];const E=Math.SQRT2*Math.PI*N*phi*f;return{q:`N<sub>C</sub>=<b>${N}</b>, φ=<b>${phi} Wb</b>, f=<b>${f} Hz</b>. Find rms phase voltage <b>E<sub>A</sub></b> (V).`,ans:E,unit:'V',tol:0.02,sol:`E<sub>A</sub>=√2·π·N<sub>C</sub>·φ·f=√2·π·${N}·${phi}·${f}=<b>${fmt(E,1)} V</b>`};},
+    term:()=>{const Ea=rnd(80,300,10);return{q:`A Y-connected stator has phase voltage E<sub>A</sub>=<b>${Ea} V</b>. Find the line (terminal) voltage <b>V<sub>T</sub></b> (V).`,ans:Math.sqrt(3)*Ea,unit:'V',tol:0.02,sol:`V<sub>T</sub>=√3·E<sub>A</sub>=√3·${Ea}=<b>${fmt(Math.sqrt(3)*Ea,1)} V</b>`};},
+    torque:()=>{const k=rnd(50,200,10),d=rnd(10,170,5);return{q:`Peak torque kB<sub>R</sub>B<sub>net</sub>=<b>${k} N·m</b>, angle δ=<b>${d}°</b>. Find induced torque <b>τ</b> (N·m).`,ans:k*Math.sin(d*D2R),unit:'N·m',tol:0.02,sol:`τ=kB<sub>R</sub>B<sub>net</sub> sin δ=${k}·sin ${d}°=<b>${fmt(k*Math.sin(d*D2R),1)} N·m</b>`};},
+    eff:()=>{const Po=rnd(3000,30000,500),L=rnd(200,2000,50);return{q:`P<sub>out</sub>=<b>${Po} W</b>, total losses=<b>${L} W</b>. Find <b>efficiency</b> (%).`,ans:Po/(Po+L)*100,unit:'%',tol:0.01,sol:`η=P<sub>out</sub>/(P<sub>out</sub>+losses)=${Po}/${Po+L}·100=<b>${fmt(Po/(Po+L)*100,2)}%</b>`};},
+    vr:()=>{const vfl=rnd(220,480,10),vnl=vfl+rnd(5,40,1);return{q:`V<sub>nl</sub>=<b>${vnl} V</b>, V<sub>fl</sub>=<b>${vfl} V</b>. Find voltage regulation <b>VR</b> (%).`,ans:(vnl-vfl)/vfl*100,unit:'%',tol:0.02,sol:`VR=(V<sub>nl</sub>−V<sub>fl</sub>)/V<sub>fl</sub>=(${vnl}−${vfl})/${vfl}·100=<b>${fmt((vnl-vfl)/vfl*100,2)}%</b>`};},
+    sr:()=>{const nfl=rnd(1400,3400,50),nnl=nfl+rnd(20,120,10);return{q:`n<sub>nl</sub>=<b>${nnl} r/min</b>, n<sub>fl</sub>=<b>${nfl} r/min</b>. Find speed regulation <b>SR</b> (%).`,ans:(nnl-nfl)/nfl*100,unit:'%',tol:0.02,sol:`SR=(n<sub>nl</sub>−n<sub>fl</sub>)/n<sub>fl</sub>=(${nnl}−${nfl})/${nfl}·100=<b>${fmt((nnl-nfl)/nfl*100,2)}%</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;
+    tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;
+    $('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;
+    $('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;
+  $('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ===================================================================
+   Summary & quiz
+=================================================================== */
+section('summary','Practice','3.9 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self-Test</h2>
+  <p class="subttl">§4.9</p>
+  <div class="card"><table>
+    <tr><th>Eq.</th><th>Relation</th><th>Meaning</th></tr>
+    <tr><td>4‑11</td><td>e=φ<sub>max</sub>ω sin ωt</td><td>loop voltage</td></tr>
+    <tr><td>4‑25</td><td>|B<sub>net</sub>|=1.5B<sub>M</sub></td><td>rotating field magnitude</td></tr>
+    <tr><td>4‑34</td><td>n=120f/P</td><td>synchronous speed</td></tr>
+    <tr><td>4‑45</td><td>e=N<sub>C</sub>φω cos ωt</td><td>induced coil voltage</td></tr>
+    <tr><td>4‑50</td><td>E<sub>A</sub>=√2πN<sub>C</sub>φf</td><td>rms phase voltage</td></tr>
+    <tr><td>4‑61</td><td>τ=kB<sub>R</sub>B<sub>net</sub>sin δ</td><td>induced torque</td></tr>
+    <tr><td>4‑62</td><td>η=P<sub>out</sub>/P<sub>in</sub></td><td>efficiency</td></tr>
+    <tr><td>4‑67</td><td>VR=(V<sub>nl</sub>−V<sub>fl</sub>)/V<sub>fl</sub></td><td>voltage regulation</td></tr>
+    <tr><td>4‑69</td><td>SR=(n<sub>nl</sub>−n<sub>fl</sub>)/n<sub>fl</sub></td><td>speed regulation</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3>
+  <div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['Synchronous machines get their rotor field current from…',['transformer induction','a separate DC source','the stator only','permanent magnets always'],1],
+    ['A balanced 3-phase current set produces a net field of magnitude…',['B_M','1.5 B_M','3 B_M','0.5 B_M'],1],
+    ['To reverse an AC motor you…',['reverse all three phases','swap any two phases','increase frequency','add a pole'],1],
+    ['Synchronous speed n equals…',['120P/f','120f/P','60f/P','Pf/120'],1],
+    ['Induced voltage in a machine is proportional to flux ×…',['reluctance','speed','resistance','area only'],1],
+    ['Induced torque τ = kB_R B_net sin δ is maximum at δ =',['0°','45°','90°','180°'],2],
+    ['Core losses vary roughly as…',['B','B²','1/B','B³'],1],
+    ['Mechanical (friction+windage) losses vary as…',['n','n²','n³','1/n'],2],
+    ['A small voltage regulation means the generator voltage is…',['very load-dependent','nearly constant with load','always rising','always zero'],1],
+    ['For a 4-pole 60 Hz machine the synchronous speed is…',['3600 r/min','1800 r/min','1200 r/min','900 r/min'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;
+  $$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];
+    $$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');
+    $('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+/* ============ build nav + routing ============ */
+const main=$('#main'),nav=$('#nav');
+function render(id){
+  const s=SECTIONS.find(x=>x.id===id);if(!s)return;
+  let el=$('#sec-'+id);
+  if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}
+  $$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  window.scrollTo(0,0);location.hash=id;
+}
+function go(id){render(id);}
+let lastGrp=null;
+SECTIONS.forEach(s=>{
+  if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}
+  const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);
+});
+render((location.hash||'#loop').slice(1)||'loop');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 3;
+  var chCode = "CHAPTER 03";
+  var chTitle = "Chapter 3: AC Machinery";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

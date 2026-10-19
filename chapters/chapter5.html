@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.5 — Induction Motors (Interactive)</title>
+<style>
+:root{--bg:#0f1220;--panel:#171a2b;--panel2:#1e2237;--ink:#e8ebf7;--muted:#9aa3c4;--acc:#5b8cff;--acc2:#38d39f;--warn:#ffcc66;--bad:#ff6b81;--line:#2a2f4a;--chip:#242a44;--good:#38d39f}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}.brand h1{font-size:16px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.brand a{font-size:12px}
+.nav{padding:8px;flex:1}.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}.credit b{color:var(--ink);font-weight:600}.credit a{color:var(--acc)}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3,.grid4{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:17px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}.frac .d{display:block;padding:0 6px}
+.vec{font-weight:700}sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.gauge{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center}.gauge .g-l{color:var(--muted);font-size:12px}.gauge .g-v{font-size:18px;font-weight:700;color:var(--acc2);font-variant-numeric:tabular-nums}
+.quiz .q{margin:10px 0}.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}.quiz .opt:hover{border-color:var(--acc)}.quiz .opt.correct{border-color:var(--good);background:#0c1a14}.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.sankey{height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;margin:3px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Chapter 5 — Induction Motors<br><span style="color:#6b7398">(Chapman Ch. 7 · eq. numbers follow the book)</span></p>
+      <p><a href="chapter4.html">← Chapter 4</a> · <a href="chapter6.html">Chapter 6 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit"><div><b>Dr. Muhammad Salim Butt</b></div><a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{if(x===null||x===undefined||!isFinite(x))return '—';if(x!==0&&(Math.abs(x)<1e-3||Math.abs(x)>=1e5))return x.toExponential(Math.max(0,d-1));return (+x.toFixed(d)).toString();};
+const D2R=Math.PI/180,R2D=180/Math.PI;
+const C=(re,im=0)=>({re,im}),cAdd=(a,b)=>C(a.re+b.re,a.im+b.im),cMul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re),cDiv=(a,b)=>{const d=b.re*b.re+b.im*b.im;return C((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d);},cAbs=a=>Math.hypot(a.re,a.im),cAng=a=>Math.atan2(a.im,a.re)*R2D;
+function axes(ctx,W,H,pad,xlab,ylab){ctx.clearRect(0,0,W,H);ctx.strokeStyle='#232a49';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}}
+/* schematic symbol builders */
+function resH(x1,x2,y,c='#ff6b81',lab='',ly){const w=x2-x1,z=x1+w*0.22,zw=w*0.56,n=6,seg=zw/n,a=7;let p=`M ${x1} ${y} H ${z}`;for(let i=1;i<n;i++)p+=` L ${z+seg*(i-0.5)} ${i%2?y-a:y+a}`;p+=` L ${z+zw} ${y} H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function indH(x1,x2,y,c='#ffcc66',lab='',ly){const w=x2-x1,z=x1+w*0.2,bw=w*0.6,n=4,r=bw/(2*n);let p=`M ${x1} ${y} H ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${z+2*r*(i+1)} ${y}`;p+=` H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function indV(x,y1,y2,c='#5b8cff',lab='',lx){const h=y2-y1,z=y1+h*0.2,bw=h*0.6,n=4,r=bw/(2*n);let p=`M ${x} ${y1} V ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${x} ${z+2*r*(i+1)}`;p+=` V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${lx||x-10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="${lx?'start':'end'}">${lab}</text>`:'');}
+function resV(x,y1,y2,c='#ff6b81',lab='',lx){const h=y2-y1,z=y1+h*0.22,zw=h*0.56,n=6,seg=zw/n,a=7;let p=`M ${x} ${y1} V ${z}`;for(let i=1;i<n;i++)p+=` L ${i%2?x-a:x+a} ${z+seg*(i-0.5)}`;p+=` L ${x} ${z+zw} V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${lx||x-10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="${lx?'start':'end'}">${lab}</text>`:'');}
+function capH(x1,x2,y,c='#5b8cff',lab='',ly){const m=(x1+x2)/2,g=5,ph=12;return `<path d="M ${x1} ${y} H ${m-g} M ${m+g} ${y} H ${x2}" fill="none" stroke="${c}" stroke-width="2"/><line x1="${m-g}" y1="${y-ph}" x2="${m-g}" y2="${y+ph}" stroke="${c}" stroke-width="2"/><line x1="${m+g}" y1="${y-ph}" x2="${m+g}" y2="${y+ph}" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${m}" y="${ly||y-16}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+const SECTIONS=[];function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+/* Thevenin torque model */
+function thev(Vphi,R1,X1,XM){const Zth=cDiv(cMul(C(0,XM),C(R1,X1)),C(R1,X1+XM));const Vth=Vphi*XM/cAbs(C(R1,X1+XM));return {Vth,Rth:Zth.re,Xth:Zth.im};}
+function torque(s,p){const {Vth,Rth,Xth}=thev(p.Vphi,p.R1,p.X1,p.XM);const den=(Rth+p.R2/s)**2+(Xth+p.X2)**2;return 3*Vth*Vth*(p.R2/s)/(p.wsync*den);}
+
+/* ===== 6.1 concepts / slip ===== */
+section('concepts','Fundamentals','5.1 · Slip, Speed & Rotor Frequency',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Induction Motor Concepts</h2>
+  <p class="subttl">§7.1–7.2 · Slip, rotor speed and rotor electrical frequency</p>
+  <div class="card">
+    <p>The stator makes a field at synchronous speed n<sub>sync</sub>. The rotor <b>cannot</b> reach it (no relative motion → no induced rotor current → no torque), so it runs slightly slower. The fractional lag is the <b>slip</b>.</p>
+    <div class="grid3">
+      <div class="eq" style="text-align:center">n<sub>sync</sub> = <span class="frac"><span class="n">120 f<sub>e</sub></span><span class="d">P</span></span><span class="tag">7‑1</span></div>
+      <div class="eq" style="text-align:center">s = <span class="frac"><span class="n">n<sub>sync</sub>−n<sub>m</sub></span><span class="d">n<sub>sync</sub></span></span><span class="tag">7‑4</span></div>
+      <div class="eq" style="text-align:center">f<sub>r</sub> = s·f<sub>e</sub><span class="tag">7‑8</span></div>
+    </div>
+    <p class="note">n<sub>m</sub> = (1−s)·n<sub>sync</sub> (7‑6). At standstill s=1 → f<sub>r</sub>=f<sub>e</sub>; at sync s=0 → f<sub>r</sub>=0.</p>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Line frequency f<sub>e</sub> (Hz)</span><input type="number" id="sl_f" value="60" step="any"></label>
+        <label class="ctl"><span class="lab">Poles P</span><input type="number" id="sl_P" value="4" step="2"></label>
+        <label class="ctl"><span class="lab">Rotor speed n<sub>m</sub> (r/min) <span class="val" id="sl_n_v"></span></span><input type="range" id="sl_n" min="0" max="1800" value="1710" step="5"></label>
+        <div class="out" id="sl_out"></div>
+        <p class="note">Defaults = Example 7‑1 (60 Hz, 4‑pole, n<sub>m</sub>=1710) → s=0.05, f<sub>r</sub>=3 Hz.</p>
+      </div>
+      <div><canvas id="sl_can" width="420" height="200"></canvas><div class="note" style="text-align:center">the gap between n<sub>sync</sub> and n<sub>m</sub> is the slip speed</div></div>
+    </div>
+  </div>`;
+  const cx=$('#sl_can').getContext('2d');
+  const upd=()=>{const f=+$('#sl_f').value,P=+$('#sl_P').value,ns=120*f/P;const sl=$('#sl_n');sl.max=Math.round(ns);
+    let nm=+sl.value;if(nm>ns){nm=ns;sl.value=ns;}$('#sl_n_v').textContent=nm+' r/min';
+    const s=(ns-nm)/ns,fr=s*f;
+    $('#sl_out').innerHTML=`n<sub>sync</sub> = 120f/P = <span class="k">${fmt(ns,0)} r/min</span>\nslip s = (n<sub>sync</sub>−n<sub>m</sub>)/n<sub>sync</sub> = <span class="k">${fmt(s,4)} (${fmt(s*100,2)}%)</span>\nrotor frequency f<sub>r</sub> = s·f<sub>e</sub> = <span class="k">${fmt(fr,3)} Hz</span>\nslip speed = <span class="k">${fmt(ns-nm,0)} r/min</span>`;
+    cx.clearRect(0,0,420,200);cx.fillStyle='#9aa3c4';cx.font='12px system-ui';
+    const bar=(y,w,c,lab)=>{cx.fillStyle=c;cx.fillRect(20,y,w,26);cx.fillStyle='#e8ebf7';cx.fillText(lab,26,y+17);};
+    bar(40,360,'#5b8cff','n_sync = '+fmt(ns,0));
+    bar(90,360*nm/ns,'#38d39f','n_m = '+fmt(nm,0));
+    cx.fillStyle='#ff6b81';cx.fillRect(20+360*nm/ns,140,360*(ns-nm)/ns||1,26);cx.fillStyle='#fff';cx.fillText('slip',24+360*nm/ns,157);};
+  ['sl_f','sl_P','sl_n'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== 6.2 equivalent circuit + power flow ===== */
+section('circuit','Model','5.2 · Equivalent Circuit & Power Flow',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Equivalent Circuit & Power Flow</h2>
+  <p class="subttl">§7.3–7.4 · The per‑phase model and where the power goes</p>
+  <svg viewBox="0 0 620 130" width="100%">
+    <line x1="20" y1="40" x2="90" y2="40" stroke="#5b8cff" stroke-width="2"/>
+    ${resH(90,132,40,'#ff6b81','R_1',24)}
+    ${indH(138,180,40,'#ffcc66','jX_1',24)}
+    <line x1="180" y1="40" x2="300" y2="40" stroke="#5b8cff" stroke-width="2"/>
+    ${indV(240,40,100,'#5b8cff','jX_M',252)}
+    ${resH(300,346,40,'#ff6b81','R_2/s',24)}
+    ${indH(352,396,40,'#ffcc66','jX_2',24)}
+    <line x1="396" y1="40" x2="470" y2="40" stroke="#5b8cff" stroke-width="2"/>
+    <line x1="20" y1="100" x2="470" y2="100" stroke="#5b8cff" stroke-width="2"/><line x1="20" y1="40" x2="20" y2="100" stroke="#5b8cff" stroke-width="2"/>
+    <text x="24" y="70" fill="#9aa3c4" font-size="11">V_φ</text><text x="200" y="34" fill="#9aa3c4" font-size="10">I_1→</text>
+  </svg>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">P<sub>AG</sub> = 3I<sub>2</sub>²(R<sub>2</sub>/s)<span class="tag">7‑28</span></div>
+    <div class="eq" style="text-align:center">τ<sub>ind</sub> = P<sub>AG</sub>/ω<sub>sync</sub><span class="tag">7‑36</span></div>
+  </div>
+  <div class="eq" style="font-size:16px">P<sub>AG</sub> : P<sub>RCL</sub> : P<sub>conv</sub> = 1 : s : (1−s) <span class="tag">the crucial ratio (7‑32,7‑33)</span></div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div class="grid2">
+          <label class="ctl"><span class="lab">V<sub>T</sub> line (V)</span><input type="number" id="pf_VT" value="460" step="any"></label>
+          <label class="ctl"><span class="lab">Poles P</span><input type="number" id="pf_P" value="4" step="2"></label>
+          <label class="ctl"><span class="lab">R<sub>1</sub> (Ω)</span><input type="number" id="pf_R1" value="0.641" step="any"></label>
+          <label class="ctl"><span class="lab">X<sub>1</sub> (Ω)</span><input type="number" id="pf_X1" value="1.106" step="any"></label>
+          <label class="ctl"><span class="lab">R<sub>2</sub> (Ω)</span><input type="number" id="pf_R2" value="0.332" step="any"></label>
+          <label class="ctl"><span class="lab">X<sub>2</sub> (Ω)</span><input type="number" id="pf_X2" value="0.464" step="any"></label>
+          <label class="ctl"><span class="lab">X<sub>M</sub> (Ω)</span><input type="number" id="pf_XM" value="26.3" step="any"></label>
+          <label class="ctl"><span class="lab">P<sub>rot</sub> (W)</span><input type="number" id="pf_Prot" value="1100" step="any"></label>
+        </div>
+        <label class="ctl"><span class="lab">Slip s (%) <span class="val" id="pf_s_v"></span></span><input type="range" id="pf_s" min="0.2" max="10" value="2.2" step="0.1"></label>
+        <div class="out" id="pf_out"></div>
+      </div>
+      <div><div id="pf_sankey"></div><canvas id="pf_can" width="380" height="120" style="margin-top:8px"></canvas></div>
+    </div>
+    <p class="note">Defaults = Example 7‑3 (460 V, 25 hp, 4‑pole) → at s=2.2%: P<sub>in</sub>≈12.5 kW, P<sub>out</sub>≈10.5 kW, τ<sub>ind</sub>≈62.8 N·m, η≈83.7%.</p>
+  </div>`;
+  const cx=$('#pf_can').getContext('2d');
+  const upd=()=>{
+    const VT=+$('#pf_VT').value,P=+$('#pf_P').value,R1=+$('#pf_R1').value,X1=+$('#pf_X1').value,R2=+$('#pf_R2').value,X2=+$('#pf_X2').value,XM=+$('#pf_XM').value,Prot=+$('#pf_Prot').value,s=+$('#pf_s').value/100;
+    $('#pf_s_v').textContent=(s*100).toFixed(1)+'%';
+    const Vphi=VT/Math.sqrt(3),ns=120*60/P,wsync=2*Math.PI*ns/60;
+    const Zrot=C(R2/s,X2),Zf=cDiv(cMul(C(0,XM),Zrot),cAdd(C(0,XM),Zrot)),Ztot=cAdd(C(R1,X1),Zf),I1=cDiv(C(Vphi,0),Ztot);
+    const I1m=cAbs(I1),pf=Math.cos(cAng(I1)*D2R),Pin=3*Vphi*I1.re,PSCL=3*I1m*I1m*R1;
+    const I2=cMul(I1,cDiv(C(0,XM),cAdd(Zrot,C(0,XM)))),I2m=cAbs(I2),PAG=3*I2m*I2m*(R2/s);
+    const PRCL=s*PAG,Pconv=(1-s)*PAG,Pout=Pconv-Prot,tau=PAG/wsync,eff=Pout/Pin*100,nm=(1-s)*ns;
+    $('#pf_out').innerHTML=`n<sub>m</sub>=<span class="k">${fmt(nm,0)} r/min</span>  I<sub>1</sub>=<span class="k">${fmt(I1m,1)}∠${fmt(cAng(I1),1)}° A</span>  PF=<span class="k">${fmt(pf,3)}</span>
+P<sub>in</sub>=<span class="k">${fmt(Pin/1000,2)} kW</span>  P<sub>SCL</sub>=<span class="k">${fmt(PSCL,0)} W</span>
+P<sub>AG</sub>=<span class="k">${fmt(PAG/1000,2)} kW</span>  P<sub>RCL</sub>=sP<sub>AG</sub>=<span class="k">${fmt(PRCL,0)} W</span>
+P<sub>conv</sub>=<span class="k">${fmt(Pconv/1000,2)} kW</span>  P<sub>out</sub>=<span class="k">${fmt(Pout/1000,2)} kW</span>
+τ<sub>ind</sub>=P<sub>AG</sub>/ω<sub>sync</sub>=<span class="k">${fmt(tau,1)} N·m</span>  η=<span class="k">${fmt(eff,1)}%</span>`;
+    // sankey ratio bar
+    const tot=PAG;const seg=(w,c,l)=>`<div class="sankey" style="width:${Math.max(6,w/tot*100)}%;background:${c}">${l}</div>`;
+    $('#pf_sankey').innerHTML=`<div class="note">P<sub>AG</sub> splits 1 : s : (1−s)</div>`+
+      `<div style="display:flex;gap:4px">${seg(Pconv,'#38d39f','P_conv '+fmt(Pconv/1000,1)+'kW')}${seg(PRCL,'#ff6b81','P_RCL')}</div>`;
+    // little power flow bars
+    cx.clearRect(0,0,380,120);const items=[['P_in',Pin,'#5b8cff'],['P_AG',PAG,'#8a7bff'],['P_conv',Pconv,'#38d39f'],['P_out',Pout,'#2fbf8f']];
+    const mx=Pin;items.forEach((it,i)=>{cx.fillStyle=it[2];cx.fillRect(70,10+i*26,it[1]/mx*290,18);cx.fillStyle='#9aa3c4';cx.font='11px system-ui';cx.fillText(it[0],8,23+i*26);});
+  };
+  ['pf_VT','pf_P','pf_R1','pf_X1','pf_R2','pf_X2','pf_XM','pf_Prot','pf_s'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== 6.3 torque-speed (flagship) ===== */
+section('torque','Characteristics','5.3 · Torque–Speed Curve ★',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Torque–Speed Characteristic</h2>
+  <p class="subttl">§7.5 · The defining curve — starting torque, pullout, and the operating region</p>
+  <div class="eq">τ<sub>ind</sub> = <span class="frac"><span class="n">3 V<sub>TH</sub>² (R<sub>2</sub>/s)</span><span class="d">ω<sub>sync</sub>[(R<sub>TH</sub>+R<sub>2</sub>/s)² + (X<sub>TH</sub>+X<sub>2</sub>)²]</span></span><span class="tag">(7‑50)</span></div>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">s<sub>max</sub> = <span class="frac"><span class="n">R<sub>2</sub></span><span class="d">√(R<sub>TH</sub>²+(X<sub>TH</sub>+X<sub>2</sub>)²)</span></span><span class="tag">7‑53</span></div>
+    <div class="eq" style="text-align:center">τ<sub>max</sub> = <span class="frac"><span class="n">3V<sub>TH</sub>²</span><span class="d">2ω<sub>sync</sub>[R<sub>TH</sub>+√(…)]</span></span><span class="tag">7‑54</span></div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">V<sub>T</sub> line (V) <span class="val" id="tq_V_v"></span></span><input type="range" id="tq_V" min="200" max="600" value="460" step="10"></label>
+        <label class="ctl"><span class="lab">Rotor R<sub>2</sub> (Ω) <span class="val" id="tq_R2_v"></span></span><input type="range" id="tq_R2" min="0.1" max="2" value="0.332" step="0.01"></label>
+        <label class="ctl"><span class="lab">X<sub>2</sub> (Ω) <span class="val" id="tq_X2_v"></span></span><input type="range" id="tq_X2" min="0.2" max="2" value="0.464" step="0.02"></label>
+        <label class="ctl"><span class="lab">R<sub>1</sub> (Ω)</span><input type="number" id="tq_R1" value="0.641" step="any"></label>
+        <label class="ctl"><span class="lab">X<sub>1</sub> (Ω)</span><input type="number" id="tq_X1" value="1.106" step="any"></label>
+        <label class="ctl"><span class="lab">X<sub>M</sub> (Ω)</span><input type="number" id="tq_XM" value="26.3" step="any"></label>
+        <label class="ctl"><span class="lab">Poles P</span><input type="number" id="tq_P" value="4" step="2"></label>
+        <label class="ctl" style="margin:6px 0"><input type="checkbox" id="tq_dbl" style="width:auto"> overlay doubled R<sub>2</sub> (wound‑rotor)</label>
+        <div class="out" id="tq_out"></div>
+      </div>
+      <div><canvas id="tq_can" width="440" height="360"></canvas></div>
+    </div>
+    <p class="note">Markers: ● starting torque (s=1), ★ pullout torque (s<sub>max</sub>). Note τ ∝ V² (drag the voltage), and that raising R<sub>2</sub> slides the pullout to lower speed while <b>τ<sub>max</sub> stays the same</b> — the wound‑rotor starting trick. Defaults = Example 7‑5.</p>
+  </div>`;
+  const can=$('#tq_can'),cx=can.getContext('2d');
+  const P=()=>{const VT=+$('#tq_V').value,pp=+$('#tq_P').value,ns=120*60/pp;return{Vphi:VT/Math.sqrt(3),R1:+$('#tq_R1').value,X1:+$('#tq_X1').value,R2:+$('#tq_R2').value,X2:+$('#tq_X2').value,XM:+$('#tq_XM').value,ns,wsync:2*Math.PI*ns/60};};
+  const upd=()=>{
+    const p=P();$('#tq_V_v').textContent=$('#tq_V').value+' V';$('#tq_R2_v').textContent=fmt(p.R2,3)+' Ω';$('#tq_X2_v').textContent=fmt(p.X2,3)+' Ω';
+    const {Vth,Rth,Xth}=thev(p.Vphi,p.R1,p.X1,p.XM);
+    const smax=p.R2/Math.sqrt(Rth*Rth+(Xth+p.X2)**2), tmax=3*Vth*Vth/(2*p.wsync*(Rth+Math.sqrt(Rth*Rth+(Xth+p.X2)**2)));
+    const tstart=torque(1,p);
+    $('#tq_out').innerHTML=`V<sub>TH</sub>=<span class="k">${fmt(Vth,1)} V</span> R<sub>TH</sub>=<span class="k">${fmt(Rth,3)}</span> X<sub>TH</sub>=<span class="k">${fmt(Xth,3)} Ω</span>
+n<sub>sync</sub>=<span class="k">${fmt(p.ns,0)} r/min</span>
+starting τ (s=1) = <span class="k">${fmt(tstart,1)} N·m</span>
+s<sub>max</sub> = <span class="k">${fmt(smax,3)}</span> → n=<span class="k">${fmt((1-smax)*p.ns,0)} r/min</span>
+τ<sub>max</sub> (pullout) = <span class="k">${fmt(tmax,1)} N·m</span>`;
+    // plot
+    axes(cx,440,360,{l:44,r:12,t:14,b:26},'speed n_m (r/min)','τ (N·m)');
+    const W=440,H=360,ymax=tmax*1.15,xX=n=>44+n/p.ns*(W-56),yY=t=>(H-26)-t/ymax*(H-40);
+    const drawCurve=(pp,col,dash)=>{cx.strokeStyle=col;cx.lineWidth=2.2;if(dash)cx.setLineDash([5,4]);cx.beginPath();let st=false;
+      for(let s=1;s>=0.001;s-=0.002){const n=(1-s)*pp.ns,t=torque(s,pp);const x=xX(n),y=yY(t);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();cx.setLineDash([]);};
+    drawCurve(p,'#5b8cff',false);
+    if($('#tq_dbl').checked){const p2={...p,R2:p.R2*2};drawCurve(p2,'#ffcc66',true);cx.fillStyle='#ffcc66';cx.font='11px system-ui';cx.fillText('2×R₂',W-60,30);}
+    // markers
+    cx.fillStyle='#38d39f';cx.beginPath();cx.arc(xX(0),yY(tstart),4,0,7);cx.fill();cx.fillText('start',xX(0)+6,yY(tstart));
+    cx.fillStyle='#ff6b81';const nmx=xX((1-smax)*p.ns),ymx=yY(tmax);cx.beginPath();cx.moveTo(nmx,ymx-5);cx.lineTo(nmx+5,ymx+4);cx.lineTo(nmx-5,ymx+4);cx.fill();cx.fillText('pullout',nmx-14,ymx-8);
+  };
+  ['tq_V','tq_R2','tq_X2','tq_R1','tq_X1','tq_XM','tq_P'].forEach(id=>$('#'+id).oninput=upd);$('#tq_dbl').onchange=upd;upd();
+});
+
+/* ===== 6.4 NEMA classes ===== */
+section('nema','Characteristics','5.4 · NEMA Design Classes',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Rotor Design & NEMA Classes</h2>
+  <p class="subttl">§7.6 · Shaping the torque–speed curve with rotor resistance/reactance</p>
+  <p class="note">Deep‑bar and double‑cage rotors make the <b>effective rotor resistance</b> high at start (high slip → high rotor frequency → current crowds to the bar top) and low when running. That gives high starting torque without a permanently high running resistance. The curves below vary R<sub>2</sub> to mimic the four classes.</p>
+  <div class="card">
+    <canvas id="nm_can" width="820" height="320" style="width:100%"></canvas>
+  </div>
+  <div class="grid4">
+    <div class="card tight"><b>Class A</b><br>normal start torque, <b>high inrush</b> (500–800%), low slip (&lt;5%), pullout 200–300%. Low‑R₂.</div>
+    <div class="card tight"><b>Class B</b><br>deep bars: same start torque as A with ~25% less current. Modern general‑purpose default.</div>
+    <div class="card tight"><b>Class C</b><br>double‑cage: <b>high start torque</b> (~250%), low start current. Pumps, compressors, conveyors.</div>
+    <div class="card tight"><b>Class D</b><br>high‑R₂ bars: <b>very high start torque</b> (≥275%), high slip (7–17%). Punch presses, flywheels.</div>
+  </div>`;
+  const cx=$('#nm_can').getContext('2d');
+  const base={Vphi:460/Math.sqrt(3),R1:0.641,X1:1.106,X2:0.464,XM:26.3,ns:1800,wsync:2*Math.PI*1800/60};
+  const classes=[['A',0.30,'#5b8cff'],['B',0.45,'#38d39f'],['C',0.90,'#ffcc66'],['D',1.6,'#ff6b81']];
+  axes(cx,820,320,{l:48,r:12,t:14,b:26},'speed n_m (r/min)','τ (N·m)');
+  let ymax=0;classes.forEach(([n,R2])=>{const p={...base,R2};for(let s=1;s>=0.02;s-=0.02)ymax=Math.max(ymax,torque(s,p));});ymax*=1.1;
+  const xX=n=>48+n/1800*(820-60),yY=t=>(320-26)-t/ymax*(320-40);
+  classes.forEach(([n,R2,col],i)=>{const p={...base,R2};cx.strokeStyle=col;cx.lineWidth=2.2;cx.beginPath();let st=false;
+    for(let s=1;s>=0.001;s-=0.002){const nm=(1-s)*1800,t=torque(s,p);st?cx.lineTo(xX(nm),yY(t)):(cx.moveTo(xX(nm),yY(t)),st=true);}cx.stroke();
+    cx.fillStyle=col;cx.font='12px system-ui';cx.fillText('Class '+n,58,26+i*15);});
+});
+
+/* ===== 6.5 starting & speed control ===== */
+section('starting','Practical','5.5 · Starting & Speed Control',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Starting & Speed Control</h2>
+  <p class="subttl">§7.8–7.10 · Taming the inrush, and setting the speed</p>
+  <h3>Starting current from the code letter</h3>
+  <div class="eq">S<sub>start</sub> = (rated hp)·(code kVA/hp)  ;  I<sub>L</sub> = S<sub>start</sub>/(√3 V<sub>T</sub>)<span class="tag">(7‑55),(7‑56)</span></div>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">Rated power (hp)</span><input type="number" id="cd_hp" value="15" step="any"></label>
+      <label class="ctl"><span class="lab">Code kVA/hp</span><input type="number" id="cd_k" value="5.6" step="any"></label>
+      <label class="ctl"><span class="lab">V<sub>T</sub> line (V)</span><input type="number" id="cd_V" value="208" step="any"></label>
+    </div>
+    <div class="out" id="cd_out"></div>
+    <p class="note">Defaults = Example 7‑7 (15 hp, code F) → S=84 kVA, I<sub>L</sub>≈233 A.</p>
+  </div>
+  <h3>Speed control</h3>
+  <div class="grid3">
+    <div class="card tight"><b>Frequency (V/f drive)</b><br>n<sub>sync</sub>=120f/P: vary f (and V∝f to keep flux) → smooth wide‑range speed. The dominant modern method.</div>
+    <div class="card tight"><b>Pole changing</b><br>Reconnect windings to change P → discrete speeds (e.g. 2/4‑pole).</div>
+    <div class="card tight"><b>Rotor resistance (wound rotor)</b><br>Add external R₂ → more slip at a given torque (lower speed), at the cost of efficiency.</div>
+  </div>
+  <div class="warnbox">Reduced‑voltage starting cuts inrush (I<sub>start</sub> ∝ V) but also cuts starting torque hard (τ ∝ V²) — the fundamental trade‑off.</div>`;
+  const upd=()=>{const hp=+$('#cd_hp').value,k=+$('#cd_k').value,V=+$('#cd_V').value,S=hp*k,IL=S*1000/(Math.sqrt(3)*V);
+    $('#cd_out').innerHTML=`S<sub>start</sub> = ${hp}·${k} = <span class="k">${fmt(S,0)} kVA</span>\nI<sub>L</sub> = S/(√3 V<sub>T</sub>) = <span class="k">${fmt(IL,0)} A</span>`;};
+  ['cd_hp','cd_k','cd_V'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== 6.6 parameter tests ===== */
+section('tests','Practical','5.6 · Parameter Tests',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Determining the Circuit Parameters</h2>
+  <p class="subttl">§7.11 · DC, no‑load and locked‑rotor tests</p>
+  <div class="grid3">
+    <div class="eq" style="text-align:center">R<sub>1</sub> = <span class="frac"><span class="n">V<sub>DC</sub></span><span class="d">2 I<sub>DC</sub></span></span><span class="tag">7‑61</span></div>
+    <div class="eq" style="text-align:center">|Z<sub>nl</sub>| ≈ X<sub>1</sub>+X<sub>M</sub><span class="tag">7‑60</span></div>
+    <div class="eq" style="text-align:center">|Z<sub>LR</sub>| = <span class="frac"><span class="n">V<sub>T</sub></span><span class="d">√3 I<sub>L</sub></span></span><span class="tag">7‑63</span></div>
+  </div>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">DC test V (V)</span><input type="number" id="pt_Vdc" value="13.6" step="any"></label>
+      <label class="ctl"><span class="lab">DC test I (A)</span><input type="number" id="pt_Idc" value="28" step="any"></label>
+      <div></div>
+      <label class="ctl"><span class="lab">Locked V<sub>T</sub> (V)</span><input type="number" id="pt_Vlr" value="25" step="any"></label>
+      <label class="ctl"><span class="lab">Locked I<sub>L</sub> (A)</span><input type="number" id="pt_Ilr" value="27.9" step="any"></label>
+      <label class="ctl"><span class="lab">Locked P (W, 3‑φ)</span><input type="number" id="pt_Plr" value="920" step="any"></label>
+      <label class="ctl"><span class="lab">Test freq (Hz)</span><input type="number" id="pt_ftest" value="15" step="any"></label>
+      <label class="ctl"><span class="lab">Rated freq (Hz)</span><input type="number" id="pt_frated" value="60" step="any"></label>
+      <div></div>
+    </div>
+    <div class="out" id="pt_out"></div>
+    <p class="note">Defaults = Example 7‑8 → R<sub>1</sub>≈0.243, R<sub>2</sub>≈0.151, X<sub>1</sub>=X<sub>2</sub>≈0.67 Ω (design A, split 50/50).</p>
+  </div>`;
+  const upd=()=>{const Vdc=+$('#pt_Vdc').value,Idc=+$('#pt_Idc').value,Vlr=+$('#pt_Vlr').value,Ilr=+$('#pt_Ilr').value,Plr=+$('#pt_Plr').value,ft=+$('#pt_ftest').value,fr=+$('#pt_frated').value;
+    const R1=Vdc/(2*Idc),Zlr=Vlr/(Math.sqrt(3)*Ilr),th=Math.acos(Plr/(Math.sqrt(3)*Vlr*Ilr)),Rlr=Zlr*Math.cos(th),Xlr_t=Zlr*Math.sin(th),Xlr=Xlr_t*fr/ft,R2=Rlr-R1,X1=Xlr/2,X2=Xlr/2;
+    $('#pt_out').innerHTML=`R<sub>1</sub> = V<sub>DC</sub>/(2I<sub>DC</sub>) = <span class="k">${fmt(R1,3)} Ω</span>
+|Z<sub>LR</sub>| = <span class="k">${fmt(Zlr,3)} Ω</span>   θ = <span class="k">${fmt(th*R2D,1)}°</span>
+R<sub>LR</sub> = <span class="k">${fmt(Rlr,3)} Ω</span> → R<sub>2</sub> = R<sub>LR</sub>−R<sub>1</sub> = <span class="k">${fmt(R2,3)} Ω</span>
+X<sub>LR</sub>@${fr}Hz = <span class="k">${fmt(Xlr,3)} Ω</span> → X<sub>1</sub>=X<sub>2</sub>= <span class="k">${fmt(X1,3)} Ω</span> (class A split)`;};
+  ['pt_Vdc','pt_Idc','pt_Vlr','pt_Ilr','pt_Plr','pt_ftest','pt_frated'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== practice ===== */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — induction motors</h2>
+  <p class="subttl">Fresh numbers each time; check against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="nsync">5.1 · Synchronous speed</option>
+        <option value="slip">5.1 · Slip from speeds</option>
+        <option value="nm">5.1 · Rotor speed from slip</option>
+        <option value="fr">5.1 · Rotor frequency</option>
+        <option value="tau">5.2 · Induced torque from P_AG</option>
+        <option value="split">5.2 · Rotor copper loss (P_RCL=sP_AG)</option>
+        <option value="pconv">5.2 · Converted power (1−s)P_AG</option>
+        <option value="eff">5.2 · Efficiency</option>
+        <option value="istart">5.5 · Starting current from code</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    nsync:()=>{const f=[50,60][Math.floor(Math.random()*2)],P=rnd(2,12,2);return{q:`f<sub>e</sub>=<b>${f} Hz</b>, P=<b>${P}</b> poles. n<sub>sync</sub> (r/min)?`,ans:120*f/P,unit:'r/min',sol:`n<sub>sync</sub>=120f/P=<b>${fmt(120*f/P,0)} r/min</b>`};},
+    slip:()=>{const ns=[1800,1200,900,3600,1500,1000][Math.floor(Math.random()*6)],nm=ns-rnd(20,120,5);return{q:`n<sub>sync</sub>=<b>${ns}</b>, n<sub>m</sub>=<b>${nm} r/min</b>. Slip s (%)?`,ans:(ns-nm)/ns*100,unit:'%',tol:0.02,sol:`s=(n<sub>sync</sub>−n<sub>m</sub>)/n<sub>sync</sub>=(${ns}−${nm})/${ns}·100=<b>${fmt((ns-nm)/ns*100,2)}%</b>`};},
+    nm:()=>{const ns=[1800,1200,900,3600][Math.floor(Math.random()*4)],s=rnd(1,6,0.5)/100;return{q:`n<sub>sync</sub>=<b>${ns} r/min</b>, s=<b>${(s*100)}%</b>. Rotor speed n<sub>m</sub> (r/min)?`,ans:(1-s)*ns,unit:'r/min',tol:0.01,sol:`n<sub>m</sub>=(1−s)n<sub>sync</sub>=(1−${s})·${ns}=<b>${fmt((1-s)*ns,0)} r/min</b>`};},
+    fr:()=>{const f=[50,60][Math.floor(Math.random()*2)],s=rnd(1,6,0.5)/100;return{q:`f<sub>e</sub>=<b>${f} Hz</b>, slip s=<b>${(s*100)}%</b>. Rotor frequency f<sub>r</sub> (Hz)?`,ans:s*f,unit:'Hz',tol:0.02,sol:`f<sub>r</sub>=s·f<sub>e</sub>=${s}·${f}=<b>${fmt(s*f,3)} Hz</b>`};},
+    tau:()=>{const PAG=rnd(5,40,1)*1000,ns=[1800,1200,900][Math.floor(Math.random()*3)],w=2*Math.PI*ns/60;return{q:`P<sub>AG</sub>=<b>${PAG/1000} kW</b>, n<sub>sync</sub>=<b>${ns} r/min</b>. Induced torque τ (N·m)?`,ans:PAG/w,unit:'N·m',tol:0.02,sol:`ω<sub>sync</sub>=2πn/60=${fmt(w,1)}; τ=P<sub>AG</sub>/ω<sub>sync</sub>=<b>${fmt(PAG/w,1)} N·m</b>`};},
+    split:()=>{const PAG=rnd(5,40,1)*1000,s=rnd(1,6,0.5)/100;return{q:`P<sub>AG</sub>=<b>${PAG/1000} kW</b>, s=<b>${(s*100)}%</b>. Rotor copper loss P<sub>RCL</sub> (W)?`,ans:s*PAG,unit:'W',tol:0.02,sol:`P<sub>RCL</sub>=s·P<sub>AG</sub>=${s}·${PAG}=<b>${fmt(s*PAG,0)} W</b>`};},
+    pconv:()=>{const PAG=rnd(5,40,1)*1000,s=rnd(1,6,0.5)/100;return{q:`P<sub>AG</sub>=<b>${PAG/1000} kW</b>, s=<b>${(s*100)}%</b>. Converted power P<sub>conv</sub> (kW)?`,ans:(1-s)*PAG/1000,unit:'kW',tol:0.02,sol:`P<sub>conv</sub>=(1−s)P<sub>AG</sub>=(1−${s})·${PAG/1000}=<b>${fmt((1-s)*PAG/1000,2)} kW</b>`};},
+    eff:()=>{const Pin=rnd(10,60,2)*1000,loss=rnd(1,6,0.5)*1000;return{q:`P<sub>in</sub>=<b>${Pin/1000} kW</b>, total losses=<b>${loss/1000} kW</b>. Efficiency (%)?`,ans:(Pin-loss)/Pin*100,unit:'%',tol:0.02,sol:`η=(P<sub>in</sub>−losses)/P<sub>in</sub>=<b>${fmt((Pin-loss)/Pin*100,1)}%</b>`};},
+    istart:()=>{const hp=rnd(5,50,5),k=rnd(4,7,0.2),V=[208,230,460][Math.floor(Math.random()*3)];const S=hp*k;return{q:`<b>${hp} hp</b>, code kVA/hp=<b>${k}</b>, V<sub>T</sub>=<b>${V} V</b>. Starting line current I<sub>L</sub> (A)?`,ans:S*1000/(Math.sqrt(3)*V),unit:'A',tol:0.02,sol:`S=${hp}·${k}=${fmt(S,0)} kVA; I<sub>L</sub>=S/(√3V<sub>T</sub>)=<b>${fmt(S*1000/(Math.sqrt(3)*V),0)} A</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;$('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;$('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;$('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ===== summary ===== */
+section('summary','Practice','5.7 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self‑Test</h2><p class="subttl">§7.14</p>
+  <div class="card"><table>
+    <tr><th>Eq.</th><th>Relation</th><th>Meaning</th></tr>
+    <tr><td>7‑1</td><td>n<sub>sync</sub>=120f/P</td><td>synchronous speed</td></tr>
+    <tr><td>7‑4</td><td>s=(n<sub>sync</sub>−n<sub>m</sub>)/n<sub>sync</sub></td><td>slip</td></tr>
+    <tr><td>7‑8</td><td>f<sub>r</sub>=s·f<sub>e</sub></td><td>rotor frequency</td></tr>
+    <tr><td>7‑32/33</td><td>P<sub>AG</sub>:P<sub>RCL</sub>:P<sub>conv</sub>=1:s:(1−s)</td><td>power split</td></tr>
+    <tr><td>7‑36</td><td>τ=P<sub>AG</sub>/ω<sub>sync</sub></td><td>induced torque</td></tr>
+    <tr><td>7‑50</td><td>τ(s) Thevenin form</td><td>torque–speed curve</td></tr>
+    <tr><td>7‑53</td><td>s<sub>max</sub>=R<sub>2</sub>/√(R<sub>TH</sub>²+(X<sub>TH</sub>+X<sub>2</sub>)²)</td><td>pullout slip</td></tr>
+  </table></div>
+  <h3>Self‑test quiz</h3><div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['An induction motor runs at…',['exactly synchronous speed','slightly below synchronous speed','above synchronous speed','half synchronous speed'],1],
+    ['At standstill the slip is…',['0','0.5','1','∞'],2],
+    ['Rotor electrical frequency equals…',['f_e','s·f_e','f_e/s','0'],1],
+    ['The air‑gap power splits P_AG : P_RCL : P_conv =',['1 : s : (1−s)','1 : (1−s) : s','s : 1 : (1−s)','1 : 1 : 1'],0],
+    ['Induced torque is best computed as…',['P_conv/ω_sync','P_AG/ω_sync','P_in/ω_m','P_out/ω_sync'],1],
+    ['Raising rotor resistance R₂…',['raises τ_max','moves pullout to lower speed, τ_max unchanged','lowers starting torque','raises efficiency'],1],
+    ['Induced torque scales with terminal voltage as…',['V','V²','1/V','V³'],1],
+    ['A NEMA Class D rotor has…',['low R₂, low slip','high R₂, high starting torque','no rotor bars','the highest efficiency'],1],
+    ['Reduced‑voltage starting reduces starting torque by a factor of…',['V','V²','1','1/V'],1],
+    ['If n_m exceeds n_sync the machine acts as a(n)…',['brake','induction generator','transformer','motor still'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;$$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];$$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');$('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+const main=$('#main'),nav=$('#nav');
+function render(id){const s=SECTIONS.find(x=>x.id===id);if(!s)return;let el=$('#sec-'+id);if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}$$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));window.scrollTo(0,0);location.hash=id;}
+function go(id){render(id);}
+let lastGrp=null;SECTIONS.forEach(s=>{if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);});
+render((location.hash||'#concepts').slice(1)||'concepts');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 5;
+  var chCode = "CHAPTER 05";
+  var chTitle = "Chapter 5: Induction Motors";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

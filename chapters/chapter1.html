@@ -1,0 +1,2173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.1 — Introduction to Machinery Principles (Interactive)</title>
+<style>
+:root{
+  --bg:#0f1220; --panel:#171a2b; --panel2:#1e2237; --ink:#e8ebf7; --muted:#9aa3c4;
+  --acc:#5b8cff; --acc2:#38d39f; --warn:#ffcc66; --bad:#ff6b81; --line:#2a2f4a;
+  --chip:#242a44; --good:#38d39f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}
+a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}
+.brand h1{font-size:16px;margin:0}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.nav{padding:8px;flex:1}
+.brand a{font-size:12px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}
+.credit b{color:var(--ink);font-weight:600}
+.credit a{color:var(--acc)}
+.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);
+  padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}
+.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.main{padding:26px 34px 80px;max-width:1020px}
+.sec{display:none;animation:fade .25s ease}
+.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}
+.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}
+h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+p{margin:8px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;
+  font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}
+.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}
+.frac .d{display:block;padding:0 6px}
+i.v{font-style:italic}
+sub,sup{font-size:.72em}
+.vec{font-weight:700}
+label.ctl{display:block;margin:10px 0}
+label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}
+label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],input[type=text],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;
+  padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}
+.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}
+.btn.warn{background:linear-gradient(90deg,#ff9f43,#ff6b81)}
+.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;
+  font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}
+.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;
+  padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}
+details summary{cursor:pointer;color:var(--acc);font-weight:600}
+details[open] summary{margin-bottom:6px}
+.deriv{background:#14182b;border:1px solid #2c3557;border-radius:10px;padding:6px 12px;margin:10px 0}
+.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#0e1striped}
+.step{background:#12162a;border-radius:0 8px 8px 0}
+.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}
+svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}
+th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}
+.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.quiz .q{margin:10px 0}
+.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:8px;cursor:pointer}
+.quiz .opt:hover{border-color:var(--acc)}
+.quiz .opt.correct{border-color:var(--good);background:#0c1a14}
+.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.seg-row{display:grid;grid-template-columns:1.3fr .9fr .9fr .9fr auto;gap:6px;margin:6px 0;align-items:center}
+.seg-row .hd{color:var(--muted);font-size:12px}
+.mini{font-size:12px;color:var(--muted)}
+.gauge{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center}
+.gauge .g-l{color:var(--muted);font-size:12px}
+.gauge .g-v{font-size:20px;font-weight:700;color:var(--acc2);font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Ch.1 — Introduction to Machinery Principles<br>Chapman, 4th ed. · Interactive study lab</p>
+      <p><a href="chapter0.html">← Introduction</a> · <a href="chapter2.html">Chapter 2 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit">
+      <div><b>Dr. Muhammad Salim Butt</b></div>
+      <a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+/* ============================================================ helpers */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{
+  if(x===null||x===undefined||!isFinite(x))return '—';
+  if(x!==0 && (Math.abs(x)<1e-3||Math.abs(x)>=1e5)) return x.toExponential(d-1);
+  return (+x.toFixed(d)).toString();
+};
+const MU0=4*Math.PI*1e-7;
+const rnd=(a,b,step=1)=>{const n=Math.round((a+Math.random()*(b-a))/step)*step;return +n.toFixed(6);};
+
+/* typical-steel B-H curve (approx Fig 1-10c) */
+const BHpts=[[0,0],[20,0.10],[50,0.25],[70,0.44],[100,0.72],[150,0.95],[200,1.10],
+  [300,1.28],[500,1.40],[700,1.47],[1000,1.51],[2000,1.57],[5000,1.63]];
+function Bof(H){
+  if(H<=0)return 0;
+  for(let k=1;k<BHpts.length;k++){if(H<=BHpts[k][0]){
+    const[a,ba]=BHpts[k-1],[b,bb]=BHpts[k];return ba+(bb-ba)*(H-a)/(b-a);}}
+  return BHpts[BHpts.length-1][1];
+}
+
+/* ============================================================ registry */
+const SECTIONS=[];
+function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* ============================================================ 1.1 / 1.2 */
+section('intro','Foundations','1.1 · Intro & Units',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Introduction to Machinery Principles</h2>
+  <p class="subttl">§1.1 Machines in daily life · units and notation (book §1.2)</p>
+  <div class="card">
+    <p>An <b>electrical machine</b> converts energy between mechanical and electrical form through a <b>magnetic field</b>.</p>
+    <div class="flex">
+      <span class="pill">Mechanical → Electrical = <b>Generator</b></span>
+      <span class="pill">Electrical → Mechanical = <b>Motor</b></span>
+      <span class="pill">AC voltage change = <b>Transformer</b></span>
+    </div>
+  </div>
+  <h3>The four magnetic principles of this chapter</h3>
+  <div class="grid2">
+    <div class="card tight">1️⃣ A current-carrying wire produces a magnetic field. <span class="badge">§1.2 Ampère → §1.4 magnetic circuits</span></div>
+    <div class="card tight">2️⃣ A time-changing field induces a voltage in a coil. <span class="badge">§1.5 transformer</span></div>
+    <div class="card tight">3️⃣ A current-carrying wire in a field feels a force. <span class="badge">§1.6 motor</span></div>
+    <div class="card tight">4️⃣ A wire moving in a field has a voltage induced. <span class="badge">§1.7 generator</span></div>
+  </div>
+  <h3>Units & notation</h3>
+  <div class="card">
+    <table>
+      <tr><th>Quantity</th><th>SI</th><th>English</th></tr>
+      <tr><td>Force</td><td>newton (N)</td><td>pound (lb)</td></tr>
+      <tr><td>Torque</td><td>N·m</td><td>lb·ft</td></tr>
+      <tr><td>Power</td><td>watt (W)</td><td>hp</td></tr>
+      <tr><td>Flux density B</td><td>tesla (T = Wb/m²)</td><td>—</td></tr>
+      <tr><td>Field intensity H</td><td>A·turns/m</td><td>—</td></tr>
+    </table>
+    <p class="note"><b>Notation:</b> vectors/phasors <b>bold</b> (<span class="vec">F</span>), scalars <i>italic</i> (<i class="v">R</i>), mmf in script (ℱ).</p>
+  </div>
+  <div class="card">
+    <h4>Convert an angle / speed</h4>
+    <div class="inrow"><input type="number" id="cv" value="180" step="any"><select id="cvu"><option value="deg">degrees</option><option value="rad">radians</option><option value="rev">revolutions</option></select></div>
+    <div class="out" id="cvout"></div>
+  </div>`;
+  const upd=()=>{const v=+$('#cv').value,u=$('#cvu').value;let deg;
+    if(u==='deg')deg=v;else if(u==='rad')deg=v*180/Math.PI;else deg=v*360;
+    $('#cvout').innerHTML=`<span class="k">${fmt(deg)}°</span> = <span class="k">${fmt(deg*Math.PI/180)} rad</span> = <span class="k">${fmt(deg/360)} rev</span>`;};
+  $('#cv').oninput=upd;$('#cvu').onchange=upd;upd();
+});
+
+/* ============================================================ 1.3 */
+/* ============================================================ Ampère's law — prelude to 1.4 */
+section('ampere','Foundations','1.2 · Ampère\'s Law · Current → Field',(el)=>{
+  el.innerHTML=`
+  <style>@media(max-width:900px){.apgrid{grid-template-columns:1fr!important}}</style>
+  <h2 class="title">Ampère's Law — How a Current Produces a Magnetic Field</h2>
+  <p class="subttl">§1.2 · one wire → solenoid → toroid → the magnetic-circuit law φ = ℱ/ℛ (developed fully in §1.4)</p>
+
+  <div class="card">
+    <p>In 1820 Ørsted saw a compass needle swing beside a wire carrying current: <b>a moving charge creates a magnetic field</b>. Ampère put a number on it. Walk around <em>any</em> closed path and add up the field intensity along the way — the total equals the current threading through that path:</p>
+    <div class="eq">∮ <span class="vec">H</span> · d<span class="vec">l</span> = I<sub>net</sub> <span class="tag">(1‑18)</span></div>
+    <div class="grid3">
+      <div class="okbox"><b>∮ … dl</b> — a closed loop, the <i>Amperian path</i>. You choose it: pick one that follows the field so H is constant along it and the integral becomes H × (path length).</div>
+      <div class="okbox"><b>H</b> — magnetic field <b>intensity</b> (A/m). Only the part of H <em>along</em> the path counts.</div>
+      <div class="okbox"><b>I<sub>net</sub></b> — the net current <b>piercing</b> the loop. N turns of the same wire pass through N times, so I<sub>net</sub> = N·i.</div>
+    </div>
+    <p class="note"><b>Right-hand rule:</b> point the thumb along the current — the curled fingers give the direction of H (and B).</p>
+  </div>
+
+  <h3>Step 1 — A single straight conductor</h3>
+  <p class="note">The field lines are circles centred on the wire. Take a circle of radius r as the Amperian path: H is the same size everywhere on it and always tangential, so the integral is simply H × (2πr). The white dot walks the loop and the green bar accumulates ∮H·dl — it always finishes at exactly I.</p>
+  <div class="card">
+    <div class="apgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab">Current I <span class="val" id="ap_Iv"></span></span><input type="range" id="ap_I" min="-20" max="20" step="0.5" value="10"></label>
+        <label class="ctl"><span class="lab">Loop radius r <span class="val" id="ap_rv"></span></span><input type="range" id="ap_r" min="0.02" max="0.20" step="0.005" value="0.05"></label>
+        <div class="eq" style="font-size:16px">H·(2πr) = I  ⇒  H = <span class="frac"><span class="n">I</span><span class="d">2πr</span></span></div>
+        <div class="out" id="ap_wout" style="font-size:13px"></div>
+        <p class="note">Bigger loop → same enclosed I spread over a longer path → smaller H. Flip the sign of I and the field reverses.</p>
+      </div>
+      <canvas id="ap_wcan" width="520" height="360" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>H versus B — field <em>intensity</em> versus flux <em>density</em></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <table>
+          <tr><th></th><th>H — field intensity</th><th>B — flux density</th></tr>
+          <tr><td>unit</td><td>A/m (ampere-turns per metre)</td><td>T = Wb/m²</td></tr>
+          <tr><td>fixed by</td><td>current &amp; geometry only (Ampère's law)</td><td>H <em>and</em> the material: B = μH</td></tr>
+          <tr><td>role</td><td>the "effort" — the cause</td><td>the "result" — the effect</td></tr>
+          <tr><td>material?</td><td>independent of μ</td><td>× μ<sub>r</sub> inside iron (hundreds to thousands)</td></tr>
+          <tr><td>leads to</td><td>—</td><td>flux φ = B·A (Wb)</td></tr>
+        </table>
+        <div class="eq">B = μH = μ<sub>r</sub> μ<sub>0</sub> H,   μ<sub>0</sub> = 4π×10⁻⁷ H/m <span class="tag">(1‑21)</span></div>
+        <p class="note">Same coil, same current → same H. Slide an iron core in and B jumps by μ<sub>r</sub>. That is why machines are built around steel, not air.</p>
+      </div>
+      <div>
+        <label class="ctl"><span class="lab">Core material <span class="val" id="ap_muv"></span></span><input type="range" id="ap_mu" min="0" max="100" step="1" value="0"></label>
+        <div id="ap_hb"></div>
+        <p class="note">Drag from air (μ<sub>r</sub>=1) towards steel (μ<sub>r</sub>≈2000–3000). H does not move; B does.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Step 2 — Many turns: the solenoid</h3>
+  <p class="note">Wind N turns over a length ℓ. Inside, the fields of all the turns add and point along the axis; outside they nearly cancel. Choose a rectangular Amperian loop: one side inside (contributes H·ℓ), one side outside (≈0), two sides perpendicular to H (0). N wires pierce it, so I<sub>net</sub> = N·I.</p>
+  <div class="card">
+    <div class="apgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab">Turns N <span class="val" id="ap_Nv"></span></span><input type="range" id="ap_N" min="5" max="60" step="1" value="20"></label>
+        <label class="ctl"><span class="lab">Length ℓ <span class="val" id="ap_lv"></span></span><input type="range" id="ap_l" min="0.10" max="0.50" step="0.01" value="0.20"></label>
+        <label class="ctl"><span class="lab">Current I <span class="val" id="ap_sIv"></span></span><input type="range" id="ap_sI" min="-10" max="10" step="0.5" value="5"></label>
+        <div class="grid2">
+          <label class="ctl"><span class="lab"><span>Core μ<sub>r</sub></span></span><select id="ap_smu"><option value="1" selected>Air (1)</option><option value="200">Cast iron (≈200)</option><option value="2000">Si-steel (≈2000)</option><option value="5000">Best steel (≈5000)</option></select></label>
+          <label class="ctl"><span class="lab">Area A (cm²)</span><input type="number" id="ap_sA" value="4" step="any" min="0.1"></label>
+        </div>
+        <div class="eq" style="font-size:16px">H·ℓ = N·I  ⇒  H = <span class="frac"><span class="n">N I</span><span class="d">ℓ</span></span></div>
+        <div class="out" id="ap_sout" style="font-size:13px"></div>
+      </div>
+      <canvas id="ap_scan" width="520" height="340" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>Step 3 — Close the loop: the toroid (a real core)</h3>
+  <p class="note">Bend the solenoid into a ring. The field is now trapped inside the core, and the natural Amperian path is the mean circumference ℓ<sub>c</sub> = 2πr. Every one of the N turns pierces it — exactly the same law, but now the core sets the path length.</p>
+  <div class="card">
+    <div class="apgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab">Turns N <span class="val" id="ap_tNv"></span></span><input type="range" id="ap_tN" min="10" max="500" step="10" value="200"></label>
+        <label class="ctl"><span class="lab">Current I <span class="val" id="ap_tIv"></span></span><input type="range" id="ap_tI" min="0" max="10" step="0.25" value="2"></label>
+        <label class="ctl"><span class="lab">Mean radius r <span class="val" id="ap_trv"></span></span><input type="range" id="ap_tr" min="0.05" max="0.25" step="0.005" value="0.10"></label>
+        <div class="grid2">
+          <label class="ctl"><span class="lab"><span>Core μ<sub>r</sub></span></span><select id="ap_tmu"><option value="1">Air (1)</option><option value="200">Cast iron (≈200)</option><option value="2000" selected>Si-steel (≈2000)</option><option value="5000">Best steel (≈5000)</option></select></label>
+          <label class="ctl"><span class="lab">Area A (cm²)</span><input type="number" id="ap_tA" value="4" step="any" min="0.1"></label>
+        </div>
+        <div class="eq" style="font-size:16px">H·ℓ<sub>c</sub> = N·I  ⇒  H = <span class="frac"><span class="n">N I</span><span class="d">ℓ<sub>c</sub></span></span></div>
+        <div class="out" id="ap_tout" style="font-size:13px"></div>
+      </div>
+      <canvas id="ap_tcan" width="520" height="340" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>Step 4 — From Ampère's law to the magnetic circuit</h3>
+  <div class="card">
+    <p>Look at the toroid result again. The flux came out as φ = (μA/ℓ<sub>c</sub>) × N·I — a <em>drive</em> (N·I) divided by something that depends only on the core's geometry and material. That "something" behaves exactly like a resistance:</p>
+    <details class="deriv" open><summary>Derivation chain — the bridge into §1.4</summary>
+      <div class="step">① Ampère's law around the mean path: H·ℓ<sub>c</sub> = N·i.<span class="why">Path length ℓ<sub>c</sub>, pierced by N turns — Eq.(1‑19).</span></div>
+      <div class="step">② Field intensity: H = N·i / ℓ<sub>c</sub>.<span class="why">Eq.(1‑20). Pure geometry + current — no material yet.</span></div>
+      <div class="step">③ Material law: B = μH = μ·N·i / ℓ<sub>c</sub>.<span class="why">Eq.(1‑21). Iron multiplies B by μ<sub>r</sub>.</span></div>
+      <div class="step">④ Flux through the cross-section: φ = B·A = (μA/ℓ<sub>c</sub>)·N·i.<span class="why">Eq.(1‑26). Uniform B over area A.</span></div>
+      <div class="step">⑤ Name the parts: <b>ℱ = N·i</b> (magnetomotive force) and <b>ℛ = ℓ<sub>c</sub>/(μA)</b> (reluctance) → <b>φ = ℱ/ℛ</b>.<span class="why">Eqs.(1‑27),(1‑28),(1‑32) — Ohm's law for flux.</span></div>
+      <div class="step">⑥ Any closed core works the same way: replace ℓ<sub>c</sub> by the mean path length; series parts (iron, air gap) add their reluctances.<span class="why">This is the whole method of §1.4.</span></div>
+    </details>
+    <div class="grid3">
+      <div class="eq" style="text-align:center">ℱ = N·i<span class="tag">mmf, A·t</span></div>
+      <div class="eq" style="text-align:center">ℛ = <span class="frac"><span class="n">ℓ<sub>c</sub></span><span class="d">μA</span></span><span class="tag">A·t/Wb</span></div>
+      <div class="eq" style="text-align:center">φ = <span class="frac"><span class="n">ℱ</span><span class="d">ℛ</span></span><span class="tag">(1‑28)</span></div>
+    </div>
+    <div class="okbox">Electric circuit: <b>V = I·R</b>  ⇄  Magnetic circuit: <b>ℱ = φ·ℛ</b>. mmf plays voltage, flux plays current, reluctance plays resistance. Everything you know about series/parallel resistors carries straight across.</div>
+    <p style="margin-top:12px"><button class="btn" id="ap_go">Continue to §1.4 Magnetic Circuits →</button></p>
+  </div>`;
+
+  const apOn=()=>$('#sec-ampere').classList.contains('on');
+  const ahead=(c,x,y,ang,col,s=7)=>{c.fillStyle=col;c.beginPath();c.moveTo(x+s*Math.cos(ang),y+s*Math.sin(ang));c.lineTo(x+s*Math.cos(ang+2.5),y+s*Math.sin(ang+2.5));c.lineTo(x+s*Math.cos(ang-2.5),y+s*Math.sin(ang-2.5));c.closePath();c.fill();};
+  const turnMark=(c,x,y,kind)=>{c.fillStyle='#12162a';c.strokeStyle='#ffcc66';c.lineWidth=1.5;c.beginPath();c.arc(x,y,5,0,7);c.fill();c.stroke();
+    if(kind==='dot'){c.fillStyle='#ffcc66';c.beginPath();c.arc(x,y,2,0,7);c.fill();}
+    else if(kind==='x'){c.beginPath();c.moveTo(x-3,y-3);c.lineTo(x+3,y+3);c.moveTo(x-3,y+3);c.lineTo(x+3,y-3);c.stroke();}};
+
+  /* ---- Step 1: single wire ---- */
+  const wc=$('#ap_wcan').getContext('2d');let wph=0,wth=0;
+  const rpx=r=>40+(r-0.02)/0.18*104;
+  function updWire(){const I=+$('#ap_I').value,r=+$('#ap_r').value,Hf=Math.abs(I)/(2*Math.PI*r),B=MU0*Hf;
+    $('#ap_Iv').textContent=I+' A';$('#ap_rv').textContent=r.toFixed(3)+' m';
+    $('#ap_wout').innerHTML=`∮H·dl = H·(2πr) = I\nH = I/(2πr) = ${Math.abs(I)}/(2π×${r.toFixed(3)}) = <span class="k">${fmt(Hf,2)} A/m</span>\nB = μ₀H = <span class="k">${fmt(B*1e6,2)} µT</span>  (air, μ<sub>r</sub>=1)\nDirection: <span class="k">${I>0?'counter-clockwise ⟲':I<0?'clockwise ⟳':'no field (I = 0)'}</span>`;}
+  function drawWire(){
+    const I=+$('#ap_I').value,r=+$('#ap_r').value,dir=I>=0?1:-1,mag=Math.abs(I);
+    const W=520,H=360,cx=250,cy=160;wc.clearRect(0,0,W,H);
+    [40,66,92,118,144].forEach(R=>{const al=Math.min(0.95,0.12+0.85*(mag/20)*(40/R));const col=`rgba(91,140,255,${al.toFixed(3)})`;
+      wc.strokeStyle=col;wc.lineWidth=1.4;wc.beginPath();wc.arc(cx,cy,R,0,7);wc.stroke();
+      if(mag>0)for(let k=0;k<6;k++){const th=wph+k*Math.PI/3,x=cx+R*Math.cos(th),y=cy-R*Math.sin(th);ahead(wc,x,y,Math.atan2(-Math.cos(th)*dir,-Math.sin(th)*dir),col,6);}});
+    wc.fillStyle='#12162a';wc.strokeStyle='#ffcc66';wc.lineWidth=2;wc.beginPath();wc.arc(cx,cy,13,0,7);wc.fill();wc.stroke();
+    wc.fillStyle='#ffcc66';
+    if(I>0){wc.beginPath();wc.arc(cx,cy,4.5,0,7);wc.fill();}
+    else if(I<0){wc.lineWidth=2.5;wc.beginPath();wc.moveTo(cx-6,cy-6);wc.lineTo(cx+6,cy+6);wc.moveTo(cx-6,cy+6);wc.lineTo(cx+6,cy-6);wc.stroke();}
+    wc.font='12px system-ui';wc.fillText(I>0?'I out of page ⊙':I<0?'I into page ⊗':'I = 0',cx+18,cy-18);
+    const R=rpx(r);wc.setLineDash([6,5]);wc.strokeStyle='#ffcc66';wc.lineWidth=2;wc.beginPath();wc.arc(cx,cy,R,0,7);wc.stroke();wc.setLineDash([]);
+    wc.strokeStyle='rgba(255,204,102,.6)';wc.lineWidth=1;wc.beginPath();wc.moveTo(cx,cy);wc.lineTo(cx+R,cy);wc.stroke();wc.fillStyle='#ffcc66';wc.fillText('r',cx+R/2-3,cy+14);
+    const th=wth,dx=cx+R*Math.cos(th),dy=cy-R*Math.sin(th),ang=Math.atan2(-Math.cos(th)*dir,-Math.sin(th)*dir);
+    if(mag>0){wc.strokeStyle='#38d39f';wc.lineWidth=2.5;wc.beginPath();wc.moveTo(dx,dy);wc.lineTo(dx+22*Math.cos(ang),dy+22*Math.sin(ang));wc.stroke();ahead(wc,dx+22*Math.cos(ang),dy+22*Math.sin(ang),ang,'#38d39f',7);wc.fillStyle='#38d39f';wc.fillText('H',dx+28*Math.cos(ang)-3,dy+28*Math.sin(ang)+4);}
+    wc.fillStyle='#fff';wc.beginPath();wc.arc(dx,dy,5,0,7);wc.fill();
+    const f=(((th*dir)%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/(2*Math.PI);
+    const bx=40,by=332,bw=440,bh=12;
+    wc.fillStyle='#1e2237';wc.fillRect(bx,by,bw,bh);wc.fillStyle='#38d39f';wc.fillRect(bx,by,bw*f,bh);wc.strokeStyle='#2a2f4a';wc.strokeRect(bx,by,bw,bh);
+    wc.fillStyle='#e8ebf7';wc.font='12px system-ui';wc.fillText(`∮H·dl so far = H·(r·θ) = ${fmt(mag*f,2)} A     →     full loop = I = ${fmt(mag,2)} A`,bx,by-6);
+    wc.fillStyle='#9aa3c4';wc.font='11px system-ui';wc.fillText('field lines circle the wire — right-hand rule · dashed = Amperian loop',12,16);
+    wph+=0.004*I;if(mag>0)wth+=0.03*dir;
+  }
+
+  /* ---- H vs B mini ---- */
+  function updHB(){const v=+$('#ap_mu').value,mur=Math.round(Math.pow(10,v/100*3.5));$('#ap_muv').textContent='μr = '+mur;
+    const Hf=500,Ba=MU0*Hf,Bm=mur*Ba,lg=b=>(Math.log10(b)+4)/5,h1=Math.max(3,120*lg(Ba)),h2=Math.max(3,120*lg(Bm));
+    $('#ap_hb').innerHTML=`<svg viewBox="0 0 300 178" style="width:100%">
+      <text x="10" y="16" fill="#9aa3c4" font-size="12">same H = 500 A/m in both</text>
+      <text x="292" y="16" fill="#9aa3c4" font-size="10" text-anchor="end">log scale</text>
+      <line x1="40" y1="150" x2="290" y2="150" stroke="#2a2f4a"/>
+      <rect x="70" y="${150-h1}" width="60" height="${h1}" fill="#5b8cff" rx="3"/>
+      <rect x="190" y="${150-h2}" width="60" height="${h2}" fill="#ffcc66" rx="3"/>
+      <text x="100" y="${150-h1-6}" fill="#5b8cff" font-size="12" text-anchor="middle">B = ${fmt(Ba*1e3,3)} mT</text>
+      <text x="220" y="${150-h2-6}" fill="#ffcc66" font-size="12" text-anchor="middle">B = ${Bm>=1?fmt(Bm,3)+' T':fmt(Bm*1e3,3)+' mT'}</text>
+      <text x="100" y="168" fill="#9aa3c4" font-size="12" text-anchor="middle">air (μr = 1)</text>
+      <text x="220" y="168" fill="#9aa3c4" font-size="12" text-anchor="middle">core (μr = ${mur})</text>
+    </svg>`;}
+
+  /* ---- Step 2: solenoid ---- */
+  const sc=$('#ap_scan').getContext('2d');let sph=0;
+  function updSol(){const N=+$('#ap_N').value,ell=+$('#ap_l').value,I=+$('#ap_sI').value,mur=+$('#ap_smu').value,A=(+$('#ap_sA').value||0)*1e-4;
+    $('#ap_Nv').textContent=N+' turns';$('#ap_lv').textContent=ell.toFixed(2)+' m';$('#ap_sIv').textContent=I+' A';
+    const Hf=N*I/ell,B=mur*MU0*Hf,phi=B*A;
+    $('#ap_sout').innerHTML=`I<sub>net</sub> = N·I = ${N} × ${I} = <span class="k">${fmt(N*I,1)} A·t</span>\nH = NI/ℓ = ${fmt(N*I,1)} / ${ell.toFixed(2)} = <span class="k">${fmt(Hf,1)} A/m</span>\nB = μ<sub>r</sub>μ<sub>0</sub>H = ${mur} × 4π×10⁻⁷ × ${fmt(Hf,1)} = <span class="k">${fmt(B,4)} T</span>\nφ = B·A = <span class="k">${fmt(phi,4)} Wb</span>`;}
+  function drawSol(){
+    const N=+$('#ap_N').value,ell=+$('#ap_l').value,I=+$('#ap_sI').value,dir=I>=0?1:-1,mag=Math.abs(I);
+    const W=520,H=340;sc.clearRect(0,0,W,H);
+    const L=200+(ell-0.1)/0.4*240,x0=260-L/2,x1=260+L/2,yT=110,yB=240,yA=175,Hrel=Math.min(1,(N*mag/ell)/1500);
+    sc.fillStyle='rgba(56,211,159,0.06)';sc.fillRect(x0,yT,L,yB-yT);sc.strokeStyle='#2a2f4a';sc.strokeRect(x0,yT,L,yB-yT);
+    const span=L-12;
+    [130,152,175,198,220].forEach((y,row)=>{const col=`rgba(56,211,159,${(0.25+0.7*Hrel).toFixed(2)})`;
+      sc.strokeStyle=col;sc.lineWidth=1.5;sc.beginPath();sc.moveTo(x0+6,y);sc.lineTo(x1-6,y);sc.stroke();
+      if(mag>0)for(let k=0;k<5;k++){const p=(((sph+row*9+k*span/5)%span)+span)%span,x=dir>0?x0+6+p:x1-6-p;ahead(sc,x,y,dir>0?0:Math.PI,col,6);}});
+    const n=Math.min(N,Math.floor(L/9)),sp=L/n;
+    for(let k=0;k<n;k++){const x=x0+sp*(k+0.5);turnMark(sc,x,yT,I>0?'dot':I<0?'x':'none');turnMark(sc,x,yB,I>0?'x':I<0?'dot':'none');}
+    sc.fillStyle='#9aa3c4';sc.font='11px system-ui';if(n<N)sc.fillText(`(drawing ${n} of ${N} turns)`,x0,yB+42);
+    sc.strokeStyle='#9aa3c4';sc.lineWidth=1;sc.beginPath();sc.moveTo(x0,yB+22);sc.lineTo(x1,yB+22);sc.moveTo(x0,yB+17);sc.lineTo(x0,yB+27);sc.moveTo(x1,yB+17);sc.lineTo(x1,yB+27);sc.stroke();
+    sc.fillStyle='#e8ebf7';sc.font='12px system-ui';sc.fillText(`ℓ = ${ell.toFixed(2)} m,  N = ${N} turns`,x0+L/2-60,yB+38);
+    sc.setLineDash([6,5]);sc.strokeStyle='#ffcc66';sc.lineWidth=2;sc.strokeRect(x0-12,60,L+24,yA-60);sc.setLineDash([]);
+    sc.fillStyle='#ffcc66';sc.fillText('inside: H·ℓ',x0+L/2-30,yA+16);sc.fillText('outside: H ≈ 0',x0+L/2-38,54);
+    sc.save();sc.translate(x0-18,150);sc.rotate(-Math.PI/2);sc.fillText('H ⟂ dl → 0',0,0);sc.restore();
+    sc.save();sc.translate(x1+28,150);sc.rotate(-Math.PI/2);sc.fillText('H ⟂ dl → 0',0,0);sc.restore();
+    sc.fillStyle='#e8ebf7';sc.fillText(`loop pierced by N = ${N} wires  →  I_net = N·I = ${fmt(N*I,1)} A·t`,12,H-10);
+    sc.fillStyle='#9aa3c4';sc.font='11px system-ui';sc.fillText('⊙ current out of page   ⊗ current into page   green = H inside',12,16);
+    sph+=0.6+2.4*Hrel;
+  }
+
+  /* ---- Step 3: toroid ---- */
+  const tc=$('#ap_tcan').getContext('2d');let tph=0;
+  function updTor(){const N=+$('#ap_tN').value,I=+$('#ap_tI').value,r=+$('#ap_tr').value,A=(+$('#ap_tA').value||0)*1e-4,mur=+$('#ap_tmu').value;
+    $('#ap_tNv').textContent=N+' turns';$('#ap_tIv').textContent=I+' A';$('#ap_trv').textContent=r.toFixed(3)+' m';
+    const lc=2*Math.PI*r,Hf=N*I/lc,mu=mur*MU0,B=mu*Hf,phi=B*A,F=N*I,Rl=A>0?lc/(mu*A):Infinity,phi2=F/Rl;
+    $('#ap_tout').innerHTML=`ℓ<sub>c</sub> = 2πr = <span class="k">${fmt(lc,4)} m</span>\nH = NI/ℓ<sub>c</sub> = ${N}×${I} / ${fmt(lc,4)} = <span class="k">${fmt(Hf,1)} A/m</span>\nB = μ<sub>r</sub>μ<sub>0</sub>H = <span class="k">${fmt(B,4)} T</span>${B>1.8?'  ⚠ real steel saturates here (see §1.4 Nonlinear B‑H)':''}\nφ = B·A = <span class="k">${fmt(phi,4)} Wb</span>\n— the same result in circuit form —\nℱ = N·i = <span class="k">${fmt(F,1)} A·t</span>     ℛ = ℓ<sub>c</sub>/(μA) = <span class="k">${fmt(Rl,4)} A·t/Wb</span>\nφ = ℱ/ℛ = <span class="k">${fmt(phi2,4)} Wb</span> ✓`;}
+  function drawTor(){
+    const N=+$('#ap_tN').value,I=+$('#ap_tI').value,r=+$('#ap_tr').value,dir=1,mag=Math.abs(I);
+    const W=520,H=340,cx=260,cy=172;tc.clearRect(0,0,W,H);
+    const Rm=75+(r-0.05)/0.2*50,t=36,Ri=Rm-t/2,Ro=Rm+t/2;
+    tc.fillStyle='#232a49';tc.beginPath();tc.arc(cx,cy,Ro,0,7);tc.arc(cx,cy,Ri,0,7,true);tc.fill();
+    tc.strokeStyle='#3a4680';tc.lineWidth=1.5;tc.beginPath();tc.arc(cx,cy,Ro,0,7);tc.stroke();tc.beginPath();tc.arc(cx,cy,Ri,0,7);tc.stroke();
+    const n=Math.min(N,72);tc.strokeStyle='rgba(255,204,102,.75)';tc.lineWidth=2;
+    for(let k=0;k<n;k++){const a=k/n*2*Math.PI;tc.beginPath();tc.moveTo(cx+(Ri-7)*Math.cos(a),cy+(Ri-7)*Math.sin(a));tc.lineTo(cx+(Ro+7)*Math.cos(a),cy+(Ro+7)*Math.sin(a));tc.stroke();}
+    tc.setLineDash([6,5]);tc.strokeStyle='#ffcc66';tc.lineWidth=2;tc.beginPath();tc.arc(cx,cy,Rm,0,7);tc.stroke();tc.setLineDash([]);
+    if(mag>0)for(let k=0;k<10;k++){const th=tph+k*Math.PI/5,x=cx+Rm*Math.cos(th),y=cy-Rm*Math.sin(th);ahead(tc,x,y,Math.atan2(-Math.cos(th)*dir,-Math.sin(th)*dir),'#38d39f',7);}
+    tc.strokeStyle='rgba(255,204,102,.6)';tc.lineWidth=1;tc.beginPath();tc.moveTo(cx,cy);tc.lineTo(cx+Rm*Math.cos(-0.6),cy+Rm*Math.sin(-0.6));tc.stroke();
+    tc.fillStyle='#ffcc66';tc.font='12px system-ui';tc.fillText('r',cx+Rm*0.55*Math.cos(-0.6)+5,cy+Rm*0.55*Math.sin(-0.6)+2);
+    tc.fillStyle='#9aa3c4';tc.font='11px system-ui';tc.textAlign='center';tc.fillText('H = 0 in the hole',cx,cy+2);tc.fillText('(no current enclosed)',cx,cy+15);tc.textAlign='left';
+    tc.fillStyle='#e8ebf7';tc.font='12px system-ui';tc.fillText(`N = ${N} turns (drawing ${n}),  I = ${I} A`,12,16);
+    tc.fillStyle='#38d39f';tc.fillText('green = H, B circulating in the core',12,H-28);
+    tc.fillStyle='#ffcc66';tc.fillText('dashed = Amperian loop = mean path, ℓc = 2πr',12,H-12);
+    tph+=(0.005+0.03*Math.min(1,N*mag/1000))*dir;
+  }
+
+  function apLoop(){if(apOn()){drawWire();drawSol();drawTor();}requestAnimationFrame(apLoop);}
+  ['ap_I','ap_r'].forEach(id=>$('#'+id).oninput=updWire);
+  ['ap_N','ap_l','ap_sI','ap_sA'].forEach(id=>$('#'+id).oninput=updSol);$('#ap_smu').onchange=updSol;
+  ['ap_tN','ap_tI','ap_tr','ap_tA'].forEach(id=>$('#'+id).oninput=updTor);$('#ap_tmu').onchange=updTor;
+  $('#ap_mu').oninput=updHB;$('#ap_go').onclick=()=>go('mag');
+  updWire();updHB();updSol();updTor();drawWire();drawSol();drawTor();apLoop();
+});
+
+section('rot','Foundations','1.3 · Rotation, Newton & Power',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Rotational Motion, Newton's Law & Power</h2>
+  <p class="subttl">§1.3 · Equations 1‑1 → 1‑17 — rotational analogs of linear motion</p>
+  <div class="card">
+    <table>
+      <tr><th>Linear</th><th>Rotational</th><th>Eq.</th></tr>
+      <tr><td>v = dr/dt</td><td>ω = dθ/dt</td><td>1‑1, 1‑2</td></tr>
+      <tr><td>a = dv/dt</td><td>α = dω/dt</td><td>1‑4, 1‑5</td></tr>
+      <tr><td>F = ma</td><td>τ = Jα</td><td>1‑7, 1‑8</td></tr>
+      <tr><td>W = ∫F dr</td><td>W = ∫τ dθ</td><td>1‑9, 1‑11</td></tr>
+      <tr><td>P = Fv</td><td>P = τω</td><td>1‑14, 1‑15</td></tr>
+    </table>
+  </div>
+
+  <div class="eq">ω<sub>m</sub> = 2π f<sub>m</sub> = <span class="frac"><span class="n">2π n<sub>m</sub></span><span class="d">60</span></span> <span class="tag">(1‑3)</span></div>
+  <details class="deriv"><summary>Derive P = τω step by step (1‑15)</summary>
+    <div class="step">① Start from the definition of power: P = dW/dt.<span class="why">Power is the rate of doing work — Eq. (1‑13).</span></div>
+    <div class="step">② Rotational work for constant torque: W = τθ.<span class="why">Work = torque applied through an angle — Eq. (1‑12).</span></div>
+    <div class="step">③ Substitute: P = d(τθ)/dt = τ·dθ/dt.<span class="why">τ is constant, so it factors out of the derivative.</span></div>
+    <div class="step">④ But dθ/dt = ω, so <b>P = τω</b>.<span class="why">Definition of angular velocity — Eq. (1‑2). This is the shaft-power equation.</span></div>
+    <div class="step">⑤ In mixed US units (τ in lb·ft, n in r/min): P(W)=τn/7.04, P(hp)=τn/5252.<span class="why">Fold in 2π/60 and 1 hp = 746 W as constants — Eqs. (1‑16),(1‑17).</span></div>
+  </details>
+
+  <style>@media(max-width:900px){.rgrid{grid-template-columns:1fr!important}}</style>
+  <h3>▶ See it spin — torque, inertia, acceleration &amp; power</h3>
+  <p class="note">Apply a torque to a flywheel: τ<sub>net</sub> = Jα makes ω grow, θ accumulates, and the power delivered P = τω climbs with speed. Add load (friction) torque and watch it settle when τ<sub>app</sub> = τ<sub>load</sub>.</p>
+  <div class="card">
+    <div class="rgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab">Applied torque τ<sub>app</sub> <span class="val" id="sp_t_v"></span></span><input type="range" id="sp_t" min="0" max="20" step="0.5" value="5"></label>
+        <label class="ctl"><span class="lab">Moment of inertia J <span class="val" id="sp_J_v"></span></span><input type="range" id="sp_J" min="0.5" max="10" step="0.5" value="2"></label>
+        <label class="ctl"><span class="lab">Load (friction) torque τ<sub>load</sub> <span class="val" id="sp_L_v"></span></span><input type="range" id="sp_L" min="0" max="10" step="0.5" value="0"></label>
+        <div class="flex"><button class="btn" id="sp_run">▶ Start</button><button class="btn ghost" id="sp_reset">↺ Reset</button></div>
+        <div class="out" id="sp_out" style="font-size:13px"></div>
+      </div>
+      <canvas id="rotCan" width="520" height="300" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>Speed conversion <span class="badge">Problem 1‑1</span></h3>
+  <div class="card">
+    <label class="ctl"><span class="lab">n<sub>m</sub> (r/min)</span><input type="number" id="r_n" value="3000" step="any"></label>
+    <div class="out" id="r_spd"></div>
+  </div>
+
+  <h3>Torque — τ = rF sin θ <span class="badge">Problem 1‑3</span></h3>
+  <details class="deriv"><summary>Derive τ = rF sin θ (1‑6)</summary>
+    <div class="step">① Torque = (applied force)(perpendicular distance).<span class="why">Only the component of F perpendicular to r twists the object.</span></div>
+    <div class="step">② Perpendicular distance from axis to line of action = r sin θ.<span class="why">θ is the angle between position vector r and force F.</span></div>
+    <div class="step">③ Therefore <b>τ = F·(r sin θ) = rF sin θ</b>.<span class="why">Max at θ=90° (F ⟂ r); zero at θ=0° (F through axis).</span></div>
+  </details>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Force F (N) <span class="val" id="tF_v"></span></span><input type="range" id="tF" min="0" max="50" value="10" step="0.5"></label>
+        <label class="ctl"><span class="lab">Radius r (m) <span class="val" id="tr_v"></span></span><input type="range" id="tr" min="0.05" max="1" value="0.25" step="0.01"></label>
+        <label class="ctl"><span class="lab">Angle θ (°) <span class="val" id="tth_v"></span></span><input type="range" id="tth" min="0" max="180" value="150" step="1"></label>
+        <div class="out" id="tout"></div>
+      </div>
+      <div><canvas id="tcan" width="380" height="300"></canvas></div>
+    </div>
+  </div>
+
+  <h3>Newton's law & Power <span class="badge">Problem 1‑4</span></h3>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">τ = Jα <span class="tag">(1‑8)</span></div>
+    <div class="eq" style="text-align:center">P = τω <span class="tag">(1‑15)</span></div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <label class="ctl"><span class="lab">Torque τ (N·m)</span><input type="number" id="p_t" value="60" step="any"></label>
+      <label class="ctl"><span class="lab">Speed n (r/min)</span><input type="number" id="p_n" value="1800" step="any"></label>
+    </div>
+    <div class="out" id="p_out"></div>
+  </div>
+
+  <h3>Flywheel spin-up <span class="badge">Problem 1‑2</span></h3>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">J (kg·m²)</span><input type="number" id="f_J" value="2" step="any"></label>
+      <label class="ctl"><span class="lab">τ (N·m)</span><input type="number" id="f_t" value="5" step="any"></label>
+      <label class="ctl"><span class="lab">t (s)</span><input type="number" id="f_time" value="5" step="any"></label>
+    </div>
+    <div class="out" id="f_out"></div>
+  </div>`;
+
+  const rspd=()=>{const n=+$('#r_n').value,w=2*Math.PI*n/60;
+    $('#r_spd').innerHTML=`ω<sub>m</sub> = 2πn/60 = <span class="k">${fmt(w)} rad/s</span>  ·  f = <span class="k">${fmt(n/60)} rev/s</span>`;};
+  $('#r_n').oninput=rspd;rspd();
+
+  const tcan=$('#tcan'),tx=tcan.getContext('2d');
+  const tupd=()=>{
+    const F=+$('#tF').value,r=+$('#tr').value,th=+$('#tth').value;
+    $('#tF_v').textContent=F+' N';$('#tr_v').textContent=r+' m';$('#tth_v').textContent=th+'°';
+    const tau=r*F*Math.sin(th*Math.PI/180),alpha=tau/5;
+    $('#tout').innerHTML=`τ = rF sin θ = ${r}×${F}×sin ${th}° = <span class="k">${fmt(Math.abs(tau))} N·m</span> ${tau>=0?'CCW (+)':'CW (−)'}\nWith J = 5 kg·m²:  α = τ/J = <span class="k">${fmt(Math.abs(alpha))} rad/s²</span>`;
+    tx.clearRect(0,0,380,300);const cx=170,cy=150,R=r*180;
+    tx.strokeStyle='#2a2f4a';tx.fillStyle='#141830';tx.beginPath();tx.arc(cx,cy,60,0,7);tx.fill();tx.stroke();
+    tx.fillStyle='#5b8cff';tx.beginPath();tx.arc(cx,cy,4,0,7);tx.fill();
+    const ex=cx+R,ey=cy;tx.strokeStyle='#9aa3c4';tx.beginPath();tx.moveTo(cx,cy);tx.lineTo(ex,ey);tx.stroke();
+    tx.fillStyle='#9aa3c4';tx.font='12px system-ui';tx.fillText('r',cx+R/2,cy-6);
+    const a=th*Math.PI/180,L=60,fx=ex+L*Math.cos(a),fy=ey-L*Math.sin(a);
+    tx.strokeStyle='#38d39f';tx.lineWidth=2.5;tx.beginPath();tx.moveTo(ex,ey);tx.lineTo(fx,fy);tx.stroke();
+    const ah=8;tx.beginPath();tx.moveTo(fx,fy);tx.lineTo(fx-ah*Math.cos(a-0.4),fy+ah*Math.sin(a-0.4));
+    tx.moveTo(fx,fy);tx.lineTo(fx-ah*Math.cos(a+0.4),fy+ah*Math.sin(a+0.4));tx.stroke();
+    tx.lineWidth=1;tx.fillStyle='#38d39f';tx.fillText('F',fx+4,fy);
+    tx.fillStyle='#ffcc66';tx.fillText('θ='+th+'°',ex-30,ey+18);
+    // perpendicular-distance construction: τ = F × (r sin θ)
+    const dx=Math.cos(a),dy=-Math.sin(a),tt=(cx-ex)*dx+(cy-ey)*dy,fxp=ex+tt*dx,fyp=ey+tt*dy;
+    tx.setLineDash([4,4]);tx.strokeStyle='rgba(56,211,159,.45)';tx.lineWidth=1;tx.beginPath();tx.moveTo(ex-dx*140,ey-dy*140);tx.lineTo(ex+dx*140,ey+dy*140);tx.stroke();
+    tx.strokeStyle='#ffcc66';tx.lineWidth=1.5;tx.beginPath();tx.moveTo(cx,cy);tx.lineTo(fxp,fyp);tx.stroke();tx.setLineDash([]);
+    tx.fillStyle='#ffcc66';tx.fillText('r sin θ',(cx+fxp)/2+6,(cy+fyp)/2-6);
+    tx.fillStyle='#9aa3c4';tx.font='11px system-ui';tx.fillText('dashed = line of action of F',10,290);
+    if(Math.abs(tau)>0.01){const ccw=tau>0,r0=34;tx.strokeStyle='#ff6b81';tx.lineWidth=2;tx.beginPath();tx.arc(cx,cy,r0,ccw?-0.3:0.3,ccw?-2.0:2.0,ccw);tx.stroke();
+      const ea=ccw?-2.0:2.0,exx=cx+r0*Math.cos(ea),eyy=cy+r0*Math.sin(ea),ta=ea+(ccw?-Math.PI/2:Math.PI/2);
+      tx.fillStyle='#ff6b81';tx.beginPath();tx.moveTo(exx+7*Math.cos(ta),eyy+7*Math.sin(ta));tx.lineTo(exx+5*Math.cos(ta+2.4),eyy+5*Math.sin(ta+2.4));tx.lineTo(exx+5*Math.cos(ta-2.4),eyy+5*Math.sin(ta-2.4));tx.closePath();tx.fill();
+      tx.font='12px system-ui';tx.fillText('τ',cx-r0-14,cy-r0+4);}
+  };
+  ['tF','tr','tth'].forEach(id=>$('#'+id).oninput=tupd);tupd();
+
+  /* ---- spin-up animation ---- */
+  const rcx=$('#rotCan').getContext('2d');const rst={w:0,th:0,t:0,run:false,hist:[]};let rLast=0;
+  const spP=()=>({tau:+$('#sp_t').value,J:+$('#sp_J').value,tl:+$('#sp_L').value});
+  function spLbl(){const p=spP();$('#sp_t_v').textContent=p.tau+' N·m';$('#sp_J_v').textContent=p.J+' kg·m²';$('#sp_L_v').textContent=p.tl+' N·m';}
+  function spDraw(){const p=spP(),c=rcx,W=520,H=300;c.clearRect(0,0,W,H);
+    const cx=130,cy=150,R=82,tnet=p.tau-(rst.w>0?p.tl:Math.min(p.tl,p.tau)),al=tnet/p.J,P=p.tau*rst.w,n=rst.w*60/(2*Math.PI);
+    c.fillStyle='#141830';c.strokeStyle='#3a4680';c.lineWidth=3;c.beginPath();c.arc(cx,cy,R,0,7);c.fill();c.stroke();
+    for(let k=0;k<6;k++){const a=rst.th+k*Math.PI/3;c.strokeStyle=k===0?'#ffcc66':'#2a2f4a';c.lineWidth=k===0?3:2;c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+R*Math.cos(a),cy-R*Math.sin(a));c.stroke();}
+    c.fillStyle='#5b8cff';c.beginPath();c.arc(cx,cy,6,0,7);c.fill();
+    if(p.tau>0){const L=0.4+1.6*Math.min(1,p.tau/20),r0=R+16;c.strokeStyle='#38d39f';c.lineWidth=3;c.beginPath();c.arc(cx,cy,r0,-0.2,-0.2-L,true);c.stroke();
+      const ea=-0.2-L,exx=cx+r0*Math.cos(ea),eyy=cy+r0*Math.sin(ea),ta=ea-Math.PI/2;c.fillStyle='#38d39f';c.beginPath();c.moveTo(exx+9*Math.cos(ta),eyy+9*Math.sin(ta));c.lineTo(exx+6*Math.cos(ta+2.4),eyy+6*Math.sin(ta+2.4));c.lineTo(exx+6*Math.cos(ta-2.4),eyy+6*Math.sin(ta-2.4));c.closePath();c.fill();
+      c.font='12px system-ui';c.fillText('τ_app',cx+r0*Math.cos(-0.2)+4,cy+r0*Math.sin(-0.2)-4);}
+    if(p.tl>0){const L=0.3+1.2*Math.min(1,p.tl/10),r0=R-14;c.strokeStyle='#ff6b81';c.lineWidth=2.5;c.beginPath();c.arc(cx,cy,r0,Math.PI-0.2,Math.PI-0.2+L,false);c.stroke();c.fillStyle='#ff6b81';c.font='11px system-ui';c.fillText('τ_load',cx-R-4,cy+R+16);}
+    c.fillStyle='#ffcc66';c.font='12px system-ui';c.fillText(`ω = ${fmt(rst.w,2)} rad/s = ${fmt(n,0)} r/min`,cx-70,cy+R+34);c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(`θ = ${fmt(rst.th%(2*Math.PI)*180/Math.PI,0)}° (${fmt(rst.th/(2*Math.PI),1)} rev)`,cx-56,cy+R+48);
+    // plots ω(t) and P(t)
+    const x0=270,x1=510,yT=40,yB=250;c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.moveTo(x0,yT);c.lineTo(x0,yB);c.lineTo(x1,yB);c.stroke();
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('t (s) →',x1-36,yB+14);
+    if(rst.hist.length>1){const t0=rst.hist[0].t,t1=rst.hist[rst.hist.length-1].t,span=Math.max(t1-t0,1),wm=Math.max(...rst.hist.map(h=>h.w),1),pm=Math.max(...rst.hist.map(h=>h.P),1);
+      const X=t=>x0+(t-t0)/span*(x1-x0);
+      c.strokeStyle='#ffcc66';c.lineWidth=2;c.beginPath();rst.hist.forEach((h,k)=>{const x=X(h.t),y=yB-h.w/wm*(yB-yT-10);k?c.lineTo(x,y):c.moveTo(x,y);});c.stroke();
+      c.strokeStyle='#38d39f';c.beginPath();rst.hist.forEach((h,k)=>{const x=X(h.t),y=yB-h.P/pm*(yB-yT-10);k?c.lineTo(x,y):c.moveTo(x,y);});c.stroke();
+      c.fillStyle='#ffcc66';c.fillText(`ω(t)  max ${fmt(wm,1)} rad/s`,x0+6,yT-10);c.fillStyle='#38d39f';c.fillText(`P = τω  max ${fmt(pm,0)} W`,x0+150,yT-10);}
+    else{c.fillStyle='#9aa3c4';c.fillText('ω(t) amber · P(t) green — press Start',x0+6,yT-10);}
+    $('#sp_out').innerHTML=`α = (τ<sub>app</sub> − τ<sub>load</sub>)/J = <span class="k">${fmt(al,3)} rad/s²</span>\nω = <span class="k">${fmt(rst.w,2)} rad/s</span> = <span class="k">${fmt(n,1)} r/min</span>\nP = τ<sub>app</sub>·ω = <span class="k">${fmt(P,1)} W</span>${p.tl>0?`\nP<sub>load</sub> = τ<sub>load</sub>·ω = <span class="k">${fmt(p.tl*rst.w,1)} W</span>`:''}\nKE = ½Jω² = <span class="k">${fmt(0.5*p.J*rst.w*rst.w,1)} J</span>`;
+  }
+  function spLoop(ts){if(!rst.run)return;if(!$('#sec-rot').classList.contains('on')){rst.run=false;$('#sp_run').textContent='▶ Start';return;}
+    const dt=Math.min((ts-rLast)/1000||0.016,0.05);rLast=ts;const p=spP();
+    let tnet=p.tau-(rst.w>0.01?p.tl:Math.min(p.tl,p.tau));rst.w=Math.max(0,rst.w+tnet/p.J*dt);rst.th+=rst.w*dt;rst.t+=dt;
+    rst.hist.push({t:rst.t,w:rst.w,P:p.tau*rst.w});if(rst.hist.length>900)rst.hist.shift();
+    spDraw();requestAnimationFrame(spLoop);}
+  $('#sp_run').onclick=()=>{rst.run=!rst.run;$('#sp_run').textContent=rst.run?'⏸ Pause':'▶ Start';if(rst.run){rLast=performance.now();requestAnimationFrame(spLoop);}};
+  $('#sp_reset').onclick=()=>{rst.run=false;$('#sp_run').textContent='▶ Start';rst.w=0;rst.th=0;rst.t=0;rst.hist=[];spDraw();};
+  ['sp_t','sp_J','sp_L'].forEach(id=>$('#'+id).oninput=()=>{spLbl();spDraw();});spLbl();spDraw();
+
+  const pupd=()=>{const t=+$('#p_t').value,n=+$('#p_n').value,w=2*Math.PI*n/60,P=t*w;
+    $('#p_out').innerHTML=`ω = 2πn/60 = <span class="k">${fmt(w)} rad/s</span>\nP = τω = <span class="k">${fmt(P)} W</span> = <span class="k">${fmt(P/746)} hp</span>`;};
+  $('#p_t').oninput=pupd;$('#p_n').oninput=pupd;pupd();
+
+  const fupd=()=>{const J=+$('#f_J').value,t=+$('#f_t').value,tm=+$('#f_time').value,al=t/J,w=al*tm,n=w*60/(2*Math.PI);
+    $('#f_out').innerHTML=`α = τ/J = <span class="k">${fmt(al)} rad/s²</span>\nω = αt = <span class="k">${fmt(w)} rad/s</span> = <span class="k">${fmt(n)} r/min</span>`;};
+  ['f_J','f_t','f_time'].forEach(id=>$('#'+id).oninput=fupd);fupd();
+});
+
+/* ============================================================ 1.5 Faraday */
+section('faraday','Induced Voltage','1.5 · Faraday\'s Law',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Faraday's Law — Induced Voltage</h2>
+  <p class="subttl">§1.5 · A time-changing flux through a coil induces a voltage (basis of the transformer)</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = −N <span class="frac"><span class="n">dφ</span><span class="d">dt</span></span> <span class="tag">(1‑36)</span></div>
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = <span class="frac"><span class="n">dλ</span><span class="d">dt</span></span>, λ=Nφ <span class="tag">(1‑41)</span></div>
+  </div>
+  <details class="deriv"><summary>Derive Faraday's law from flux linkage</summary>
+    <div class="step">① One turn linking flux φ: e = dφ/dt.<span class="why">A changing flux through a single loop drives a voltage — Eq.(1‑35).</span></div>
+    <div class="step">② If all N turns link the same φ, voltages add: e = φ̇ + φ̇ + … (N times).<span class="why">Series turns → voltages sum.</span></div>
+    <div class="step">③ Define flux linkage λ = Nφ (weber-turns).<span class="why">Eq.(1‑42).</span></div>
+    <div class="step">④ Then e = dλ/dt = N dφ/dt.<span class="why">Eq.(1‑41)/(1‑36).</span></div>
+    <div class="step">⑤ Sign (Lenz): the induced voltage opposes the flux change → the leading minus sign.<span class="why">Once polarity is known physically, the sign is dropped.</span></div>
+  </details>
+  <p class="note">Faraday's law also explains <b>eddy-current losses</b>: the changing flux induces swirling currents inside the iron itself → cores are laminated.</p>
+
+  <style>@media(max-width:900px){.fvgrid{grid-template-columns:1fr!important}}</style>
+  <h3>Self-inductance — voltage → flux → back-emf in a single coil</h3>
+  <div class="card">
+    <p>Put an AC voltage on one coil wound on an iron core — an <b>inductor</b> — and a loop of cause and effect starts:</p>
+    <div class="grid2">
+      <div class="okbox"><b>① v(t) forces φ(t).</b> The coil has almost no resistance, so KVL says v = N·dφ/dt. The flux has no choice: <b>φ = (1/N)∫v dt</b>. For v = V<sub>m</sub> sin ωt this gives φ = −(V<sub>m</sub>/ωN) cos ωt — peak <b>φ<sub>m</sub> = V<sub>m</sub>/(ωN)</b>, <b>lagging v by 90°</b>. The <em>voltage</em> sets the flux.</div>
+      <div class="okbox"><b>② φ needs a current — and that defines L.</b> Ampère (§1.4): ℱ = Ni = ℛφ, so <b>i = ℛφ/N</b>, in phase with φ. The flux linkage is λ = Nφ = (N²/ℛ)·i ≡ <b>L·i</b>: the <b>self-inductance L = N²/ℛ = μN²A/ℓ<sub>c</sub></b> depends only on the turns and the core.</div>
+      <div class="okbox"><b>③ φ(t) induces a voltage back in the same coil.</b> Faraday: <b>e<sub>ind</sub> = −N dφ/dt = −L di/dt = −v</b> — equal to the applied voltage and <b>180° out of phase</b>: the <em>back-emf</em> (Lenz) that balances the source. This is why a coil "opposes any change in its current".</div>
+      <div class="okbox"><b>④ Seen from the terminals it is an inductor.</b> i lags v by 90° and v = L di/dt, so the peaks obey <b>V<sub>m</sub> = ωL·I<sub>m</sub></b> → reactance <b>X<sub>L</sub> = ωL = 2πfL</b>; the field stores W = ½Li². Same physics as the Introduction's L panel, now built from the core.</div>
+    </div>
+    <div class="fvgrid" style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;margin-top:12px">
+      <div>
+        <label class="ctl"><span class="lab">Peak voltage V<sub>m</sub> <span class="val" id="fv_V_v"></span></span><input type="range" id="fv_V" min="10" max="400" step="5" value="100"></label>
+        <label class="ctl"><span class="lab">Frequency f <span class="val" id="fv_f_v"></span></span><input type="range" id="fv_f" min="25" max="100" step="5" value="50"></label>
+        <label class="ctl"><span class="lab">Turns N <span class="val" id="fv_N_v"></span></span><input type="range" id="fv_N" min="50" max="500" step="10" value="200"></label>
+        <label class="ctl"><span class="lab">Mean path ℓ<sub>c</sub> <span class="val" id="fv_l_v"></span></span><input type="range" id="fv_l" min="10" max="100" step="1" value="40"></label>
+        <label class="ctl"><span class="lab">Core area A <span class="val" id="fv_A_v"></span></span><input type="range" id="fv_A" min="2" max="50" step="1" value="10"></label>
+        <label class="ctl"><span class="lab"><span>Core μ<sub>r</sub></span></span><select id="fv_mu"><option value="1">Air (1)</option><option value="200">Cast iron (≈200)</option><option value="2000" selected>Si-steel (≈2000)</option><option value="5000">Best steel (≈5000)</option></select></label>
+        <button class="btn" id="fv_run" style="width:100%">⏸ Pause</button>
+        <div class="out" id="fv_out" style="font-size:12.5px"></div>
+      </div>
+      <div>
+        <canvas id="fv_core" width="540" height="300" style="width:100%"></canvas>
+        <canvas id="fv_ph" width="540" height="250" style="width:100%;margin-top:8px"></canvas>
+      </div>
+    </div>
+    <div class="warnbox" style="margin-top:12px"><b>Two ways to write the same thing.</b> With Lenz's sign, e<sub>ind</sub> = −L di/dt is drawn <b>opposite</b> to V (180°) — the voltage the coil generates <em>against</em> the source. Drop the sign and v<sub>L</sub> = L di/dt sits <b>on top of</b> V — the "voltage across the inductor" of circuit theory. Either way, φ and i are 90° behind V.</div>
+    <div class="grid3">
+      <div class="eq" style="text-align:center">L = <span class="frac"><span class="n">λ</span><span class="d">i</span></span> = <span class="frac"><span class="n">N²</span><span class="d">ℛ</span></span> = <span class="frac"><span class="n">μN²A</span><span class="d">ℓ<sub>c</sub></span></span></div>
+      <div class="eq" style="text-align:center">e<sub>ind</sub> = −N <span class="frac"><span class="n">dφ</span><span class="d">dt</span></span> = −L <span class="frac"><span class="n">di</span><span class="d">dt</span></span></div>
+      <div class="eq" style="text-align:center">X<sub>L</sub> = ωL,   W = ½ L i²</div>
+    </div>
+  </div>
+
+  <h3>Example 1‑6 — sinusoidal flux</h3>
+  <details class="deriv"><summary>Derivation: φ = φ<sub>m</sub> sin ωt → e</summary>
+    <div class="step">e = N dφ/dt = N·d(φ<sub>m</sub> sin ωt)/dt = <b>Nφ<sub>m</sub>ω cos ωt</b>.<span class="why">Peak voltage = Nφ<sub>m</sub>ω; voltage leads flux by 90°.</span></div>
+  </details>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">φ<sub>m</sub> (Wb) <span class="val" id="fd_p_v"></span></span><input type="range" id="fd_p" min="0.01" max="0.2" value="0.05" step="0.005"></label>
+        <label class="ctl"><span class="lab">N turns <span class="val" id="fd_N_v"></span></span><input type="range" id="fd_N" min="10" max="500" value="100" step="10"></label>
+        <label class="ctl"><span class="lab">ω (rad/s) <span class="val" id="fd_w_v"></span></span><input type="range" id="fd_w" min="100" max="628" value="377" step="1"></label>
+        <div class="out" id="fd_out"></div>
+        <p class="note">Book case: φ=0.05 sin 377t, N=100 → e = 1885 cos 377t V.</p>
+      </div>
+      <div><canvas id="fdCan" width="380" height="300"></canvas></div>
+    </div>
+  </div>
+
+  <h3>Problem 1‑16 — triangular flux → square-wave voltage</h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Peak flux (Wb) <span class="val" id="tr_p_v"></span></span><input type="range" id="tr_p" min="0.005" max="0.05" value="0.01" step="0.005"></label>
+        <label class="ctl"><span class="lab">Period (s) <span class="val" id="tr_T_v"></span></span><input type="range" id="tr_T" min="0.01" max="0.1" value="0.04" step="0.005"></label>
+        <label class="ctl"><span class="lab">N turns <span class="val" id="tr_N_v"></span></span><input type="range" id="tr_N" min="10" max="500" value="100" step="10"></label>
+        <div class="out" id="tr_out"></div>
+      </div>
+      <div><canvas id="trCan" width="380" height="300"></canvas></div>
+    </div>
+  </div>`;
+  const fdCan=$('#fdCan'),fx=fdCan.getContext('2d');
+  function drawWave(ctx,f1,f2,T,l1,l2,a1,a2){
+    const W=380,H=300,pl=30,pr=12,pt=14,mid=H/2;ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='#232a49';ctx.beginPath();ctx.moveTo(pl,mid);ctx.lineTo(W-pr,mid);ctx.stroke();
+    const xX=t=>pl+t/T*(W-pl-pr),y1=v=>mid-v/a1*(mid-pt)*0.9,y2=v=>mid-v/a2*(mid-pt)*0.9;
+    ctx.strokeStyle='#5b8cff';ctx.lineWidth=2;ctx.beginPath();
+    for(let t=0;t<=T;t+=T/300){const x=xX(t),y=y1(f1(t));t===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();
+    ctx.strokeStyle='#38d39f';ctx.beginPath();
+    for(let t=0;t<=T;t+=T/300){const x=xX(t),y=y2(f2(t));t===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();
+    ctx.fillStyle='#5b8cff';ctx.font='12px system-ui';ctx.fillText(l1+' (flux)',pl+4,pt+6);
+    ctx.fillStyle='#38d39f';ctx.fillText(l2+' (voltage)',pl+90,pt+6);
+  }
+  const fdUpd=()=>{const p=+$('#fd_p').value,N=+$('#fd_N').value,w=+$('#fd_w').value,Epk=N*p*w;
+    $('#fd_p_v').textContent=p+' Wb';$('#fd_N_v').textContent=N;$('#fd_w_v').textContent=w;
+    $('#fd_out').innerHTML=`e = Nφ<sub>m</sub>ω cos ωt\nPeak = <span class="k">${fmt(Epk)} V</span>  (f = <span class="k">${fmt(w/2/Math.PI)} Hz</span>)`;
+    drawWave(fx,t=>p*Math.sin(w*t),t=>N*p*w*Math.cos(w*t),4*Math.PI/w,'φ','e',p,Epk);};
+  ['fd_p','fd_N','fd_w'].forEach(id=>$('#'+id).oninput=fdUpd);fdUpd();
+  const trCan=$('#trCan'),trx=trCan.getContext('2d');
+  const trUpd=()=>{const p=+$('#tr_p').value,T=+$('#tr_T').value,N=+$('#tr_N').value,slope=p/(T/2),e=N*slope;
+    $('#tr_p_v').textContent=p+' Wb';$('#tr_T_v').textContent=T+' s';$('#tr_N_v').textContent=N;
+    $('#tr_out').innerHTML=`|dφ/dt| = peak/(T/2) = <span class="k">${fmt(slope)} Wb/s</span>\n|e| = N·|dφ/dt| = <span class="k">${fmt(e)} V</span> (square wave)`;
+    const tri=t=>{const x=(t%T)/T;return x<0.5?(p*(x/0.5)):(p*(1-(x-0.5)/0.5));},sq=t=>((t%T)/T<0.5?e:-e);
+    drawWave(trx,tri,sq,2*T,'φ','e',p,e);};
+  ['tr_p','tr_T','tr_N'].forEach(id=>$('#'+id).oninput=trUpd);trUpd();
+
+  /* ---- self-inductance: voltage → flux → back-emf (animated core + phasors) ---- */
+  const fcv=$('#fv_core').getContext('2d'),fpv=$('#fv_ph').getContext('2d');let fth=0,frun=true;
+  const ahead2=(c,x,y,ang,col,s=7)=>{c.fillStyle=col;c.beginPath();c.moveTo(x+s*Math.cos(ang),y+s*Math.sin(ang));c.lineTo(x+s*Math.cos(ang+2.5),y+s*Math.sin(ang+2.5));c.lineTo(x+s*Math.cos(ang-2.5),y+s*Math.sin(ang-2.5));c.closePath();c.fill();};
+  const fvP=()=>{const V=+$('#fv_V').value,f=+$('#fv_f').value,N=+$('#fv_N').value,l=+$('#fv_l').value/100,A=+$('#fv_A').value*1e-4,mur=+$('#fv_mu').value;
+    const w=2*Math.PI*f,R=l/(mur*MU0*A),L=N*N/R,pm=V/(w*N),Im=V/(w*L),Bm=pm/A;return {V,f,N,l,A,mur,w,R,L,pm,Im,Bm};};
+  function fvUpd(){const p=fvP();
+    $('#fv_V_v').textContent=p.V+' V';$('#fv_f_v').textContent=p.f+' Hz';$('#fv_N_v').textContent=p.N;$('#fv_l_v').textContent=Math.round(p.l*100)+' cm';$('#fv_A_v').textContent=Math.round(p.A*1e4)+' cm²';
+    $('#fv_out').innerHTML=`ℛ = ℓ<sub>c</sub>/(μ<sub>r</sub>μ<sub>0</sub>A) = <span class="k">${fmt(p.R,3)} A·t/Wb</span>\nL = N²/ℛ = <span class="k">${fmt(p.L*1e3,2)} mH</span>\nφ<sub>m</sub> = V<sub>m</sub>/(ωN) = <span class="k">${fmt(p.pm,4)} Wb</span>  ← lags v by 90°\n${p.Bm>1.8?'⚠ B<sub>m</sub> = '+fmt(p.Bm,2)+' T — real steel would saturate':'B<sub>m</sub> = φ<sub>m</sub>/A = '+fmt(p.Bm,3)+' T'}\nI<sub>m</sub> = ℛφ<sub>m</sub>/N = V<sub>m</sub>/(ωL) = <span class="k">${fmt(p.Im,3)} A</span>  ← in phase with φ\nX<sub>L</sub> = ωL = <span class="k">${fmt(p.w*p.L,2)} Ω</span>   λ<sub>m</sub> = Nφ<sub>m</sub> = L·I<sub>m</sub> = ${fmt(p.N*p.pm,4)} Wb·t ✓\ne<sub>ind</sub> = −N dφ/dt = −L di/dt = <span class="k">−v</span>  ← 180° from v`;}
+  function drawCore(){
+    const p=fvP(),th=fth,v=Math.sin(th),ph=-Math.cos(th),e=-Math.sin(th),c=fcv,W=540,H=300;c.clearRect(0,0,W,H);
+    c.fillStyle='#232a49';c.strokeStyle='#3a4680';c.lineWidth=1.5;c.beginPath();c.rect(170,40,260,220);c.rect(204,74,192,152);c.fill('evenodd');c.stroke();
+    c.setLineDash([3,4]);c.strokeStyle='rgba(255,204,102,.35)';c.strokeRect(187,57,226,186);c.setLineDash([]);
+    const mag=Math.abs(ph),dirF=ph>=0?1:-1,per=[[187,57,226,0],[413,57,0,186],[413,243,-226,0],[187,243,0,-186]],lens=[226,186,226,186],P=824;
+    for(let k=0;k<16;k++){let s=k*P/16+8,seg=0;while(s>lens[seg]){s-=lens[seg];seg++;}const [x0,y0,dx,dy]=per[seg],x=x0+dx*s/lens[seg],y=y0+dy*s/lens[seg];
+      ahead2(c,x,y,Math.atan2(dy,dx)+(dirF>0?0:Math.PI),`rgba(255,204,102,${(0.12+0.88*mag).toFixed(2)})`,7);}
+    c.fillStyle='#ffcc66';c.font='12px system-ui';c.fillText('φ(t): brightness = |φ|, arrows = direction',236,30);
+    c.strokeStyle='#5b8cff';c.lineWidth=2;for(let k=0;k<7;k++){c.beginPath();c.ellipse(187,112+k*13,26,5,0,0,7);c.stroke();}
+    c.lineWidth=1.5;c.beginPath();c.moveTo(80,132);c.lineTo(80,108);c.lineTo(161,108);c.moveTo(80,168);c.lineTo(80,192);c.lineTo(161,192);c.stroke();
+    c.fillStyle='#12162a';c.lineWidth=2;c.beginPath();c.arc(80,150,18,0,7);c.fill();c.stroke();
+    c.beginPath();for(let k=0;k<=20;k++){const x=68+k*1.2,y=150-6*Math.sin(k/20*2*Math.PI);k?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();
+    c.fillStyle='#5b8cff';c.font='12px system-ui';c.fillText('v(t)',40,154);
+    c.font='bold 14px system-ui';c.fillText(v>=0?'+':'−',92,126);c.fillText(v>=0?'−':'+',92,184);
+    const im=ph,len=30*Math.abs(im);if(Math.abs(im)>0.03){const d=im>=0?1:-1;c.strokeStyle='#38d39f';c.lineWidth=2.5;c.beginPath();c.moveTo(122-d*len/2,108);c.lineTo(122+d*len/2,108);c.stroke();ahead2(c,122+d*len/2,108,d>0?0:Math.PI,'#38d39f',7);}
+    c.fillStyle='#38d39f';c.font='12px system-ui';c.fillText('i(t) ∝ φ',108,98);
+    c.fillStyle='#ff6b81';c.font='bold 14px system-ui';c.fillText(v>=0?'+':'−',222,112);c.fillText(v>=0?'−':'+',222,200);
+    c.font='12px system-ui';c.fillText('v_L = L di/dt',216,226);c.fillText('e_ind = −v_L',216,241);
+    c.fillStyle='#ffcc66';c.fillText(`λ = Nφ = L·i = ${fmt(p.N*p.pm*ph,4)} Wb·t`,300,150);
+    c.fillStyle='#38d39f';c.fillText(`≡ inductor  L = ${fmt(p.L*1e3,2)} mH,  X_L = ${fmt(p.w*p.L,2)} Ω`,300,170);
+    c.fillStyle='rgba(23,26,43,.9)';c.fillRect(8,8,215,80);c.strokeStyle='#2a2f4a';c.lineWidth=1;c.strokeRect(8,8,215,80);
+    c.font='12px system-ui';c.fillStyle='#5b8cff';c.fillText(`v = ${fmt(p.V*v,1)} V`,16,26);c.fillStyle='#38d39f';c.fillText(`i = ${fmt(p.Im*ph,3)} A`,16,44);c.fillStyle='#ffcc66';c.fillText(`φ = ${fmt(p.pm*ph,4)} Wb`,16,62);c.fillStyle='#ff6b81';c.fillText(`e_ind = −L di/dt = ${fmt(p.V*e,1)} V`,16,80);
+    c.fillStyle='#5b8cff';c.fillText('N turns on one core — a self-inductance',150,278);
+    c.fillStyle='#ff6b81';c.fillText('e_ind = −v : the coil pushes back on the source (back-emf)',150,294);
+  }
+  function drawPh(){const c=fpv,W=540,H=250,th=fth,cx=110,cy=122,R=80;c.clearRect(0,0,W,H);
+    c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();c.beginPath();c.moveTo(cx-R-8,cy);c.lineTo(cx+R+8,cy);c.moveTo(cx,cy-R-8);c.lineTo(cx,cy+R+8);c.stroke();
+    const phz=(len,ang,col,lab,dash)=>{const x=cx+len*Math.cos(ang),y=cy-len*Math.sin(ang);if(dash)c.setLineDash([4,4]);c.strokeStyle=col;c.lineWidth=dash?1.5:2.5;c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.stroke();c.setLineDash([]);
+      if(!dash){ahead2(c,x,y,-ang,col,8);c.fillStyle=col;c.font='12px system-ui';c.fillText(lab,x+10*Math.cos(ang)-8,y-10*Math.sin(ang)+4);}};
+    phz(R,th,'#5b8cff','V');phz(R*.75,th-Math.PI/2,'#ffcc66','Φ');phz(R*.5,th-Math.PI/2,'#38d39f','I');phz(R,th+Math.PI,'#ff6b81','E_ind');phz(R,th,'#ff6b81','',true);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('phasors rotate at ω',12,14);c.fillText('dashed red = |E_ind| = V_L (sign dropped)',12,H-8);
+    const x0=225,x1=530,mid=118,A=68,span=4*Math.PI;c.strokeStyle='#232a49';c.beginPath();c.moveTo(x0,mid);c.lineTo(x1,mid);c.stroke();
+    const fns=[[t=>Math.sin(t),'#5b8cff',1],[t=>-Math.cos(t),'#38d39f',.6],[t=>-Math.sin(t),'#ff6b81',1]];
+    fns.forEach(([fn,col,sc])=>{c.strokeStyle=col;c.lineWidth=2;c.beginPath();for(let k=0;k<=300;k++){const t=k/300*span,x=x0+(x1-x0)*k/300,y=mid-fn(t)*A*sc;k?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();});
+    const tc=((th%span)+span)%span,xc=x0+(x1-x0)*tc/span;c.strokeStyle='rgba(255,255,255,.35)';c.setLineDash([3,3]);c.beginPath();c.moveTo(xc,mid-A-10);c.lineTo(xc,mid+A+10);c.stroke();c.setLineDash([]);
+    fns.forEach(([fn,col,sc])=>{c.fillStyle=col;c.beginPath();c.arc(xc,mid-fn(tc)*A*sc,4,0,7);c.fill();});
+    c.font='12px system-ui';c.fillStyle='#5b8cff';c.fillText('v(t)',x0,26);c.fillStyle='#38d39f';c.fillText('i(t), φ(t) — lag 90°',x0+45,26);c.fillStyle='#ff6b81';c.fillText('e_ind = −L di/dt — 180°',x0+190,26);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('0',x0-4,mid+A+22);c.fillText('T',x0+(x1-x0)/2-3,mid+A+22);c.fillText('2T',x1-10,mid+A+22);
+  }
+  function fLoop(){if($('#sec-faraday').classList.contains('on')){drawCore();drawPh();if(frun)fth+=0.025;}requestAnimationFrame(fLoop);}
+  ['fv_V','fv_f','fv_N','fv_l','fv_A'].forEach(id=>$('#'+id).oninput=fvUpd);$('#fv_mu').onchange=fvUpd;
+  $('#fv_run').onclick=()=>{frun=!frun;$('#fv_run').textContent=frun?'⏸ Pause':'▶ Play';};
+  fvUpd();drawCore();drawPh();fLoop();
+});
+
+/* ============================================================ 1.6 force */
+section('force','Induced Force','1.6 · Force on a Wire',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Induced Force on a Current-Carrying Wire</h2>
+  <p class="subttl">§1.6 · Basis of motor action</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center"><span class="vec">F</span> = i(<span class="vec">l</span> × <span class="vec">B</span>) <span class="tag">(1‑43)</span></div>
+    <div class="eq" style="text-align:center">F = i l B sin θ <span class="tag">(1‑44)</span></div>
+  </div>
+  <details class="deriv"><summary>From the vector law to F = ilB sin θ</summary>
+    <div class="step">① Each charge in the wire feels <b>F</b>=q<b>v</b>×<b>B</b>; summing over all charges in length l carrying current i gives <b>F</b> = i(<b>l</b>×<b>B</b>).<span class="why">Eq.(1‑43); l points along current flow.</span></div>
+    <div class="step">② The magnitude of a cross product is |l||B|sin θ.<span class="why">θ = angle between wire and field.</span></div>
+    <div class="step">③ So <b>F = ilB sin θ</b>; maximum when the wire is ⟂ to B (θ=90°), zero when parallel.<span class="why">Eq.(1‑44). Direction by the right-hand rule.</span></div>
+  </details>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Current i (A) <span class="val" id="F_i_v"></span></span><input type="range" id="F_i" min="0" max="10" value="0.5" step="0.1"></label>
+        <label class="ctl"><span class="lab">Length l (m) <span class="val" id="F_l_v"></span></span><input type="range" id="F_l" min="0.1" max="3" value="1" step="0.1"></label>
+        <label class="ctl"><span class="lab">Flux density B (T) <span class="val" id="F_B_v"></span></span><input type="range" id="F_B" min="0" max="1" value="0.25" step="0.01"></label>
+        <label class="ctl"><span class="lab">Angle θ (°) <span class="val" id="F_th_v"></span></span><input type="range" id="F_th" min="0" max="180" value="90" step="1"></label>
+        <div class="flex" style="margin:4px 0"><button class="btn ghost" id="F_flipI">⇄ reverse i</button><button class="btn ghost" id="F_flipB">⇅ reverse B</button></div>
+        <div class="out" id="F_out"></div>
+        <p class="note">Defaults = <b>Example 1‑7</b> (→ 0.125 N). Set i=5 A for <b>Problem 1‑9</b>. B lies in the page (blue arrows); the wire is tilted θ from B; the force comes <b>out of</b> (⊙) or <b>into</b> (⊗) the page.</p>
+      </div>
+      <div><canvas id="FCan" width="380" height="280"></canvas></div>
+    </div>
+  </div>`;
+  const FCan=$('#FCan'),Fx=FCan.getContext('2d');let fI=1,fB=1;
+  const fArr=(c,x0,y0,x1,y1,col,w=2)=>{c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-8*Math.cos(a-0.45),y1-8*Math.sin(a-0.45));c.lineTo(x1-8*Math.cos(a+0.45),y1-8*Math.sin(a+0.45));c.closePath();c.fill();};
+  const upd=()=>{const i=+$('#F_i').value,l=+$('#F_l').value,B=+$('#F_B').value,th=+$('#F_th').value,Fm=i*l*B*Math.sin(th*Math.PI/180),F=Fm*fI*fB;
+    $('#F_i_v').textContent=i+' A';$('#F_l_v').textContent=l+' m';$('#F_B_v').textContent=B+' T';$('#F_th_v').textContent=th+'°';
+    $('#F_out').innerHTML=`F = ilB sin θ = ${i}·${l}·${B}·sin ${th}°\n|F| = <span class="k">${fmt(Math.abs(Fm),4)} N</span>   direction: <span class="k">${Math.abs(F)<1e-9?'— (no force)':F>0?'out of page ⊙':'into page ⊗'}</span>\n(i ${fI>0?'→ as drawn':'reversed'}, B ${fB>0?'up':'down'})`;
+    const c=Fx,W=380,H=280,cx=175,cy=140;c.clearRect(0,0,W,H);
+    // B field lines in the page (vertical)
+    const bal=0.15+0.75*Math.min(1,B);for(let k=0;k<8;k++){const x=30+k*42;if(fB>0)fArr(c,x,262,x,30,`rgba(91,140,255,${bal.toFixed(2)})`,1.5);else fArr(c,x,30,x,262,`rgba(91,140,255,${bal.toFixed(2)})`,1.5);}
+    c.fillStyle='#5b8cff';c.font='12px system-ui';c.fillText(`B = ${B} T (${fB>0?'up':'down'}, in the page)`,8,16);
+    // wire at angle θ from B
+    const ph=(90-th)*Math.PI/180,dx=Math.cos(ph),dy=-Math.sin(ph),hl=110;
+    c.strokeStyle='#38d39f';c.lineWidth=4;c.beginPath();c.moveTo(cx-hl*dx,cy-hl*dy);c.lineTo(cx+hl*dx,cy+hl*dy);c.stroke();
+    const tip=fI>0?1:-1;fArr(c,cx+tip*(hl-40)*dx,cy+tip*(hl-40)*dy,cx+tip*(hl-4)*dx,cy+tip*(hl-4)*dy,'#38d39f',4);
+    c.fillStyle='#38d39f';c.fillText('i',cx+tip*(hl-18)*dx+10*dy*tip,cy+tip*(hl-18)*dy-10*dx*tip);
+    // θ arc between B (up) and the wire
+    c.strokeStyle='#ffcc66';c.lineWidth=1.5;c.beginPath();c.arc(cx,cy,44,-Math.PI/2,-Math.PI/2+th*Math.PI/180,false);c.stroke();
+    c.fillStyle='#ffcc66';c.fillText('θ='+th+'°',cx+8+40*Math.sin(th*Math.PI/360),cy-40*Math.cos(th*Math.PI/360)+4);
+    // force marker (out of / into page)
+    const r=6+22*Math.min(1,Math.abs(F)/5);
+    if(Math.abs(F)<1e-9){c.strokeStyle='#9aa3c4';c.lineWidth=1.5;c.setLineDash([3,3]);c.beginPath();c.arc(cx,cy,10,0,7);c.stroke();c.setLineDash([]);c.fillStyle='#9aa3c4';c.fillText('F = 0 (wire ∥ B)',cx+16,cy+4);}
+    else{c.fillStyle='rgba(255,107,129,.18)';c.beginPath();c.arc(cx,cy,r,0,7);c.fill();c.strokeStyle='#ff6b81';c.lineWidth=2.5;c.beginPath();c.arc(cx,cy,r,0,7);c.stroke();
+      if(F>0){c.fillStyle='#ff6b81';c.beginPath();c.arc(cx,cy,Math.max(3,r*0.25),0,7);c.fill();}
+      else{c.beginPath();c.moveTo(cx-r*0.6,cy-r*0.6);c.lineTo(cx+r*0.6,cy+r*0.6);c.moveTo(cx-r*0.6,cy+r*0.6);c.lineTo(cx+r*0.6,cy-r*0.6);c.stroke();}
+      c.fillStyle='#ff6b81';c.font='bold 12px system-ui';c.fillText(`F = ${fmt(Math.abs(F),3)} N ${F>0?'⊙ out':'⊗ in'}`,cx+r+8,cy+4);c.font='12px system-ui';}
+    // right-hand-rule inset
+    const ix=300,iy=228;c.fillStyle='rgba(23,26,43,.9)';c.fillRect(ix-46,iy-46,90,64);c.strokeStyle='#2a2f4a';c.lineWidth=1;c.strokeRect(ix-46,iy-46,90,64);
+    fArr(c,ix-30,iy,ix+6,iy,'#38d39f',2);c.fillStyle='#38d39f';c.font='10px system-ui';c.fillText('i',ix+9,iy+4);
+    fArr(c,ix-30,iy,ix-30,iy-34,'#5b8cff',2);c.fillStyle='#5b8cff';c.fillText('B',ix-28,iy-36);
+    c.strokeStyle='#ff6b81';c.beginPath();c.arc(ix-30,iy,7,0,7);c.stroke();c.fillStyle='#ff6b81';c.beginPath();c.arc(ix-30,iy,2.2,0,7);c.fill();c.fillText('F ⊙',ix-24,iy+14);
+    c.fillStyle='#9aa3c4';c.fillText('F = i l × B',ix-44,iy-52+16);};
+  ['F_i','F_l','F_B','F_th'].forEach(id=>$('#'+id).oninput=upd);
+  $('#F_flipI').onclick=()=>{fI=-fI;upd();};$('#F_flipB').onclick=()=>{fB=-fB;upd();};upd();
+});
+
+/* ============================================================ 1.7 moving conductor */
+section('movevolt','Induced Voltage','1.7 · Moving Conductor',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Induced Voltage on a Moving Conductor</h2>
+  <p class="subttl">§1.7 · Basis of generator action</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = (<span class="vec">v</span> × <span class="vec">B</span>)·<span class="vec">l</span> <span class="tag">(1‑45)</span></div>
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = v B l cos α</div>
+  </div>
+  <details class="deriv"><summary>Derive e = vBl cos α</summary>
+    <div class="step">① A charge in the moving wire feels force q<b>v</b>×<b>B</b>, i.e. an effective field <b>v</b>×<b>B</b>.<span class="why">Motional EMF.</span></div>
+    <div class="step">② Voltage = (that field)·(wire vector l) = (<b>v</b>×<b>B</b>)·<b>l</b>.<span class="why">Dot product picks the component of v×B along the wire — Eq.(1‑45).</span></div>
+    <div class="step">③ If v⟂B, |v×B|=vB; the dot product with l adds cos α (α = angle of l to v×B): <b>e = vBl cos α</b>.<span class="why">Max when l ∥ v×B (α=0).</span></div>
+  </details>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Velocity v (m/s) <span class="val" id="M_v_v"></span></span><input type="range" id="M_v" min="0" max="20" value="5" step="0.5"></label>
+        <label class="ctl"><span class="lab">Flux density B (T) <span class="val" id="M_B_v"></span></span><input type="range" id="M_B" min="0" max="1" value="0.5" step="0.01"></label>
+        <label class="ctl"><span class="lab">Length l (m) <span class="val" id="M_l_v"></span></span><input type="range" id="M_l" min="0.1" max="2" value="1" step="0.1"></label>
+        <label class="ctl"><span class="lab">Angle α (°) <span class="val" id="M_a_v"></span></span><input type="range" id="M_a" min="0" max="90" value="0" step="1"></label>
+        <div class="flex" style="margin:4px 0"><button class="btn" id="M_run">⏸ Pause</button><button class="btn ghost" id="M_flip">⇄ reverse v</button></div>
+        <div class="out" id="M_out"></div>
+        <p class="note"><b>Ex 1‑8</b>: v=5,B=0.5,l=1,α=0 → 2.5 V. <b>Ex 1‑9</b>: v=10,α=30° → 4.33 V. The force q<b>v</b>×<b>B</b> pushes the free charges to one end — that separation <em>is</em> the induced voltage.</p>
+      </div>
+      <div><canvas id="MCan" width="380" height="280"></canvas></div>
+    </div>
+  </div>`;
+  const MCan=$('#MCan'),Mx=MCan.getContext('2d');let mX=90,mRun=true,mDir=1;
+  const mArr=(c,x0,y0,x1,y1,col,w=2)=>{c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-8*Math.cos(a-0.45),y1-8*Math.sin(a-0.45));c.lineTo(x1-8*Math.cos(a+0.45),y1-8*Math.sin(a+0.45));c.closePath();c.fill();};
+  const mP=()=>({v:+$('#M_v').value,B:+$('#M_B').value,l:+$('#M_l').value,a:+$('#M_a').value});
+  const upd=()=>{const {v,B,l,a}=mP(),e=v*B*l*Math.cos(a*Math.PI/180)*mDir;
+    $('#M_v_v').textContent=v+' m/s';$('#M_B_v').textContent=B+' T';$('#M_l_v').textContent=l+' m';$('#M_a_v').textContent=a+'°';
+    $('#M_out').innerHTML=`e = vBl cos α = ${v}·${B}·${l}·cos ${a}°\ne = <span class="k">${fmt(Math.abs(e),4)} V</span>   ${Math.abs(e)<1e-9?'':e>0?'(upper end +)':'(upper end −, v reversed)'}`;};
+  function mDraw(){const {v,B,l,a}=mP(),e=v*B*l*Math.cos(a*Math.PI/180)*mDir,c=Mx,W=380,H=280;c.clearRect(0,0,W,H);
+    c.fillStyle=`rgba(154,163,196,${(0.35+0.6*B).toFixed(2)})`;c.font='13px system-ui';for(let A=0;A<8;A++)for(let b=0;b<6;b++)c.fillText('×',22+A*46,44+b*42);
+    c.fillStyle='#9aa3c4';c.font='12px system-ui';c.fillText(`B = ${B} T into page`,8,16);
+    const cy=140,hl=30+35*l,ar=a*Math.PI/180,dx=Math.sin(ar),dy=-Math.cos(ar),tx=mX+hl*dx,ty=cy+hl*dy,bx=mX-hl*dx,by=cy-hl*dy;
+    c.strokeStyle='#38d39f';c.lineWidth=5;c.beginPath();c.moveTo(bx,by);c.lineTo(tx,ty);c.stroke();c.fillStyle='#38d39f';c.fillText('l',tx+8,ty+14);
+    if(v>0)mArr(c,mX,cy,mX+mDir*(20+3*v),cy,'#5b8cff',2.5);c.fillStyle='#5b8cff';c.fillText('v',mX+mDir*(26+3*v),cy-6);
+    if(v>0&&B>0){mArr(c,mX,cy,mX,cy-mDir*(30+40*B),'#ffcc66',2);c.fillStyle='#ffcc66';c.fillText('v×B',mX+6,cy-mDir*(34+40*B));}
+    if(a>0){c.strokeStyle='#ffcc66';c.lineWidth=1.2;c.beginPath();c.arc(mX,cy,26,-Math.PI/2*mDir,-Math.PI/2*mDir+ar*mDir,mDir<0);c.stroke();c.fillStyle='#ffcc66';c.fillText('α',mX+10,cy-30*mDir+4);}
+    const n=Math.min(6,Math.round(Math.abs(e)/0.6)),top=e>0?'+':'−',bot=e>0?'−':'+';
+    c.font='bold 12px system-ui';for(let k=0;k<n;k++){c.fillStyle=e>0?'#ff6b81':'#5b8cff';c.fillText(top,tx-4+(k%2)*12-6,ty-6-Math.floor(k/2)*13);c.fillStyle=e>0?'#5b8cff':'#ff6b81';c.fillText(bot,bx-4+(k%2)*12-6,by+16+Math.floor(k/2)*13);}
+    if(n>0){c.fillStyle='#e8ebf7';c.font='12px system-ui';c.fillText(`${top} end`,tx+12,ty-4);c.fillText(`${bot} end`,bx+12,by+8);}
+    c.fillStyle='rgba(23,26,43,.9)';c.fillRect(W-170,H-58,162,50);c.strokeStyle='#2a2f4a';c.lineWidth=1;c.strokeRect(W-170,H-58,162,50);
+    c.fillStyle='#e8ebf7';c.font='12px system-ui';c.fillText(`e = vBl cos α`,W-162,H-40);c.fillStyle='#ff6b81';c.font='bold 13px system-ui';c.fillText(`= ${fmt(Math.abs(e),3)} V`,W-162,H-20);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(Math.abs(e)<1e-9?'no motion across B → no emf':'charges pile up at the ends → voltage',8,H-8);
+  }
+  function mLoop(){if($('#sec-movevolt').classList.contains('on')){if(mRun){const {v}=mP();mX+=mDir*v*0.5;if(mX>300)mX=90;if(mX<90)mX=300;}mDraw();}requestAnimationFrame(mLoop);}
+  ['M_v','M_B','M_l','M_a'].forEach(id=>$('#'+id).oninput=upd);
+  $('#M_run').onclick=()=>{mRun=!mRun;$('#M_run').textContent=mRun?'⏸ Pause':'▶ Play';};
+  $('#M_flip').onclick=()=>{mDir=-mDir;upd();};
+  upd();mDraw();mLoop();
+});
+
+/* ============================================================ 1.8 linear DC machine (animated) */
+section('linear','DC Machine','1.8 · Linear DC Machine',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Linear DC Machine — Live Simulation</h2>
+  <p class="subttl">§1.8 · The simplest machine — watch the bar actually move as motor, generator & on starting</p>
+  <div class="card">
+    <b>Four governing equations:</b>
+    <div class="grid2">
+      <div class="eq" style="text-align:center">F<sub>ind</sub> = i l B <span class="tag">(1‑43)</span></div>
+      <div class="eq" style="text-align:center">e<sub>ind</sub> = v B l <span class="tag">(1‑45)</span></div>
+      <div class="eq" style="text-align:center">i = <span class="frac"><span class="n">V<sub>B</sub> − e<sub>ind</sub></span><span class="d">R</span></span> <span class="tag">(1‑47)</span></div>
+      <div class="eq" style="text-align:center">F<sub>net</sub> = m·dv/dt <span class="tag">(1‑7)</span></div>
+    </div>
+  </div>
+  <details class="deriv"><summary>Derive the no-load speed v = V<sub>B</sub>/(Bl) (1‑50)</summary>
+    <div class="step">① KVL: V<sub>B</sub> = iR + e<sub>ind</sub>.<span class="why">Battery drives current through R and the moving bar — Eq.(1‑47).</span></div>
+    <div class="step">② At steady state the bar isn't accelerating → F<sub>net</sub>=0 → F<sub>ind</sub>=ilB=0 → i=0.<span class="why">No net force means no current (no load).</span></div>
+    <div class="step">③ With i=0: V<sub>B</sub> = e<sub>ind</sub> = v·Bl.<span class="why">Back-emf has risen to equal the battery.</span></div>
+    <div class="step">④ Solve: <b>v = V<sub>B</sub>/(Bl)</b>.<span class="why">Eq.(1‑50). Note: weaken B → faster bar (field weakening).</span></div>
+  </details>
+
+  <h3>▶ Real-time simulation</h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Battery V<sub>B</sub> (V) <span class="val" id="a_V_v"></span></span><input type="range" id="a_V" min="20" max="250" value="120" step="5"></label>
+        <label class="ctl"><span class="lab">Resistance R (Ω) <span class="val" id="a_R_v"></span></span><input type="range" id="a_R" min="0.1" max="2" value="0.3" step="0.05"></label>
+        <label class="ctl"><span class="lab">Flux density B (T) <span class="val" id="a_B_v"></span></span><input type="range" id="a_B" min="0.02" max="0.5" value="0.1" step="0.01"></label>
+        <label class="ctl"><span class="lab">Bar length l (m) <span class="val" id="a_l_v"></span></span><input type="range" id="a_l" min="1" max="10" value="10" step="0.5"></label>
+        <label class="ctl"><span class="lab">Bar mass m (kg) <span class="val" id="a_m_v"></span></span><input type="range" id="a_m" min="0.5" max="20" value="5" step="0.5"></label>
+        <label class="ctl"><span class="lab">Applied force F<sub>app</sub> (N): + right (gen) / − left (motor) <span class="val" id="a_F_v"></span></span><input type="range" id="a_F" min="-40" max="40" value="0" step="1"></label>
+        <div class="flex">
+          <button class="btn" id="a_run">▶ Start</button>
+          <button class="btn ghost" id="a_reset">↺ Reset</button>
+          <button class="btn warn" id="a_short">⚡ Show starting surge</button>
+        </div>
+      </div>
+      <div>
+        <div class="grid3">
+          <div class="gauge"><div class="g-l">velocity</div><div class="g-v"><span id="g_v">0</span></div><div class="mini">m/s</div></div>
+          <div class="gauge"><div class="g-l">current i</div><div class="g-v"><span id="g_i">0</span></div><div class="mini">A</div></div>
+          <div class="gauge"><div class="g-l">e<sub>ind</sub></div><div class="g-v"><span id="g_e">0</span></div><div class="mini">V</div></div>
+        </div>
+        <div id="a_mode" class="okbox" style="margin-top:10px">Idle — press Start</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px">
+          <div class="gauge"><div class="g-l">P<sub>batt</sub> = V<sub>B</sub>·i</div><div class="g-v" style="font-size:16px"><span id="g_pb">0</span></div><div class="mini">W</div></div>
+          <div class="gauge"><div class="g-l">P<sub>loss</sub> = i²R</div><div class="g-v" style="font-size:16px;color:#ff6b81"><span id="g_pl">0</span></div><div class="mini">W</div></div>
+          <div class="gauge"><div class="g-l">P<sub>conv</sub> = e·i</div><div class="g-v" style="font-size:16px;color:#ffcc66"><span id="g_pc">0</span></div><div class="mini">W</div></div>
+          <div class="gauge"><div class="g-l">P<sub>mech</sub> = F<sub>app</sub>·v</div><div class="g-v" style="font-size:16px;color:#5b8cff"><span id="g_pm">0</span></div><div class="mini">W</div></div>
+        </div>
+        <p class="mini" style="margin:6px 0 0">Energy balance: P<sub>batt</sub> = P<sub>loss</sub> + P<sub>conv</sub>, and P<sub>conv</sub> = −P<sub>mech</sub> (steady). Motor: battery → bar → load. Generator: F<sub>app</sub> → bar → battery (P<sub>batt</sub> negative = charging).</p>
+      </div>
+    </div>
+    <canvas id="aCan" width="900" height="220" style="width:100%;margin-top:12px"></canvas>
+    <canvas id="aPlot" width="900" height="180" style="width:100%;margin-top:8px"></canvas>
+    <p class="note">Watch it: at start e<sub>ind</sub>=0 so current (and force) spike, the bar accelerates, e<sub>ind</sub> rises, current falls, and it settles at v=V<sub>B</sub>/Bl. Push F<sub>app</sub> left → motor slows; pull right → generator speeds up and current reverses (battery charges).</p>
+  </div>
+
+  <h3>Steady-state solver <span class="badge">Example 1‑10</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <label class="ctl"><span class="lab">V<sub>B</sub> (V)</span><input type="number" id="L_V" value="120" step="any"></label>
+      <label class="ctl"><span class="lab">R (Ω)</span><input type="number" id="L_R" value="0.3" step="any"></label>
+      <label class="ctl"><span class="lab">B (T)</span><input type="number" id="L_B" value="0.1" step="any"></label>
+      <label class="ctl"><span class="lab">l (m)</span><input type="number" id="L_l" value="10" step="any"></label>
+    </div>
+    <label class="ctl"><span class="lab">Applied force (N): + right (gen) / − left (motor)</span><input type="range" id="L_F" min="-50" max="50" value="0" step="1"></label>
+    <div class="out" id="L_out"></div>
+  </div>`;
+
+  /* animation */
+  const aCan=$('#aCan'),ax=aCan.getContext('2d'),aPlot=$('#aPlot'),px=aPlot.getContext('2d');
+  let st={v:0,x:120,t:0,running:false,hist:[]};
+  const P=()=>({V:+$('#a_V').value,R:+$('#a_R').value,B:+$('#a_B').value,l:+$('#a_l').value,m:+$('#a_m').value,F:+$('#a_F').value});
+  const lbl=()=>{const p=P();$('#a_V_v').textContent=p.V+' V';$('#a_R_v').textContent=p.R+' Ω';$('#a_B_v').textContent=p.B+' T';$('#a_l_v').textContent=p.l+' m';$('#a_m_v').textContent=p.m+' kg';$('#a_F_v').textContent=p.F+' N';};
+  ['a_V','a_R','a_B','a_l','a_m','a_F'].forEach(id=>$('#'+id).oninput=lbl);lbl();
+  function reset(){st.v=0;st.x=120;st.t=0;st.hist=[];draw();}
+  function step(dt){
+    const p=P(),Bl=p.B*p.l;
+    // substeps for stability
+    const sub=20,h=dt/sub;
+    for(let s=0;s<sub;s++){
+      const eind=st.v*Bl, i=(p.V-eind)/p.R, Find=i*Bl, Fnet=Find+p.F, a=Fnet/p.m;
+      st.v+=a*h; st.x+=st.v*h*6; st.t+=h;
+    }
+    const eind=st.v*Bl,i=(p.V-eind)/p.R;
+    st.hist.push({t:st.t,v:st.v,i:i});if(st.hist.length>600)st.hist.shift();
+    // wrap position
+    if(st.x>820)st.x=120; if(st.x<120)st.x=120;
+    $('#g_v').textContent=fmt(st.v,1);$('#g_i').textContent=fmt(i,1);$('#g_e').textContent=fmt(eind,1);
+    $('#g_pb').textContent=fmt(p.V*i,0);$('#g_pl').textContent=fmt(i*i*p.R,0);$('#g_pc').textContent=fmt(eind*i,0);$('#g_pm').textContent=fmt(p.F*st.v,0);
+    let mode,box='okbox';
+    if(Math.abs(p.F)<0.5&&Math.abs(i)<0.5)mode='No-load steady state (v ≈ V_B/Bl)';
+    else if(p.F>0){mode='GENERATOR — pulled right, current reversed, battery charging';box='okbox';}
+    else if(p.F<0){mode='MOTOR — driving load to the right';box='okbox';}
+    else mode='Accelerating…';
+    const mb=$('#a_mode');mb.className=box;mb.textContent=mode;
+  }
+  function draw(){
+    ax.clearRect(0,0,900,220);
+    // rails
+    ax.strokeStyle='#3a4570';ax.lineWidth=4;ax.beginPath();ax.moveTo(60,60);ax.lineTo(860,60);ax.moveTo(60,180);ax.lineTo(860,180);ax.stroke();
+    // field ×
+    ax.fillStyle='#232a49';ax.font='13px system-ui';for(let a=0;a<16;a++)for(let b=0;b<2;b++)ax.fillText('×',110+a*46,100+b*44);
+    // battery+R at left
+    ax.strokeStyle='#5b8cff';ax.lineWidth=2;ax.beginPath();ax.moveTo(60,60);ax.lineTo(30,60);ax.lineTo(30,180);ax.lineTo(60,180);ax.stroke();
+    ax.fillStyle='#5b8cff';ax.fillText('V_B',6,124);
+    // bar
+    const bx=st.x;ax.strokeStyle='#38d39f';ax.lineWidth=6;ax.beginPath();ax.moveTo(bx,54);ax.lineTo(bx,186);ax.stroke();
+    ax.fillStyle='#38d39f';ax.fillText('bar',bx-8,44);
+    // velocity arrow
+    const p=P();if(Math.abs(st.v)>0.1){const dir=st.v>0?1:-1,L=Math.min(70,10+Math.abs(st.v));ax.strokeStyle='#ffcc66';ax.lineWidth=3;ax.beginPath();ax.moveTo(bx,120);ax.lineTo(bx+dir*L,120);ax.stroke();ax.beginPath();ax.moveTo(bx+dir*L,120);ax.lineTo(bx+dir*L-dir*8,114);ax.moveTo(bx+dir*L,120);ax.lineTo(bx+dir*L-dir*8,126);ax.stroke();ax.fillStyle='#ffcc66';ax.fillText('v',bx+dir*L,112);}
+    // applied force arrow
+    if(Math.abs(p.F)>0.5){const dir=p.F>0?1:-1,L=Math.min(60,15+Math.abs(p.F));ax.strokeStyle='#ff6b81';ax.lineWidth=3;ax.beginPath();ax.moveTo(bx,160);ax.lineTo(bx+dir*L,160);ax.stroke();ax.beginPath();ax.moveTo(bx+dir*L,160);ax.lineTo(bx+dir*L-dir*8,154);ax.moveTo(bx+dir*L,160);ax.lineTo(bx+dir*L-dir*8,166);ax.stroke();ax.fillStyle='#ff6b81';ax.fillText('F_app',bx+dir*L-10,176);}
+    ax.fillStyle='#9aa3c4';ax.fillText('B into page',380,210);
+    // current arrows around the loop + induced force on the bar
+    const Bl=p.B*p.l,ii=(p.V-st.v*Bl)/p.R,Find=ii*Bl;
+    if(Math.abs(ii)>0.5){const d=ii>0?1:-1,ca=`rgba(56,211,159,${(0.35+0.65*Math.min(1,Math.abs(ii)/60)).toFixed(2)})`;
+      const tri=(x,y,ddx,ddy)=>{ax.fillStyle=ca;ax.beginPath();ax.moveTo(x+8*ddx,y+8*ddy);ax.lineTo(x-5*ddx+5*ddy,y-5*ddy-5*ddx);ax.lineTo(x-5*ddx-5*ddy,y-5*ddy+5*ddx);ax.closePath();ax.fill();};
+      [100,240,380,520,660].forEach(x=>{if(x<bx-30){tri(x,60,d,0);tri(x,180,-d,0);}});
+      tri(bx,120,0,d);ax.fillStyle=ca;ax.fillText('i',bx-16,124);}
+    if(Math.abs(Find)>0.5){const d=Find>0?1:-1,L=Math.min(80,8+Math.abs(Find)*0.6);ax.strokeStyle='#38d39f';ax.lineWidth=3;ax.beginPath();ax.moveTo(bx,86);ax.lineTo(bx+d*L,86);ax.stroke();ax.beginPath();ax.moveTo(bx+d*L,86);ax.lineTo(bx+d*L-d*8,80);ax.moveTo(bx+d*L,86);ax.lineTo(bx+d*L-d*8,92);ax.stroke();ax.fillStyle='#38d39f';ax.fillText('F_ind = ilB',bx+d*L+(d>0?4:-70),82);}
+    // plots
+    drawPlot();
+  }
+  function drawPlot(){
+    const W=900,H=180,pl=40,mid=H/2;px.clearRect(0,0,W,H);
+    px.strokeStyle='#232a49';px.beginPath();px.moveTo(pl,mid);px.lineTo(W-10,mid);px.stroke();
+    if(st.hist.length<2)return;
+    const t0=st.hist[0].t,t1=st.hist[st.hist.length-1].t,span=Math.max(t1-t0,0.1);
+    const vmax=Math.max(...st.hist.map(h=>Math.abs(h.v)),1),imax=Math.max(...st.hist.map(h=>Math.abs(h.i)),1);
+    const xX=t=>pl+(t-t0)/span*(W-pl-10);
+    px.strokeStyle='#ffcc66';px.lineWidth=2;px.beginPath();st.hist.forEach((h,k)=>{const x=xX(h.t),y=mid-h.v/vmax*(mid-14);k===0?px.moveTo(x,y):px.lineTo(x,y);});px.stroke();
+    px.strokeStyle='#38d39f';px.beginPath();st.hist.forEach((h,k)=>{const x=xX(h.t),y=mid-h.i/imax*(mid-14);k===0?px.moveTo(x,y):px.lineTo(x,y);});px.stroke();
+    px.fillStyle='#ffcc66';px.font='12px system-ui';px.fillText('v(t)',pl+4,16);px.fillStyle='#38d39f';px.fillText('i(t)',pl+44,16);
+  }
+  let raf=null,last=0;
+  function loop(ts){
+    if(!st.running)return;
+    if(!$('#sec-linear').classList.contains('on')){st.running=false;$('#a_run').textContent='▶ Start';return;}
+    const dt=Math.min((ts-last)/1000||0.016,0.05);last=ts;
+    step(dt);draw();raf=requestAnimationFrame(loop);
+  }
+  $('#a_run').onclick=()=>{st.running=!st.running;$('#a_run').textContent=st.running?'⏸ Pause':'▶ Start';if(st.running){last=performance.now();raf=requestAnimationFrame(loop);}};
+  $('#a_reset').onclick=()=>{st.running=false;$('#a_run').textContent='▶ Start';reset();};
+  $('#a_short').onclick=()=>{const p=P();const isc=p.V/p.R;const mb=$('#a_mode');mb.className='badbox';mb.innerHTML=`Starting surge (v=0 ⇒ e<sub>ind</sub>=0): i = V<sub>B</sub>/R = ${p.V}/${p.R} = <b>${fmt(isc)} A</b> — often &gt;10× rated. A series starting resistor limits it.`;};
+  reset();
+
+  /* steady-state solver */
+  const calc=()=>{const V=+$('#L_V').value,R=+$('#L_R').value,B=+$('#L_B').value,l=+$('#L_l').value,F=+$('#L_F').value,Bl=B*l,istart=V/R;
+    let i,eind,v,mode,Pconv,Pbatt;
+    if(F===0){i=0;eind=V;v=V/Bl;mode='No-load steady state';Pconv=0;Pbatt=0;}
+    else{i=Math.abs(F)/Bl;if(F>0){eind=V+i*R;mode='GENERATOR (charging battery)';}else{eind=V-i*R;mode='MOTOR (driving load)';}v=eind/Bl;Pconv=eind*i;Pbatt=V*i;}
+    $('#L_out').innerHTML=`Bl=${fmt(Bl)} · Max starting current (v=0): i=V/R=<span class="k">${fmt(istart)} A</span>\nMode: <span class="k">${mode}</span>\ni=<span class="k">${fmt(i)} A</span>  e<sub>ind</sub>=<span class="k">${fmt(eind)} V</span>  v=<span class="k">${fmt(v)} m/s</span>`+(F!==0?`\nP conv (bar)=e·i=<span class="k">${fmt(Pconv)} W</span> · P battery=V·i=<span class="k">${fmt(Pbatt)} W</span>`:'');};
+  ['L_V','L_R','L_B','L_l','L_F'].forEach(id=>$('#'+id).oninput=calc);calc();
+});
+
+/* ============================================================ 1.9 AC power */
+section('power','AC Power','1.9 · Real, Reactive & Apparent Power',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Real, Reactive & Apparent Power</h2>
+  <p class="subttl">§1.9 · Power in single-phase AC circuits & the power triangle</p>
+  <div class="grid3">
+    <div class="eq" style="text-align:center">P = VI cos θ<span class="tag">1‑60 W</span></div>
+    <div class="eq" style="text-align:center">Q = VI sin θ<span class="tag">1‑61 var</span></div>
+    <div class="eq" style="text-align:center">S = VI<span class="tag">1‑62 VA</span></div>
+  </div>
+  <div class="eq"><span class="vec">S</span> = P + jQ = <span class="vec">V I</span>* &nbsp;&nbsp; PF = cos θ <span class="tag">(1‑69),(1‑70),(1‑71)</span></div>
+  <details class="deriv"><summary>Derive the instantaneous-power decomposition (1‑59)</summary>
+    <div class="step">① v(t)=√2 V cos ωt, i(t)=√2 I cos(ωt−θ).<span class="why">θ = impedance angle; current lags by θ for inductive loads.</span></div>
+    <div class="step">② p(t)=v·i = 2VI cos ωt·cos(ωt−θ).<span class="why">Instantaneous power is the product.</span></div>
+    <div class="step">③ Product-to-sum: cosA cosB = ½[cos(A−B)+cos(A+B)] → p = VI[cos θ + cos(2ωt−θ)].<span class="why">A−B=θ, A+B=2ωt−θ.</span></div>
+    <div class="step">④ Expand cos(2ωt−θ)=cos2ωt cosθ+sin2ωt sinθ:<br>p = <b>VI cosθ(1+cos2ωt)</b> + <b>VI sinθ·sin2ωt</b>.<span class="why">Eq.(1‑59).</span></div>
+    <div class="step">⑤ Term 1 averages to P = VI cosθ (never negative). Term 2 averages to 0 — it just sloshes energy back and forth: amplitude Q = VI sinθ.<span class="why">Eqs.(1‑60),(1‑61).</span></div>
+  </details>
+  <p class="note">Inductive: θ&gt;0, current <b>lags</b>, Q&gt;0. Capacitive: θ&lt;0, current <b>leads</b>, Q&lt;0.</p>
+
+  <h3>Interactive power solver <span class="badge">Example 1‑11</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <label class="ctl"><span class="lab">V rms (V)</span><input type="number" id="P_V" value="120" step="any"></label>
+      <label class="ctl"><span class="lab">|Z| (Ω)</span><input type="number" id="P_Z" value="20" step="any"></label>
+    </div>
+    <label class="ctl"><span class="lab">Impedance angle θ (°) <span class="val" id="P_th_v"></span></span><input type="range" id="P_th" min="-90" max="90" value="-30" step="1"></label>
+    <div class="flex" style="margin:2px 0 8px"><span class="note">Load type:</span>
+      <button class="btn ghost" data-th="0">R (θ=0)</button><button class="btn ghost" data-th="45">R–L (+45°)</button><button class="btn ghost" data-th="-45">R–C (−45°)</button><button class="btn ghost" data-th="90">pure L (+90°)</button><button class="btn ghost" data-th="-90">pure C (−90°)</button><button class="btn ghost" data-th="-30">Ex 1‑11 (−30°)</button>
+    </div>
+    <div class="grid3" style="align-items:start">
+      <div class="out" id="P_out" style="margin-top:0"></div>
+      <div><canvas id="PTri" width="380" height="240" style="width:100%"></canvas><p class="mini" style="margin:2px 0 0;text-align:center">power triangle S = P + jQ</p></div>
+      <div><canvas id="PPh" width="380" height="240" style="width:100%"></canvas><p class="mini" style="margin:2px 0 0;text-align:center">V–I phasors (I lags for θ&gt;0)</p></div>
+    </div>
+    <p class="note">Defaults = Ex 1‑11 (Z=20∠−30°): I=6 A, PF=0.866 leading, P=623.5 W, Q=−360 var, S=720 VA.</p>
+  </div>
+  <h3>Instantaneous voltage, current &amp; power</h3>
+  <p class="note">Top: v(t) and i(t) shifted by θ. Bottom: their product p(t). The green area is energy delivered to the load, the red area is energy handed <em>back</em> to the source — that back-and-forth is the reactive power Q; the average (dashed) is the real power P.</p>
+  <div class="card"><canvas id="PWave" width="820" height="340" style="width:100%"></canvas></div>`;
+  const PTri=$('#PTri'),ptx=PTri.getContext('2d'),PWave=$('#PWave'),pwx=PWave.getContext('2d'),phx=$('#PPh').getContext('2d');let pph=0;
+  const pArr=(c,x0,y0,x1,y1,col,w=2.5)=>{c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-9*Math.cos(a-0.45),y1-9*Math.sin(a-0.45));c.lineTo(x1-9*Math.cos(a+0.45),y1-9*Math.sin(a+0.45));c.closePath();c.fill();};
+  const pState=()=>{const V=+$('#P_V').value,Z=+$('#P_Z').value,th=+$('#P_th').value,I=Z>0?V/Z:0,rad=th*Math.PI/180;return {V,Z,th,I,rad,P:V*I*Math.cos(rad),Q:V*I*Math.sin(rad),S:V*I};};
+  const upd=()=>{const s=pState(),{V,Z,th,I,rad,P,Q,S}=s,PF=Math.cos(rad),lead=th<0?'leading':(th>0?'lagging':'unity');$('#P_th_v').textContent=th+'°';
+    $('#P_out').innerHTML=`I=V/|Z|=<span class="k">${fmt(I)} A</span>\nPF=cos θ=<span class="k">${fmt(PF,3)} ${lead}</span>\nP=<span class="k">${fmt(P,1)} W</span>\nQ=<span class="k">${fmt(Q,1)} var</span>\nS=<span class="k">${fmt(S,1)} VA</span>\nS=${fmt(P,1)} ${Q>=0?'+':'−'} j${fmt(Math.abs(Q),1)} VA`;
+    ptx.clearRect(0,0,380,240);const ox=40,oy=Q>=0?200:40,sc=Math.min(300/Math.max(S,1e-9),150/Math.max(Math.abs(Q),1)),Px=P*sc;
+    ptx.strokeStyle='#5b8cff';ptx.lineWidth=2.5;ptx.beginPath();ptx.moveTo(ox,oy);ptx.lineTo(ox+Px,oy);ptx.stroke();
+    ptx.strokeStyle='#ff6b81';ptx.beginPath();ptx.moveTo(ox+Px,oy);ptx.lineTo(ox+Px,oy-Q*sc);ptx.stroke();
+    pArr(ptx,ox,oy,ox+Px,oy-Q*sc,'#38d39f',2.5);
+    if(Math.abs(th)>0.5){ptx.strokeStyle='#ffcc66';ptx.lineWidth=1.5;ptx.beginPath();ptx.arc(ox,oy,36,0,-rad,Q>0);ptx.stroke();ptx.fillStyle='#ffcc66';ptx.font='12px system-ui';ptx.fillText('θ',ox+42,oy-(Q>=0?10:-16));}
+    ptx.fillStyle='#5b8cff';ptx.font='12px system-ui';ptx.fillText('P='+fmt(P,0)+' W',ox+Px/2-24,oy+(Q>=0?16:-6));
+    ptx.fillStyle='#ff6b81';ptx.fillText('Q='+fmt(Q,0)+' var',ox+Px+6,oy-Q*sc/2+4);
+    ptx.fillStyle='#38d39f';ptx.fillText('S='+fmt(S,0)+' VA',ox+Px/2-40,oy-Q*sc/2-(Q>=0?8:-16));
+    drawPPh(s);drawPWave(s);};
+  function drawPPh(s){const c=phx,W=380,H=240,cx=150,cy=122,R=92;c.clearRect(0,0,W,H);
+    c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();c.beginPath();c.moveTo(cx-R-8,cy);c.lineTo(cx+R+8,cy);c.moveTo(cx,cy-R-8);c.lineTo(cx,cy+R+8);c.stroke();
+    const aV=pph,aI=pph-s.rad,rI=R*0.68;
+    pArr(c,cx,cy,cx+R*Math.cos(aV),cy-R*Math.sin(aV),'#5b8cff');c.fillStyle='#5b8cff';c.font='12px system-ui';c.fillText('V',cx+(R+11)*Math.cos(aV)-4,cy-(R+11)*Math.sin(aV)+4);
+    pArr(c,cx,cy,cx+rI*Math.cos(aI),cy-rI*Math.sin(aI),'#38d39f');c.fillStyle='#38d39f';c.fillText('I',cx+(rI+13)*Math.cos(aI)-4,cy-(rI+13)*Math.sin(aI)+4);
+    if(Math.abs(s.th)>0.5){c.strokeStyle='#ffcc66';c.lineWidth=1.5;c.beginPath();c.arc(cx,cy,34,-aV,-aI,s.th<0);c.stroke();const am=(aV+aI)/2;c.fillStyle='#ffcc66';c.fillText('θ',cx+44*Math.cos(am)-4,cy-44*Math.sin(am)+4);}
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(s.th>0?'I lags V by θ — inductive':s.th<0?'I leads V by |θ| — capacitive':'I in phase with V — resistive',8,14);
+    c.fillText('projection on the horizontal axis = instantaneous v, i',8,H-8);
+  }
+  function drawPWave(s){const c=pwx,W=820,H=340,pl=44,pr=12,Tw=W-pl-pr,span=4*Math.PI,{V,I,rad,P,S}=s;c.clearRect(0,0,W,H);
+    const y1=78,A1=50,y2=245,A2=72,X=k=>pl+k,tOf=k=>k/Tw*span;
+    c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.moveTo(pl,y1);c.lineTo(W-pr,y1);c.moveTo(pl,y2);c.lineTo(W-pr,y2);c.stroke();
+    c.strokeStyle='#2a2f4a';c.setLineDash([2,4]);c.beginPath();c.moveTo(pl,150);c.lineTo(W-pr,150);c.stroke();c.setLineDash([]);
+    const vf=t=>Math.cos(t),iF=t=>Math.cos(t-rad),pf=t=>V*I*Math.cos(rad)*(1+Math.cos(2*t))+V*I*Math.sin(rad)*Math.sin(2*t),sc=A2/Math.max(S*1.95,1e-9);
+    for(let k=0;k<=Tw;k++){const p=pf(tOf(k)),y=y2-p*sc;c.fillStyle=p>=0?'rgba(56,211,159,.28)':'rgba(255,107,129,.35)';c.fillRect(X(k),Math.min(y,y2),1,Math.abs(y-y2));}
+    const line=(f,col,yc,amp,w=2)=>{c.strokeStyle=col;c.lineWidth=w;c.beginPath();for(let k=0;k<=Tw;k++){const y=yc-f(tOf(k))*amp;k?c.lineTo(X(k),y):c.moveTo(X(k),y);}c.stroke();};
+    line(vf,'#5b8cff',y1,A1);line(iF,'#38d39f',y1,A1*0.8);
+    line(t=>V*I*Math.cos(rad)*(1+Math.cos(2*t)),'rgba(91,140,255,.55)',y2,sc,1.2);line(t=>V*I*Math.sin(rad)*Math.sin(2*t),'rgba(255,107,129,.55)',y2,sc,1.2);line(pf,'#ffcc66',y2,sc,2.4);
+    c.strokeStyle='#ffcc66';c.setLineDash([6,4]);c.lineWidth=1.5;c.beginPath();c.moveTo(pl,y2-P*sc);c.lineTo(W-pr,y2-P*sc);c.stroke();c.setLineDash([]);
+    const tc=((pph%span)+span)%span,xc=pl+tc/span*Tw;c.strokeStyle='rgba(255,255,255,.35)';c.setLineDash([3,3]);c.beginPath();c.moveTo(xc,22);c.lineTo(xc,H-18);c.stroke();c.setLineDash([]);
+    [[vf(tc)*A1,y1,'#5b8cff'],[iF(tc)*A1*0.8,y1,'#38d39f'],[pf(tc)*sc,y2,'#ffcc66']].forEach(([d,yc,col])=>{c.fillStyle=col;c.beginPath();c.arc(xc,yc-d,4,0,7);c.fill();});
+    c.font='12px system-ui';c.fillStyle='#5b8cff';c.fillText('v(t)',pl+6,18);c.fillStyle='#38d39f';c.fillText(`i(t) — ${s.th>0?'lags':s.th<0?'leads':'in phase'} ${Math.abs(s.th)}°`,pl+46,18);
+    c.fillStyle='#ffcc66';c.fillText(`p(t) = v·i     average = P = ${fmt(P,0)} W (dashed)`,pl+6,170);
+    c.fillStyle='rgba(56,211,159,.9)';c.fillText('green: energy to load',pl+330,170);c.fillStyle='rgba(255,107,129,.9)';c.fillText('red: energy returned to source (reactive)',pl+480,170);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('thin blue/red = the two terms of Eq.(1‑59)',pl+6,H-6);
+  }
+  function pLoop(){if($('#sec-power').classList.contains('on')){pph+=0.02;const s=pState();drawPPh(s);drawPWave(s);}requestAnimationFrame(pLoop);}
+  ['P_V','P_Z','P_th'].forEach(id=>$('#'+id).oninput=upd);
+  $$('button[data-th]',el).forEach(b=>b.onclick=()=>{$('#P_th').value=b.dataset.th;upd();});
+  upd();pLoop();
+});
+
+/* ============================================================ 1.4 MAGNETIC (big) */
+section('mag','The Magnetic Field ★','1.4 · Magnetic Circuits (core)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Magnetic Field & Magnetic Circuits</h2>
+  <p class="subttl">§1.4 · The heart of the chapter — Ampère's law, the electric↔magnetic analogy, reluctance networks, nonlinear cores & losses</p>
+
+  <div class="tabs" id="mtabs">
+    <div class="t on" data-p="theory">Theory & Equivalence</div>
+    <div class="t" data-p="rect">Rectangular Core Lab</div>
+    <div class="t" data-p="circ">Circular / Toroid Lab</div>
+    <div class="t" data-p="solver">Reluctance-Network Solver</div>
+    <div class="t" data-p="par">Parallel 3-leg Core</div>
+    <div class="t" data-p="nonlin">Nonlinear B‑H</div>
+    <div class="t" data-p="ex">Worked Examples</div>
+    <div class="t" data-p="probs">End-Chapter Problems</div>
+    <div class="t" data-p="loss">Losses & Hysteresis</div>
+  </div>
+
+  <div id="p_theory" class="mpanel">
+    <h3>Production of a field — Ampère's law</h3>
+    <div class="eq">∮ <span class="vec">H</span>·d<span class="vec">l</span> = I<sub>net</sub> &nbsp;→&nbsp; H ℓ<sub>c</sub> = Ni <span class="tag">(1‑18),(1‑19)</span></div>
+    <div class="grid3">
+      <div class="eq" style="text-align:center">H = <span class="frac"><span class="n">Ni</span><span class="d">ℓ<sub>c</sub></span></span><span class="tag">1‑20</span></div>
+      <div class="eq" style="text-align:center">B = μH<span class="tag">1‑21</span></div>
+      <div class="eq" style="text-align:center">φ = BA<span class="tag">1‑26</span></div>
+    </div>
+
+    <h3>⚙️ Electric circuit ↔ Magnetic circuit equivalence</h3>
+    <p class="note">The magnetic circuit is solved exactly like a resistive DC circuit — this analogy is the single most useful design tool in the chapter.</p>
+    <svg viewBox="0 0 640 230" style="width:100%">
+      <!-- electric -->
+      <text x="20" y="18" fill="#9aa3c4" font-size="13">Electric circuit</text>
+      <path d="M60 74 V60 H130 M190 60 H260 V180 H60 V104" fill="none" stroke="#5b8cff" stroke-width="2"/>
+      <line x1="46" y1="84" x2="74" y2="84" stroke="#5b8cff" stroke-width="2.5"/><line x1="52" y1="94" x2="68" y2="94" stroke="#5b8cff" stroke-width="4"/>
+      <text x="38" y="92" fill="#5b8cff" font-size="13" text-anchor="end">V</text>
+      <text x="80" y="80" fill="#5b8cff" font-size="11">+</text><text x="80" y="104" fill="#5b8cff" font-size="11">−</text>
+      <path d="M130 60 l6 -8 l8 16 l8 -16 l8 16 l8 -16 l8 16 l6 -8" fill="none" stroke="#ff6b81" stroke-width="2"/>
+      <text x="160" y="40" fill="#ff6b81" font-size="13" text-anchor="middle">R</text>
+      <line x1="260" y1="95" x2="260" y2="128" stroke="#38d39f" stroke-width="2.5"/><polygon points="260,138 254,126 266,126" fill="#38d39f"/>
+      <text x="268" y="120" fill="#38d39f" font-size="13">I</text>
+      <text x="60" y="208" fill="#9aa3c4" font-size="12">V = I·R      I = V/R      R = ℓ/(σA)</text>
+      <!-- magnetic -->
+      <text x="340" y="18" fill="#9aa3c4" font-size="13">Magnetic circuit</text>
+      <path d="M360 40 H560 V190 H360 Z M395 75 H525 V155 H395 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+      <ellipse cx="377.5" cy="94" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/><ellipse cx="377.5" cy="106" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/>
+      <ellipse cx="377.5" cy="118" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/><ellipse cx="377.5" cy="130" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/>
+      <text x="350" y="116" fill="#38d39f" font-size="13" text-anchor="end">ℱ=Ni</text>
+      <rect x="377.5" y="57.5" width="165" height="115" fill="none" stroke="#ffcc66" stroke-dasharray="5 4"/>
+      <polygon points="468,57.5 458,52 458,63" fill="#ffcc66"/><polygon points="542.5,123 537,113 548,113" fill="#ffcc66"/>
+      <polygon points="452,172.5 462,167 462,178" fill="#ffcc66"/><polygon points="377.5,107 372,117 383,117" fill="#ffcc66"/>
+      <text x="464" y="52" fill="#ffcc66" font-size="13">φ</text>
+      <text x="600" y="110" fill="#ff6b81" font-size="12" text-anchor="middle">ℛ = ℓc/μA</text>
+      <text x="600" y="125" fill="#9aa3c4" font-size="10" text-anchor="middle">(the core itself)</text>
+      <text x="360" y="208" fill="#9aa3c4" font-size="12">ℱ = φ·ℛ      φ = ℱ/ℛ      ℛ = ℓ/(μA)</text>
+    </svg>
+    <table>
+      <tr><th>Electric</th><th>Magnetic</th><th>Note</th></tr>
+      <tr><td>EMF, V (volts)</td><td>mmf, ℱ = Ni (A·turns)</td><td>the "drive"</td></tr>
+      <tr><td>Current, I (A)</td><td>Flux, φ (Wb)</td><td>the "flow"</td></tr>
+      <tr><td>Resistance, R = ℓ/σA</td><td>Reluctance, ℛ = ℓ/μA</td><td>opposition (1‑32)</td></tr>
+      <tr><td>Conductivity σ</td><td>Permeability μ</td><td>material property</td></tr>
+      <tr><td>Conductance G = 1/R</td><td>Permeance 𝒫 = 1/ℛ</td><td>(1‑29)</td></tr>
+      <tr><td>Ohm: V = IR</td><td>ℱ = φℛ</td><td>(1‑28)</td></tr>
+      <tr><td>Series R add</td><td>Series ℛ add (1‑33)</td><td>same node rule</td></tr>
+      <tr><td>1/R<sub>eq</sub>=Σ1/R</td><td>1/ℛ<sub>eq</sub>=Σ1/ℛ (1‑34)</td><td>parallel</td></tr>
+      <tr><td>KVL ΣV=0</td><td>Σℱ = Σφℛ (Ampère loop)</td><td>—</td></tr>
+      <tr><td>KCL Σi=0</td><td>Σφ=0 at a node</td><td>flux continuity</td></tr>
+    </table>
+
+    <details class="deriv" open><summary>Derive reluctance ℛ = ℓ/(μA) from Ampère's law (the key chain)</summary>
+      <div class="step">① Ampère's law around the core: H·ℓ<sub>c</sub> = Ni.<span class="why">All N turns link the path; I<sub>net</sub> = Ni — Eq.(1‑19).</span></div>
+      <div class="step">② Solve for field intensity: H = Ni/ℓ<sub>c</sub>.<span class="why">Eq.(1‑20).</span></div>
+      <div class="step">③ Flux density from the material law: B = μH = μNi/ℓ<sub>c</sub>.<span class="why">B = μH, with μ = μ<sub>r</sub>μ<sub>0</sub> — Eq.(1‑21).</span></div>
+      <div class="step">④ Total flux through area A: φ = BA = (μA/ℓ<sub>c</sub>)·Ni.<span class="why">φ = BA — Eq.(1‑26).</span></div>
+      <div class="step">⑤ Rewrite as φ = Ni ÷ (ℓ<sub>c</sub>/μA) = ℱ/ℛ.<span class="why">Group the geometry into one factor.</span></div>
+      <div class="step">⑥ Compare with ℱ = φℛ ⇒ <b>ℛ = ℓ<sub>c</sub>/(μA) = ℓ<sub>c</sub>/(μ<sub>r</sub>μ<sub>0</sub>A)</b>.<span class="why">Eq.(1‑32). Long/thin/low-μ paths have high reluctance — exactly like resistance.</span></div>
+    </details>
+    <div class="grid2" style="align-items:center;margin-top:10px">
+      <div class="warnbox">Why answers are only ~5% accurate: (1) <b>leakage</b> flux escapes the core and closes through air; (2) path length/area are guesses, especially at corners; (3) μ is nonlinear (saturation); (4) air-gap <b>fringing</b> — the flux bulges outward at the gap, so the effective gap area is larger than the core face (we add ~5%).</div>
+      <svg viewBox="0 0 320 190" style="width:100%">
+        <path d="M30 20 H290 V170 H30 Z M65 55 H255 V135 H65 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+        <rect x="254" y="88" width="37" height="14" fill="#0b0e1c"/>
+        <ellipse cx="47.5" cy="76" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/><ellipse cx="47.5" cy="88" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/>
+        <ellipse cx="47.5" cy="100" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/><ellipse cx="47.5" cy="112" rx="22" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/>
+        <rect x="47.5" y="37.5" width="225" height="115" fill="none" stroke="#ffcc66" stroke-dasharray="5 4"/>
+        <text x="150" y="33" fill="#ffcc66" font-size="11" text-anchor="middle">main flux φ</text>
+        <path d="M280 88 Q312 95 280 102 M286 88 Q322 95 286 102 M262 88 Q230 95 262 102" fill="none" stroke="#ff6b81" stroke-width="1.5"/>
+        <text x="300" y="80" fill="#ff6b81" font-size="10.5" text-anchor="middle">fringing</text>
+        <path d="M40 62 C -8 70, -8 126, 40 134 M44 68 C 8 76, 8 120, 44 128" fill="none" stroke="#c774e6" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text x="6" y="150" fill="#c774e6" font-size="10.5">leakage flux</text>
+        <text x="150" y="184" fill="#9aa3c4" font-size="10.5" text-anchor="middle">both make the real φ differ from the ideal ℱ/ℛ estimate</text>
+      </svg>
+    </div>
+  </div>
+
+  <div id="p_rect" class="mpanel" style="display:none">
+    <h3>🧲 Rectangular core lab — reluctance → flux → B, drawn to scale</h3>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label class="ctl"><span class="lab">Turns N <span class="val" id="c_N_v"></span></span><input type="range" id="c_N" min="10" max="1000" value="200" step="10"></label>
+          <label class="ctl"><span class="lab">Current i (A) <span class="val" id="c_i_v"></span></span><input type="range" id="c_i" min="0" max="5" value="1" step="0.05"></label>
+          <label class="ctl"><span class="lab">Mean path ℓ<sub>c</sub> (cm) <span class="val" id="c_l_v"></span></span><input type="range" id="c_l" min="10" max="150" value="55" step="1"></label>
+          <label class="ctl"><span class="lab">Cross-section A (cm²) <span class="val" id="c_A_v"></span></span><input type="range" id="c_A" min="5" max="200" value="150" step="5"></label>
+          <label class="ctl"><span class="lab">Rel. permeability μ<sub>r</sub> <span class="val" id="c_mu_v"></span></span><input type="range" id="c_mu" min="500" max="6000" value="2500" step="50"></label>
+          <label class="ctl"><span class="lab">Air-gap length (cm) <span class="val" id="c_g_v"></span></span><input type="range" id="c_g" min="0" max="0.3" value="0" step="0.005"></label>
+          <label class="ctl"><span class="lab">Gap fringing (% area ↑) <span class="val" id="c_fr_v"></span></span><input type="range" id="c_fr" min="0" max="10" value="5" step="1"></label>
+        </div>
+        <div>
+          <svg id="coreSVG" viewBox="0 0 360 300" width="360" height="300"></svg>
+          <div class="out" id="c_out"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p_circ" class="mpanel" style="display:none">
+    <h3>⭕ Circular (toroidal) core lab</h3>
+    <p class="note">The only thing that changes for a ring core is the geometry: the mean path length is the mean circumference
+    <b>ℓ = 2π·r<sub>mean</sub> = π·D<sub>mean</sub></b>, and for a round cross-section <b>A = π·a²</b> (a = section radius). Everything else (ℛ, ℱ, φ, B) is identical.</p>
+    <details class="deriv"><summary>Derive the toroid flux formula</summary>
+      <div class="step">① Mean circumference: ℓ = 2π r<sub>mean</sub>, where r<sub>mean</sub> = (r<sub>in</sub>+r<sub>out</sub>)/2.<span class="why">The average flux path is a circle at the mean radius.</span></div>
+      <div class="step">② Round cross-section area: A = π a².<span class="why">a = radius of the wire/ring cross-section.</span></div>
+      <div class="step">③ ℛ = ℓ/(μ<sub>r</sub>μ<sub>0</sub>A) = 2π r/(μ<sub>r</sub>μ<sub>0</sub>π a²) = 2r/(μ<sub>r</sub>μ<sub>0</sub>a²).<span class="why">Substitute the toroid geometry into Eq.(1‑32).</span></div>
+      <div class="step">④ φ = Ni/ℛ, B = φ/A = μ<sub>r</sub>μ<sub>0</sub>Ni/(2π r).<span class="why">Same ℱ = Ni drive; B falls off with mean radius.</span></div>
+    </details>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label class="ctl"><span class="lab">Turns N <span class="val" id="t_N_v"></span></span><input type="range" id="t_N" min="50" max="1000" value="400" step="10"></label>
+          <label class="ctl"><span class="lab">Current i (A) <span class="val" id="t_i_v"></span></span><input type="range" id="t_i" min="0" max="3" value="0.3" step="0.05"></label>
+          <label class="ctl"><span class="lab">Mean diameter D (cm) <span class="val" id="t_D_v"></span></span><input type="range" id="t_D" min="4" max="30" value="10" step="0.5"></label>
+          <label class="ctl"><span class="lab">Section radius a (cm) <span class="val" id="t_a_v"></span></span><input type="range" id="t_a" min="0.5" max="4" value="1.5" step="0.1"></label>
+          <label class="ctl"><span class="lab">Rel. permeability μ<sub>r</sub> <span class="val" id="t_mu_v"></span></span><input type="range" id="t_mu" min="500" max="6000" value="1500" step="50"></label>
+          <div class="out" id="t_out"></div>
+        </div>
+        <div><svg id="torSVG" viewBox="0 0 300 300" width="300" height="300"></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p_solver" class="mpanel" style="display:none">
+    <h3>🔧 General series reluctance-network solver</h3>
+    <p class="note">Enter each segment of the flux path (iron regions and air gaps in <b>series</b>). Use μ<sub>r</sub>=1 for air gaps and increase the area for fringing. This solves Examples 1‑1/1‑2/1‑3 and many end-chapter cores.</p>
+    <div class="card">
+      <div class="grid2" style="align-items:start">
+        <div>
+          <div class="grid2">
+            <label class="ctl"><span class="lab">Turns N</span><input type="number" id="s_N" value="200" step="any"></label>
+            <label class="ctl"><span class="lab">Current i (A)</span><input type="number" id="s_i" value="1" step="any"></label>
+          </div>
+          <div class="seg-row"><span class="hd">Segment</span><span class="hd">length (cm)</span><span class="hd">area (cm²)</span><span class="hd">μ<sub>r</sub> (1=air)</span><span></span></div>
+          <div id="segs"></div>
+          <div class="flex" style="margin-top:8px">
+            <button class="btn ghost" id="s_add">+ Add segment</button>
+            <button class="btn ghost" id="s_ex1">Load Ex 1‑1</button>
+            <button class="btn ghost" id="s_ex2">Load Ex 1‑2</button>
+            <button class="btn ghost" id="s_ex3">Load Ex 1‑3</button>
+          </div>
+        </div>
+        <div style="min-width:0">
+          <div id="s_phys" style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px"></div>
+          <div id="s_net" style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px;margin-top:8px;overflow-x:auto"></div>
+          <p class="note" style="margin:6px 0 0">Colours match: each segment row ↔ its region in the sketch ↔ its ℛ box in the circuit.</p>
+        </div>
+      </div>
+      <div class="out" id="s_out"></div>
+    </div>
+  </div>
+
+  <div id="p_par" class="mpanel" style="display:none">
+    <h3>⫴ Parallel magnetic circuit — the three-legged core</h3>
+    <p class="note">The coil sits on the <b>centre leg</b>; its flux splits into the left and right outer loops (the geometry of Problems 1‑6, 1‑8 and 1‑13). The two outer loops are reluctances in <b>parallel</b>, and the centre leg is in <b>series</b> with that pair — exactly two resistors in parallel fed through a third. Flux divides like current: the loop with the <b>smaller</b> reluctance carries <b>more</b> flux.</p>
+    <div class="eq">ℛ<sub>tot</sub> = ℛ<sub>c</sub> + <span class="frac"><span class="n">ℛ<sub>L</sub>·ℛ<sub>R</sub></span><span class="d">ℛ<sub>L</sub>+ℛ<sub>R</sub></span></span>,   φ<sub>c</sub> = <span class="frac"><span class="n">ℱ</span><span class="d">ℛ<sub>tot</sub></span></span>,   φ<sub>L</sub> = φ<sub>c</sub><span class="frac"><span class="n">ℛ<sub>R</sub></span><span class="d">ℛ<sub>L</sub>+ℛ<sub>R</sub></span></span>,   φ<sub>R</sub> = φ<sub>c</sub><span class="frac"><span class="n">ℛ<sub>L</sub></span><span class="d">ℛ<sub>L</sub>+ℛ<sub>R</sub></span></span> <span class="tag">(1‑34) flux divider</span></div>
+    <div class="card">
+      <div class="grid2" style="align-items:start">
+        <div>
+          <div class="grid3">
+            <label class="ctl"><span class="lab">Turns N</span><input type="number" id="pp_N" value="400" step="any"></label>
+            <label class="ctl"><span class="lab">Current i (A)</span><input type="number" id="pp_i" value="1" step="any"></label>
+            <label class="ctl"><span class="lab">Iron μ<sub>r</sub></span><input type="number" id="pp_mu" value="1500" step="any"></label>
+          </div>
+          <div class="mini" style="margin-top:4px;color:#ffcc66">Centre leg (with coil)</div>
+          <div class="grid2">
+            <label class="ctl"><span class="lab">ℓ<sub>c</sub> (cm)</span><input type="number" id="pp_lc" value="22" step="any"></label>
+            <label class="ctl"><span class="lab">A<sub>c</sub> (cm²)</span><input type="number" id="pp_Ac" value="21" step="any"></label>
+          </div>
+          <div class="mini" style="color:#5b8cff">Left outer loop</div>
+          <div class="grid3">
+            <label class="ctl"><span class="lab">ℓ<sub>L</sub> (cm)</span><input type="number" id="pp_lL" value="62" step="any"></label>
+            <label class="ctl"><span class="lab">A<sub>L</sub> (cm²)</span><input type="number" id="pp_AL" value="14" step="any"></label>
+            <label class="ctl"><span class="lab">gap (cm)</span><input type="number" id="pp_gL" value="0.07" step="0.01" min="0"></label>
+          </div>
+          <div class="mini" style="color:#38d39f">Right outer loop</div>
+          <div class="grid3">
+            <label class="ctl"><span class="lab">ℓ<sub>R</sub> (cm)</span><input type="number" id="pp_lR" value="62" step="any"></label>
+            <label class="ctl"><span class="lab">A<sub>R</sub> (cm²)</span><input type="number" id="pp_AR" value="14" step="any"></label>
+            <label class="ctl"><span class="lab">gap (cm)</span><input type="number" id="pp_gR" value="0.05" step="0.01" min="0"></label>
+          </div>
+          <label class="ctl"><span class="lab">Gap fringing (% area ↑) <span class="val" id="pp_fr_v"></span></span><input type="range" id="pp_fr" min="0" max="10" value="5" step="1"></label>
+        </div>
+        <div style="min-width:0">
+          <div id="pp_phys" style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px"></div>
+          <div id="pp_net" style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px;margin-top:8px"></div>
+        </div>
+      </div>
+      <div class="out" id="pp_out"></div>
+      <p class="note">Try it: set one gap to 0 — nearly all the flux takes that loop. Make both gaps equal and the split is 50/50. This is the flux-divider rule, Eq.(1‑34) in action.</p>
+    </div>
+  </div>
+
+  <div id="p_nonlin" class="mpanel" style="display:none">
+    <h3>Nonlinear cores — plot your operating point on the B‑H curve</h3>
+    <p class="note">Real steel saturates: μ is not constant. Drive the core (no air gap) and watch the operating point ride the curve.
+    Two extra graphs: the <b>B‑H magnetization curve</b> and the <b>μ<sub>r</sub>–H curve</b> (Fig 1‑10d).</p>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label class="ctl"><span class="lab">Turns N <span class="val" id="n_N_v"></span></span><input type="range" id="n_N" min="50" max="500" value="200" step="10"></label>
+          <label class="ctl"><span class="lab">Current i (A) <span class="val" id="n_i_v"></span></span><input type="range" id="n_i" min="0" max="3" value="0.316" step="0.002"></label>
+          <label class="ctl"><span class="lab">Mean path ℓ<sub>c</sub> (cm) <span class="val" id="n_l_v"></span></span><input type="range" id="n_l" min="20" max="120" value="55" step="1"></label>
+          <label class="ctl"><span class="lab">Area A (cm²) <span class="val" id="n_A_v"></span></span><input type="range" id="n_A" min="20" max="200" value="150" step="5"></label>
+          <div class="out" id="n_out"></div>
+          <label class="ctl" style="margin-top:6px"><span class="lab">Log H axis</span><input type="checkbox" id="n_log" checked style="width:auto"></label>
+        </div>
+        <div>
+          <canvas id="bhCan" width="380" height="260"></canvas>
+          <canvas id="murCan" width="380" height="150" style="margin-top:8px"></canvas>
+          <canvas id="domCan" width="380" height="120" style="margin-top:8px"></canvas>
+          <p class="note" style="margin:4px 0 0">Why it saturates: iron is made of tiny <b>magnetic domains</b>. H turns them to line up — once (almost) all point the same way there is nothing left to align, so B stops rising.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="p_ex" class="mpanel" style="display:none">
+    <h3>Worked examples</h3>
+    <div class="tabs" id="exTabs">
+      <div class="t on" data-e="1">Ex 1‑1</div><div class="t" data-e="2">Ex 1‑2</div>
+      <div class="t" data-e="3">Ex 1‑3</div><div class="t" data-e="5">Ex 1‑5</div><div class="t" data-e="tor">Circular core</div>
+    </div>
+    <div class="card" id="exBody"></div>
+  </div>
+
+  <div id="p_probs" class="mpanel" style="display:none">
+    <h3>End-of-chapter magnetic problems (1‑5 → 1‑15)</h3>
+    <p class="note">Each gives the setup and the method; open the <b>Reluctance-Network Solver</b> tab and enter the segments to get numbers. Multi-leg cores (parallel branches) are noted where they occur.</p>
+    <div id="probBody"></div>
+  </div>
+
+  <div id="p_loss" class="mpanel" style="display:none">
+    <h3>Energy losses — hysteresis loop</h3>
+    <p class="note">Under AC the flux doesn't retrace its path (hysteresis). <b>Loop area ∝ energy lost per cycle</b>. Residual flux φ<sub>res</sub> is what remains at zero mmf (permanent magnets); coercive mmf ℱ<sub>c</sub> drives it to zero. <b>Eddy-current</b> loss (∝ lamination thickness²) → laminate cores. Together = <b>core loss</b>.</p>
+    <div class="card">
+      <div class="grid2">
+        <div><canvas id="hysCan" width="380" height="300"></canvas></div>
+        <div>
+          <label class="ctl"><span class="lab">Drive amplitude (mmf excursion) <span class="val" id="hy_v"></span></span><input type="range" id="hy" min="20" max="100" value="80" step="1"></label>
+          <div class="out" id="hy_out"></div>
+        </div>
+      </div>
+      <h4>Eddy currents — why cores are laminated</h4>
+      <div class="grid2" style="align-items:center">
+        <svg viewBox="0 0 360 150" style="width:100%">
+          <text x="70" y="14" fill="#9aa3c4" font-size="11" text-anchor="middle">solid core</text>
+          <rect x="20" y="24" width="100" height="100" fill="#232a49" stroke="#3a4680"/>
+          <ellipse cx="70" cy="74" rx="36" ry="30" fill="none" stroke="#ff6b81" stroke-width="2.5"/>
+          <polygon points="106,70 101,80 111,80" fill="#ff6b81"/>
+          <text x="70" y="78" fill="#ff6b81" font-size="10" text-anchor="middle">big eddy loop</text>
+          <text x="70" y="140" fill="#ff6b81" font-size="10.5" text-anchor="middle">large i²R loss, heating</text>
+          <text x="250" y="14" fill="#9aa3c4" font-size="11" text-anchor="middle">laminated core (insulated sheets)</text>
+          <g>
+            <rect x="180" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="198" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="216" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="234" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="252" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="270" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="288" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/><rect x="306" y="24" width="14" height="100" fill="#232a49" stroke="#3a4680"/>
+            <ellipse cx="187" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="205" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="223" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="241" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="259" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="277" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="295" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/><ellipse cx="313" cy="74" rx="4" ry="28" fill="none" stroke="#38d39f" stroke-width="1.3"/>
+          </g>
+          <text x="250" y="140" fill="#38d39f" font-size="10.5" text-anchor="middle">tiny loops, loss ∝ (sheet thickness)²</text>
+        </svg>
+        <div class="okbox">The changing flux induces a voltage <em>inside the iron itself</em> (Faraday), driving circulating <b>eddy currents</b>. Slicing the core into thin, insulated laminations cuts each loop short: eddy loss ∝ t² f² B². Together with hysteresis loss (∝ f · loop area) this is the <b>core loss</b> — it appears as heat and is why transformers and machines run warm even at no load.</div>
+      </div>
+    </div>
+  </div>`;
+
+  /* tab switching */
+  $$('#mtabs .t').forEach(t=>t.onclick=()=>{
+    $$('#mtabs .t').forEach(x=>x.classList.toggle('on',x===t));
+    $$('.mpanel').forEach(p=>p.style.display='none');
+    $('#p_'+t.dataset.p).style.display='';
+  });
+
+  /* ---- rectangular core lab ---- */
+  const coreSVG=$('#coreSVG');
+  function coreCalc(){
+    const N=+$('#c_N').value,i=+$('#c_i').value,lc=+$('#c_l').value/100,A=+$('#c_A').value/1e4,
+      mur=+$('#c_mu').value,g=+$('#c_g').value/100,fr=+$('#c_fr').value/100;
+    $('#c_N_v').textContent=N;$('#c_i_v').textContent=i+' A';$('#c_l_v').textContent=(lc*100)+' cm';
+    $('#c_A_v').textContent=(A*1e4)+' cm²';$('#c_mu_v').textContent=mur;$('#c_g_v').textContent=(g*100).toFixed(3)+' cm';$('#c_fr_v').textContent=(fr*100)+'%';
+    const liron=Math.max(lc-g,0),Rc=liron/(mur*MU0*A),Agap=A*(1+fr),Rg=g>0?g/(MU0*Agap):0,Rt=Rc+Rg,mmf=N*i,
+      phi=Rt>0?mmf/Rt:0,B=phi/A,Bgap=g>0?phi/Agap:B;
+    $('#c_out').innerHTML=
+`ℱ = Ni = <span class="k">${fmt(mmf)} A·t</span>
+ℛ_core = ℓ/μA = <span class="k">${fmt(Rc)} A·t/Wb</span>${g>0?`\nℛ_gap  = <span class="k">${fmt(Rg)} A·t/Wb</span>`:''}
+ℛ_tot  = <span class="k">${fmt(Rt)} A·t/Wb</span>
+φ = ℱ/ℛ = <span class="k">${fmt(phi)} Wb</span>
+B_core = φ/A = <span class="k">${fmt(B)} T</span>${g>0?`\nB_gap  = <span class="k">${fmt(Bgap)} T</span>`:''}`;
+    drawCore(N,g>0,B,lc,A);
+  }
+  function drawCore(N,hasGap,B,lc,A){
+    const w=+$('#c_A').value,t=8+Math.min(w/8,26),ox=40,oy=30,W=280,H=240,gapPx=hasGap?Math.max(6,+$('#c_g').value*300):0;
+    const col=B<1.0?'#5b8cff':B<1.5?'#ffcc66':'#ff6b81',fa=Math.max(0.35,Math.min(1,B/1.2)),mx=ox+t/2,my=oy+t/2,MX=ox+W-t/2,MY=oy+H-t/2;
+    let s=`<defs><linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a4570"/><stop offset="1" stop-color="#232a49"/></linearGradient></defs>`;
+    s+=`<rect x="${ox}" y="${oy}" width="${W}" height="${H}" rx="6" fill="url(#steel)" stroke="${col}" stroke-width="2"/>`;
+    s+=`<rect x="${ox+t}" y="${oy+t}" width="${W-2*t}" height="${H-2*t}" rx="4" fill="#0b0e1c" stroke="#2a2f4a"/>`;
+    if(hasGap){const gx=ox+W-t,gy=oy+H/2-gapPx/2,gm=gy+gapPx/2,bul=10+gapPx*0.8;
+      s+=`<rect x="${gx}" y="${gy}" width="${t}" height="${gapPx}" fill="#0b0e1c"/>`;
+      s+=`<line x1="${gx-2}" y1="${gy}" x2="${gx+t+2}" y2="${gy}" stroke="#ffcc66"/><line x1="${gx-2}" y1="${gy+gapPx}" x2="${gx+t+2}" y2="${gy+gapPx}" stroke="#ffcc66"/>`;
+      s+=`<path d="M${gx+t-3} ${gy} Q${gx+t+bul} ${gm} ${gx+t-3} ${gy+gapPx} M${gx+3} ${gy} Q${gx-bul} ${gm} ${gx+3} ${gy+gapPx}" fill="none" stroke="#ff6b81" stroke-width="1.3" opacity=".8"/>`;
+      s+=`<text x="${gx-6}" y="${gy-6}" fill="#ffcc66" font-size="11" text-anchor="end">air gap ${(+$('#c_g').value).toFixed(3)} cm</text>`;
+      s+=`<text x="${gx+t+4}" y="${gy+gapPx+14}" fill="#ff6b81" font-size="10">fringing</text>`;}
+    const coils=Math.min(12,Math.max(4,Math.round(N/60)));
+    for(let k=0;k<coils;k++){const yy=oy+34+k*((H-68)/(coils-1));s+=`<ellipse cx="${mx}" cy="${yy}" rx="${t/2+7}" ry="4.5" fill="none" stroke="#38d39f" stroke-width="1.8"/>`;}
+    s+=`<text x="${ox-8}" y="${oy+20}" fill="#38d39f" font-size="11" text-anchor="end">N=${N}</text>`;
+    s+=`<rect x="${mx}" y="${my}" width="${MX-mx}" height="${MY-my}" fill="none" stroke="#ff6b81" stroke-width="1.5" stroke-dasharray="5 5" opacity="${fa}"/>`;
+    const ah=(x,y,dx,dy)=>`<polygon points="${x+7*dx},${y+7*dy} ${x-5*dx+5*dy},${y-5*dy-5*dx} ${x-5*dx-5*dy},${y-5*dy+5*dx}" fill="#ff6b81" opacity="${fa}"/>`;
+    s+=ah((mx+MX)/2,my,1,0)+ah(MX,(my+MY)/2,0,1)+ah((mx+MX)/2,MY,-1,0)+ah(mx,(my+MY)/2,0,-1);
+    s+=`<text x="${(mx+MX)/2+12}" y="${my-5}" fill="#ff6b81" font-size="11">φ</text>`;
+    s+=`<text x="${ox+W/2}" y="${oy+H/2-6}" fill="${col}" font-size="13" text-anchor="middle" font-weight="600">B = ${fmt(B,3)} T</text>`;
+    s+=`<text x="${ox+W/2}" y="${oy+H/2+10}" fill="#9aa3c4" font-size="10.5" text-anchor="middle">${B>1.6?'⚠ beyond the knee — real steel saturates':B>1.2?'near the knee of the B‑H curve':'linear region'}</text>`;
+    s+=`<text x="${ox+W/2}" y="${oy+H+22}" fill="#9aa3c4" font-size="10.5" text-anchor="middle">ℓc = ${(lc*100).toFixed(0)} cm (dashed path)   ·   A = ${(A*1e4).toFixed(0)} cm² (limb thickness)</text>`;
+    coreSVG.innerHTML=s;
+  }
+  ['c_N','c_i','c_l','c_A','c_mu','c_g','c_fr'].forEach(id=>$('#'+id).oninput=coreCalc);coreCalc();
+
+  /* ---- toroid lab ---- */
+  const torSVG=$('#torSVG');
+  function torCalc(){
+    const N=+$('#t_N').value,i=+$('#t_i').value,D=+$('#t_D').value/100,a=+$('#t_a').value/100,mur=+$('#t_mu').value;
+    $('#t_N_v').textContent=N;$('#t_i_v').textContent=i+' A';$('#t_D_v').textContent=(D*100)+' cm';$('#t_a_v').textContent=(a*100)+' cm';$('#t_mu_v').textContent=mur;
+    const l=Math.PI*D,A=Math.PI*a*a,R=l/(mur*MU0*A),mmf=N*i,phi=mmf/R,B=phi/A,H=mmf/l;
+    $('#t_out').innerHTML=
+`ℓ = πD = <span class="k">${fmt(l)} m</span>   A = πa² = <span class="k">${fmt(A)} m²</span>
+ℱ = Ni = <span class="k">${fmt(mmf)} A·t</span>   H = ℱ/ℓ = <span class="k">${fmt(H)} A·t/m</span>
+ℛ = <span class="k">${fmt(R)} A·t/Wb</span>
+φ = <span class="k">${fmt(phi)} Wb</span>   B = <span class="k">${fmt(B)} T</span>`;
+    // draw torus
+    const cx=150,cy=150,Rout=110*(D/0.3),ring=Math.max(14,40*(a/0.04));
+    const ro=Math.min(120,60+Rout*0.25),ri=Math.max(20,ro-ring);
+    let s=`<circle cx="${cx}" cy="${cy}" r="${ro}" fill="none" stroke="#5b8cff" stroke-width="${ro-ri}" opacity="0.35"/>`;
+    s+=`<circle cx="${cx}" cy="${cy}" r="${(ro+ri)/2}" fill="none" stroke="#ff6b81" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+    // winding marks
+    for(let k=0;k<16;k++){const ang=k/16*2*Math.PI;const x1=cx+ri*Math.cos(ang),y1=cy+ri*Math.sin(ang),x2=cx+ro*Math.cos(ang),y2=cy+ro*Math.sin(ang);
+      s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#38d39f" stroke-width="2" opacity="0.7"/>`;}
+    s+=`<text x="${cx}" y="${cy-2}" fill="#ff6b81" font-size="12" text-anchor="middle">φ</text>`;
+    s+=`<text x="${cx}" y="${cy+14}" fill="#9aa3c4" font-size="11" text-anchor="middle">ℓ = πD</text>`;
+    torSVG.innerHTML=s;
+  }
+  ['t_N','t_i','t_D','t_a','t_mu'].forEach(id=>$('#'+id).oninput=torCalc);torCalc();
+
+  /* ---- reluctance-network solver ---- */
+  let SEG=[['Region 1',45,100,2500],['Region 2',130,150,2500]],sCase='ex1';
+  const SEGC=['#5b8cff','#ffcc66','#38d39f','#ff6b81','#c774e6','#7ee0ff'],segCol=k=>SEGC[k%SEGC.length];
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  function renderSegs(){
+    $('#segs').innerHTML=SEG.map((r,k)=>`<div class="seg-row">
+      <input type="text" data-k="${k}" data-f="0" value="${esc(r[0])}" style="border-left:4px solid ${segCol(k)}">
+      <input type="number" data-k="${k}" data-f="1" value="${r[1]}" step="any">
+      <input type="number" data-k="${k}" data-f="2" value="${r[2]}" step="any">
+      <input type="number" data-k="${k}" data-f="3" value="${r[3]}" step="any">
+      <button class="btn ghost" data-del="${k}">✕</button></div>`).join('');
+    $$('#segs input').forEach(inp=>inp.oninput=()=>{const k=+inp.dataset.k,f=+inp.dataset.f;SEG[k][f]=f===0?inp.value:+inp.value;solve();});
+    $$('#segs button[data-del]').forEach(b=>b.onclick=()=>{SEG.splice(+b.dataset.del,1);sCase='custom';renderSegs();solve();});
+  }
+  /* --- diagram helpers --- */
+  const svgArr=(x1,y1,x2,y2,c)=>{const a=Math.atan2(y2-y1,x2-x1),h=7;return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="2"/><polygon points="${x2},${y2} ${x2-h*Math.cos(a-0.45)},${y2-h*Math.sin(a-0.45)} ${x2-h*Math.cos(a+0.45)},${y2-h*Math.sin(a+0.45)}" fill="${c}"/>`;};
+  const loopsV=(cx,cy0,rx,n,c)=>Array.from({length:n},(_,k)=>`<ellipse cx="${cx}" cy="${cy0+k*12}" rx="${rx}" ry="4.5" fill="none" stroke="${c}" stroke-width="1.8"/>`).join('');
+  const loopsH=(cx0,cy,ry,n,c)=>Array.from({length:n},(_,k)=>`<ellipse cx="${cx0+k*12}" cy="${cy}" rx="4.5" ry="${ry}" fill="none" stroke="${c}" stroke-width="1.8"/>`).join('');
+  const lbl=(r,k)=>`${esc(r[0])}: ℓ=${r[1]} cm, A=${r[2]} cm²${r[3]==1?' (air)':''}`;
+  function physEx1(N){const c1=segCol(0),c2=segCol(1);return `<svg viewBox="0 0 300 200" style="width:100%;display:block">
+    <text x="8" y="12" fill="#9aa3c4" font-size="10.5">Example 1‑1 — core with two cross-sections (Fig 1‑7)</text>
+    <path d="M30 24 H270 V180 H30 Z M55 64 H230 V140 H55 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+    <rect x="30" y="24" width="25" height="156" fill="${c1}" opacity=".32"/>
+    <path d="M55 24 H270 V180 H55 V140 H230 V64 H55 Z" fill="${c2}" opacity=".22"/>
+    <rect x="42.5" y="44" width="207.5" height="116" fill="none" stroke="#e8ebf7" stroke-dasharray="4 4" opacity=".55"/>
+    ${loopsV(42.5,80,21,5,'#ff6b81')}<text x="66" y="112" fill="#ff6b81" font-size="10">N=${N}</text>
+    <text x="60" y="36" fill="${c2}" font-size="9.5">${lbl(SEG[1])}</text>
+    <text x="8" y="194" fill="${c1}" font-size="9.5">${lbl(SEG[0])}</text></svg>`;}
+  function physEx2(N){const c1=segCol(0),c2=segCol(1);return `<svg viewBox="0 0 300 200" style="width:100%;display:block">
+    <text x="8" y="12" fill="#9aa3c4" font-size="10.5">Example 1‑2 — core with an air gap (Fig 1‑9)</text>
+    <path d="M40 24 H260 V180 H40 Z M75 59 H225 V145 H75 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+    <path d="M40 24 H260 V180 H40 Z M75 59 H225 V145 H75 Z" fill="${c1}" opacity=".22" fill-rule="evenodd"/>
+    <rect x="224" y="97" width="37" height="9" fill="#0b0e1c"/><rect x="224" y="97" width="37" height="9" fill="${c2}" opacity=".7" stroke="${c2}"/>
+    <rect x="57.5" y="41.5" width="185" height="121" fill="none" stroke="#e8ebf7" stroke-dasharray="4 4" opacity=".55"/>
+    ${loopsV(57.5,72,26,6,'#ff6b81')}<text x="88" y="110" fill="#ff6b81" font-size="10">N=${N}</text>
+    <text x="8" y="194" fill="${c1}" font-size="9.5">${lbl(SEG[0])}</text>
+    <text x="150" y="112" fill="${c2}" font-size="9.5">← ${lbl(SEG[1])}</text></svg>`;}
+  function physEx3(N){const c=[0,1,2,3].map(segCol);return `<svg viewBox="0 0 300 200" style="width:100%;display:block">
+    <text x="8" y="12" fill="#9aa3c4" font-size="10.5">Example 1‑3 — rotor, stator &amp; two air gaps (Fig 1‑11)</text>
+    <path d="M30 24 H270 V180 H30 Z M65 59 H235 V145 H65 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+    <path d="M30 24 H270 V180 H30 Z M65 59 H235 V145 H65 Z" fill="${c[0]}" opacity=".22" fill-rule="evenodd"/>
+    <rect x="64" y="80" width="36" height="40" fill="#232a49" stroke="#3a4680"/><rect x="64" y="80" width="36" height="40" fill="${c[0]}" opacity=".22"/>
+    <rect x="200" y="80" width="36" height="40" fill="#232a49" stroke="#3a4680"/><rect x="200" y="80" width="36" height="40" fill="${c[0]}" opacity=".22"/>
+    <circle cx="150" cy="100" r="44" fill="#232a49" stroke="#3a4680"/><circle cx="150" cy="100" r="44" fill="${c[2]}" opacity=".3"/>
+    <rect x="100" y="80" width="6" height="40" fill="${c[1]}" opacity=".8"/><rect x="194" y="80" width="6" height="40" fill="${c[3]}" opacity=".8"/>
+    <rect x="47.5" y="41.5" width="205" height="121" fill="none" stroke="#e8ebf7" stroke-dasharray="4 4" opacity=".45"/>
+    <line x1="47.5" y1="100" x2="252.5" y2="100" stroke="#e8ebf7" stroke-dasharray="4 4" opacity=".55"/>
+    ${loopsH(120,41.5,22,6,'#ff6b81')}<text x="196" y="36" fill="#ff6b81" font-size="10">N=${N}</text>
+    <text x="8" y="194" fill="${c[0]}" font-size="9.5">${lbl(SEG[0])}</text><text x="8" y="182" fill="${c[2]}" font-size="9.5">${lbl(SEG[2])}</text>
+    <text x="292" y="194" fill="${c[1]}" font-size="9.5" text-anchor="end">${lbl(SEG[1])}</text><text x="292" y="182" fill="${c[3]}" font-size="9.5" text-anchor="end">${lbl(SEG[3])}</text>
+    <text x="150" y="103" fill="#e8ebf7" font-size="10" text-anchor="middle">rotor</text></svg>`;}
+  function physRing(N){const cx=150,cy=104,R=64,tot=SEG.reduce((s,r)=>s+Math.max(+r[1],0),0)||1;
+    let spans=SEG.map(r=>Math.max(7,360*Math.max(+r[1],0)/tot));const k=360/spans.reduce((a,b)=>a+b,0);spans=spans.map(s=>s*k);
+    let a0=-90,arcs='',labs='';SEG.forEach((r,i)=>{const a1=a0+spans[i],am=(a0+a1)/2,d=Math.PI/180,c=segCol(i);
+      const x1=cx+R*Math.cos(a0*d),y1=cy+R*Math.sin(a0*d),x2=cx+R*Math.cos(a1*d),y2=cy+R*Math.sin(a1*d),big=spans[i]>180?1:0;
+      arcs+=`<path d="M ${x1} ${y1} A ${R} ${R} 0 ${big} 1 ${x2} ${y2}" fill="none" stroke="${c}" stroke-width="26" stroke-opacity="${r[3]==1?0.3:0.75}" ${r[3]==1?'stroke-dasharray="3 3"':''}/>`;
+      const lx=cx+(R+24)*Math.cos(am*d),ly=cy+(R+24)*Math.sin(am*d);labs+=`<text x="${lx}" y="${ly+3}" fill="${c}" font-size="9.5" text-anchor="${Math.cos(am*d)<-0.3?'end':Math.cos(am*d)>0.3?'start':'middle'}">${esc(r[0]).slice(0,14)} (${r[1]} cm)</text>`;a0=a1;});
+    return `<svg viewBox="0 0 300 200" style="width:100%;display:block">
+    <text x="8" y="12" fill="#9aa3c4" font-size="10.5">Series flux path — arc length ∝ segment length; dashed = air gap</text>
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#232a49" stroke-width="26"/>${arcs}
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#e8ebf7" stroke-dasharray="4 4" opacity=".5"/>
+    ${[-10,0,10].map(o=>`<ellipse cx="${cx-R}" cy="${cy+o}" rx="19" ry="4" fill="none" stroke="#ff6b81" stroke-width="1.8"/>`).join('')}
+    <text x="${cx-R+24}" y="${cy+4}" fill="#ff6b81" font-size="10">N=${N}</text>${labs}</svg>`;}
+  function drawPhys(){const N=+$('#s_N').value;let s;
+    if(sCase==='ex1'&&SEG.length===2)s=physEx1(N);else if(sCase==='ex2'&&SEG.length===2)s=physEx2(N);else if(sCase==='ex3'&&SEG.length===4)s=physEx3(N);else s=physRing(N);
+    $('#s_phys').innerHTML=s;}
+  function drawNet(Rs,Rt,phi,mmf){const n=SEG.length,W=Math.max(340,130+n*112);
+    let s=`<div class="mini" style="margin:0 0 2px 4px">Equivalent magnetic circuit — series reluctances</div><svg viewBox="0 0 ${W} 150" style="width:100%;min-width:${Math.min(W,440)}px;display:block">
+    <path d="M40 59 V30 H${W-30} V120 H40 V91" fill="none" stroke="#3a4680" stroke-width="2"/>
+    <circle cx="40" cy="75" r="16" fill="#12162a" stroke="#38d39f" stroke-width="2"/><text x="40" y="80" fill="#38d39f" font-size="13" text-anchor="middle">ℱ</text>
+    <text x="22" y="56" fill="#38d39f" font-size="12">+</text><text x="22" y="100" fill="#38d39f" font-size="12">−</text>
+    <text x="8" y="142" fill="#38d39f" font-size="10.5">ℱ = Ni = ${fmt(mmf,1)} A·t</text>
+    ${svgArr(W/2+22,120,W/2-22,120,'#ffcc66')}<text x="${W/2}" y="136" fill="#ffcc66" font-size="10.5" text-anchor="middle">φ = ${fmt(phi,3)} Wb</text>
+    <text x="${W-8}" y="142" fill="#9aa3c4" font-size="10.5" text-anchor="end">ℛ<tspan font-size="8">tot</tspan> = ${fmt(Rt,3)} A·t/Wb</text>`;
+    SEG.forEach((r,k)=>{const x=90+k*112,c=segCol(k);s+=`<rect x="${x}" y="18" width="84" height="24" rx="4" fill="#1e2237" stroke="${c}" stroke-width="2"/>
+      <text x="${x+42}" y="12" fill="${c}" font-size="9.5" text-anchor="middle">${esc(r[0]).slice(0,17)}</text>
+      <text x="${x+42}" y="34" fill="#e8ebf7" font-size="10.5" text-anchor="middle">ℛ${k+1}</text>
+      <text x="${x+42}" y="56" fill="${c}" font-size="10" text-anchor="middle">${fmt(Rs[k],3)}</text>
+      <text x="${x+42}" y="68" fill="#9aa3c4" font-size="9" text-anchor="middle">${r[3]==1?'air gap':'μr = '+r[3]}</text>`;});
+    $('#s_net').innerHTML=s+'</svg>';}
+  function solve(){
+    const N=+$('#s_N').value,i=+$('#s_i').value,mmf=N*i;let Rt=0,rows='';const Rs=[];
+    SEG.forEach(r=>{const l=r[1]/100,A=r[2]/1e4,mur=r[3],R=l/(mur*MU0*A);Rs.push(R);Rt+=R;
+      rows+=`  ${esc(r[0])}: ℛ = <span class="k">${fmt(R)}</span> A·t/Wb\n`;});
+    const phi=Rt>0?mmf/Rt:0;
+    let brows='';SEG.forEach(r=>{const A=r[2]/1e4,B=phi/A;brows+=`  B(${esc(r[0])}) = φ/A = <span class="k">${fmt(B)} T</span>\n`;});
+    $('#s_out').innerHTML=`ℱ = Ni = <span class="k">${fmt(mmf)} A·t</span>\n${rows}ℛ_tot = <span class="k">${fmt(Rt)} A·t/Wb</span>\nφ = ℱ/ℛ_tot = <span class="k">${fmt(phi)} Wb</span>\n${brows}`;
+    drawPhys();drawNet(Rs,Rt,phi,mmf);
+  }
+  $('#s_add').onclick=()=>{SEG.push(['Region '+(SEG.length+1),50,100,2500]);sCase='custom';renderSegs();solve();};
+  $('#s_ex1').onclick=()=>{$('#s_N').value=200;$('#s_i').value=1;SEG=[['Region 1 (thin)',45,100,2500],['Region 2 (3 sides)',130,150,2500]];sCase='ex1';renderSegs();solve();};
+  $('#s_ex2').onclick=()=>{$('#s_N').value=400;$('#s_i').value=0.602;SEG=[['Iron core',40,12,4000],['Air gap (×1.05)',0.05,12.6,1]];sCase='ex2';renderSegs();solve();};
+  $('#s_ex3').onclick=()=>{$('#s_N').value=200;$('#s_i').value=1;SEG=[['Stator',50,12,2000],['Air gap 1',0.05,14,1],['Rotor',5,12,2000],['Air gap 2',0.05,14,1]];sCase='ex3';renderSegs();solve();};
+  $('#s_N').oninput=solve;$('#s_i').oninput=solve;renderSegs();solve();
+
+  /* ---- parallel three-leg core ---- */
+  function parCalc(){
+    const g=id=>+$('#'+id).value;
+    const N=g('pp_N'),i=g('pp_i'),mur=g('pp_mu'),lc=g('pp_lc')/100,Ac=g('pp_Ac')/1e4,lL=g('pp_lL')/100,AL=g('pp_AL')/1e4,gL=g('pp_gL')/100,lR=g('pp_lR')/100,AR=g('pp_AR')/1e4,gR=g('pp_gR')/100,fr=g('pp_fr')/100;
+    $('#pp_fr_v').textContent=Math.round(fr*100)+'%';
+    const Rc=lc/(mur*MU0*Ac),RLi=Math.max(lL-gL,0)/(mur*MU0*AL),RLg=gL>0?gL/(MU0*AL*(1+fr)):0,RL=RLi+RLg,RRi=Math.max(lR-gR,0)/(mur*MU0*AR),RRg=gR>0?gR/(MU0*AR*(1+fr)):0,RR=RRi+RRg;
+    const Rpar=RL*RR/(RL+RR),Rt=Rc+Rpar,F=N*i,phic=F/Rt,phiL=phic*RR/(RL+RR),phiR=phic*RL/(RL+RR);
+    const Bc=phic/Ac,BL=phiL/AL,BR=phiR/AR,BgL=gL>0?phiL/(AL*(1+fr)):null,BgR=gR>0?phiR/(AR*(1+fr)):null;
+    $('#pp_out').innerHTML=`ℱ = Ni = <span class="k">${fmt(F)} A·t</span>\nℛ<sub>c</sub> = <span class="k">${fmt(Rc)}</span>   ℛ<sub>L</sub> = iron ${fmt(RLi)} + gap ${fmt(RLg)} = <span class="k">${fmt(RL)}</span>   ℛ<sub>R</sub> = iron ${fmt(RRi)} + gap ${fmt(RRg)} = <span class="k">${fmt(RR)}</span>  (A·t/Wb)\nℛ<sub>L</sub>∥ℛ<sub>R</sub> = <span class="k">${fmt(Rpar)}</span>   ℛ<sub>tot</sub> = ℛ<sub>c</sub> + ℛ<sub>L</sub>∥ℛ<sub>R</sub> = <span class="k">${fmt(Rt)} A·t/Wb</span>\nφ<sub>c</sub> = ℱ/ℛ<sub>tot</sub> = <span class="k">${fmt(phic)} Wb</span>  →  φ<sub>L</sub> = <span class="k">${fmt(phiL)} Wb</span> (${fmt(100*phiL/phic,1)}%)   φ<sub>R</sub> = <span class="k">${fmt(phiR)} Wb</span> (${fmt(100*phiR/phic,1)}%)   check: φ<sub>L</sub>+φ<sub>R</sub> = ${fmt(phiL+phiR)} ✓\nB<sub>c</sub> = <span class="k">${fmt(Bc,3)} T</span>   B<sub>L</sub> = <span class="k">${fmt(BL,3)} T</span>${BgL!==null?` (gap ${fmt(BgL,3)} T)`:''}   B<sub>R</sub> = <span class="k">${fmt(BR,3)} T</span>${BgR!==null?` (gap ${fmt(BgR,3)} T)`:''}`;
+    // physical sketch
+    const fL=phiL/phic,fR=phiR/phic,ahP=(x,y,dx,dy,c,o)=>`<polygon points="${x+7*dx},${y+7*dy} ${x-5*dx+5*dy},${y-5*dy-5*dx} ${x-5*dx-5*dy},${y-5*dy+5*dx}" fill="${c}" opacity="${o}"/>`;
+    let s=`<svg viewBox="0 0 320 200" style="width:100%;display:block">
+      <text x="8" y="12" fill="#9aa3c4" font-size="10.5">Three-leg core — flux splits at the top and rejoins at the bottom</text>
+      <path d="M20 20 H300 V180 H20 Z M55 55 H135 V145 H55 Z M165 55 H245 V145 H165 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+      ${gL>0?`<rect x="19" y="94" width="37" height="${Math.max(5,gL*4000)}" fill="#0b0e1c"/><text x="4" y="90" fill="#5b8cff" font-size="9">gap</text>`:''}
+      ${gR>0?`<rect x="244" y="94" width="57" height="${Math.max(5,gR*4000)}" fill="#0b0e1c"/><text x="304" y="90" fill="#38d39f" font-size="9">gap</text>`:''}
+      ${[76,88,100,112,124].map(y=>`<ellipse cx="150" cy="${y}" rx="23" ry="4.5" fill="none" stroke="#ffcc66" stroke-width="1.8"/>`).join('')}
+      <rect x="37.5" y="37.5" width="112.5" height="125" fill="none" stroke="#5b8cff" stroke-dasharray="5 4" opacity="${0.3+0.7*fL}"/>
+      <rect x="150" y="37.5" width="112.5" height="125" fill="none" stroke="#38d39f" stroke-dasharray="5 4" opacity="${0.3+0.7*fR}"/>
+      ${ahP(94,37.5,-1,0,'#5b8cff',0.3+0.7*fL)}${ahP(37.5,100,0,1,'#5b8cff',0.3+0.7*fL)}${ahP(94,162.5,1,0,'#5b8cff',0.3+0.7*fL)}
+      ${ahP(206,37.5,1,0,'#38d39f',0.3+0.7*fR)}${ahP(262.5,100,0,1,'#38d39f',0.3+0.7*fR)}${ahP(206,162.5,-1,0,'#38d39f',0.3+0.7*fR)}
+      ${ahP(150,60,0,-1,'#ffcc66',1)}
+      <text x="150" y="50" fill="#ffcc66" font-size="10" text-anchor="middle">φc</text>
+      <text x="94" y="30" fill="#5b8cff" font-size="10" text-anchor="middle">φL = ${fmt(100*fL,0)}%</text>
+      <text x="206" y="30" fill="#38d39f" font-size="10" text-anchor="middle">φR = ${fmt(100*fR,0)}%</text>
+      <text x="150" y="194" fill="#9aa3c4" font-size="10" text-anchor="middle">N = ${N}, i = ${i} A on the centre leg</text></svg>`;
+    $('#pp_phys').innerHTML=s;
+    // equivalent circuit
+    const box=(x,y,c,lab,val)=>`<rect x="${x}" y="${y-12}" width="80" height="24" rx="4" fill="#1e2237" stroke="${c}" stroke-width="2"/><text x="${x+40}" y="${y+4}" fill="#e8ebf7" font-size="10.5" text-anchor="middle">${lab}</text><text x="${x+40}" y="${y+24}" fill="${c}" font-size="9.5" text-anchor="middle">${val}</text>`;
+    $('#pp_net').innerHTML=`<div class="mini" style="margin:0 0 2px 4px">Equivalent circuit — ℛc in series with ℛL ∥ ℛR</div><svg viewBox="0 0 420 165" style="width:100%;display:block">
+      <path d="M40 69 V30 H240 M240 30 H380 M240 30 V95 H380 V30 M380 30 V140 H40 V101" fill="none" stroke="#3a4680" stroke-width="2"/>
+      <circle cx="40" cy="85" r="16" fill="#12162a" stroke="#ffcc66" stroke-width="2"/><text x="40" y="90" fill="#ffcc66" font-size="13" text-anchor="middle">ℱ</text>
+      <text x="22" y="66" fill="#ffcc66" font-size="12">+</text><text x="22" y="110" fill="#ffcc66" font-size="12">−</text>
+      <circle cx="240" cy="30" r="3" fill="#e8ebf7"/><circle cx="380" cy="30" r="3" fill="#e8ebf7"/>
+      ${box(110,30,'#ffcc66','ℛc',fmt(Rc,3))}${box(270,30,'#5b8cff','ℛL',fmt(RL,3))}${box(270,95,'#38d39f','ℛR',fmt(RR,3))}
+      ${ahP(70,30,1,0,'#ffcc66',1)}<text x="58" y="22" fill="#ffcc66" font-size="10">φc</text>
+      ${ahP(355,30,1,0,'#5b8cff',0.3+0.7*fL)}<text x="345" y="22" fill="#5b8cff" font-size="10">φL</text>
+      ${ahP(355,95,1,0,'#38d39f',0.3+0.7*fR)}<text x="345" y="87" fill="#38d39f" font-size="10">φR</text>
+      <text x="8" y="158" fill="#9aa3c4" font-size="10.5">ℛtot = ${fmt(Rt,3)} A·t/Wb   ·   φc = ${fmt(phic,3)} Wb</text></svg>`;
+  }
+  ['pp_N','pp_i','pp_mu','pp_lc','pp_Ac','pp_lL','pp_AL','pp_gL','pp_lR','pp_AR','pp_gR','pp_fr'].forEach(id=>$('#'+id).oninput=parCalc);parCalc();
+
+  /* ---- nonlinear B-H ---- */
+  const bhCan=$('#bhCan'),bx=bhCan.getContext('2d'),murCan=$('#murCan'),mx=murCan.getContext('2d');
+  function nonlin(){
+    const N=+$('#n_N').value,i=+$('#n_i').value,lc=+$('#n_l').value/100,A=+$('#n_A').value/1e4,log=$('#n_log').checked;
+    $('#n_N_v').textContent=N;$('#n_i_v').textContent=i+' A';$('#n_l_v').textContent=(lc*100)+' cm';$('#n_A_v').textContent=(A*1e4)+' cm²';
+    const H=N*i/lc,B=Bof(H),phi=B*A,mur=H>0?B/(MU0*H):0;
+    $('#n_out').innerHTML=`H = Ni/ℓ = <span class="k">${fmt(H)} A·t/m</span>\nB (from curve) = <span class="k">${fmt(B,3)} T</span>\nφ = BA = <span class="k">${fmt(phi)} Wb</span>\nμ<sub>r</sub> = B/(μ₀H) = <span class="k">${Math.round(mur)}</span>`;
+    // curve
+    const W=380,Hh=260,pl=44,pb=30,pt=12,pr=12,Hmax=1000,Bmax=1.6;
+    bx.clearRect(0,0,W,Hh);
+    const xX=h=>{if(log){const lo=Math.log10(10),hi=Math.log10(Hmax);return pl+(Math.log10(Math.max(h,10))-lo)/(hi-lo)*(W-pl-pr);}return pl+h/Hmax*(W-pl-pr);};
+    const yY=b=>Hh-pb-(b/Bmax)*(Hh-pb-pt);
+    bx.strokeStyle='#232a49';bx.fillStyle='#9aa3c4';bx.font='10px system-ui';
+    for(let b=0;b<=Bmax;b+=0.2){const y=yY(b);bx.beginPath();bx.moveTo(pl,y);bx.lineTo(W-pr,y);bx.stroke();bx.fillText(b.toFixed(1),6,y+3);}
+    (log?[10,20,50,100,200,500,1000]:[0,200,400,600,800,1000]).forEach(h=>{const x=xX(h);bx.fillText(h,x-8,Hh-pb+12);});
+    bx.fillStyle='#9aa3c4';bx.fillText('B (T)',6,pt+2);bx.fillText('H',W-24,Hh-6);
+    bx.strokeStyle='#5b8cff';bx.lineWidth=2;bx.beginPath();
+    for(let h=1;h<=Hmax;h+=2){const x=xX(h),y=yY(Bof(h));h===1?bx.moveTo(x,y):bx.lineTo(x,y);}bx.stroke();
+    const px=xX(H),py=yY(B);bx.strokeStyle='#38d39f';bx.setLineDash([4,4]);bx.beginPath();bx.moveTo(px,Hh-pb);bx.lineTo(px,py);bx.lineTo(pl,py);bx.stroke();bx.setLineDash([]);
+    bx.fillStyle='#38d39f';bx.beginPath();bx.arc(px,py,4,0,7);bx.fill();bx.fillText('operating point',px-40,py-8);
+    // mur curve
+    const w2=380,h2=150,p2=44,pb2=24,pt2=10;mx.clearRect(0,0,w2,h2);
+    const murMax=7000;const yy=m=>h2-pb2-(m/murMax)*(h2-pb2-pt2);
+    mx.strokeStyle='#232a49';mx.fillStyle='#9aa3c4';mx.font='10px system-ui';
+    [2000,4000,6000].forEach(m=>{const y=yy(m);mx.beginPath();mx.moveTo(p2,y);mx.lineTo(w2-pr,y);mx.stroke();mx.fillText(m,4,y+3);});
+    mx.fillText('μr',6,pt2+2);mx.fillText('H',w2-20,h2-6);
+    mx.strokeStyle='#ffcc66';mx.lineWidth=2;mx.beginPath();let first=true;
+    for(let h=5;h<=Hmax;h+=2){const m=Bof(h)/(MU0*h);const x=xX(h),y=yy(m);first?(mx.moveTo(x,y),first=false):mx.lineTo(x,y);}mx.stroke();
+    const mv=yy(mur);mx.fillStyle='#38d39f';mx.beginPath();mx.arc(xX(H),mv,4,0,7);mx.fill();
+    // magnetic domains
+    const dc=$('#domCan').getContext('2d'),f=Math.min(1,B/1.63);dc.clearRect(0,0,380,120);
+    dc.fillStyle='#9aa3c4';dc.font='11px system-ui';dc.fillText(`magnetic domains — ${Math.round(f*100)}% aligned with H →`,8,14);
+    DOM.forEach((a0,k)=>{const col=k%12,row=Math.floor(k/12),x=24+col*30,y=36+row*30,a=a0*(1-f)*(1-f);
+      const g=Math.round(120+135*f);dc.strokeStyle=`rgb(${Math.round(154-100*f)},${g},${Math.round(196-40*f)})`;dc.lineWidth=2;
+      dc.beginPath();dc.moveTo(x-9*Math.cos(a),y+9*Math.sin(a));dc.lineTo(x+9*Math.cos(a),y-9*Math.sin(a));dc.stroke();
+      dc.fillStyle=dc.strokeStyle;dc.beginPath();dc.moveTo(x+11*Math.cos(a),y-11*Math.sin(a));dc.lineTo(x+5*Math.cos(a)+4*Math.sin(a),y-5*Math.sin(a)+4*Math.cos(a));dc.lineTo(x+5*Math.cos(a)-4*Math.sin(a),y-5*Math.sin(a)-4*Math.cos(a));dc.closePath();dc.fill();});
+  }
+  const DOM=Array.from({length:36},()=>(Math.random()*2-1)*Math.PI);
+  ['n_N','n_i','n_l','n_A'].forEach(id=>$('#'+id).oninput=nonlin);$('#n_log').onchange=nonlin;nonlin();
+
+  /* ---- examples ---- */
+  const EX={
+    1:`<h4>Example 1‑1 — two-region core</h4><p>Depth 10 cm; N=200, i=1 A, μ<sub>r</sub>=2500. Region 1: ℓ₁=45 cm, A₁=100 cm². Region 2: ℓ₂=130 cm, A₂=150 cm².</p>
+    <div class="step">ℛ₁ = 0.45/(2500·μ₀·0.01) = <b>14,300</b> A·t/Wb</div>
+    <div class="step">ℛ₂ = 1.30/(2500·μ₀·0.015) = <b>27,600</b> A·t/Wb</div>
+    <div class="step">ℛ<sub>tot</sub> = 41,900;  ℱ = Ni = 200 A·t</div>
+    <div class="step">φ = ℱ/ℛ = 200/41,900 = <b>0.0048 Wb</b></div>
+    <p class="note">Reproduce it in the solver → "Load Ex 1‑1".</p>`,
+    2:`<h4>Example 1‑2 — core with air gap</h4><p>ℓ<sub>c</sub>=40 cm, gap=0.05 cm, A=12 cm², μ<sub>r</sub>=4000, N=400, fringing +5%.</p>
+    <div class="step">ℛ<sub>c</sub> = 0.40/(4000·μ₀·0.002) ≈ <b>66,300</b></div>
+    <div class="step">A<sub>gap</sub>=1.05·12=12.6 cm²; ℛ<sub>gap</sub> ≈ <b>316,000</b> — the tiny gap dominates!</div>
+    <div class="step">ℛ<sub>tot</sub> ≈ 382,300; for B=0.5 T: i = BAℛ/N ≈ <b>0.602 A</b></div>`,
+    3:`<h4>Example 1‑3 — DC motor rotor/stator</h4><p>Stator ℓ=50 A=12; rotor ℓ=5 A=12; two gaps 0.05 cm A<sub>gap</sub>=14; μ<sub>r</sub>=2000, N=200, i=1 A.</p>
+    <div class="step">ℛ<sub>s</sub>≈166,000; ℛ<sub>r</sub>≈16,600; each ℛ<sub>gap</sub>≈284,000</div>
+    <div class="step">ℛ<sub>tot</sub>=751,000; φ=200/751,000=<b>0.000266 Wb</b></div>
+    <div class="step">B<sub>gap</sub>=φ/A<sub>gap</sub>=0.000266/0.0014=<b>0.19 T</b></div>`,
+    5:`<h4>Example 1‑5 — nonlinear core</h4><p>ℓ<sub>c</sub>=55 cm, A=150 cm², N=200, real steel. Find i for φ=0.012 Wb.</p>
+    <div class="step">B=φ/A=0.012/0.015=<b>0.8 T</b> → from curve H≈115 A·t/m</div>
+    <div class="step">ℱ=Hℓ=115·0.55=63.25 → i=ℱ/N=<b>0.316 A</b></div>
+    <div class="step">μ<sub>r</sub>=B/(μ₀H)=<b>5540</b>;  ℛ=ℱ/φ=<b>5270</b> A·t/Wb</div>
+    <p class="note">Open the "Nonlinear B‑H" tab — the defaults (N=200, i=0.316, ℓ=55, A=150) land exactly on B≈0.8 T.</p>`,
+    tor:`<h4>Circular (toroidal) core — worked example</h4>
+    <p>A ring core has mean diameter D=10 cm and a round cross-section of radius a=1.5 cm. N=400 turns carry i=0.3 A; μ<sub>r</sub>=1500.</p>
+    <div class="step">① ℓ = πD = π(0.10) = <b>0.314 m</b> <span class="why">mean circumference is the flux path</span></div>
+    <div class="step">② A = πa² = π(0.015)² = <b>7.07×10⁻⁴ m²</b></div>
+    <div class="step">③ ℛ = ℓ/(μ<sub>r</sub>μ₀A) = 0.314/(1500·μ₀·7.07e‑4) = <b>2.36×10⁵ A·t/Wb</b></div>
+    <div class="step">④ ℱ = Ni = 400·0.3 = <b>120 A·t</b></div>
+    <div class="step">⑤ φ = ℱ/ℛ = 120/2.36e5 = <b>5.1×10⁻⁴ Wb</b></div>
+    <div class="step">⑥ B = φ/A = 5.1e‑4/7.07e‑4 = <b>0.72 T</b> (below the knee — good design point)</div>
+    <p class="note">The "Circular / Toroid Lab" tab is preset to these numbers — drag D and watch B fall as the ring grows (B = μ<sub>r</sub>μ₀Ni/πD).</p>`
+  };
+  const showEx=e=>{$('#exBody').innerHTML=EX[e];$$('#exTabs .t').forEach(t=>t.classList.toggle('on',t.dataset.e==e));};
+  $$('#exTabs .t').forEach(t=>t.onclick=()=>showEx(t.dataset.e));showEx('1');
+
+  /* ---- end-chapter problems ---- */
+  const PROBS=[
+    ['1‑5','Depth 5 cm core; find i for φ=0.005 Wb, μ<sub>r</sub>=1000; then B at the top and right legs.',
+     'Single series loop. Enter each limb (ℓ, A) with μ<sub>r</sub>=1000 in the solver; i = φ·ℛ<sub>tot</sub>/N. B<sub>leg</sub>=φ/A<sub>leg</sub> (thinner legs → higher B).'],
+    ['1‑6','Core μ<sub>r</sub>=1500, depth 7 cm, two air gaps (0.07 & 0.05 cm, +5% fringing), N=400 on centre leg, i=1 A. Flux in left/centre/right legs; B in each gap.',
+     'PARALLEL branches: centre leg (mmf source) splits into left and right loops, each with its own gap. Solve ℛ<sub>left</sub>, ℛ<sub>right</sub> in parallel, add centre in series: ℛ = ℛ<sub>c</sub>+(ℛ<sub>L</sub>∥ℛ<sub>R</sub>). φ<sub>centre</sub>=ℱ/ℛ, then split by current-divider.'],
+    ['1‑7','Two-legged core, N₁=400 (i₁=0.5 A) & N₂=300 (i₂=0.75 A), μ<sub>r</sub>=1000. Find φ.',
+     'Two mmf sources. Net ℱ = N₁i₁ ± N₂i₂ (sign from winding directions in the figure). Single series loop: φ = ℱ<sub>net</sub>/ℛ<sub>tot</sub>.'],
+    ['1‑8','Three-leg core, depth 5 cm, 200 turns on left leg, μ<sub>r</sub>=1500, one air gap (+4% fringing). Flux & B in each leg.',
+     'Parallel middle/right legs; same method as 1‑6.'],
+    ['1‑13','Three-leg core, depth 8 cm, 400 turns on centre leg; nonlinear steel (Fig 1‑10c). (a) i for B=0.5 T centre; (b) i for B=1.0 T — is it double? (c)(d) reluctances.',
+     'Use the Nonlinear B‑H tab: B→H from the curve for each leg, ℱ=ΣHℓ around the loop. Because μ drops with B, doubling B needs MORE than double the current — reluctance is not constant.'],
+    ['1‑14','Two-leg core + air gap, depth 5 cm, gap 0.06 cm (+5%), N=1000, nonlinear steel. i for gap B=0.5 T; B on four sides; total gap flux.',
+     'Series iron + gap, but iron is nonlinear: ℱ = H<sub>iron</sub>ℓ<sub>iron</sub> + H<sub>gap</sub>ℓ<sub>gap</sub>, with H<sub>gap</sub>=B/μ₀ and H<sub>iron</sub> from the curve at that B.'],
+    ['1‑15','Transformer core, ℓ=10 in, 300 turns, A=0.25 in², i=0.25 A, nonlinear steel. Find φ and B.',
+     'Convert inches→metres (1 in=0.0254 m). H=Ni/ℓ → B from curve → φ=BA.'],
+  ];
+  $('#probBody').innerHTML=PROBS.map(p=>`<details><summary>Problem ${p[0]}</summary>
+    <p>${p[1]}</p><div class="okbox"><b>Method:</b> ${p[2]}</div></details>`).join('');
+
+  /* ---- hysteresis ---- */
+  const hysCan=$('#hysCan'),hx=hysCan.getContext('2d');
+  function drawHys(){
+    const amp=+$('#hy').value/100;$('#hy_v').textContent=Math.round(amp*100)+'%';
+    const W=380,H=300,cx=W/2,cy=H/2,sx=(W/2-20),sy=(H/2-16);
+    hx.clearRect(0,0,W,H);
+    hx.strokeStyle='#232a49';hx.beginPath();hx.moveTo(20,cy);hx.lineTo(W-10,cy);hx.moveTo(cx,14);hx.lineTo(cx,H-14);hx.stroke();
+    hx.fillStyle='#9aa3c4';hx.font='11px system-ui';hx.fillText('φ (or B)',cx+6,20);hx.fillText('ℱ (or H)',W-70,cy-6);
+    const kc=0.35*amp,sat=amp;hx.strokeStyle='#ff6b81';hx.lineWidth=2;hx.beginPath();const Np=200;
+    for(let s=0;s<=1;s+=1/Np){const d=s*2*Math.PI,drive=Math.sin(d)*sat,branch=Math.cos(d)>=0?1:-1,
+      b=Math.tanh((drive+branch*kc)*3)/Math.tanh(3),X=cx+drive*sx,Y=cy-b*sy;s===0?hx.moveTo(X,Y):hx.lineTo(X,Y);}
+    hx.closePath();hx.stroke();
+    const res=Math.tanh(kc*3)/Math.tanh(3);hx.fillStyle='#ffcc66';hx.beginPath();hx.arc(cx,cy-res*sy,3,0,7);hx.fill();hx.fillText('φ_res',cx+4,cy-res*sy-2);
+    $('#hy_out').innerHTML=`Loop width ∝ coercive mmf ℱ<sub>c</sub>\nResidual flux marker in amber\nRelative loop area (∝ loss/cycle): <span class="k">${fmt(amp*amp*kc*100,2)}</span>`;
+  }
+  $('#hy').oninput=drawHys;drawHys();
+});
+
+/* ============================================================ Practice mode */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — endless randomized problems</h2>
+  <p class="subttl">Pick a topic, get fresh numbers each time, type your answer, and check it against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:320px">
+        <option value="speed">1.3 · Speed conversion (r/min → rad/s)</option>
+        <option value="power">1.3 · Power P = τω</option>
+        <option value="torque">1.3 · Torque τ = rF sinθ</option>
+        <option value="reluct">1.4 · Reluctance ℛ = ℓ/μA</option>
+        <option value="flux">1.4 · Core flux φ = Ni/ℛ</option>
+        <option value="toroid">1.4 · Toroid B (circular core)</option>
+        <option value="force">1.6 · Force F = ilB sinθ</option>
+        <option value="movev">1.7 · Moving-wire e = vBl cosα</option>
+        <option value="linear">1.8 · Linear machine no-load speed</option>
+        <option value="acp">1.9 · AC power (P, Q, S)</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px">
+      <input type="number" id="pk_ans" placeholder="your answer" step="any">
+      <button class="btn" id="pk_check">Check</button>
+    </div>
+    <div id="pk_fb"></div>
+    <div id="pk_sol"></div>
+  </div>`;
+
+  let cur=null,score=0,tot=0;
+  const G={
+    speed:()=>{const n=rnd(300,3600,100);return{q:`A shaft spins at <b>${n} r/min</b>. Find ω in <b>rad/s</b>.`,ans:2*Math.PI*n/60,unit:'rad/s',
+      sol:`ω = 2πn/60 = 2π(${n})/60 = <b>${fmt(2*Math.PI*n/60)} rad/s</b>`};},
+    power:()=>{const t=rnd(10,150,5),n=rnd(600,3000,60),w=2*Math.PI*n/60;return{q:`A motor delivers <b>τ=${t} N·m</b> at <b>${n} r/min</b>. Find <b>P</b> in W.`,ans:t*w,unit:'W',
+      sol:`ω=2πn/60=${fmt(w)} rad/s; P=τω=${t}×${fmt(w)}=<b>${fmt(t*w)} W</b>`};},
+    torque:()=>{const F=rnd(5,40,1),r=rnd(0.1,0.6,0.05),th=rnd(20,160,5);return{q:`Force <b>${F} N</b> at radius <b>${r} m</b>, angle <b>${th}°</b> to r. Find <b>τ</b> (N·m).`,ans:r*F*Math.sin(th*Math.PI/180),unit:'N·m',
+      sol:`τ=rF sinθ=${r}×${F}×sin ${th}°=<b>${fmt(r*F*Math.sin(th*Math.PI/180))} N·m</b>`};},
+    reluct:()=>{const l=rnd(20,120,5),A=rnd(10,150,5),mur=rnd(1000,5000,500);const R=(l/100)/(mur*MU0*(A/1e4));
+      return{q:`A core has ℓ=<b>${l} cm</b>, A=<b>${A} cm²</b>, μ<sub>r</sub>=<b>${mur}</b>. Find <b>ℛ</b> (A·t/Wb).`,ans:R,unit:'A·t/Wb',tol:0.02,
+      sol:`ℛ=ℓ/(μ<sub>r</sub>μ₀A)=${l/100}/(${mur}×μ₀×${A/1e4})=<b>${fmt(R)} A·t/Wb</b>`};},
+    flux:()=>{const N=rnd(100,600,50),i=rnd(0.5,3,0.5),l=rnd(30,100,5),A=rnd(20,150,5),mur=rnd(1000,4000,500);
+      const R=(l/100)/(mur*MU0*(A/1e4)),phi=N*i/R;
+      return{q:`N=<b>${N}</b>, i=<b>${i} A</b>, ℓ=<b>${l} cm</b>, A=<b>${A} cm²</b>, μ<sub>r</sub>=<b>${mur}</b>. Find core flux <b>φ</b> (Wb).`,ans:phi,unit:'Wb',tol:0.02,
+      sol:`ℛ=ℓ/μA=${fmt(R)}; ℱ=Ni=${N*i}; φ=ℱ/ℛ=<b>${fmt(phi)} Wb</b>`};},
+    toroid:()=>{const N=rnd(200,600,50),i=rnd(0.2,1,0.1),D=rnd(6,20,1),mur=rnd(1000,3000,250);const B=mur*MU0*N*i/(Math.PI*D/100);
+      return{q:`A toroid: N=<b>${N}</b>, i=<b>${i} A</b>, mean diameter D=<b>${D} cm</b>, μ<sub>r</sub>=<b>${mur}</b>. Find <b>B</b> (T).`,ans:B,unit:'T',tol:0.02,
+      sol:`ℓ=πD=${fmt(Math.PI*D/100)} m; B=μ<sub>r</sub>μ₀Ni/ℓ=<b>${fmt(B)} T</b>`};},
+    force:()=>{const i=rnd(1,10,0.5),l=rnd(0.5,2,0.1),B=rnd(0.1,0.9,0.05),th=rnd(30,150,10);
+      return{q:`Wire i=<b>${i} A</b>, l=<b>${l} m</b>, B=<b>${B} T</b>, angle <b>${th}°</b>. Find <b>F</b> (N).`,ans:i*l*B*Math.sin(th*Math.PI/180),unit:'N',
+      sol:`F=ilB sinθ=${i}×${l}×${B}×sin ${th}°=<b>${fmt(i*l*B*Math.sin(th*Math.PI/180))} N</b>`};},
+    movev:()=>{const v=rnd(2,20,1),B=rnd(0.2,0.9,0.05),l=rnd(0.5,2,0.1),a=rnd(0,60,5);
+      return{q:`Wire v=<b>${v} m/s</b>, B=<b>${B} T</b>, l=<b>${l} m</b>, α=<b>${a}°</b>. Find induced <b>e</b> (V).`,ans:v*B*l*Math.cos(a*Math.PI/180),unit:'V',
+      sol:`e=vBl cosα=${v}×${B}×${l}×cos ${a}°=<b>${fmt(v*B*l*Math.cos(a*Math.PI/180))} V</b>`};},
+    linear:()=>{const V=rnd(60,240,10),B=rnd(0.05,0.4,0.05),l=rnd(1,10,0.5);
+      return{q:`Linear DC machine: V<sub>B</sub>=<b>${V} V</b>, B=<b>${B} T</b>, l=<b>${l} m</b>. Find <b>no-load speed</b> (m/s).`,ans:V/(B*l),unit:'m/s',tol:0.01,
+      sol:`v=V<sub>B</sub>/(Bl)=${V}/(${B}×${l})=<b>${fmt(V/(B*l))} m/s</b>`};},
+    acp:()=>{const V=rnd(100,240,10),Z=rnd(10,50,2),th=rnd(-60,60,5);const I=V/Z,P=V*I*Math.cos(th*Math.PI/180);
+      return{q:`AC load: V=<b>${V} V</b>, |Z|=<b>${Z} Ω</b>, θ=<b>${th}°</b>. Find <b>real power P</b> (W).`,ans:P,unit:'W',tol:0.01,
+      sol:`I=V/Z=${fmt(I)} A; P=VI cosθ=${V}×${fmt(I)}×cos ${th}°=<b>${fmt(P)} W</b>`};}
+  };
+  function neu(){const t=$('#pk_type').value;cur=G[t]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){
+    if(!cur)return;const guess=+$('#pk_ans').value;if($('#pk_ans').value==='')return;
+    const tol=cur.tol||0.02,ok=Math.abs(guess-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;
+    tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;
+    $('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct! Answer ≈ <b>${fmt(cur.ans)} ${cur.unit}</b> (within ${Math.round(tol*100)}%).</div>`
+      :`<div class="badbox">❌ Not quite. You entered ${fmt(guess)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b>.</div>`;
+    $('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;
+  }
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;
+  $('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});
+  neu();
+});
+
+/* ============================================================ Summary + quiz */
+section('summary','Practice','1.10 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary, Equation Sheet & Self-Test</h2>
+  <p class="subttl">§1.10</p>
+  <h3>Master equation sheet</h3>
+  <div class="card"><table>
+    <tr><th>#</th><th>Equation</th><th>Meaning</th></tr>
+    <tr><td>1‑3</td><td>ω=2πn/60</td><td>speed conversion</td></tr>
+    <tr><td>1‑6</td><td>τ=rF sinθ</td><td>torque</td></tr>
+    <tr><td>1‑8</td><td>τ=Jα</td><td>Newton (rotation)</td></tr>
+    <tr><td>1‑15</td><td>P=τω</td><td>rotational power</td></tr>
+    <tr><td>1‑20</td><td>H=Ni/ℓ<sub>c</sub></td><td>field intensity</td></tr>
+    <tr><td>1‑21</td><td>B=μH</td><td>flux density</td></tr>
+    <tr><td>1‑26</td><td>φ=BA=μNiA/ℓ</td><td>core flux</td></tr>
+    <tr><td>1‑28</td><td>ℱ=φℛ</td><td>magnetic Ohm's law</td></tr>
+    <tr><td>1‑32</td><td>ℛ=ℓ/μA</td><td>reluctance</td></tr>
+    <tr><td>1‑36</td><td>e=−N dφ/dt</td><td>Faraday</td></tr>
+    <tr><td>1‑43</td><td>F=ilB</td><td>force / motor</td></tr>
+    <tr><td>1‑45</td><td>e=vBl</td><td>motional emf / generator</td></tr>
+    <tr><td>1‑50</td><td>v=V<sub>B</sub>/Bl</td><td>no-load speed</td></tr>
+    <tr><td>1‑60/61/62</td><td>P=VIcosθ, Q=VIsinθ, S=VI</td><td>AC power</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3>
+  <div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['A machine converting mechanical → electrical energy is a…',['Motor','Generator','Transformer','Reluctance'],1],
+    ['Units of magnetic field intensity H:',['Tesla','Weber','A·turns/m','Henry'],2],
+    ['Reluctance ℛ equals…',['μA/ℓ','ℓ/μA','ℓμ/A','A/ℓμ'],1],
+    ['For a toroid, the mean path length is…',['πa²','2πr_mean','ℓ/μA','N i'],1],
+    ['Faraday: induced voltage ∝ …',['flux','rate of change of flux','current','reluctance'],1],
+    ['Motor action is based on…',['F=ilB','e=vBl','φ=BA','P=VIcosθ'],0],
+    ['Linear DC machine no-load speed v = …',['V_B·Bl','Bl/V_B','V_B/(Bl)','V_B·R'],2],
+    ['A capacitive load has an impedance angle that is…',['positive','zero','negative','undefined'],2],
+    ['Hysteresis-loop area is proportional to…',['permeability','energy lost per cycle','reluctance','flux linkage'],1],
+    ['Cores are laminated mainly to reduce…',['hysteresis loss','copper loss','eddy-current loss','friction'],2],
+    ['In a magnetic circuit, the analog of current is…',['mmf','flux','reluctance','permeance'],1],
+    ['Power factor is defined as…',['sinθ','cosθ','tanθ','θ'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let answered={},score=0;
+  $$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(answered[q]!==undefined)return;answered[q]=j;const c=QZ[q][2];
+    $$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)score++;else o.classList.add('wrong');
+    $('#qscore').textContent=`Score: ${score} / ${QZ.length}`;});
+});
+
+/* ============================================================ build nav + routing */
+const main=$('#main'),nav=$('#nav');
+function render(id){
+  const s=SECTIONS.find(x=>x.id===id);if(!s)return;
+  let el=$('#sec-'+id);
+  if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}
+  $$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  window.scrollTo(0,0);location.hash=id;
+}
+function go(id){render(id);}
+let lastGrp=null;
+SECTIONS.forEach(s=>{
+  if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}
+  const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);
+});
+render((location.hash||'#intro').slice(1)||'intro');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 1;
+  var chCode = "CHAPTER 01";
+  var chTitle = "Chapter 1: Machinery Principles";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.6 — DC Machines (Interactive)</title>
+<style>
+:root{--bg:#0f1220;--panel:#171a2b;--panel2:#1e2237;--ink:#e8ebf7;--muted:#9aa3c4;--acc:#5b8cff;--acc2:#38d39f;--warn:#ffcc66;--bad:#ff6b81;--line:#2a2f4a;--chip:#242a44;--good:#38d39f}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}.brand h1{font-size:16px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.brand a{font-size:12px}
+.nav{padding:8px;flex:1}.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}.credit b{color:var(--ink);font-weight:600}.credit a{color:var(--acc)}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}.frac .d{display:block;padding:0 6px}
+.eq i,.m i,.dq i{font-style:italic;font-family:"Cambria Math","Times New Roman",Georgia,serif}.m{font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:17px;white-space:nowrap}
+.dq{display:block;text-align:center;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:19px;margin:8px 0 6px;line-height:1.35;color:var(--ink);position:relative}.dq .frac .n,.dq .frac .d{padding:0 8px}.dq .tag{position:absolute;right:0;top:4px;color:var(--muted);font-size:12px;font-family:system-ui}
+.sqrt{display:inline-block;vertical-align:middle;white-space:nowrap}.sqrt::before{content:"√";font-size:1.35em;vertical-align:top;line-height:.9;margin-right:-1px}.sqrt .rad{display:inline-block;border-top:1.5px solid currentColor;padding:2px 5px 0 4px;vertical-align:middle}.step{line-height:1.65}
+.vec{font-weight:700}sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.quiz .q{margin:10px 0}.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}.quiz .opt:hover{border-color:var(--acc)}.quiz .opt.correct{border-color:var(--good);background:#0c1a14}.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Chapter 6 — DC Machines<br><span style="color:#6b7398">(Chapman Ch. 8 & 9 · Fundamentals + Motors & Generators)</span></p>
+      <p><a href="chapter5.html">← Chapter 5</a> · <a href="chapter7.html">Chapter 7 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit"><div><b>Dr. Muhammad Salim Butt</b></div><a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{if(x===null||x===undefined||!isFinite(x))return '—';if(x!==0&&(Math.abs(x)<1e-3||Math.abs(x)>=1e5))return x.toExponential(Math.max(0,d-1));return (+x.toFixed(d)).toString();};
+function axes(ctx,W,H,pad,xlab,ylab){ctx.clearRect(0,0,W,H);ctx.strokeStyle='#232a49';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}}
+const SECTIONS=[];function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* ===== 6.1 Introduction to DC machines — the single loop ===== */
+section('dcintro','DC Fundamentals','6.1 · Introduction to DC Machines',(el)=>{
+  el.innerHTML=`
+  <style>@media(max-width:900px){.dcgrid{grid-template-columns:1fr!important}}</style>
+  <h2 class="title">Introduction to DC Machines — one loop, two jobs</h2>
+  <p class="subttl">§6.1 · A single rectangular loop in a magnetic field is the whole DC machine in miniature: spin it and it <b>generates</b> a voltage; feed it current and it <b>produces torque</b>. The same few variables set both.</p>
+
+  <div class="card">
+    <div class="grid2">
+      <div class="okbox"><b>Generator — mechanical in, electrical out.</b> Turn the loop at speed ω. Its two long sides cut through the field, so a voltage <b>e = B l v</b> appears in each side (§1.7). The commutator turns the alternating voltage of the loop into a one-directional voltage at the brushes.</div>
+      <div class="okbox"><b>Motor — electrical in, mechanical out.</b> Push a current i through the loop. Each long side feels a force <b>F = B i l</b> (§1.6); the two forces act on opposite sides of the shaft → a torque. The commutator reverses the current every half-turn so the torque always pushes the same way.</div>
+    </div>
+    <table style="margin-top:10px">
+      <tr><th>Symbol</th><th>Meaning</th><th>Unit</th><th>Appears in</th></tr>
+      <tr><td><i>B</i></td><td>flux density of the pole field (uniform here)</td><td>T</td><td>both</td></tr>
+      <tr><td><i>l</i></td><td>length of each long side (the part inside the field)</td><td>m</td><td>both</td></tr>
+      <tr><td><i>w</i></td><td>width of the loop = distance between the two sides (radius of rotation = <i>w</i>/2)</td><td>m</td><td>both</td></tr>
+      <tr><td><i>A</i> = <i>l w</i></td><td>area of the loop; <i>φ</i><sub>max</sub> = <i>B A</i> is the most flux it can enclose</td><td>m², Wb</td><td>both</td></tr>
+      <tr><td><i>N</i></td><td>number of turns wound in the loop</td><td>—</td><td>both</td></tr>
+      <tr><td><i>θ</i> = <i>ωt</i></td><td>angle turned from the position where the loop face is square to the field</td><td>rad</td><td>both</td></tr>
+      <tr><td><i>ω</i></td><td>rotational speed (= 2π<i>n</i>/60)</td><td>rad/s</td><td>generator (sets <i>e</i>)</td></tr>
+      <tr><td><i>i</i></td><td>current in the loop</td><td>A</td><td>motor (sets <i>τ</i>)</td></tr>
+    </table>
+  </div>
+
+  <h3>The machine in one picture</h3>
+  <div class="card">
+    <svg viewBox="0 0 640 300" style="width:100%">
+      <defs><marker id="dcArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5b8cff"/></marker>
+      <marker id="dcArrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#38d39f"/></marker></defs>
+      <!-- poles -->
+      <rect x="150" y="18" width="330" height="34" rx="4" fill="#4a5480" stroke="#7d8ab8"/><text x="315" y="41" fill="#e8ebf7" font-size="15" font-weight="700" text-anchor="middle">N</text>
+      <rect x="150" y="238" width="330" height="34" rx="4" fill="#4a5480" stroke="#7d8ab8"/><text x="315" y="261" fill="#e8ebf7" font-size="15" font-weight="700" text-anchor="middle">S</text>
+      <g stroke="#5b8cff" stroke-width="1.5" marker-end="url(#dcArr)" opacity=".85">${[180,240,300,360,420,460].map(x=>`<line x1="${x}" y1="56" x2="${x}" y2="232"/>`).join('')}</g>
+      <text x="470" y="150" fill="#5b8cff" font-size="13">B (uniform)</text>
+      <!-- axis -->
+      <line x1="60" y1="150" x2="590" y2="150" stroke="#9aa3c4" stroke-dasharray="6 5"/>
+      <text x="560" y="140" fill="#9aa3c4" font-size="11">axis</text>
+      <!-- loop (oblique view): long sides a (front, red) and b (back, orange), short sides grey -->
+      <polygon points="200,190 420,190 460,110 240,110" fill="rgba(255,204,102,.08)" stroke="none"/>
+      <line x1="240" y1="110" x2="460" y2="110" stroke="#ff9f43" stroke-width="5"/><line x1="200" y1="190" x2="420" y2="190" stroke="#ff6b81" stroke-width="5"/>
+      <line x1="200" y1="190" x2="240" y2="110" stroke="#c8cfe8" stroke-width="3"/><line x1="420" y1="190" x2="460" y2="110" stroke="#c8cfe8" stroke-width="3"/>
+      <line x1="236" y1="116" x2="456" y2="116" stroke="#ff9f43" stroke-width="1.5" opacity=".6"/><line x1="204" y1="196" x2="424" y2="196" stroke="#ff6b81" stroke-width="1.5" opacity=".6"/>
+      <text x="310" y="212" fill="#ff6b81" font-size="12" text-anchor="middle">side a — length l (N turns)</text>
+      <text x="350" y="102" fill="#ff9f43" font-size="12" text-anchor="middle">side b — length l</text>
+      <text x="196" y="156" fill="#c8cfe8" font-size="12" text-anchor="end">w</text>
+      <!-- rotation arrow -->
+      <path d="M520 118 A32 32 0 1 1 519 182" fill="none" stroke="#38d39f" stroke-width="2.2" marker-end="url(#dcArrG)"/><text x="562" y="186" fill="#38d39f" font-size="13">ω</text>
+      <!-- commutator + brushes at the left end -->
+      <circle cx="110" cy="150" r="22" fill="none" stroke="#d08a4a" stroke-width="9" stroke-dasharray="31 5"/>
+      <rect x="78" y="143" width="9" height="14" fill="#3a3a3a" stroke="#8a8a8a"/><rect x="133" y="143" width="9" height="14" fill="#3a3a3a" stroke="#8a8a8a"/>
+      <line x1="78" y1="150" x2="40" y2="150" stroke="#38d39f" stroke-width="2"/><line x1="142" y1="150" x2="150" y2="150" stroke="#38d39f" stroke-width="2"/>
+      <line x1="110" y1="128" x2="200" y2="190" stroke="#ff6b81" stroke-width="1.5" opacity=".6"/><line x1="110" y1="172" x2="240" y2="110" stroke="#ff9f43" stroke-width="1.5" opacity=".6"/>
+      <text x="110" y="196" fill="#d08a4a" font-size="11" text-anchor="middle">split ring</text><text x="110" y="209" fill="#d08a4a" font-size="11" text-anchor="middle">(commutator)</text>
+      <text x="40" y="140" fill="#38d39f" font-size="11">to brushes:</text><text x="40" y="168" fill="#38d39f" font-size="11">load / source</text>
+      <text x="20" y="290" fill="#9aa3c4" font-size="11">Each half-ring is soldered to one side of the loop; the stationary brushes touch whichever half-ring is on their side — that swaps the connection every half-turn.</text>
+    </svg>
+  </div>
+
+  <h3>First principles — where e = B l v and F = B i l come from</h3>
+  <p class="note">Both machine actions rest on one fact: a charge <i>q</i> moving at velocity <i>v</i> across a magnetic field <i>B</i> feels a force <i>F</i> = <i>q v B</i>, at right angles to both <i>v</i> and <i>B</i>. A moving <em>wire</em> carries its charges with it (→ voltage); a current is charges moving <em>along</em> the wire (→ force).</p>
+  <div class="card">
+    <svg viewBox="0 0 640 236" style="width:100%">
+      <text x="12" y="16" fill="#9aa3c4" font-size="11">A — wire (length l) moving at v through B  (× = into the page)</text>
+      <g fill="#5b8cff" font-size="13" opacity=".7">${[0,1,2,3,4,5].map(r=>[0,1,2,3,4,5,6].map(cc=>`<text x="${30+cc*44}" y="${46+r*30}">×</text>`).join('')).join('')}</g>
+      <line x1="150" y1="40" x2="150" y2="196" stroke="#ff6b81" stroke-width="6" stroke-linecap="round"/>
+      <text x="128" y="122" fill="#ff6b81" font-size="13" text-anchor="end">l</text>
+      <line x1="156" y1="118" x2="226" y2="118" stroke="#38d39f" stroke-width="2.5"/><polygon points="234,118 224,112 224,124" fill="#38d39f"/><text x="238" y="122" fill="#38d39f" font-size="13">v</text>
+      <circle cx="150" cy="150" r="5" fill="#ffcc66"/><text x="158" y="154" fill="#ffcc66" font-size="12">q</text>
+      <line x1="150" y1="143" x2="150" y2="96" stroke="#ffcc66" stroke-width="2.5"/><polygon points="150,88 144,98 156,98" fill="#ffcc66"/><text x="158" y="94" fill="#ffcc66" font-size="12">F = q v B</text>
+      <text x="150" y="36" fill="#e8ebf7" font-size="13" text-anchor="middle" font-weight="700">+ + +</text><text x="150" y="214" fill="#e8ebf7" font-size="13" text-anchor="middle" font-weight="700">− − −</text>
+      <line x1="178" y1="60" x2="178" y2="176" stroke="#c774e6" stroke-width="1.6" stroke-dasharray="4 3"/><polygon points="178,184 173,174 183,174" fill="#c774e6"/><text x="184" y="170" fill="#c774e6" font-size="12">E (pulls back)</text>
+      <text x="40" y="226" fill="#e8ebf7" font-size="12">voltage between the ends: e = E·l = B l v</text>
+      <text x="350" y="16" fill="#9aa3c4" font-size="11">B — only the part of v that cuts ACROSS the field counts</text>
+      <g stroke="#5b8cff" stroke-width="1.4" opacity=".7">${[60,96,132,168,204].map(y=>`<line x1="350" y1="${y}" x2="620" y2="${y}"/><polygon points="624,${y} 614,${y-4} 614,${y+4}" fill="#5b8cff" stroke="none"/>`).join('')}</g>
+      <text x="596" y="50" fill="#5b8cff" font-size="12">B</text>
+      <circle cx="450" cy="150" r="7" fill="#ff6b81"/><text x="430" y="172" fill="#ff6b81" font-size="12">side a</text>
+      <line x1="450" y1="150" x2="534" y2="90" stroke="#38d39f" stroke-width="2.5"/><polygon points="540,86 528,88 534,98" fill="#38d39f"/><text x="544" y="86" fill="#38d39f" font-size="13">v</text>
+      <line x1="450" y1="150" x2="534" y2="150" stroke="#38d39f" stroke-width="1.6" stroke-dasharray="4 3"/><text x="492" y="166" fill="#38d39f" font-size="11">v cos θ (along B — no effect)</text>
+      <line x1="534" y1="150" x2="534" y2="96" stroke="#38d39f" stroke-width="2.5"/><polygon points="534,88 528,98 540,98" fill="#38d39f"/><text x="540" y="128" fill="#38d39f" font-size="12">v<tspan font-size="9" dy="3">⊥</tspan><tspan dy="-3"> = v sin θ</tspan></text>
+      <path d="M478 150 A28 28 0 0 0 473 134" fill="none" stroke="#ffcc66" stroke-width="1.5"/><text x="482" y="140" fill="#ffcc66" font-size="12">θ</text>
+      <text x="350" y="226" fill="#e8ebf7" font-size="12">e = B l v<tspan font-size="9" dy="3">⊥</tspan><tspan dy="-3"> = B l v sin θ</tspan></text>
+    </svg>
+    <details class="deriv" open><summary>Derive e = B l v (motional emf), then e = B l v sin θ</summary>
+      <div class="step">① Every free charge <i>q</i> inside the wire is carried along with it at velocity <i>v</i>. A charge moving across a magnetic field feels the magnetic force
+        <span class="dq"><i>F</i> = <i>q v B</i>      (perpendicular to both <i>v</i> and <i>B</i> — here, <em>along</em> the wire)</span>
+        <span class="why">Panel A: with <i>v</i> to the right and <i>B</i> into the page the force on a positive charge points up the wire.</span></div>
+      <div class="step">② That force shoves positive charge towards one end and leaves the other end negative. The separated charges set up an electric field <i>E</i> inside the wire that pulls the next charge <em>back</em>. Charge stops piling up when the two forces balance:
+        <span class="dq"><i>q E</i> = <i>q v B</i>     ⟹     <i>E</i> = <i>v B</i></span></div>
+      <div class="step">③ A uniform field <i>E</i> acting over the length <i>l</i> of the wire means a voltage between its ends of <i>E</i>·<i>l</i>:
+        <span class="dq"><b><i>e</i> = <i>B l v</i></b></span>
+        <span class="why">This is the <em>motional emf</em>. Nothing flows until the ends are joined through a circuit — then <i>e</i> drives a current, exactly like a battery.</span></div>
+      <div class="step">④ If <i>v</i> is not perpendicular to <i>B</i>, split it (panel B): the part <em>along</em> the field, <i>v</i> cos <i>θ</i>, slides along the field lines and produces no force; only the part <em>across</em> the field, <i>v</i><sub>⊥</sub> = <i>v</i> sin <i>θ</i>, pushes the charges. So in general
+        <span class="dq"><b><i>e</i> = <i>B l v</i> sin <i>θ</i></b>     (θ = angle between <i>v</i> and <i>B</i>)</span>
+        <span class="why">Check with Faraday: in a time d<i>t</i> the wire sweeps out an area <i>l</i>·<i>v</i><sub>⊥</sub>d<i>t</i> and so "cuts" a flux d<i>φ</i> = <i>B l v</i><sub>⊥</sub> d<i>t</i>; the rate of cutting d<i>φ</i>/d<i>t</i> = <i>B l v</i><sub>⊥</sub> is the same voltage.</span></div>
+    </details>
+    <details class="deriv" open><summary>Derive F = B i l (force on a current-carrying wire) — same force, other way round</summary>
+      <div class="step">① A current is charges drifting <em>along</em> the wire at some speed <i>u</i>. In a length <i>l</i> of wire with <i>n</i> free charges per unit volume and cross-section <i>a</i> there are <i>n a l</i> of them, and the current they make is <i>i</i> = <i>n q a u</i>.</div>
+      <div class="step">② Each of them feels <i>F</i> = <i>q u B</i>, now directed <em>across</em> the wire (because <i>u</i> is along it). Add them all up:
+        <span class="dq"><i>F</i> = (<i>n a l</i>)·<i>q u B</i> = (<i>n q a u</i>)·<i>l B</i> = <b><i>B i l</i></b></span>
+        <span class="why">The force is perpendicular to the wire and to <i>B</i>; reverse the current or the field and it reverses. Only the part of the wire inside the field (length <i>l</i>) counts.</span></div>
+    </details>
+  </div>
+
+  <h3>Generator — spin the loop, get a voltage</h3>
+  <details class="deriv" open><summary>Derive e = N B A ω sin θ (then what the commutator does to it)</summary>
+    <div class="step">① Each long side travels round a circle of radius <i>w</i>/2, so its speed is
+      <span class="dq"><i>v</i> = <i>ω</i> <span class="frac"><span class="n"><i>w</i></span><span class="d">2</span></span></span></div>
+    <div class="step">② From the motional-emf result above, a side of length <i>l</i> moving at <i>v</i> has <i>e</i> = <i>B l v</i> sin <i>θ</i>, where <i>θ</i> is the angle between its velocity and the field. When the loop has turned by <i>θ</i> from the face-on position, that is exactly the angle between <i>v</i> and <i>B</i>:
+      <span class="dq"><i>e</i><sub>side</sub> = <i>B l</i> <i>v</i> sin <i>θ</i> = <i>B l</i> <span class="frac"><span class="n"><i>ω w</i></span><span class="d">2</span></span> sin <i>θ</i></span>
+      <span class="why">At <i>θ</i> = 0 the sides move <em>along</em> the field — nothing is cut, <i>e</i> = 0. At <i>θ</i> = 90° they move straight across it — maximum.</span></div>
+    <div class="step">③ The two sides move in opposite directions, so their voltages <b>add</b> around the loop; <i>N</i> turns multiply it by <i>N</i>:
+      <span class="dq"><i>e</i> = 2<i>N</i>·<i>B l</i> <span class="frac"><span class="n"><i>ω w</i></span><span class="d">2</span></span> sin <i>θ</i> = <i>N B</i> (<i>l w</i>) <i>ω</i> sin <i>θ</i> = <b><i>N B A ω</i> sin <i>θ</i></b></span></div>
+    <div class="step">④ Faraday says the same thing. The flux through the loop is <i>φ</i> = <i>B A</i> cos <i>θ</i> = <i>φ</i><sub>max</sub> cos <i>ωt</i>, so
+      <span class="dq"><i>e</i> = −<i>N</i> <span class="frac"><span class="n">d<i>φ</i></span><span class="d">d<i>t</i></span></span> = <i>N φ</i><sub>max</sub> <i>ω</i> sin <i>ωt</i>,     <i>φ</i><sub>max</sub> = <i>B A</i></span>
+      <span class="why">Two views, one result: the loop voltage is an <b>alternating</b> sine wave of peak <i>E</i><sub>m</sub> = <i>N B A ω</i>.</span></div>
+    <div class="step">⑤ The commutator reverses the connection every half-turn, so the brushes see |sin <i>θ</i>| — a <b>pulsating DC</b>. Its average over a half-cycle is 2/π of the peak:
+      <span class="dq"><i>E</i><sub>avg</sub> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> <i>N B A ω</i> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> <i>N φ</i><sub>max</sub> <i>ω</i><span class="tag">(8‑6)</span></span>
+      <span class="why">Voltage = (turns × flux) × speed × a constant of construction. Real machines add many loops to smooth the pulses (§6.3).</span></div>
+  </details>
+
+  <h3>Motor — push a current through, get a torque</h3>
+  <details class="deriv" open><summary>Derive τ = N B A i sin θ (and why it never reverses)</summary>
+    <div class="step">① A side of length <i>l</i> carrying <i>i</i> in field <i>B</i> feels <i>F</i> = <i>B i l</i> (§1.6), perpendicular to both <i>B</i> and the side; with <i>N</i> turns it carries the current <i>N</i> times:
+      <span class="dq"><i>F</i><sub>side</sub> = <i>N B i l</i></span>
+      <span class="why">The two sides carry current in opposite directions, so their forces point opposite ways — a <b>couple</b> about the shaft.</span></div>
+    <div class="step">② Torque = force × perpendicular distance to the axis. Each side is <i>w</i>/2 from the axis, but only the part of that arm perpendicular to the force counts: (<i>w</i>/2) sin <i>θ</i>. Two sides:
+      <span class="dq"><i>τ</i> = 2 · <i>N B i l</i> · <span class="frac"><span class="n"><i>w</i></span><span class="d">2</span></span> sin <i>θ</i> = <i>N B</i> (<i>l w</i>) <i>i</i> sin <i>θ</i> = <b><i>N B A i</i> sin <i>θ</i></b></span>
+      <span class="why">Maximum when the sides are level with the axis (forces fully tangential, <i>θ</i> = 90°); zero when they are directly above and below it (forces point straight through the axis).</span></div>
+    <div class="step">③ Without a commutator the torque would change sign each half-turn and the loop would just rock. The split ring <b>reverses i every half-turn</b>, so the side that is on the left always pushes up and the side on the right always pushes down → |sin <i>θ</i>|, one direction. Average:
+      <span class="dq"><i>τ</i><sub>avg</sub> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> <i>N B A i</i> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> <i>N φ</i><sub>max</sub> <i>i</i><span class="tag">(8‑16)</span></span>
+      <span class="why">Torque = (turns × flux) × current × the <em>same</em> construction constant.</span></div>
+  </details>
+
+  <h3>▶ Watch it: end view of the loop and the voltage / torque it makes</h3>
+  <p class="note">You are looking along the shaft. The field runs left → right between the poles; the two long sides are the red (a) and orange (b) dots. Generator: green = velocity of each side, dashed green = the part of it that cuts the field, magenta ⊙/⊗ = induced emf. Motor: ⊙/⊗ = current, green = force F = B i l, amber arc = torque. The graph on the right draws the loop quantity (sine) and what the brushes see.</p>
+  <div class="card">
+    <div class="flex" style="justify-content:space-between">
+      <div class="tabs" id="dl_mode" style="margin:0"><div class="t on" data-m="gen">⚡ Generator (e)</div><div class="t" data-m="mot">⚙ Motor (τ)</div></div>
+      <div class="tabs" id="dl_comm" style="margin:0"><div class="t on" data-c="1">split ring (commutator)</div><div class="t" data-c="0">slip rings (no commutator)</div></div>
+    </div>
+    <div class="dcgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start;margin-top:8px">
+      <div>
+        <label class="ctl"><span class="lab"><span>Flux density B</span> <span class="val" id="dl_B_v"></span></span><input type="range" id="dl_B" min="0.1" max="1.5" step="0.05" value="0.5"></label>
+        <label class="ctl"><span class="lab"><span>Side length l</span> <span class="val" id="dl_l_v"></span></span><input type="range" id="dl_l" min="0.05" max="0.5" step="0.01" value="0.2"></label>
+        <label class="ctl"><span class="lab"><span>Loop width w</span> <span class="val" id="dl_w_v"></span></span><input type="range" id="dl_w" min="0.05" max="0.3" step="0.01" value="0.1"></label>
+        <label class="ctl"><span class="lab"><span>Turns N</span> <span class="val" id="dl_N_v"></span></span><input type="range" id="dl_N" min="1" max="20" step="1" value="10"></label>
+        <label class="ctl"><span class="lab"><span>Speed n</span> <span class="val" id="dl_n_v"></span></span><input type="range" id="dl_n" min="100" max="3000" step="50" value="1500"></label>
+        <label class="ctl" id="dl_i_row"><span class="lab"><span>Loop current i (motor)</span> <span class="val" id="dl_i_v"></span></span><input type="range" id="dl_i" min="0" max="10" step="0.25" value="5"></label>
+        <button class="btn" id="dl_run" style="width:100%">⏸ Pause</button>
+        <div class="out" id="dl_out" style="font-size:12.5px"></div>
+      </div>
+      <canvas id="dl_can" width="640" height="400" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>What changes the EMF and the torque</h3>
+  <div class="card">
+    <div class="grid2">
+      <table>
+        <tr><th>Raise…</th><th>e = N B A ω sin θ</th><th>τ = N B A i sin θ</th></tr>
+        <tr><td>turns <i>N</i></td><td>↑ in proportion</td><td>↑ in proportion</td></tr>
+        <tr><td>field <i>B</i> (more field current, better steel)</td><td>↑ in proportion</td><td>↑ in proportion</td></tr>
+        <tr><td>loop size <i>A</i> = <i>l w</i> (longer or wider loop)</td><td>↑ in proportion</td><td>↑ in proportion</td></tr>
+        <tr><td>speed <i>ω</i></td><td>↑ in proportion</td><td>no direct effect</td></tr>
+        <tr><td>current <i>i</i></td><td>no direct effect</td><td>↑ in proportion</td></tr>
+        <tr><td>angle <i>θ</i></td><td colspan="2">both follow sin θ — the commutator keeps only the magnitude, so the brush quantity pulses between 0 and the peak</td></tr>
+      </table>
+      <div>
+        <div class="okbox"><b>One constant does both jobs.</b> Write <i>k</i> = <i>N B A</i> = <i>N φ</i><sub>max</sub>. Then <b>e = k ω sin θ</b> and <b>τ = k i sin θ</b>. Multiply: <i>e</i>·<i>i</i> = <i>τ</i>·<i>ω</i> — electrical power equals mechanical power. That is energy conversion in one line.</div>
+        <div class="eq" style="margin-top:8px;font-size:17px"><i>e</i> <i>i</i> = (<i>k ω</i> sin <i>θ</i>) <i>i</i> = (<i>k i</i> sin <i>θ</i>) <i>ω</i> = <i>τ ω</i></div>
+        <div class="okbox" style="margin-top:8px"><b>From one loop to a real machine.</b> Replace the single loop by many coils spread round a slotted rotor and the pulses smooth out; the construction constant grows but the form survives: <b>E<sub>A</sub> = Kφω</b> and <b>τ<sub>ind</sub> = KφI<sub>A</sub></b> (§6.4). Every DC-machine result in this chapter is these two lines.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Numbers to hold on to</h3>
+  <div class="card">
+    <div class="step">B = 0.5 T, l = 0.2 m, w = 0.1 m, N = 10 turns, n = 1500 r/min:   A = 0.02 m², φ<sub>max</sub> = BA = <b>0.01 Wb</b>, ω = 157 rad/s.</div>
+    <div class="step">Generator: E<sub>m</sub> = N B A ω = 10 × 0.5 × 0.02 × 157 = <b>15.7 V</b> peak; at the brushes E<sub>avg</sub> = (2/π) × 15.7 = <b>10.0 V</b>.</div>
+    <div class="step">Motor with i = 5 A: τ<sub>m</sub> = N B A i = 10 × 0.5 × 0.02 × 5 = <b>0.50 N·m</b> peak; average <b>0.318 N·m</b>. Check: E<sub>avg</sub>·i = 50 W = τ<sub>avg</sub>·ω = 0.318 × 157 ✓.</div>
+    <p class="note">The animation starts with exactly these values — read them off the panel, then double N or B and watch both the peak and the average double.</p>
+  </div>`;
+
+  /* ---------- animation ---------- */
+  const dc=$('#dl_can').getContext('2d');let dlMode='gen',comm=true,run=true,th=0,hist=[];
+  const P=()=>({B:+$('#dl_B').value,l:+$('#dl_l').value,w:+$('#dl_w').value,N:+$('#dl_N').value,n:+$('#dl_n').value,i:+$('#dl_i').value});
+  const arrow=(c,x0,y0,x1,y1,col,wd=2.5,dash)=>{if(dash)c.setLineDash([4,4]);c.strokeStyle=col;c.lineWidth=wd;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.setLineDash([]);const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-8*Math.cos(a-0.45),y1-8*Math.sin(a-0.45));c.lineTo(x1-8*Math.cos(a+0.45),y1-8*Math.sin(a+0.45));c.closePath();c.fill();};
+  const sym=(c,x,y,dot,col,r)=>{c.fillStyle='#12162a';c.strokeStyle=col;c.lineWidth=2;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.stroke();if(dot){c.fillStyle=col;c.beginPath();c.arc(x,y,Math.max(2,r*0.3),0,7);c.fill();}else{c.beginPath();c.moveTo(x-r*0.55,y-r*0.55);c.lineTo(x+r*0.55,y+r*0.55);c.moveTo(x-r*0.55,y+r*0.55);c.lineTo(x+r*0.55,y-r*0.55);c.stroke();}};
+  function labels(){const p=P();$('#dl_B_v').textContent=p.B.toFixed(2)+' T';$('#dl_l_v').textContent=p.l.toFixed(2)+' m';$('#dl_w_v').textContent=p.w.toFixed(2)+' m';$('#dl_N_v').textContent=p.N;$('#dl_n_v').textContent=p.n+' r/min';$('#dl_i_v').textContent=p.i.toFixed(2)+' A';$('#dl_i_row').style.opacity=dlMode==='mot'?1:.45;}
+  function readout(){const p=P(),A=p.l*p.w,phi=p.B*A,w=p.n*2*Math.PI/60,k=p.N*phi,s=Math.sin(th);
+    if(dlMode==='gen'){const Em=k*w,e=Em*s;$('#dl_out').innerHTML=`A = l·w = <span class="k">${fmt(A,4)} m²</span>   φ<sub>max</sub> = BA = <span class="k">${fmt(phi,4)} Wb</span>\nω = 2πn/60 = <span class="k">${fmt(w,1)} rad/s</span>\n<b>e = N B A ω sin θ</b>\npeak E<sub>m</sub> = NBAω = <span class="k">${fmt(Em,2)} V</span>\nnow: θ = ${fmt((th*180/Math.PI)%360,0)}°, e = <span class="k">${fmt(e,2)} V</span>\n${comm?`brushes: |e| = ${fmt(Math.abs(e),2)} V, average <span class="k">${fmt(2/Math.PI*Em,2)} V</span> = (2/π)·E<sub>m</sub>`:'slip rings: brushes see the full AC sine, average 0'}`;}
+    else{const tm=k*p.i,t=tm*s;$('#dl_out').innerHTML=`A = l·w = <span class="k">${fmt(A,4)} m²</span>   φ<sub>max</sub> = BA = <span class="k">${fmt(phi,4)} Wb</span>\nF per side = N B i l = <span class="k">${fmt(p.N*p.B*p.i*p.l,3)} N</span>\n<b>τ = N B A i sin θ</b>\npeak τ<sub>m</sub> = NBAi = <span class="k">${fmt(tm,3)} N·m</span>\nnow: θ = ${fmt((th*180/Math.PI)%360,0)}°, τ = <span class="k">${fmt(comm?Math.abs(t):t,3)} N·m</span>\n${comm?`average <span class="k">${fmt(2/Math.PI*tm,3)} N·m</span> = (2/π)·τ<sub>m</sub>, always the same direction`:'slip rings: torque reverses every half-turn — the loop only rocks'}\nP<sub>conv</sub> = τ<sub>avg</sub>·ω = <span class="k">${fmt(2/Math.PI*tm*p.n*2*Math.PI/60,1)} W</span>`;}}
+  function draw(){
+    const p=P(),c=dc,W=640,H=400;c.clearRect(0,0,W,H);
+    const cx=170,cy=200,R=92,s=Math.sin(th),beta=th+Math.PI/2; // side a at angle beta (measured CCW from +x); th=0 → sides top/bottom (face-on)
+    // poles + field
+    c.fillStyle='#4a5480';c.strokeStyle='#7d8ab8';c.lineWidth=1;c.fillRect(22,60,30,280);c.strokeRect(22,60,30,280);c.fillRect(288,60,30,280);c.strokeRect(288,60,30,280);
+    c.fillStyle='#e8ebf7';c.font='bold 14px system-ui';c.fillText('N',30,205);c.fillText('S',296,205);
+    for(let k=0;k<7;k++){const y=85+k*38;arrow(c,56,y,284,y,'rgba(91,140,255,.45)',1.4);}
+    c.fillStyle='#5b8cff';c.font='12px system-ui';c.fillText('B →',150,76);
+    // rotation path
+    c.setLineDash([3,5]);c.strokeStyle='#2a2f4a';c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();c.setLineDash([]);
+    // axis dot + loop (line joining the two sides) + short ends
+    const ax=cx+R*Math.cos(beta),ay=cy-R*Math.sin(beta),bx=cx-R*Math.cos(beta),by=cy+R*Math.sin(beta);
+    c.strokeStyle='#c8cfe8';c.lineWidth=3;c.beginPath();c.moveTo(ax,ay);c.lineTo(bx,by);c.stroke();
+    c.fillStyle='#9aa3c4';c.beginPath();c.arc(cx,cy,4,0,7);c.fill();
+    // commutator / slip rings at the centre
+    if(comm){c.lineWidth=7;c.strokeStyle='#d08a4a';c.beginPath();c.arc(cx,cy,16,beta-Math.PI/2+0.12,beta+Math.PI/2-0.12);c.stroke();c.beginPath();c.arc(cx,cy,16,beta+Math.PI/2+0.12,beta+3*Math.PI/2-0.12);c.stroke();}
+    else{c.lineWidth=4;c.strokeStyle='#d08a4a';c.beginPath();c.arc(cx,cy,13,0,7);c.stroke();c.beginPath();c.arc(cx,cy,19,0,7);c.stroke();}
+    c.fillStyle='#3a3a3a';c.strokeStyle='#8a8a8a';c.lineWidth=1;c.fillRect(cx-34,cy-5,10,10);c.strokeRect(cx-34,cy-5,10,10);c.fillRect(cx+24,cy-5,10,10);c.strokeRect(cx+24,cy-5,10,10);
+    c.fillStyle='#9aa3c4';c.font='10px system-ui';c.fillText(comm?'commutator':'slip rings',cx-26,cy+32);
+    // which side is on the left half (x<cx)? with commutator the LEFT side always carries the same polarity
+    const aLeft=ax<cx;
+    if(dlMode==='gen'){
+      // velocities (CCW): v = ωR(−sinβ, cosβ) in math coords → screen (−sinβ, −cosβ)
+      const vL=48;[[ax,ay,1],[bx,by,-1]].forEach(([x,y,sg])=>{const vx=-sg*Math.sin(beta)*vL,vy=-sg*Math.cos(beta)*vL;arrow(c,x,y,x+vx,y+vy,'#38d39f',2.5);
+        // component perpendicular to B (vertical on screen)
+        if(Math.abs(vy)>3){arrow(c,x,y,x,y+vy,'#38d39f',1.6,true);}});
+      c.fillStyle='#38d39f';c.font='11px system-ui';c.fillText('v = ω·w/2  (dashed: part ⟂ B)',60,352);
+      // emf symbols: e_side ∝ v_⊥ ; side a: e = +sinθ (out of page when sinθ>0)
+      const ea=s,r=7+9*Math.abs(s);
+      sym(c,ax,ay,ea>=0,'#c774e6',r);sym(c,bx,by,ea<0,'#c774e6',r);
+      c.fillStyle='#c774e6';c.fillText('⊙/⊗ = induced e in each side (size ∝ |sin θ|)',60,368);
+    }else{
+      // current symbols: with commutator the left-hand side always ⊙; without, side a always ⊙
+      // with the commutator the side on the LEFT always carries ⊗ (pushed down) and the side on the RIGHT ⊙ (pushed up) → a counter-clockwise couple, the same sense as the rotation drawn
+      const aDot=comm?!aLeft:true,r=9;sym(c,ax,ay,aDot,'#ffcc66',r);sym(c,bx,by,!aDot,'#ffcc66',r);
+      // force F = i l × B: ⊙ with B→+x gives +y (up on screen = −y)
+      const FL=14+40*Math.min(1,p.N*p.B*p.i*p.l/10);
+      [[ax,ay,aDot],[bx,by,!aDot]].forEach(([x,y,dot])=>{if(p.i>0)arrow(c,x,y,x,y+(dot?-FL:FL),'#38d39f',3);});
+      c.fillStyle='#38d39f';c.font='11px system-ui';c.fillText('F = N·B·i·l on each side (⊙ pushed up, ⊗ pushed down)',60,352);
+      // torque arc
+      // torque sense: side a always ⊙ without a commutator → couple is CCW while a is on the right half, CW while on the left; with the commutator it is always CCW
+      const tq=(comm?Math.abs(s):s)*(p.i>0?1:0);if(Math.abs(tq)>0.03){const span=0.4+1.2*Math.abs(tq),ccw=comm?true:(ax>cx);const a0=-Math.PI/2-span/2,a1=-Math.PI/2+span/2;c.strokeStyle='#ffcc66';c.lineWidth=3.5;c.beginPath();c.arc(cx,cy,R+22,a0,a1);c.stroke();const tip=ccw?a0:a1;const tx=cx+(R+22)*Math.cos(tip),ty=cy+(R+22)*Math.sin(tip);const ang=tip+(ccw?-Math.PI/2:Math.PI/2);c.fillStyle='#ffcc66';c.beginPath();c.moveTo(tx+9*Math.cos(ang),ty+9*Math.sin(ang));c.lineTo(tx+6*Math.cos(ang+2.5),ty+6*Math.sin(ang+2.5));c.lineTo(tx+6*Math.cos(ang-2.5),ty+6*Math.sin(ang-2.5));c.closePath();c.fill();}
+      c.fillStyle='#ffcc66';c.fillText(comm?'τ always the same way round':'τ reverses each half-turn (no commutator)',60,368);
+    }
+    c.fillStyle='#ff6b81';c.font='bold 12px system-ui';c.fillText('a',ax+12,ay-10);c.fillStyle='#ff9f43';c.fillText('b',bx+12,by-10);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(`θ = ${Math.round((th*180/Math.PI)%360)}°`,60,384);
+    // ---- waveform panel ----
+    const x0=350,x1=625,yc=200,amp=110;c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.moveTo(x0,yc);c.lineTo(x1,yc);c.moveTo(x0,70);c.lineTo(x0,330);c.stroke();
+    const A=p.l*p.w,k=p.N*p.B*A,w=p.n*2*Math.PI/60,peak=dlMode==='gen'?k*w:k*p.i,col=dlMode==='gen'?'#c774e6':'#ffcc66',span=4*Math.PI;
+    const X=t=>x0+(t/span)*(x1-x0),Y=v=>yc-v*amp;
+    // loop quantity (AC sine) faint; brush quantity bold
+    c.strokeStyle='rgba(154,163,196,.5)';c.lineWidth=1.5;c.beginPath();for(let q=0;q<=300;q++){const t=q/300*span,y=Y(Math.sin(t));q?c.lineTo(X(t),y):c.moveTo(X(t),y);}c.stroke();
+    c.strokeStyle=col;c.lineWidth=2.6;c.beginPath();for(let q=0;q<=300;q++){const t=q/300*span,v=comm?Math.abs(Math.sin(t)):Math.sin(t),y=Y(v);q?c.lineTo(X(t),y):c.moveTo(X(t),y);}c.stroke();
+    if(comm){c.setLineDash([6,4]);c.strokeStyle=col;c.lineWidth=1.3;c.beginPath();c.moveTo(x0,Y(2/Math.PI));c.lineTo(x1,Y(2/Math.PI));c.stroke();c.setLineDash([]);c.fillStyle=col;c.font='11px system-ui';c.fillText('average = (2/π)·peak = '+fmt(2/Math.PI*peak,dlMode==='gen'?2:3)+(dlMode==='gen'?' V':' N·m'),x0+4,Y(2/Math.PI)-6);}
+    const tc=((th%span)+span)%span,xc=X(tc),vc=comm?Math.abs(Math.sin(tc)):Math.sin(tc);
+    c.strokeStyle='rgba(255,255,255,.35)';c.setLineDash([3,3]);c.beginPath();c.moveTo(xc,70);c.lineTo(xc,330);c.stroke();c.setLineDash([]);
+    c.fillStyle=col;c.beginPath();c.arc(xc,Y(vc),5,0,7);c.fill();
+    c.font='12px system-ui';c.fillStyle='#e8ebf7';c.fillText(dlMode==='gen'?`e(t):  peak E_m = N B A ω = ${fmt(peak,2)} V`:`τ(t):  peak τ_m = N B A i = ${fmt(peak,3)} N·m`,x0,52);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(comm?'bold = at the brushes (|sin θ|)   grey = inside the loop (sin θ)':'bold = at the brushes = inside the loop (sin θ)',x0,345);
+    c.fillText('0',x0-4,yc+amp+22);c.fillText('½ turn',X(Math.PI)-16,yc+amp+22);c.fillText('1 turn',X(2*Math.PI)-16,yc+amp+22);c.fillText('2 turns',x1-30,yc+amp+22);
+    c.fillText('+peak',x0+4,Y(1)-4);c.fillText('−peak',x0+4,Y(-1)+12);
+  }
+  function loop(){if($('#sec-dcintro').classList.contains('on')){if(run){const p=P();th+=p.n/1500*0.035;}draw();readout();}requestAnimationFrame(loop);}
+  $$('#dl_mode .t').forEach(t=>t.onclick=()=>{$$('#dl_mode .t').forEach(x=>x.classList.toggle('on',x===t));dlMode=t.dataset.m;labels();});
+  $$('#dl_comm .t').forEach(t=>t.onclick=()=>{$$('#dl_comm .t').forEach(x=>x.classList.toggle('on',x===t));comm=t.dataset.c==='1';});
+  ['dl_B','dl_l','dl_w','dl_N','dl_n','dl_i'].forEach(id=>$('#'+id).oninput=labels);
+  $('#dl_run').onclick=()=>{run=!run;$('#dl_run').textContent=run?'⏸ Pause':'▶ Play';};
+  labels();draw();readout();loop();
+});
+
+/* ===== 6.2 Parts of a DC machine ===== */
+section('parts','DC Fundamentals','6.2 · Parts of a DC Machine ★',(el)=>{
+  el.innerHTML=`
+  <style>
+    @media(max-width:900px){.ptgrid{grid-template-columns:1fr!important}}
+    .anat g[data-k]{transition:opacity .2s;cursor:pointer}.anat.dim g[data-k]{opacity:.14}.anat.dim g[data-k].hi{opacity:1}
+    .ptinfo h4{margin:0 0 6px;font-size:16px}.ptinfo .row{display:grid;grid-template-columns:92px 1fr;gap:6px 10px;font-size:13.5px;margin-top:8px}.ptinfo .row b{color:var(--muted);font-weight:600}
+  </style>
+  <h2 class="title">Parts of a DC Machine</h2>
+  <p class="subttl">§6.2 · Seven parts, two groups: the stationary <b>stator</b> makes the magnetic field, the rotating <b>rotor</b> carries the current that is pushed by it (motor) or is pushed through it (generator)</p>
+
+  <div class="grid2">
+    <div class="card tight"><b style="color:#5b8cff">STATOR — stands still, makes the field</b><ol style="margin:6px 0 0 18px;line-height:1.7"><li>Yoke (frame)</li><li>Poles — pole core + pole shoe</li><li>Field winding</li><li>Carbon brushes (fixed to the frame, touch the rotor)</li></ol></div>
+    <div class="card tight"><b style="color:#ff9f43">ROTOR (armature) — turns, carries the load current</b><ol start="5" style="margin:6px 0 0 18px;line-height:1.7"><li>Armature core</li><li>Armature winding</li><li>Commutator (split rings)</li></ol></div>
+  </div>
+
+  <h3>Step 1 — Anatomy: click a part</h3>
+  <div class="card">
+    <div class="tabs" id="pt_tabs">
+      <div class="t on" data-k="0">all parts</div>
+      <div class="t" data-k="1">① Yoke</div><div class="t" data-k="2">② Poles</div><div class="t" data-k="3">③ Field winding</div><div class="t" data-k="4">④ Brushes</div>
+      <div class="t" data-k="5">⑤ Armature core</div><div class="t" data-k="6">⑥ Armature winding</div><div class="t" data-k="7">⑦ Commutator</div>
+    </div>
+    <div class="ptgrid" style="display:grid;grid-template-columns:1.15fr 1fr;gap:16px;align-items:start">
+      <svg class="anat" id="pt_svg" viewBox="0 0 520 520" style="width:100%;display:block">
+        <defs>
+          <radialGradient id="ptSteel" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3b4466"/><stop offset="1" stop-color="#2b3250"/></radialGradient>
+        </defs>
+        <text x="260" y="14" fill="#9aa3c4" font-size="11" text-anchor="middle">cross-section through a two-pole DC machine (commutator drawn at the centre for clarity — it really sits beside the core, on the shaft)</text>
+        <!-- ① yoke -->
+        <g data-k="1">
+          <circle cx="260" cy="260" r="222.5" fill="none" stroke="#3b4466" stroke-width="35"/>
+          <circle cx="260" cy="260" r="240" fill="none" stroke="#6b78a8" stroke-width="1.5"/><circle cx="260" cy="260" r="205" fill="none" stroke="#6b78a8" stroke-width="1"/>
+          <circle cx="260" cy="37.5" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="260" y="41.5" fill="#e8ebf7" font-size="11" text-anchor="middle">1</text>
+          <text x="80" y="470" fill="#9aa3c4" font-size="11">yoke / frame (cast steel)</text>
+        </g>
+        <!-- ② poles: cores + shoes -->
+        <g data-k="2">
+          <rect x="225" y="55" width="70" height="72" fill="#4a5480" stroke="#7d8ab8"/>
+          <path d="M225 127 L189 189 A101 101 0 0 1 331 189 L295 127 Z" fill="#4f5a8a" stroke="#7d8ab8"/>
+          <rect x="225" y="393" width="70" height="72" fill="#4a5480" stroke="#7d8ab8"/>
+          <path d="M225 393 L189 331 A101 101 0 0 0 331 331 L295 393 Z" fill="#4f5a8a" stroke="#7d8ab8"/>
+          <text x="260" y="176" fill="#e8ebf7" font-size="15" font-weight="700" text-anchor="middle">N</text>
+          <text x="260" y="350" fill="#e8ebf7" font-size="15" font-weight="700" text-anchor="middle">S</text>
+          <circle cx="260" cy="91" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="260" y="95" fill="#e8ebf7" font-size="11" text-anchor="middle">2</text>
+          <text x="336" y="150" fill="#9aa3c4" font-size="10.5">pole shoe</text><text x="300" y="75" fill="#9aa3c4" font-size="10.5" transform="rotate(0)">core</text>
+        </g>
+        <!-- ③ field coils -->
+        <g data-k="3">
+          <rect x="197" y="62" width="27" height="58" rx="3" fill="#c47a3a" stroke="#e8a060"/><rect x="296" y="62" width="27" height="58" rx="3" fill="#c47a3a" stroke="#e8a060"/>
+          <rect x="197" y="400" width="27" height="58" rx="3" fill="#c47a3a" stroke="#e8a060"/><rect x="296" y="400" width="27" height="58" rx="3" fill="#c47a3a" stroke="#e8a060"/>
+          <g stroke="#7a4518" stroke-width="1">${[0,1,2,3,4,5,6,7].map(k=>`<line x1="198" y1="${67+k*7}" x2="223" y2="${67+k*7}"/><line x1="297" y1="${67+k*7}" x2="322" y2="${67+k*7}"/><line x1="198" y1="${405+k*7}" x2="223" y2="${405+k*7}"/><line x1="297" y1="${405+k*7}" x2="322" y2="${405+k*7}"/>`).join('')}</g>
+          <text x="210" y="95" fill="#0f1220" font-size="12" text-anchor="middle" font-weight="700">⊗</text><text x="309" y="95" fill="#0f1220" font-size="12" text-anchor="middle" font-weight="700">⊙</text>
+          <text x="210" y="433" fill="#0f1220" font-size="12" text-anchor="middle" font-weight="700">⊙</text><text x="309" y="433" fill="#0f1220" font-size="12" text-anchor="middle" font-weight="700">⊗</text>
+          <circle cx="340" cy="91" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="340" y="95" fill="#e8ebf7" font-size="11" text-anchor="middle">3</text>
+          <text x="356" y="95" fill="#e8a060" font-size="10.5">field coil, I_F (DC)</text>
+          <text x="356" y="433" fill="#e8a060" font-size="10.5">field coil</text>
+        </g>
+        <!-- ⑤ armature core (slotted, laminated) with cut-away centre -->
+        <g data-k="5">
+          <circle cx="260" cy="260" r="96" fill="#2a3153" stroke="#4b5680"/>
+          <circle cx="260" cy="260" r="84" fill="none" stroke="#3a4470" stroke-dasharray="2 3"/><circle cx="260" cy="260" r="72" fill="none" stroke="#3a4470" stroke-dasharray="2 3"/>
+          ${Array.from({length:16},(_,k)=>`<rect x="254" y="164" width="12" height="20" fill="#0b0e1c" transform="rotate(${k*22.5} 260 260)"/>`).join('')}
+          <circle cx="260" cy="260" r="58" fill="#0b0e1c" stroke="#4b5680" stroke-dasharray="4 3"/>
+          <circle cx="226" cy="236" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="226" y="240" fill="#e8ebf7" font-size="11" text-anchor="middle">5</text>
+          <text x="150" y="196" fill="#9aa3c4" font-size="10.5" text-anchor="end">laminated</text><text x="150" y="209" fill="#9aa3c4" font-size="10.5" text-anchor="end">armature core</text>
+        </g>
+        <!-- ⑥ armature conductors in the slots -->
+        <g data-k="6">
+          ${Array.from({length:16},(_,k)=>{const a=k*22.5-90+11.25,r=88,x=260+r*Math.cos(a*Math.PI/180),y=260+r*Math.sin(a*Math.PI/180),top=y<260;return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#d08a4a" stroke="#f0b070"/>`+(top?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.8" fill="#0f1220"/>`:`<line x1="${(x-3).toFixed(1)}" y1="${(y-3).toFixed(1)}" x2="${(x+3).toFixed(1)}" y2="${(y+3).toFixed(1)}" stroke="#0f1220" stroke-width="1.4"/><line x1="${(x-3).toFixed(1)}" y1="${(y+3).toFixed(1)}" x2="${(x+3).toFixed(1)}" y2="${(y-3).toFixed(1)}" stroke="#0f1220" stroke-width="1.4"/>`);}).join('')}
+          <circle cx="330" cy="200" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="330" y="204" fill="#e8ebf7" font-size="11" text-anchor="middle">6</text>
+          <text x="428" y="262" fill="#f0b070" font-size="10.5">armature conductors</text><text x="428" y="275" fill="#9aa3c4" font-size="10.5">⊙ under N, ⊗ under S</text>
+        </g>
+        <!-- ⑦ commutator -->
+        <g data-k="7">
+          <circle cx="260" cy="260" r="34" fill="none" stroke="#d08a4a" stroke-width="16"/>
+          <g stroke="#0b0e1c" stroke-width="2.5">${Array.from({length:12},(_,k)=>`<line x1="260" y1="218" x2="260" y2="234" transform="rotate(${k*30+15} 260 260)"/>`).join('')}</g>
+          <circle cx="260" cy="260" r="42" fill="none" stroke="#f0b070" stroke-width="1"/><circle cx="260" cy="260" r="26" fill="none" stroke="#f0b070" stroke-width="1"/>
+          <circle cx="260" cy="260" r="20" fill="#1b1f33" stroke="#6b78a8"/><rect x="256" y="240" width="8" height="6" fill="#0b0e1c"/>
+          <text x="260" y="264" fill="#9aa3c4" font-size="9" text-anchor="middle">shaft</text>
+          <circle cx="260" cy="304" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="260" y="308" fill="#e8ebf7" font-size="11" text-anchor="middle">7</text>
+          <text x="366" y="316" fill="#f0b070" font-size="10.5">commutator:</text><text x="366" y="329" fill="#f0b070" font-size="10.5">Cu segments + mica</text>
+        </g>
+        <!-- ④ brushes -->
+        <g data-k="4">
+          <rect x="196" y="251" width="22" height="18" fill="#3a3a3a" stroke="#8a8a8a"/><rect x="302" y="251" width="22" height="18" fill="#3a3a3a" stroke="#8a8a8a"/>
+          <path d="M196 260 l-4 -4 l-4 8 l-4 -8 l-4 8 l-4 -4 M324 260 l4 -4 l4 8 l4 -8 l4 8 l4 -4" fill="none" stroke="#9aa3c4" stroke-width="1.3"/>
+          <line x1="176" y1="260" x2="150" y2="260" stroke="#38d39f" stroke-width="2"/><line x1="344" y1="260" x2="370" y2="260" stroke="#38d39f" stroke-width="2"/>
+          <circle cx="146" cy="260" r="5" fill="#0b0e1c" stroke="#38d39f" stroke-width="1.5"/><circle cx="374" cy="260" r="5" fill="#0b0e1c" stroke="#38d39f" stroke-width="1.5"/>
+          <text x="140" y="248" fill="#38d39f" font-size="11" text-anchor="middle">A1 +</text><text x="380" y="248" fill="#38d39f" font-size="11" text-anchor="middle">A2 −</text>
+          <circle cx="207" cy="286" r="10" fill="#0f1220" stroke="#e8ebf7"/><text x="207" y="290" fill="#e8ebf7" font-size="11" text-anchor="middle">4</text>
+          <text x="128" y="300" fill="#bdbdbd" font-size="10.5">carbon brush + spring</text>
+        </g>
+        <!-- magnetic neutral plane -->
+        <line x1="20" y1="260" x2="500" y2="260" stroke="#9aa3c4" stroke-dasharray="3 6" opacity=".35"/>
+        <text x="24" y="500" fill="#9aa3c4" font-size="9.5" opacity=".8">dashed horizontal line = magnetic neutral plane (brush axis)</text>
+      </svg>
+      <div class="ptinfo card tight" id="pt_info" style="margin:0;min-height:300px"></div>
+    </div>
+  </div>
+
+  <h3>Step 2 — Watch it work: field → flux → force → torque</h3>
+  <p class="note">The field coils make the flux (top to bottom here). The commutator keeps every conductor under the N pole carrying current one way and every conductor under the S pole the other way — <em>whatever the rotor's position</em> — so all the forces F = ilB push in the same rotational sense. Switch to <b>Generator</b>: the shaft is now driven, the induced current reverses, and the same forces become the counter-torque the prime mover must overcome.</p>
+  <div class="card">
+    <div class="tabs" id="pt_mode"><div class="t on" data-m="motor">⚙ Motor — electrical in, torque out</div><div class="t" data-m="gen">⚡ Generator — shaft driven, voltage out</div></div>
+    <div class="ptgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Field current I<sub>F</sub></span> <span class="val" id="pt_if_v"></span></span><input type="range" id="pt_if" min="0" max="2" step="0.05" value="1.2"></label>
+        <label class="ctl"><span class="lab"><span id="pt_ia_lab">Armature current I<sub>A</sub></span> <span class="val" id="pt_ia_v"></span></span><input type="range" id="pt_ia" min="-20" max="20" step="0.5" value="12"></label>
+        <label class="ctl"><span class="lab"><span>Shaft speed n</span> <span class="val" id="pt_n_v"></span></span><input type="range" id="pt_n" min="0" max="1800" step="20" value="1200"></label>
+        <button class="btn" id="pt_run" style="width:100%">⏸ Pause</button>
+        <div class="out" id="pt_out" style="font-size:12.5px"></div>
+      </div>
+      <canvas id="pt_can" width="600" height="470" style="width:100%"></canvas>
+    </div>
+    <p class="note">Illustrative constants: φ = 0.02·I<sub>F</sub> Wb per pole, machine constant K = 40 (E<sub>A</sub> = Kφω, τ<sub>ind</sub> = KφI<sub>A</sub>). Flux-line brightness follows I<sub>F</sub>; force-arrow length follows I<sub>F</sub>·I<sub>A</sub>.</p>
+  </div>
+
+  <h3>Step 3 — How voltage is applied: two separate circuits</h3>
+  <div class="card">
+    <div class="grid2" style="align-items:center">
+      <svg viewBox="0 0 440 230" style="width:100%">
+        <text x="12" y="16" fill="#9aa3c4" font-size="11">Field circuit (makes φ)</text>
+        <path d="M30 60 V40 H150 V60 M30 100 V120 H150 V100" fill="none" stroke="#e8a060" stroke-width="2"/>
+        <line x1="20" y1="66" x2="40" y2="66" stroke="#e8a060" stroke-width="2.5"/><line x1="25" y1="76" x2="35" y2="76" stroke="#e8a060" stroke-width="4"/><line x1="20" y1="86" x2="40" y2="86" stroke="#e8a060" stroke-width="2.5"/><line x1="25" y1="96" x2="35" y2="96" stroke="#e8a060" stroke-width="4"/>
+        <text x="46" y="84" fill="#e8a060" font-size="11">V<tspan font-size="8" dy="3">F</tspan></text>
+        <path d="M150 60 l6 -6 l8 12 l8 -12 l8 12 l6 -6" fill="none" stroke="#ff6b81" stroke-width="2" transform="translate(-36 0)"/>
+        <path d="M150 60 V100" fill="none" stroke="#e8a060" stroke-width="2"/>
+        <path d="M150 62 a5 5 0 0 1 0 10 a5 5 0 0 1 0 10 a5 5 0 0 1 0 10" fill="none" stroke="#e8a060" stroke-width="2"/>
+        <text x="160" y="84" fill="#e8a060" font-size="11">N<tspan font-size="8" dy="3">F</tspan><tspan dy="-3"> turns</tspan></text>
+        <text x="100" y="52" fill="#ff6b81" font-size="10">R<tspan font-size="8" dy="3">F</tspan></text>
+        <text x="70" y="140" fill="#9aa3c4" font-size="11">I<tspan font-size="8" dy="3">F</tspan><tspan dy="-3"> = V</tspan><tspan font-size="8" dy="3">F</tspan><tspan dy="-3">/R</tspan><tspan font-size="8" dy="3">F</tspan><tspan dy="-3">  →  ℱ = N</tspan><tspan font-size="8" dy="3">F</tspan><tspan dy="-3">I</tspan><tspan font-size="8" dy="3">F</tspan><tspan dy="-3">  →  φ</tspan></text>
+        <text x="240" y="16" fill="#9aa3c4" font-size="11">Armature circuit (carries I_A)</text>
+        <path d="M250 60 V40 H400 V60 M250 100 V120 H400 V100" fill="none" stroke="#38d39f" stroke-width="2"/>
+        <circle cx="250" cy="80" r="20" fill="#0b0e1c" stroke="#38d39f" stroke-width="2"/><text x="250" y="84" fill="#38d39f" font-size="11" text-anchor="middle">V<tspan font-size="8" dy="3">T</tspan></text>
+        <path d="M330 40 l6 -6 l8 12 l8 -12 l8 12 l6 -6" fill="none" stroke="#ff6b81" stroke-width="2" transform="translate(-60 0)"/>
+        <text x="300" y="30" fill="#ff6b81" font-size="10">R<tspan font-size="8" dy="3">A</tspan></text>
+        <circle cx="400" cy="80" r="20" fill="#0b0e1c" stroke="#5b8cff" stroke-width="2"/><text x="400" y="84" fill="#5b8cff" font-size="11" text-anchor="middle">E<tspan font-size="8" dy="3">A</tspan></text>
+        <rect x="372" y="74" width="8" height="12" fill="#3a3a3a" stroke="#8a8a8a"/><rect x="420" y="74" width="8" height="12" fill="#3a3a3a" stroke="#8a8a8a"/>
+        <text x="400" y="112" fill="#9aa3c4" font-size="9.5" text-anchor="middle">brushes · commutator · winding</text>
+        <text x="236" y="140" fill="#9aa3c4" font-size="11">Motor:  V<tspan font-size="8" dy="3">T</tspan><tspan dy="-3"> = E</tspan><tspan font-size="8" dy="3">A</tspan><tspan dy="-3"> + I</tspan><tspan font-size="8" dy="3">A</tspan><tspan dy="-3">R</tspan><tspan font-size="8" dy="3">A</tspan></text>
+        <text x="236" y="158" fill="#9aa3c4" font-size="11">Generator:  V<tspan font-size="8" dy="3">T</tspan><tspan dy="-3"> = E</tspan><tspan font-size="8" dy="3">A</tspan><tspan dy="-3"> − I</tspan><tspan font-size="8" dy="3">A</tspan><tspan dy="-3">R</tspan><tspan font-size="8" dy="3">A</tspan></text>
+        <text x="12" y="200" fill="#9aa3c4" font-size="10.5">Shunt machine: the field is connected across V_T.   Series machine: the field is in series with I_A.   Separately excited: its own V_F (drawn here).</text>
+        <text x="12" y="218" fill="#9aa3c4" font-size="10.5">Everything the armature does is DC at the brushes and AC inside the coils — the commutator converts between them.</text>
+      </svg>
+      <div>
+        <div class="okbox"><b>Field circuit.</b> A DC voltage V<sub>F</sub> drives a small current I<sub>F</sub> = V<sub>F</sub>/R<sub>F</sub> through the many-turn field coils on the poles. Its only job is to make flux: ℱ = N<sub>F</sub>I<sub>F</sub>. No power is converted here (just I<sub>F</sub>²R<sub>F</sub> heat).</div>
+        <div class="okbox" style="margin-top:8px"><b>Armature circuit.</b> The terminal voltage V<sub>T</sub> reaches the rotating winding only through the <b>brushes</b> pressing on the <b>commutator</b>. Inside, the winding has an induced voltage E<sub>A</sub> = Kφω and a small resistance R<sub>A</sub>. As a <b>motor</b> V<sub>T</sub> pushes I<sub>A</sub> <em>against</em> E<sub>A</sub>; as a <b>generator</b> E<sub>A</sub> is larger and pushes I<sub>A</sub> <em>out</em> to the load.</div>
+        <div class="eq" style="margin-top:8px;font-size:17px">motor:  <i>V</i><sub>T</sub> = <i>E</i><sub>A</sub> + <i>I</i><sub>A</sub><i>R</i><sub>A</sub>      generator:  <i>V</i><sub>T</sub> = <i>E</i><sub>A</sub> − <i>I</i><sub>A</sub><i>R</i><sub>A</sub></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Step 4 — How the magnetic field is produced: the machine is a magnetic circuit</h3>
+  <p class="note">Exactly §1.4 again. The mmf N<sub>F</sub>I<sub>F</sub> of one pole's coil drives flux around a loop: pole core → pole shoe → <b>air gap</b> → armature core → <b>air gap</b> → other pole → half the yoke → back. Two short air gaps hold most of the reluctance, which is why the gap is kept as small as mechanics allow.</p>
+  <div class="card">
+    <div class="ptgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Field turns per pole N<sub>F</sub></span> <span class="val" id="pm_N_v"></span></span><input type="range" id="pm_N" min="200" max="3000" step="50" value="1000"></label>
+        <label class="ctl"><span class="lab"><span>Field current I<sub>F</sub></span> <span class="val" id="pm_I_v"></span></span><input type="range" id="pm_I" min="0.1" max="3" step="0.05" value="1.2"></label>
+        <label class="ctl"><span class="lab"><span>Air-gap length g</span> <span class="val" id="pm_g_v"></span></span><input type="range" id="pm_g" min="0.5" max="5" step="0.1" value="2"></label>
+        <label class="ctl"><span class="lab"><span>Pole-face area A<sub>p</sub></span> <span class="val" id="pm_A_v"></span></span><input type="range" id="pm_A" min="50" max="400" step="10" value="150"></label>
+        <label class="ctl"><span class="lab"><span>Iron path reluctance (% of gap)</span> <span class="val" id="pm_fe_v"></span></span><input type="range" id="pm_fe" min="0" max="100" step="5" value="20"></label>
+        <div class="out" id="pm_out" style="font-size:12.5px"></div>
+      </div>
+      <div>
+        <svg viewBox="0 0 420 260" style="width:100%" id="pm_svg"></svg>
+        <div class="eq" style="font-size:16px"><i>φ</i> = <span class="frac"><span class="n">2 <i>N</i><sub>F</sub> <i>I</i><sub>F</sub></span><span class="d">ℛ<sub>loop</sub></span></span>,     ℛ<sub>loop</sub> = ℛ<sub>gap</sub> + ℛ<sub>gap</sub> + ℛ<sub>iron</sub>,     ℛ<sub>gap</sub> = <span class="frac"><span class="n"><i>g</i></span><span class="d"><i>μ</i><sub>0</sub> <i>A</i><sub>p</sub></span></span>,     <i>B</i><sub>gap</sub> = <i>φ</i> / <i>A</i><sub>p</sub></div>
+        <p class="note">Both pole coils push the same loop, so the loop mmf is 2N<sub>F</sub>I<sub>F</sub>. Real machines run B<sub>gap</sub> ≈ 0.6–1.0 T; above that the pole and armature teeth saturate (the magnetisation curve of §6.7).</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Step 5 — How the current flows and torque is produced</h3>
+  <div class="card">
+    <div class="grid2">
+      <div class="okbox"><b>Path of the current.</b> A1 (+) → stationary brush → the commutator segment under it → through the armature coils (two or more <em>parallel paths</em>, a of them) → the segment under the other brush → A2 (−). As the rotor turns, each coil is handed from one path to the other at the neutral plane and its current is <b>reversed</b> — that is commutation.</div>
+      <div class="okbox"><b>Why the torque is one-way.</b> Under the N pole B points into the rotor, under the S pole out of it. Because the commutator keeps ⊙ current under N and ⊗ under S, F = ilB on every conductor points the same way round. Z conductors at radius r all add up.</div>
+    </div>
+    <details class="deriv" open><summary>From one conductor to τ<sub>ind</sub> = KφI<sub>A</sub></summary>
+      <div class="step">① Force on one conductor of length <i>l</i> carrying current <i>I</i><sub>cond</sub> in flux density <i>B</i>:
+        <span class="dq"><i>F</i> = <i>I</i><sub>cond</sub> <i>l</i> <i>B</i>,      <i>τ</i><sub>cond</sub> = <i>r</i> <i>I</i><sub>cond</sub> <i>l</i> <i>B</i></span>
+        <span class="why">The conductor sits in a slot at radius <i>r</i>; the force is tangential, so the torque is simply <i>r</i>·<i>F</i>.</span></div>
+      <div class="step">② The armature current divides among <i>a</i> parallel paths, so each conductor carries <i>I</i><sub>cond</sub> = <i>I</i><sub>A</sub>/<i>a</i>. With <i>Z</i> conductors:
+        <span class="dq"><i>τ</i><sub>ind</sub> = <i>Z</i> <i>r</i> <i>l</i> <i>B</i> <span class="frac"><span class="n"><i>I</i><sub>A</sub></span><span class="d"><i>a</i></span></span></span></div>
+      <div class="step">③ Replace <i>B</i> by the flux per pole. The pole covers an area 2π<i>rl</i>/<i>P</i> of the rotor surface, so <i>B</i> = <i>φ</i> <i>P</i>/(2π<i>rl</i>):
+        <span class="dq"><i>τ</i><sub>ind</sub> = <span class="frac"><span class="n"><i>Z</i> <i>P</i></span><span class="d">2π <i>a</i></span></span> <i>φ</i> <i>I</i><sub>A</sub> = <b><i>K</i> <i>φ</i> <i>I</i><sub>A</sub></b>,      <i>K</i> = <span class="frac"><span class="n"><i>Z</i> <i>P</i></span><span class="d">2π <i>a</i></span></span><span class="tag">(8‑49)</span></span>
+        <span class="why"><i>K</i> contains only construction numbers: conductors, poles, parallel paths.</span></div>
+      <div class="step">④ The same conductors moving at <i>v</i> = <i>rω</i> have <i>e</i> = <i>vBl</i> induced; the <i>Z</i>/<i>a</i> conductors in series per path give
+        <span class="dq"><i>E</i><sub>A</sub> = <span class="frac"><span class="n"><i>Z</i> <i>P</i></span><span class="d">2π <i>a</i></span></span> <i>φ</i> <i>ω</i> = <b><i>K</i> <i>φ</i> <i>ω</i></b><span class="tag">(8‑38)</span></span>
+        <span class="why">Same <i>K</i>. Multiply: <i>E</i><sub>A</sub><i>I</i><sub>A</sub> = <i>τ</i><sub>ind</sub><i>ω</i> — electrical power in equals mechanical power out (motor), the converted power.</span></div>
+    </details>
+  </div>
+
+  <h3>Step 6 — The seven parts at a glance</h3>
+  <div class="card">
+    <table>
+      <tr><th>#</th><th>Part</th><th>Where</th><th>Material</th><th>Job</th><th>Carries</th></tr>
+      <tr><td>1</td><td>Yoke / frame</td><td>stator</td><td>cast or rolled steel (solid)</td><td>mechanical frame; magnetic return path (φ/2 each side)</td><td>steady flux</td></tr>
+      <tr><td>2</td><td>Poles (core + shoe)</td><td>stator</td><td>laminated silicon steel; shoe always laminated</td><td>hold the field coils; spread φ evenly over the air gap</td><td>pole flux φ</td></tr>
+      <tr><td>3</td><td>Field winding</td><td>stator</td><td>enamelled copper (many fine turns: shunt; few thick turns: series)</td><td>mmf N<sub>F</sub>I<sub>F</sub> → the main field</td><td>I<sub>F</sub> (small, DC)</td></tr>
+      <tr><td>4</td><td>Carbon brushes</td><td>stator (frame-mounted)</td><td>carbon / graphite, spring-loaded</td><td>sliding contact to the rotating commutator, on the neutral plane</td><td>I<sub>A</sub> in / out</td></tr>
+      <tr><td>5</td><td>Armature core</td><td>rotor</td><td>stacked insulated laminations, 0.35–0.5 mm, slotted, keyed to shaft</td><td>low-reluctance path for φ; holds the conductors</td><td>alternating flux</td></tr>
+      <tr><td>6</td><td>Armature winding</td><td>rotor</td><td>insulated copper in the slots (lap a = P, wave a = 2)</td><td>seat of E<sub>A</sub> = Kφω and τ = KφI<sub>A</sub></td><td>I<sub>A</sub> (large), AC inside</td></tr>
+      <tr><td>7</td><td>Commutator (split rings)</td><td>rotor</td><td>hard-drawn copper segments, mica between, on the shaft</td><td>rotating switch: reverses each coil at the neutral plane → DC at the brushes</td><td>I<sub>A</sub></td></tr>
+    </table>
+    <div class="grid2" style="margin-top:8px">
+      <div class="warnbox"><b>Why laminate the rotor but not the yoke?</b> A point on the armature passes N, then S, then N… — it sees an <em>alternating</em> flux, so eddy currents would circulate in solid iron (Faraday, §1.5). Thin insulated laminations break those paths. The yoke carries a steady flux, so a solid casting is fine. Pole <em>shoes</em> are laminated because the passing slots and teeth ripple the flux at their surface.</div>
+      <div class="warnbox"><b>Why carbon brushes?</b> Carbon is self-lubricating, tolerates sparking and heat, and its relatively high contact resistance limits the circulating current in the coil being commutated — it makes commutation gentler. They wear, so they are the routine maintenance item of a DC machine, together with the commutator surface.</div>
+    </div>
+  </div>`;
+
+  /* ---------- Step 1: part info + highlighting ---------- */
+  const INFO={
+    0:['The whole machine','Stator (1–4) makes a <b>stationary magnetic field</b>; rotor (5–7) carries the <b>armature current</b> through that field. Click a part — or a numbered tag in the drawing — to isolate it.','','',''],
+    1:['① Yoke (frame)','Cast steel or rolled mild steel — <b>solid</b>, because it carries a steady (DC) flux and needs no laminations.','The mechanical frame: holds the poles, end-bells, bearings and brush gear. Magnetically it is the <b>return path</b>: each half of the ring carries half the pole flux.','No current; it is earthed for safety.','Thickness is set by flux density, not strength — about half the pole-core width per side.'],
+    2:['② Poles — pole core and pole shoe','Laminated silicon steel bolted to the yoke. The <b>shoe</b> is always laminated (it faces the slotted rotor and sees flux ripple); the core sometimes solid.','The core carries the field coil; the shoe spreads the flux over a wide arc of the air gap so B is nearly uniform under the pole, and its shaped tips taper the field at the edges.','No current.','Pole arc ≈ 60–75 % of the pole pitch; shoe shape and gap taper set the flux-density curve under the pole.'],
+    3:['③ Field winding','Enamelled copper wire wound on insulated formers around each pole core. <b>Shunt</b>: thousands of fine turns (high R<sub>F</sub>, small I<sub>F</sub>). <b>Series</b>: a few thick turns carrying I<sub>A</sub>.','Fed with DC it produces the mmf ℱ = N<sub>F</sub>I<sub>F</sub> that drives the flux φ round the magnetic circuit: pole → gap → armature → gap → pole → yoke. Coils on adjacent poles are wound in opposite senses so poles alternate N, S, N, S.','I<sub>F</sub>: typically 1–5 % of the machine current (shunt). Field power ≈ I<sub>F</sub>²R<sub>F</sub> is a loss.','Adjusting I<sub>F</sub> (field rheostat) is the main speed control of a DC motor and voltage control of a DC generator.'],
+    4:['④ Carbon brushes','Carbon or electro-graphite blocks (copper-graphite for low-voltage, high-current machines) held in brass brush boxes and pressed on the commutator by springs.','The <b>stationary</b> terminals of the <b>rotating</b> winding: all of I<sub>A</sub> enters and leaves through them. They are positioned on the <b>magnetic neutral plane</b> so the coil being short-circuited by a brush has (ideally) no voltage in it.','I<sub>A</sub> — the full armature current, through a sliding contact. Brush-contact drop ≈ 1–2 V total.','Carbon: self-lubricating, arc-resistant, and its contact resistance damps the current in the commutating coil. Brushes wear and are replaceable.'],
+    5:['⑤ Armature core','A stack of thin (0.35–0.5 mm) insulated silicon-steel laminations pressed on the shaft, with axial slots punched round the outside and ventilation ducts.','Completes the magnetic circuit across the rotor (low reluctance) and mechanically holds the conductors in its slots and transmits their force to the shaft.','No current intended — laminations exist to <em>prevent</em> eddy currents, because a rotating point sees alternating flux (N → S → N).','Teeth between the slots carry concentrated flux and are the first part to saturate.'],
+    6:['⑥ Armature winding','Insulated copper conductors (round or rectangular) laid in the slots, wedged in, connected into coils whose ends go to the commutator segments. Lap winding: a = P parallel paths; wave winding: a = 2.','Where energy conversion actually happens: moving conductors in the field get E<sub>A</sub> = Kφω induced, and current-carrying conductors in the field feel F = ilB, giving τ<sub>ind</sub> = KφI<sub>A</sub>.','I<sub>A</sub> split over a paths; inside each coil the current is <b>alternating</b> — it reverses every time the coil passes a brush.','Copper loss I<sub>A</sub>²R<sub>A</sub> is the main variable loss; heat is removed by the rotor fan.'],
+    7:['⑦ Commutator (split rings)','Wedge-shaped hard-drawn copper bars insulated from each other and from the shaft by mica, clamped into a cylinder on the shaft; coil ends are soldered into risers on each bar.','A rotating switch. The brushes always touch the bars connected to the coils at the neutral plane, so each coil\'s connection is <b>reversed</b> there: inside the coils the current alternates, at the brushes it is DC. Motor: this keeps the torque in one direction. Generator: it rectifies the induced AC into DC.','I<sub>A</sub>, handed from segment to segment.','More segments → smaller voltage ripple and gentler commutation (§6.3). Worn or dirty bars cause sparking.']};
+  function ptShow(k){const d=INFO[k];
+    $('#pt_info').innerHTML=`<h4>${d[0]}</h4><p style="margin:0;font-size:13.5px">${d[1]}</p>`+(k==='0'?'':`<div class="row"><b>Job</b><span>${d[2]}</span><b>Carries</b><span>${d[3]}</span><b>Also</b><span>${d[4]}</span></div>`);
+    $$('#pt_tabs .t').forEach(t=>t.classList.toggle('on',t.dataset.k===k));
+    const s=$('#pt_svg');s.classList.toggle('dim',k!=='0');$$('g[data-k]',s).forEach(g=>g.classList.toggle('hi',g.dataset.k===k));}
+  $$('#pt_tabs .t').forEach(t=>t.onclick=()=>ptShow(t.dataset.k));
+  $$('#pt_svg g[data-k]').forEach(g=>g.onclick=()=>ptShow(g.dataset.k));
+  ptShow('0');
+
+  /* ---------- Step 2: animated machine ---------- */
+  const pc=$('#pt_can').getContext('2d');let ptMode='motor',ptRun=true,th=0,fph=0;
+  const ptP=()=>({If:+$('#pt_if').value,Ia:+$('#pt_ia').value,n:+$('#pt_n').value});
+  const tri=(c,x,y,ang,col,s=7)=>{c.fillStyle=col;c.beginPath();c.moveTo(x+s*Math.cos(ang),y+s*Math.sin(ang));c.lineTo(x+s*Math.cos(ang+2.5),y+s*Math.sin(ang+2.5));c.lineTo(x+s*Math.cos(ang-2.5),y+s*Math.sin(ang-2.5));c.closePath();c.fill();};
+  function ptLabels(){const p=ptP();$('#pt_if_v').textContent=p.If.toFixed(2)+' A';$('#pt_ia_v').textContent=p.Ia+' A';$('#pt_n_v').textContent=p.n+' r/min';$('#pt_ia_lab').innerHTML=ptMode==='motor'?'Armature current I<sub>A</sub> (+ → CW)':'Load current I<sub>A</sub> delivered';
+    const phi=0.02*p.If,K=40,w=p.n*2*Math.PI/60,EA=K*phi*w,tau=K*phi*Math.abs(p.Ia),P=EA*Math.abs(p.Ia);
+    $('#pt_out').innerHTML=`φ per pole = 0.02·I<sub>F</sub> = <span class="k">${fmt(phi,4)} Wb</span>\nω = 2πn/60 = <span class="k">${fmt(w,1)} rad/s</span>\n<b>E<sub>A</sub> = Kφω = <span class="k">${fmt(EA,1)} V</span></b>\n<b>τ<sub>ind</sub> = KφI<sub>A</sub> = <span class="k">${fmt(tau,2)} N·m</span></b> ${ptMode==='motor'?(p.Ia>=0?'(clockwise — drives the shaft)':'(counter-clockwise — drives the shaft)'):'(opposes the prime mover — counter-torque)'}\nP<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τω = <span class="k">${fmt(P,0)} W</span>\n${ptMode==='motor'?'Motor: V<sub>T</sub> &gt; E<sub>A</sub> pushes I<sub>A</sub> in; the field pushes the conductors round.':'Generator: the shaft is turned, E<sub>A</sub> pushes I<sub>A</sub> out to the load; the forces on the conductors resist the turning.'}`;}
+  function ptDraw(){
+    const p=ptP(),c=pc,W=600,H=470,cx=300,cy=240;c.clearRect(0,0,W,H);
+    const fI=Math.min(1,p.If/2),dirRot=ptMode==='motor'?(p.Ia>=0?1:-1):1,sgnI=ptMode==='motor'?(p.Ia>=0?1:-1):-1; // sgnI>0: ⊙ on top (generator: driven CW → induced current ⊗ on top)
+    // yoke
+    c.strokeStyle='#3b4466';c.lineWidth=28;c.beginPath();c.arc(cx,cy,204,0,7);c.stroke();c.strokeStyle='#6b78a8';c.lineWidth=1;c.beginPath();c.arc(cx,cy,218,0,7);c.stroke();c.beginPath();c.arc(cx,cy,190,0,7);c.stroke();
+    // poles + shoes
+    const pole=(sgn)=>{c.fillStyle='#4a5480';c.strokeStyle='#7d8ab8';c.lineWidth=1;c.beginPath();c.rect(cx-35,sgn<0?cy-190:cy+125,70,65);c.fill();c.stroke();
+      c.beginPath();c.moveTo(cx-35,sgn<0?cy-125:cy+125);c.lineTo(cx-70,sgn<0?cy-70:cy+70);c.arc(cx,cy,99,sgn<0?Math.PI*1.25:Math.PI*0.75,sgn<0?Math.PI*1.75:Math.PI*0.25,sgn>0);c.lineTo(cx+35,sgn<0?cy-125:cy+125);c.closePath();c.fillStyle='#4f5a8a';c.fill();c.stroke();};
+    pole(-1);pole(1);
+    c.fillStyle='#e8ebf7';c.font='bold 15px system-ui';c.textAlign='center';c.fillText('N',cx,cy-150);c.fillText('S',cx,cy+160);c.textAlign='left';
+    // field coils glow with I_F
+    const coil=(x,y)=>{c.fillStyle=`rgba(196,122,58,${(0.35+0.65*fI).toFixed(2)})`;c.strokeStyle='#e8a060';c.beginPath();c.rect(x,y,24,52);c.fill();c.stroke();c.strokeStyle='rgba(122,69,24,.9)';for(let k=0;k<8;k++){c.beginPath();c.moveTo(x+1,y+5+k*6);c.lineTo(x+23,y+5+k*6);c.stroke();}};
+    coil(cx-60,cy-184);coil(cx+36,cy-184);coil(cx-60,cy+131);coil(cx+36,cy+131);
+    c.fillStyle='#e8a060';c.font='11px system-ui';c.fillText('I_F',cx+64,cy-160);c.fillText('I_F',cx+64,cy+150);
+    // flux lines N→S through the rotor (vertical), plus return paths in the yoke
+    if(p.If>0.01){const al=0.15+0.75*fI;c.lineWidth=1.5;
+      [-66,-44,-22,0,22,44,66].forEach(dx=>{c.strokeStyle=`rgba(91,140,255,${al.toFixed(2)})`;c.beginPath();c.moveTo(cx+dx,cy-98);c.lineTo(cx+dx,cy+98);c.stroke();
+        for(let k=0;k<3;k++){const yy=cy-98+((fph+k*65+Math.abs(dx))%196);tri(c,cx+dx,yy,Math.PI/2,`rgba(91,140,255,${al.toFixed(2)})`,6);}});
+      c.setLineDash([3,4]);c.strokeStyle=`rgba(91,140,255,${(al*0.6).toFixed(2)})`;c.beginPath();c.arc(cx,cy,204,Math.PI*0.55,Math.PI*1.45);c.stroke();c.beginPath();c.arc(cx,cy,204,-Math.PI*0.45,Math.PI*0.45);c.stroke();c.setLineDash([]);
+      c.fillStyle=`rgba(91,140,255,${al.toFixed(2)})`;c.font='11px system-ui';c.fillText('φ',cx+74,cy-60);c.fillText('return flux through the yoke',cx-250,cy+4);}
+    // armature core (rotating slots)
+    c.fillStyle='#2a3153';c.strokeStyle='#4b5680';c.lineWidth=1;c.beginPath();c.arc(cx,cy,94,0,7);c.fill();c.stroke();
+    const Z=16,cond=[];
+    for(let k=0;k<Z;k++){const a=th+k*2*Math.PI/Z;const sx=cx+86*Math.cos(a),sy=cy+86*Math.sin(a);
+      c.save();c.translate(sx,sy);c.rotate(a+Math.PI/2);c.fillStyle='#0b0e1c';c.fillRect(-6,-10,12,20);c.restore();
+      cond.push({a,x:cx+86*Math.cos(a),y:cy+86*Math.sin(a)});}
+    c.fillStyle='#0b0e1c';c.beginPath();c.arc(cx,cy,56,0,7);c.fill();c.strokeStyle='#4b5680';c.setLineDash([4,3]);c.beginPath();c.arc(cx,cy,56,0,7);c.stroke();c.setLineDash([]);
+    // conductors: symbol fixed by POSITION (commutator action)
+    cond.forEach(q=>{const top=q.y<cy;const dot=(top?1:-1)*sgnI>0;c.fillStyle='#d08a4a';c.strokeStyle='#f0b070';c.lineWidth=1;c.beginPath();c.arc(q.x,q.y,5.5,0,7);c.fill();c.stroke();
+      c.strokeStyle='#0f1220';c.fillStyle='#0f1220';if(Math.abs(p.Ia)<0.3)return;
+      if(dot){c.beginPath();c.arc(q.x,q.y,2,0,7);c.fill();}else{c.lineWidth=1.5;c.beginPath();c.moveTo(q.x-3,q.y-3);c.lineTo(q.x+3,q.y+3);c.moveTo(q.x-3,q.y+3);c.lineTo(q.x+3,q.y-3);c.stroke();}
+      // force F = ilB on conductors under the poles (within ±50° of the pole axis)
+      const ang=Math.atan2(q.y-cy,q.x-cx),underN=Math.abs(ang+Math.PI/2)<0.9,underS=Math.abs(ang-Math.PI/2)<0.9;
+      if((underN||underS)&&p.If>0.02){const L=6+34*Math.min(1,Math.abs(p.Ia)/20)*fI;
+        // F = i l × B with B pointing down (N→S): ⊙ under N pushes +x, ⊗ under N pushes −x; under S the signs swap.
+        // Expressed along the clockwise tangent (−sin ang, cos ang): dirCW = (dot ? +1 : −1) × (under N ? +1 : −1)
+        const dirCW=(dot?1:-1)*(underN?1:-1),tx=-Math.sin(ang),ty=Math.cos(ang);
+        const fx=q.x+tx*L*dirCW,fy=q.y+ty*L*dirCW;
+        c.strokeStyle='#38d39f';c.lineWidth=2.5;c.beginPath();c.moveTo(q.x,q.y);c.lineTo(fx,fy);c.stroke();tri(c,fx,fy,Math.atan2(fy-q.y,fx-q.x),'#38d39f',7);}});
+    // commutator (rotates with armature) + fixed brushes
+    for(let k=0;k<12;k++){const a0=th+k*Math.PI/6,a1=a0+Math.PI/6-0.06;c.strokeStyle='#d08a4a';c.lineWidth=14;c.beginPath();c.arc(cx,cy,33,a0,a1);c.stroke();}
+    c.fillStyle='#1b1f33';c.strokeStyle='#6b78a8';c.lineWidth=1;c.beginPath();c.arc(cx,cy,20,0,7);c.fill();c.stroke();
+    c.fillStyle='#3a3a3a';c.strokeStyle='#8a8a8a';c.fillRect(cx-62,cy-9,22,18);c.strokeRect(cx-62,cy-9,22,18);c.fillRect(cx+40,cy-9,22,18);c.strokeRect(cx+40,cy-9,22,18);
+    c.strokeStyle='#38d39f';c.lineWidth=2;c.beginPath();c.moveTo(cx-62,cy);c.lineTo(cx-100,cy);c.moveTo(cx+62,cy);c.lineTo(cx+100,cy);c.stroke();
+    c.fillStyle='#38d39f';c.font='12px system-ui';const plus=sgnI>0;c.fillText(plus?'+':'−',cx-112,cy+4);c.fillText(plus?'−':'+',cx+104,cy+4);
+    if(Math.abs(p.Ia)>0.3){c.strokeStyle='rgba(56,211,159,.9)';c.lineWidth=3;c.beginPath();c.arc(cx,cy,33,Math.PI-0.25,Math.PI+0.25);c.stroke();c.beginPath();c.arc(cx,cy,33,-0.25,0.25);c.stroke();}
+    // curved arrow helper: draws an arc of given span centred on angle 'mid' at radius r, arrowhead at the CW end if cw>0 else at the CCW end
+    const curved=(r,mid,span,cw,col,w)=>{const a0=mid-span/2,a1=mid+span/2;c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.arc(cx,cy,r,a0,a1,false);c.stroke();
+      const tip=cw>0?a1:a0;tri(c,cx+r*Math.cos(tip),cy+r*Math.sin(tip),tip+(cw>0?Math.PI/2:-Math.PI/2),col,9);};
+    // torque arc (right-hand side, clear of the poles)
+    if(Math.abs(p.Ia)>0.3&&p.If>0.02){const mag=Math.min(1,Math.abs(p.Ia)/20)*fI,span=0.5+1.1*mag,motor=ptMode==='motor',col=motor?'#38d39f':'#ff6b81',cw=motor?dirRot:-1;
+      curved(150,0,span,cw,col,4);c.fillStyle=col;c.font='12px system-ui';c.fillText('τ_ind',cx+158,cy+4);c.fillText(motor?'drives the rotation':'opposes the rotation',cx+158,cy+18);}
+    // rotation indicator (left-hand side)
+    if(p.n>0){curved(150,Math.PI,0.9,dirRot,'#9aa3c4',2);c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('ω '+(dirRot>0?'(CW)':'(CCW)'),cx-200,cy+4);}
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('blue = flux φ (N → S)  ·  ⊙/⊗ = conductor current, fixed in space by the commutator  ·  green = F = ilB  ·  rotor turns, symbols stay',12,H-10);
+    c.fillText(ptMode==='motor'?'MOTOR':'GENERATOR',12,18);
+  }
+  function ptLoop(){if($('#sec-parts').classList.contains('on')){const p=ptP();if(ptRun){const dir=ptMode==='motor'?(p.Ia>=0?1:-1):1;th+=dir*p.n/1800*0.045;fph+=1.2+2.5*Math.min(1,p.If/2);}ptDraw();}requestAnimationFrame(ptLoop);}
+  $$('#pt_mode .t').forEach(t=>t.onclick=()=>{$$('#pt_mode .t').forEach(x=>x.classList.toggle('on',x===t));ptMode=t.dataset.m;ptLabels();});
+  ['pt_if','pt_ia','pt_n'].forEach(id=>$('#'+id).oninput=ptLabels);
+  $('#pt_run').onclick=()=>{ptRun=!ptRun;$('#pt_run').textContent=ptRun?'⏸ Pause':'▶ Play';};
+  ptLabels();ptDraw();ptLoop();
+
+  /* ---------- Step 4: magnetic circuit of the machine ---------- */
+  const MU0=4*Math.PI*1e-7;
+  function mcUpd(){
+    const N=+$('#pm_N').value,I=+$('#pm_I').value,g=+$('#pm_g').value/1000,A=+$('#pm_A').value*1e-4,fe=+$('#pm_fe').value/100;
+    $('#pm_N_v').textContent=N+' turns';$('#pm_I_v').textContent=I.toFixed(2)+' A';$('#pm_g_v').textContent=(g*1000).toFixed(1)+' mm';$('#pm_A_v').textContent=(A*1e4)+' cm²';$('#pm_fe_v').textContent=Math.round(fe*100)+' %';
+    const Rg=g/(MU0*A),Rfe=2*Rg*fe,Rt=2*Rg+Rfe,F=2*N*I,phi=F/Rt,B=phi/A;
+    $('#pm_out').innerHTML=`ℱ<sub>loop</sub> = 2N<sub>F</sub>I<sub>F</sub> = <span class="k">${fmt(F,0)} A·t</span>\nℛ<sub>gap</sub> = g/(μ<sub>0</sub>A<sub>p</sub>) = <span class="k">${fmt(Rg,3)} A·t/Wb</span>  (×2 gaps)\nℛ<sub>iron</sub> = <span class="k">${fmt(Rfe,3)}</span>   ℛ<sub>loop</sub> = <span class="k">${fmt(Rt,3)} A·t/Wb</span>\n<b>φ per pole = ℱ/ℛ = <span class="k">${fmt(phi,4)} Wb</span></b>\n<b>B<sub>gap</sub> = φ/A<sub>p</sub> = <span class="k">${fmt(B,3)} T</span></b>${B>1.0?'  ⚠ teeth and poles would saturate':B<0.3?'  (weak field — raise I<sub>F</sub> or N<sub>F</sub>)':'  ✓ typical working range'}\nmmf across the two gaps: ${fmt(100*2*Rg/Rt,0)} % of the total — the gaps dominate.`;
+    const al=Math.min(1,B/1.0),gp=Math.max(3,g*1000*3);
+    $('#pm_svg').innerHTML=`<text x="10" y="14" fill="#9aa3c4" font-size="11">one flux loop: pole → gap → armature → gap → pole → yoke</text>
+      <path d="M60 30 H360 V240 H60 Z M100 70 H320 V200 H100 Z" fill="#3b4466" stroke="#6b78a8" fill-rule="evenodd"/>
+      <rect x="180" y="70" width="60" height="${40-gp}" fill="#4a5480" stroke="#7d8ab8"/><rect x="180" y="${160+gp}" width="60" height="${40-gp}" fill="#4a5480" stroke="#7d8ab8"/>
+      <rect x="160" y="78" width="20" height="24" fill="#c47a3a"/><rect x="240" y="78" width="20" height="24" fill="#c47a3a"/><rect x="160" y="168" width="20" height="24" fill="#c47a3a"/><rect x="240" y="168" width="20" height="24" fill="#c47a3a"/>
+      <rect x="150" y="${110}" width="120" height="50" rx="6" fill="#2a3153" stroke="#4b5680"/><text x="210" y="139" fill="#9aa3c4" font-size="10.5" text-anchor="middle">armature core</text>
+      <text x="246" y="${108}" fill="#ffcc66" font-size="10">g</text><text x="246" y="${168}" fill="#ffcc66" font-size="10">g</text>
+      <path d="M210 50 V${106} M210 ${164} V220" fill="none" stroke="rgba(91,140,255,${(0.35+0.65*al).toFixed(2)})" stroke-width="3"/>
+      <path d="M210 220 H80 V50 H210 M210 220 H340 V50 H210" fill="none" stroke="rgba(91,140,255,${(0.25+0.5*al).toFixed(2)})" stroke-width="2" stroke-dasharray="6 5"/>
+      <polygon points="210,100 204,88 216,88" fill="rgba(91,140,255,${(0.35+0.65*al).toFixed(2)})"/><polygon points="210,214 204,202 216,202" fill="rgba(91,140,255,${(0.35+0.65*al).toFixed(2)})"/>
+      <text x="216" y="60" fill="#5b8cff" font-size="11">φ = ${fmt(phi,4)} Wb</text><text x="60" y="256" fill="#9aa3c4" font-size="10.5">B_gap = ${fmt(B,2)} T   ·   gap drawn ${(g*1000).toFixed(1)} mm (exaggerated)</text>
+      <text x="300" y="139" fill="#e8a060" font-size="10.5">N_F I_F</text><text x="110" y="139" fill="#e8a060" font-size="10.5">N_F I_F</text>`;
+  }
+  ['pm_N','pm_I','pm_g','pm_A','pm_fe'].forEach(id=>$('#'+id).oninput=mcUpd);mcUpd();
+});
+
+/* ===== 6.2 Commutation / rotating loop ===== */
+section('fund','DC Fundamentals','6.3 · Commutation & the DC Machine',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">DC Machinery Fundamentals</h2>
+  <p class="subttl">§8.1–8.2 · A rotating loop, and how commutation makes DC</p>
+  <div class="card">
+    <p>A loop rotating between curved pole faces generates an <b>AC</b> voltage (e = 2vBl under the poles, zero at the edges). A <b>commutator + brushes</b> mechanically flips the connection every half turn, rectifying it into <b>DC</b>. More loops/segments → smaller ripple → smoother DC.</p>
+    <div class="grid2">
+      <div class="eq" style="text-align:center">e<sub>ind</sub> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> φ ω<span class="tag">(8‑6)</span></div>
+      <div class="eq" style="text-align:center">τ<sub>ind</sub> = <span class="frac"><span class="n">2</span><span class="d">π</span></span> φ i<span class="tag">(8‑16)</span></div>
+    </div>
+    <p class="note">Even for the simple loop, voltage = flux × speed × (construction constant), and torque = flux × current × (construction constant) — the master DC relations.</p>
+  </div>
+  <div class="card">
+    <h4>Commutation ripple — more coils = smoother DC</h4>
+    <label class="ctl"><span class="lab">Number of coils <span class="val" id="fu_n_v"></span></span><input type="range" id="fu_n" min="1" max="24" value="4" step="1"></label>
+    <canvas id="fu_can" width="820" height="200" style="width:100%"></canvas>
+    <div class="note">Rectified segment voltages overlap; the terminal DC is their upper envelope. A 4‑loop machine ripples between 4e and 3e (§8.2).</div>
+  </div>`;
+  const cx=$('#fu_can').getContext('2d');
+  const upd=()=>{const n=+$('#fu_n').value;$('#fu_n_v').textContent=n;
+    const W=820,H=200,mid=H-30,top=20;cx.clearRect(0,0,W,H);
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(30,mid);cx.lineTo(W-10,mid);cx.stroke();
+    // each coil: rectified sine |sin| shifted by phase; envelope = max
+    const amp=mid-top,xs=x=>30+x*(W-40);
+    // draw envelope
+    cx.strokeStyle='#38d39f';cx.lineWidth=2.5;cx.beginPath();
+    for(let px=0;px<=1;px+=1/600){let mx=0;for(let k=0;k<n;k++){const ph=k/n*Math.PI;mx=Math.max(mx,Math.abs(Math.sin(px*Math.PI*2*1+ph)));}const y=mid-mx*amp;px===0?cx.moveTo(xs(px),y):cx.lineTo(xs(px),y);}cx.stroke();
+    // faint individual
+    cx.strokeStyle='rgba(91,140,255,0.25)';cx.lineWidth=1;
+    for(let k=0;k<Math.min(n,12);k++){const ph=k/n*Math.PI;cx.beginPath();for(let px=0;px<=1;px+=1/300){const y=mid-Math.abs(Math.sin(px*Math.PI*2+ph))*amp;px===0?cx.moveTo(xs(px),y):cx.lineTo(xs(px),y);}cx.stroke();}
+    const ripple=1-Math.abs(Math.sin(Math.PI/2-Math.PI/n));// crude
+    cx.fillStyle='#9aa3c4';cx.font='12px system-ui';cx.fillText('terminal DC (envelope) — ripple shrinks as coils ↑',36,16);};
+  $('#fu_n').oninput=upd;upd();
+});
+
+/* ===== 6.2 EA & torque + windings ===== */
+section('eqns','DC Fundamentals','6.4 · E_A = Kφω & τ = KφI_A',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Internal Voltage & Torque of Real DC Machines</h2>
+  <p class="subttl">§8.5 · The two equations everything else builds on</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">E<sub>A</sub> = K φ ω = K′ φ n<span class="tag">(8‑38),(8‑41)</span></div>
+    <div class="eq" style="text-align:center">τ<sub>ind</sub> = K φ I<sub>A</sub><span class="tag">(8‑49)</span></div>
+  </div>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">K = <span class="frac"><span class="n">Z P</span><span class="d">2π a</span></span><span class="tag">(8‑39)</span></div>
+    <div class="eq" style="text-align:center">K′ = <span class="frac"><span class="n">Z P</span><span class="d">60 a</span></span><span class="tag">(8‑42)</span></div>
+  </div>
+  <div class="eq">P<sub>conv</sub> = E<sub>A</sub> I<sub>A</sub> = τ<sub>ind</sub> ω<sub>m</sub> <span class="tag">(8‑55),(8‑56)</span></div>
+  <p class="note">Current paths a from the winding: <b>lap</b> a = m·P (8‑26); <b>wave</b> a = 2m (8‑28); Z = 2·C·N<sub>c</sub> conductors (8‑22).</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Winding</span><select id="e_w"><option value="lap">lap (a = m·P)</option><option value="wave">wave (a = 2m)</option></select></label>
+        <div class="grid3">
+          <label class="ctl"><span class="lab">Poles P</span><input type="number" id="e_P" value="6" step="any"></label>
+          <label class="ctl"><span class="lab">plex m</span><input type="number" id="e_m" value="2" step="1"></label>
+          <label class="ctl"><span class="lab">Coils C</span><input type="number" id="e_C" value="72" step="any"></label>
+          <label class="ctl"><span class="lab">Turns/coil N<sub>c</sub></span><input type="number" id="e_Nc" value="12" step="any"></label>
+          <label class="ctl"><span class="lab">Flux φ (Wb)</span><input type="number" id="e_phi" value="0.039" step="any"></label>
+          <label class="ctl"><span class="lab">Speed n (r/min)</span><input type="number" id="e_n" value="400" step="any"></label>
+        </div>
+        <label class="ctl"><span class="lab">Armature current I<sub>A</sub> (A)</span><input type="number" id="e_IA" value="100" step="any"></label>
+      </div>
+      <div class="out" id="e_out"></div>
+    </div>
+    <p class="note">Defaults = Example 8‑3 (duplex lap, 6‑pole) → a=12, Z=1728, K′=14.4, E<sub>A</sub>=224.6 V.</p>
+  </div>`;
+  const upd=()=>{const w=$('#e_w').value,P=+$('#e_P').value,m=+$('#e_m').value,C=+$('#e_C').value,Nc=+$('#e_Nc').value,phi=+$('#e_phi').value,n=+$('#e_n').value,IA=+$('#e_IA').value;
+    const a=w==='lap'?m*P:2*m,Z=2*C*Nc,Kp=Z*P/(60*a),K=Z*P/(2*Math.PI*a),EA=Kp*phi*n,tau=K*phi*IA,wm=2*Math.PI*n/60,Pconv=EA*IA;
+    $('#e_out').innerHTML=`a = <span class="k">${fmt(a,0)} paths</span>   Z = 2·C·N<sub>c</sub> = <span class="k">${fmt(Z,0)}</span>
+K′ = ZP/(60a) = <span class="k">${fmt(Kp,3)}</span>   K = ZP/(2πa) = <span class="k">${fmt(K,2)}</span>
+E<sub>A</sub> = K′φn = <span class="k">${fmt(EA,1)} V</span>
+τ<sub>ind</sub> = KφI<sub>A</sub> = <span class="k">${fmt(tau,1)} N·m</span>
+P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τω<sub>m</sub> = <span class="k">${fmt(Pconv/1000,2)} kW</span>`;};
+  ['e_w','e_P','e_m','e_C','e_Nc','e_phi','e_n','e_IA'].forEach(id=>$('#'+id).oninput=upd);$('#e_w').onchange=upd;upd();
+});
+
+/* ===== 6.3 Armature reaction / commutation ===== */
+section('commutation','DC Fundamentals','6.5 · Armature Reaction & Commutation',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Problems with Commutation</h2>
+  <p class="subttl">§8.4 · Armature reaction, the neutral-plane shift, and the fixes</p>
+  <p class="note">Armature current makes its own field that <b>distorts</b> the main pole flux, shifting the <b>magnetic neutral plane</b> (where brushes should sit). The shift grows with load — in the direction of rotation for a <b>generator</b>, against it for a <b>motor</b> — causing brush sparking. It also <b>weakens</b> the net flux (saturation).</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Load (armature current) <span class="val" id="cm_l_v"></span></span><input type="range" id="cm_l" min="0" max="100" value="50" step="1"></label>
+        <label class="ctl"><span class="lab">Machine</span><select id="cm_t"><option value="gen">generator</option><option value="mot">motor</option></select></label>
+        <label class="ctl" style="margin:6px 0"><input type="checkbox" id="cm_comp" style="width:auto"> interpoles + compensating windings</label>
+        <div class="out" id="cm_out"></div>
+      </div>
+      <div><canvas id="cm_can" width="380" height="300"></canvas></div>
+    </div>
+  </div>
+  <div class="grid3">
+    <div class="card tight"><b>Interpoles</b><br>small poles on the neutral axis, series‑connected so they track load; cancel the L·di/dt commutation voltage. Polarity = next main pole (gen) / previous (motor).</div>
+    <div class="card tight"><b>Compensating windings</b><br>conductors in the pole faces carrying armature current in opposition → cancel the flux distortion <i>everywhere</i> under the poles (expensive).</div>
+    <div class="card tight"><b>Brush shifting</b><br>the old fix: rotate brushes to the new neutral — but the neutral moves with load, so it only works at one load. Obsolete.</div>
+  </div>`;
+  const cx=$('#cm_can').getContext('2d');
+  const upd=()=>{const l=+$('#cm_l').value,t=$('#cm_t').value,comp=$('#cm_comp').checked;$('#cm_l_v').textContent=l+'%';
+    const shift=comp?0:(t==='gen'?1:-1)*l/100*35;
+    $('#cm_out').innerHTML=comp?`Neutral plane held fixed ✓ (armature reaction cancelled)\nNo brush sparking at any load.`:
+`Neutral‑plane shift ≈ <span class="k">${fmt(Math.abs(shift),0)}°</span> ${shift>0?'(with rotation)':shift<0?'(against rotation)':''}\n${l>60?'⚠ heavy sparking likely at the brushes':'brushes off the true neutral'}`;
+    cx.clearRect(0,0,380,300);const ox=190,oy=150,R=110;
+    // stator poles N (top) S (bottom)
+    cx.fillStyle='#3a4570';cx.font='16px system-ui';cx.fillText('N',ox-8,40);cx.fillText('S',ox-6,275);
+    cx.strokeStyle='#2a2f4a';cx.beginPath();cx.arc(ox,oy,R,0,7);cx.stroke();
+    // main flux vertical (down)
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2;cx.beginPath();cx.moveTo(ox,oy-R);cx.lineTo(ox,oy+R);cx.stroke();
+    // neutral plane (should be horizontal), shifted by 'shift' deg
+    const a=(90+shift)*Math.PI/180;
+    cx.strokeStyle='#ff6b81';cx.lineWidth=2;cx.setLineDash([6,4]);cx.beginPath();cx.moveTo(ox-R*Math.cos(a),oy-R*Math.sin(a));cx.lineTo(ox+R*Math.cos(a),oy+R*Math.sin(a));cx.stroke();cx.setLineDash([]);
+    cx.fillStyle='#ff6b81';cx.font='12px system-ui';cx.fillText('brush axis',ox+R*Math.cos(a)-30,oy+R*Math.sin(a)+16);
+    // brushes
+    cx.fillStyle='#ffcc66';cx.beginPath();cx.arc(ox-R*Math.cos(a),oy-R*Math.sin(a),5,0,7);cx.arc(ox+R*Math.cos(a),oy+R*Math.sin(a),5,0,7);cx.fill();};
+  ['cm_l'].forEach(id=>$('#'+id).oninput=upd);$('#cm_t').onchange=upd;$('#cm_comp').onchange=upd;upd();
+});
+
+/* ===== 6.4 power flow / efficiency ===== */
+section('power','DC Fundamentals','6.6 · Power Flow & Efficiency',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Power Flow, Losses & Efficiency</h2>
+  <p class="subttl">§8.7 / §9.10 · Where the power goes</p>
+  <div class="eq">η = <span class="frac"><span class="n">P<sub>out</sub></span><span class="d">P<sub>in</sub></span></span> ×100%  ;  P<sub>conv</sub> = E<sub>A</sub>I<sub>A</sub> = τ<sub>ind</sub>ω<sub>m</sub><span class="tag">(8‑50),(8‑55/56)</span></div>
+  <div class="grid2">
+    <div class="card tight"><b>Copper</b> — armature P<sub>A</sub>=I<sub>A</sub>²R<sub>A</sub> (8‑52); field P<sub>F</sub>=I<sub>F</sub>²R<sub>F</sub> (8‑53); brush P<sub>BD</sub>=V<sub>BD</sub>I<sub>A</sub> (8‑54, V<sub>BD</sub>≈2 V)</div>
+    <div class="card tight"><b>Rotational</b> — core (∝B²n<sup>1.5</sup>) + mechanical (∝n³); <b>stray</b> ≈ 1% of full load</div>
+  </div>
+  <h3>Efficiency calculator <span class="badge">Example 9‑8</span></h3>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">V<sub>T</sub> (V)</span><input type="number" id="ef_V" value="250" step="any"></label>
+      <label class="ctl"><span class="lab">Line I<sub>L</sub> (A)</span><input type="number" id="ef_IL" value="175" step="any"></label>
+      <label class="ctl"><span class="lab">Field I<sub>F</sub> (A)</span><input type="number" id="ef_IF" value="5" step="any"></label>
+      <label class="ctl"><span class="lab">R<sub>A</sub> (Ω)</span><input type="number" id="ef_RA" value="0.06" step="any"></label>
+      <label class="ctl"><span class="lab">V<sub>BD</sub> (V)</span><input type="number" id="ef_VBD" value="2" step="any"></label>
+      <label class="ctl"><span class="lab">Rotational loss (W)</span><input type="number" id="ef_rot" value="3168" step="any"></label>
+      <label class="ctl"><span class="lab">Stray (% of P<sub>in</sub>)</span><input type="number" id="ef_stray" value="1" step="any"></label>
+    </div>
+    <div class="grid2"><div class="out" id="ef_out"></div><div><canvas id="ef_can" width="380" height="150"></canvas></div></div>
+    <p class="note">Defaults = Example 9‑8 → P<sub>out</sub>≈36.8 kW, η≈84.2%.</p>
+  </div>`;
+  const cx=$('#ef_can').getContext('2d');
+  const upd=()=>{const V=+$('#ef_V').value,IL=+$('#ef_IL').value,IF=+$('#ef_IF').value,RA=+$('#ef_RA').value,VBD=+$('#ef_VBD').value,rot=+$('#ef_rot').value,stray=+$('#ef_stray').value/100;
+    const IA=IL-IF,Pin=V*IL,PA=IA*IA*RA,PF=V*IF,Pbr=VBD*IA,Pstray=stray*Pin,loss=PA+PF+Pbr+rot+Pstray,Pout=Pin-loss,eff=Pout/Pin*100;
+    $('#ef_out').innerHTML=`I<sub>A</sub> = I<sub>L</sub>−I<sub>F</sub> = <span class="k">${fmt(IA,0)} A</span>
+P<sub>in</sub> = V<sub>T</sub>I<sub>L</sub> = <span class="k">${fmt(Pin/1000,2)} kW</span>
+P<sub>A</sub>=<span class="k">${fmt(PA,0)}</span> P<sub>F</sub>=<span class="k">${fmt(PF,0)}</span> P<sub>brush</sub>=<span class="k">${fmt(Pbr,0)}</span> W
+P<sub>rot</sub>=<span class="k">${fmt(rot,0)}</span> P<sub>stray</sub>=<span class="k">${fmt(Pstray,0)}</span> W
+P<sub>out</sub> = <span class="k">${fmt(Pout/1000,2)} kW</span>   <b>η = <span class="k">${fmt(eff,1)}%</span></b>`;
+    cx.clearRect(0,0,380,150);const items=[['P_in',Pin,'#5b8cff'],['P_out',Pout,'#38d39f']];const mx=Pin;
+    cx.fillStyle='#5b8cff';cx.fillRect(60,20,Pin/mx*300,26);cx.fillStyle='#38d39f';cx.fillRect(60,60,Pout/mx*300,26);
+    cx.fillStyle='#ff6b81';cx.fillRect(60,100,loss/mx*300,26);
+    cx.fillStyle='#9aa3c4';cx.font='11px system-ui';cx.fillText('P_in',8,37);cx.fillText('P_out',8,77);cx.fillText('losses',8,117);};
+  ['ef_V','ef_IL','ef_IF','ef_RA','ef_VBD','ef_rot','ef_stray'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== 6.5 Motor equivalent circuit + mag curve ===== */
+section('motor','DC Motors','6.7 · Motor Circuit & Magnetization',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">DC Motor Equivalent Circuit</h2>
+  <p class="subttl">§9.2–9.3 · The circuit and the magnetization curve</p>
+  <div class="eq"><span class="vec">V</span><sub>T</sub> = E<sub>A</sub> + I<sub>A</sub>R<sub>A</sub> &nbsp;;&nbsp; ω = <span class="frac"><span class="n">V<sub>T</sub></span><span class="d">Kφ</span></span> − <span class="frac"><span class="n">R<sub>A</sub></span><span class="d">(Kφ)²</span></span> τ<sub>ind</sub><span class="tag">(9‑3),(9‑7)</span></div>
+  <p class="note">The general <b>speed equation</b> (9‑7) is a straight line: no‑load speed V<sub>T</sub>/Kφ minus a small droop ∝ τ. Field current sets φ via the magnetization curve; machines run near the <b>knee</b> (saturation), so flux barely rises with more field there.</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <p class="note">Speed ratio at constant flux: n₂ = (E<sub>A2</sub>/E<sub>A1</sub>)·n₁ (9‑8). Scale a mag‑curve point across speeds with E<sub>A</sub>/E<sub>A0</sub> = n/n₀ (9‑13).</p>
+        <label class="ctl"><span class="lab">Field current I<sub>F</sub> (A) <span class="val" id="mc_if_v"></span></span><input type="range" id="mc_if" min="0" max="8" value="5" step="0.1"></label>
+        <div class="out" id="mc_out"></div>
+      </div>
+      <div><canvas id="mc_can" width="380" height="260"></canvas><div class="note" style="text-align:center">magnetization curve E_A vs I_F (at fixed speed) — note the knee</div></div>
+    </div>
+  </div>`;
+  const cx=$('#mc_can').getContext('2d');
+  const Esat=280,I0=1.6; // saturating mag curve E=Esat*tanh(IF/I0)
+  const upd=()=>{const IF=+$('#mc_if').value;$('#mc_if_v').textContent=IF+' A';
+    const EA=Esat*Math.tanh(IF/I0),mu=IF>0?EA/IF:0;
+    $('#mc_out').innerHTML=`E<sub>A0</sub>(I<sub>F</sub>) = <span class="k">${fmt(EA,0)} V</span> (at rated speed)\n${IF>3?'operating past the knee (saturated) — more field adds little flux':'below the knee — flux ∝ field'}`;
+    axes(cx,380,260,{l:44,r:10,t:14,b:26},'I_F (A)','E_A (V)');
+    const xX=i=>44+i/8*(380-54),yY=e=>(260-26)-e/300*(260-40);
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2.5;cx.beginPath();for(let i=0;i<=8;i+=0.05){const x=xX(i),y=yY(Esat*Math.tanh(i/I0));i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();
+    cx.fillStyle='#38d39f';cx.beginPath();cx.arc(xX(IF),yY(EA),4,0,7);cx.fill();};
+  $('#mc_if').oninput=upd;upd();
+});
+
+/* ===== 6.6 Motor torque-speed (flagship) ===== */
+section('ts','DC Motors','6.8 · Motor Torque–Speed Curves ★',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">DC Motor Torque–Speed Characteristics</h2>
+  <p class="subttl">§9.4–9.7 · Shunt, series and compound on one axis</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">shunt: ω = <span class="frac"><span class="n">V<sub>T</sub></span><span class="d">Kφ</span></span> − <span class="frac"><span class="n">R<sub>A</sub></span><span class="d">(Kφ)²</span></span>τ<span class="tag">9‑7</span></div>
+    <div class="eq" style="text-align:center">series: τ = Kc·I<sub>A</sub>², ω = <span class="frac"><span class="n">V<sub>T</sub></span><span class="d">√(Kc·τ)</span></span> − <span class="frac"><span class="n">R</span><span class="d">Kc</span></span><span class="tag">9‑20,9‑23</span></div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Terminal voltage V<sub>T</sub> (V) <span class="val" id="t_V_v"></span></span><input type="range" id="t_V" min="120" max="600" value="250" step="10"></label>
+        <label class="ctl"><span class="lab">Armature R<sub>A</sub> (Ω) <span class="val" id="t_RA_v"></span></span><input type="range" id="t_RA" min="0.02" max="0.6" value="0.1" step="0.01"></label>
+        <label class="ctl"><span class="lab">Shunt field strength Kφ (V·s) <span class="val" id="t_kf_v"></span></span><input type="range" id="t_kf" min="0.5" max="3" value="2" step="0.05"></label>
+        <label class="ctl"><span class="lab">Series coupling K·c (V·s/A) <span class="val" id="t_kc_v"></span></span><input type="range" id="t_kc" min="0.005" max="0.08" value="0.03" step="0.001"></label>
+        <div class="flex" id="t_tabs">
+          <label class="ctl" style="margin:2px 0"><input type="checkbox" class="tsc" value="shunt" checked style="width:auto"> shunt</label>
+          <label class="ctl" style="margin:2px 0"><input type="checkbox" class="tsc" value="series" checked style="width:auto"> series</label>
+          <label class="ctl" style="margin:2px 0"><input type="checkbox" class="tsc" value="cum" checked style="width:auto"> cumulative</label>
+          <label class="ctl" style="margin:2px 0"><input type="checkbox" class="tsc" value="diff" style="width:auto"> differential</label>
+        </div>
+        <div class="out" id="t_out"></div>
+      </div>
+      <div><canvas id="t_can" width="440" height="360"></canvas></div>
+    </div>
+    <p class="note"><b>Shunt</b>: nearly constant speed (gentle droop). <b>Series</b>: huge starting torque (τ∝I²) but <b>runs away at no load</b>. <b>Cumulative compound</b>: high start torque, no runaway. <b>Differential</b>: unstable (speeds up with load).</p>
+  </div>`;
+  const can=$('#t_can'),cx=can.getContext('2d');
+  const cfg={shunt:['#38d39f','shunt'],series:['#ff6b81','series'],cum:['#5b8cff','cumulative'],diff:['#ffcc66','differential']};
+  const upd=()=>{
+    const V=+$('#t_V').value,RA=+$('#t_RA').value,kf=+$('#t_kf').value,kc=+$('#t_kc').value;
+    $('#t_V_v').textContent=V+' V';$('#t_RA_v').textContent=fmt(RA,2)+' Ω';$('#t_kf_v').textContent=fmt(kf,2);$('#t_kc_v').textContent=fmt(kc,3);
+    const on=$$('.tsc').filter(c=>c.checked).map(c=>c.value);
+    // parametric over IA: phi_tot depends on type
+    const Rtot={shunt:RA,series:RA*1.3,cum:RA*1.3,diff:RA*1.3};
+    function point(type,IA){let phi,R=Rtot[type];
+      if(type==='shunt')phi=kf;
+      else if(type==='series')phi=kc*IA;
+      else if(type==='cum')phi=kf+kc*IA;
+      else phi=Math.max(0.05,kf-kc*IA);
+      const E=V-IA*R;if(E<=0||phi<=0)return null;const w=E/phi,n=w*60/(2*Math.PI),tau=phi*IA;return{n,tau};}
+    // find scales
+    let taumax=0,nmax=0;on.forEach(t=>{for(let IA=1;IA<=400;IA+=2){const p=point(t,IA);if(p){taumax=Math.max(taumax,p.tau);nmax=Math.max(nmax,p.n);}}});
+    nmax=Math.min(nmax,6000);taumax=Math.max(taumax,50);
+    axes(cx,440,360,{l:48,r:12,t:14,b:26},'torque τ (N·m)','speed n (r/min)');
+    const xX=t=>48+t/taumax*(440-60),yY=n=>(360-26)-Math.min(n,nmax)/nmax*(360-40);
+    on.forEach((t,i)=>{const[col,lab]=cfg[t];cx.strokeStyle=col;cx.lineWidth=2.2;cx.beginPath();let st=false;
+      for(let IA=1;IA<=400;IA+=1){const p=point(t,IA);if(!p||p.n>nmax*1.02){st=false;continue;}const x=xX(p.tau),y=yY(p.n);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();
+      cx.fillStyle=col;cx.font='11px system-ui';cx.fillText(lab,54,26+i*13);});
+    $('#t_out').innerHTML=`No‑load shunt speed = V<sub>T</sub>/Kφ = <span class="k">${fmt(V/kf*60/(2*Math.PI),0)} r/min</span>\nSeries at no load → <span class="k">runaway (n→∞)</span>\nGraph: speed (y) vs torque (x) for each selected type.`;
+  };
+  ['t_V','t_RA','t_kf','t_kc'].forEach(id=>$('#'+id).oninput=upd);$$('.tsc').forEach(c=>c.onchange=upd);upd();
+});
+
+/* ===== 6.7 speed control ===== */
+section('speedctl','DC Motors','6.9 · Speed Control',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Shunt-Motor Speed Control</h2>
+  <p class="subttl">§9.4 · Three methods, three effects on the τ–n line</p>
+  <div class="grid3">
+    <div class="card tight"><b>Field resistance</b><br>R<sub>F</sub>↑ → I<sub>F</sub>↓ → φ↓ → speed <b>up</b> (above base). Constant max <b>power</b>; τ<sub>max</sub> ∝ 1/n.</div>
+    <div class="card tight"><b>Armature voltage</b><br>V<sub>A</sub>↑ → no‑load speed up, slope unchanged → speed <b>below base</b>. Constant max <b>torque</b> (9‑14,9‑15).</div>
+    <div class="card tight"><b>Armature resistance</b><br>insert R in series → steepens the droop. Simple but <b>wasteful</b> (I²R heat).</div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Method</span><select id="sc_m"><option value="V">armature voltage</option><option value="F">field resistance</option><option value="R">armature resistance</option></select></label>
+        <label class="ctl"><span class="lab">Control setting <span class="val" id="sc_v_v"></span></span><input type="range" id="sc_v" min="0.3" max="1.6" value="1" step="0.05"></label>
+        <div class="out" id="sc_out"></div>
+      </div>
+      <div><canvas id="sc_can" width="420" height="300"></canvas><div class="note" style="text-align:center">base curve (grey) vs adjusted curve</div></div>
+    </div>
+  </div>`;
+  const cx=$('#sc_can').getContext('2d');
+  const V0=250,RA0=0.1,kf0=2;
+  const upd=()=>{const m=$('#sc_m').value,s=+$('#sc_v').value;$('#sc_v_v').textContent=fmt(s,2)+'×';
+    let V=V0,RA=RA0,kf=kf0;if(m==='V')V=V0*s;else if(m==='F')kf=kf0/s;else RA=RA0*(1+ (s-0.3)*3);
+    const n0=V/kf*60/(2*Math.PI);
+    $('#sc_out').innerHTML=`Adjusted no‑load speed = <span class="k">${fmt(n0,0)} r/min</span>\n${m==='V'?'below‑base region, constant max torque':m==='F'?'above‑base region, constant max power':'steeper droop (lossy)'}`;
+    axes(cx,420,300,{l:48,r:12,t:14,b:26},'torque τ (N·m)','speed n (r/min)');
+    const taumax=400,nmax=2500,xX=t=>48+t/taumax*(420-60),yY=n=>(300-26)-Math.min(n,nmax)/nmax*(300-40);
+    const line=(V,RA,kf,col,dash)=>{cx.strokeStyle=col;cx.lineWidth=2;if(dash)cx.setLineDash([5,4]);cx.beginPath();let st=false;
+      for(let IA=0;IA<=300;IA+=2){const E=V-IA*RA,w=E/kf,n=w*60/(2*Math.PI),tau=kf*IA;if(n<0)continue;const x=xX(tau),y=yY(n);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();cx.setLineDash([]);};
+    line(V0,RA0,kf0,'#39507a',true);
+    line(V,RA,kf,'#38d39f',false);};
+  ['sc_m','sc_v'].forEach(id=>$('#'+id).oninput=upd);$('#sc_m').onchange=upd;upd();
+});
+
+/* ===== 6.8 generators terminal char ===== */
+section('gen','DC Generators','6.10 · Generator Terminal Characteristics',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">DC Generator Terminal Characteristics</h2>
+  <p class="subttl">§9.11–9.16 · V<sub>T</sub> vs load current for each type</p>
+  <div class="eq">VR = <span class="frac"><span class="n">V<sub>nl</sub> − V<sub>fl</sub></span><span class="d">V<sub>fl</sub></span></span> ×100%<span class="tag">(9‑39)</span></div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Type</span><select id="g_t">
+          <option value="sep">separately excited</option>
+          <option value="shunt">shunt (self‑excited)</option>
+          <option value="series">series</option>
+          <option value="cum">cumulatively compound</option>
+          <option value="diff">differentially compound</option>
+        </select></label>
+        <label class="ctl"><span class="lab">No‑load / rated E<sub>A</sub> (V)</span><input type="number" id="g_E" value="430" step="any"></label>
+        <label class="ctl"><span class="lab">R<sub>A</sub>(+R<sub>S</sub>) (Ω)</span><input type="number" id="g_R" value="0.05" step="any"></label>
+        <label class="ctl"><span class="lab">Series compounding <span class="val" id="g_c_v"></span></span><input type="range" id="g_c" min="0" max="1.5" value="0.6" step="0.05"></label>
+        <div class="out" id="g_out"></div>
+      </div>
+      <div><canvas id="g_can" width="420" height="300"></canvas><div class="note" style="text-align:center">V_T vs I_L — grey dashed = separately-excited reference</div></div>
+    </div>
+    <p class="note">Separately excited droops linearly; <b>shunt</b> droops more steeply (falling V reduces field); <b>series</b> rises then falls; <b>cumulative compound</b> can be under/flat/<b>over</b>‑compounded (series knob); <b>differential</b> collapses fast.</p>
+  </div>`;
+  const cx=$('#g_can').getContext('2d');
+  const Imax=400,Esat=480,I0=180;
+  const upd=()=>{const t=$('#g_t').value,E=+$('#g_E').value,R=+$('#g_R').value,cc=+$('#g_c').value;$('#g_c_v').textContent=fmt(cc,2);
+    // V_T(IL) per type
+    const VT=(IL)=>{
+      if(t==='sep')return E-IL*R;
+      if(t==='series')return Esat*Math.tanh(IL/I0)-IL*R*1.5;
+      // self-excited: iterate E_A(I_F=VT/Rf) — approximate shunt with steeper droop + collapse
+      if(t==='shunt'){let v=E;for(let k=0;k<40;k++){v=E*Math.tanh((v/E)*1.6)/Math.tanh(1.6)-IL*R*1.4;}return v;}
+      if(t==='cum'){let v=E;for(let k=0;k<40;k++){v=E*Math.tanh((v/E)*1.6)/Math.tanh(1.6)+cc*IL*0.15-IL*R*1.4;}return v;}
+      // diff
+      let v=E;for(let k=0;k<40;k++){v=E*Math.tanh((v/E)*1.6)/Math.tanh(1.6)-cc*IL*0.25-IL*R*1.4;}return v;
+    };
+    const Vnl=VT(0.1),Vfl=VT(Imax),VR=(Vnl-Vfl)/Vfl*100;
+    $('#g_out').innerHTML=`No‑load V<sub>T</sub> ≈ <span class="k">${fmt(Vnl,0)} V</span>\nFull‑load V<sub>T</sub> ≈ <span class="k">${fmt(Vfl,0)} V</span>\nVoltage regulation ≈ <span class="k">${fmt(VR,1)} %</span>`;
+    axes(cx,420,300,{l:48,r:12,t:14,b:26},'load current I_L (A)','V_T (V)');
+    const Vmax=E*1.35,xX=i=>48+i/Imax*(420-60),yY=v=>(300-26)-Math.max(0,v)/Vmax*(300-40);
+    // reference sep-excited
+    cx.strokeStyle='#39507a';cx.lineWidth=1.5;cx.setLineDash([5,4]);cx.beginPath();for(let i=0;i<=Imax;i+=4){const x=xX(i),y=yY(E-i*R);i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();cx.setLineDash([]);
+    cx.strokeStyle='#38d39f';cx.lineWidth=2.5;cx.beginPath();let st=false;for(let i=0.1;i<=Imax;i+=2){const v=VT(i);if(v<0){st=false;continue;}const x=xX(i),y=yY(v);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();};
+  ['g_E','g_R','g_c'].forEach(id=>$('#'+id).oninput=upd);$('#g_t').onchange=upd;upd();
+});
+
+/* ===== 6.9 voltage buildup ===== */
+section('buildup','DC Generators','6.11 · Shunt-Gen Voltage Buildup',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Voltage Buildup & Critical Resistance</h2>
+  <p class="subttl">§9.13 · How a self-excited shunt generator bootstraps its own voltage</p>
+  <p class="note">Residual flux makes a tiny E<sub>A</sub> → drives field current I<sub>F</sub>=V<sub>T</sub>/R<sub>F</sub> → more flux → more E<sub>A</sub> … climbing the magnetization curve until it meets the <b>field‑resistance line</b> (E=R<sub>F</sub>·I<sub>F</sub>). If R<sub>F</sub> exceeds the <b>critical resistance</b> (the initial slope of the mag curve), the line stays above the curve and <b>the voltage never builds</b>.</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Field resistance R<sub>F</sub> (Ω) <span class="val" id="b_rf_v"></span></span><input type="range" id="b_rf" min="20" max="120" value="50" step="1"></label>
+        <label class="ctl"><span class="lab">Speed (× rated) <span class="val" id="b_n_v"></span></span><input type="range" id="b_n" min="0.4" max="1.3" value="1" step="0.05"></label>
+        <div class="out" id="b_out"></div>
+      </div>
+      <div><canvas id="b_can" width="420" height="300"></canvas><div class="note" style="text-align:center">mag curve (blue) ∩ field line (amber) = operating voltage</div></div>
+    </div>
+  </div>`;
+  const cx=$('#b_can').getContext('2d');
+  const Esat=280,I0=1.6; // E_A0(IF)=Esat*tanh(IF/I0) at rated speed
+  const critR=Esat/I0; // initial slope
+  const upd=()=>{const RF=+$('#b_rf').value,n=+$('#b_n').value;$('#b_rf_v').textContent=RF+' Ω';$('#b_n_v').textContent=fmt(n,2)+'×';
+    const mag=IF=>Esat*Math.tanh(IF/I0)*n;
+    // find intersection mag(IF)=RF*IF (besides 0)
+    let op=null;for(let IF=0.05;IF<=8;IF+=0.01){if(mag(IF)<=RF*IF+0.1&&IF>0.2){op={IF,V:RF*IF};break;}}
+    // better: last IF where mag>RF*IF
+    let vI=0;for(let IF=0.05;IF<=8;IF+=0.005){if(mag(IF)>=RF*IF)vI=IF;}
+    const V=mag(vI),crit=critR*n;
+    const builds=RF<crit;
+    $('#b_out').innerHTML=`Critical resistance (this speed) ≈ <span class="k">${fmt(crit,0)} Ω</span>\n${builds?`✓ builds up to V<sub>T</sub> ≈ <span class="k">${fmt(V,0)} V</span>`:'<span style="color:#ff6b81">✗ R<sub>F</sub> too high — voltage collapses to residual</span>'}`;
+    axes(cx,420,300,{l:44,r:12,t:14,b:26},'field current I_F (A)','voltage (V)');
+    const xX=i=>44+i/8*(420-56),yY=v=>(300-26)-v/300*(300-40);
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2.5;cx.beginPath();for(let i=0;i<=8;i+=0.05){const x=xX(i),y=yY(mag(i));i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();
+    cx.strokeStyle='#ffcc66';cx.lineWidth=2;cx.beginPath();cx.moveTo(xX(0),yY(0));cx.lineTo(xX(8),yY(Math.min(300,RF*8)));cx.stroke();
+    cx.fillStyle='#ffcc66';cx.font='11px system-ui';cx.fillText('R_F line',xX(6),yY(Math.min(290,RF*6))-6);
+    if(builds){cx.fillStyle='#38d39f';cx.beginPath();cx.arc(xX(vI),yY(V),5,0,7);cx.fill();}};
+  ['b_rf','b_n'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===== practice ===== */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — DC machines</h2>
+  <p class="subttl">Fresh numbers each time; check against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="ea">6.4 · E_A = K′φn</option>
+        <option value="tau">6.4 · τ = KφI_A</option>
+        <option value="paths">6.4 · Current paths a (lap/wave)</option>
+        <option value="kvl">6.7 · Motor E_A from V_T</option>
+        <option value="speed">6.7 · Speed ratio n₂ (constant flux)</option>
+        <option value="series">6.8 · Series torque τ=Kc·I_A²</option>
+        <option value="eff">6.6 · Efficiency</option>
+        <option value="vr">6.10 · Voltage regulation</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    ea:()=>{const Kp=rnd(5,30,0.5),phi=rnd(0.01,0.06,0.005),n=rnd(400,2000,50);return{q:`K′=<b>${Kp}</b>, φ=<b>${phi} Wb</b>, n=<b>${n} r/min</b>. Internal voltage E<sub>A</sub> (V)?`,ans:Kp*phi*n,unit:'V',tol:0.02,sol:`E<sub>A</sub>=K′φn=${Kp}·${phi}·${n}=<b>${fmt(Kp*phi*n,1)} V</b>`};},
+    tau:()=>{const K=rnd(50,300,10),phi=rnd(0.01,0.06,0.005),IA=rnd(20,200,5);return{q:`K=<b>${K}</b>, φ=<b>${phi} Wb</b>, I<sub>A</sub>=<b>${IA} A</b>. Induced torque τ (N·m)?`,ans:K*phi*IA,unit:'N·m',tol:0.02,sol:`τ=KφI<sub>A</sub>=${K}·${phi}·${IA}=<b>${fmt(K*phi*IA,1)} N·m</b>`};},
+    paths:()=>{const lap=Math.random()<0.5,P=rnd(2,12,2),m=rnd(1,3,1);const a=lap?m*P:2*m;return{q:`A <b>${lap?'lap':'wave'}</b> winding, P=<b>${P}</b> poles, m=<b>${m}</b>‑plex. Number of current paths a?`,ans:a,unit:'paths',sol:`${lap?'lap: a=m·P='+m+'·'+P:'wave: a=2m=2·'+m}=<b>${a}</b>`};},
+    kvl:()=>{const V=rnd(120,500,10),IA=rnd(20,200,5),RA=rnd(0.03,0.2,0.01);return{q:`Motor: V<sub>T</sub>=<b>${V} V</b>, I<sub>A</sub>=<b>${IA} A</b>, R<sub>A</sub>=<b>${RA} Ω</b>. Back‑emf E<sub>A</sub> (V)?`,ans:V-IA*RA,unit:'V',tol:0.02,sol:`E<sub>A</sub>=V<sub>T</sub>−I<sub>A</sub>R<sub>A</sub>=${V}−${IA}·${RA}=<b>${fmt(V-IA*RA,1)} V</b>`};},
+    speed:()=>{const E1=rnd(200,400,5),E2=rnd(180,420,5),n1=rnd(800,1800,50);return{q:`Constant flux: E<sub>A1</sub>=<b>${E1} V</b> at n₁=<b>${n1} r/min</b>; E<sub>A2</sub>=<b>${E2} V</b>. New speed n₂ (r/min)?`,ans:E2/E1*n1,unit:'r/min',tol:0.02,sol:`n₂=(E<sub>A2</sub>/E<sub>A1</sub>)n₁=(${E2}/${E1})·${n1}=<b>${fmt(E2/E1*n1,0)} r/min</b>`};},
+    series:()=>{const Kc=rnd(0.01,0.05,0.005),IA=rnd(20,120,5);return{q:`Series motor: K·c=<b>${Kc}</b>, I<sub>A</sub>=<b>${IA} A</b>. Torque τ=Kc·I<sub>A</sub>² (N·m)?`,ans:Kc*IA*IA,unit:'N·m',tol:0.02,sol:`τ=Kc·I<sub>A</sub>²=${Kc}·${IA}²=<b>${fmt(Kc*IA*IA,1)} N·m</b>`};},
+    eff:()=>{const Pin=rnd(10,60,2)*1000,loss=rnd(1,7,0.5)*1000;return{q:`P<sub>in</sub>=<b>${Pin/1000} kW</b>, total losses=<b>${loss/1000} kW</b>. Efficiency (%)?`,ans:(Pin-loss)/Pin*100,unit:'%',tol:0.02,sol:`η=(P<sub>in</sub>−losses)/P<sub>in</sub>=<b>${fmt((Pin-loss)/Pin*100,1)}%</b>`};},
+    vr:()=>{const Vfl=rnd(200,450,10),Vnl=Vfl+rnd(10,80,5);return{q:`Generator: V<sub>nl</sub>=<b>${Vnl} V</b>, V<sub>fl</sub>=<b>${Vfl} V</b>. Voltage regulation (%)?`,ans:(Vnl-Vfl)/Vfl*100,unit:'%',tol:0.02,sol:`VR=(V<sub>nl</sub>−V<sub>fl</sub>)/V<sub>fl</sub>=<b>${fmt((Vnl-Vfl)/Vfl*100,1)}%</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;$('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;$('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;$('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ===== summary ===== */
+section('summary','Practice','6.12 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self-Test</h2><p class="subttl">§8.8 / §9.17</p>
+  <div class="card"><table>
+    <tr><th>Eq.</th><th>Relation</th><th>Meaning</th></tr>
+    <tr><td>8‑38/41</td><td>E<sub>A</sub>=Kφω=K′φn</td><td>internal voltage</td></tr>
+    <tr><td>8‑49</td><td>τ<sub>ind</sub>=KφI<sub>A</sub></td><td>induced torque</td></tr>
+    <tr><td>8‑39/42</td><td>K=ZP/2πa, K′=ZP/60a</td><td>machine constant</td></tr>
+    <tr><td>9‑3</td><td>V<sub>T</sub>=E<sub>A</sub>+I<sub>A</sub>R<sub>A</sub></td><td>motor circuit</td></tr>
+    <tr><td>9‑7</td><td>ω=V<sub>T</sub>/Kφ − R<sub>A</sub>τ/(Kφ)²</td><td>shunt speed equation</td></tr>
+    <tr><td>9‑20</td><td>τ=Kc·I<sub>A</sub>²</td><td>series torque</td></tr>
+    <tr><td>9‑41</td><td>V<sub>T</sub>=E<sub>A</sub>−I<sub>A</sub>R<sub>A</sub></td><td>generator circuit</td></tr>
+    <tr><td>9‑39</td><td>VR=(V<sub>nl</sub>−V<sub>fl</sub>)/V<sub>fl</sub></td><td>voltage regulation</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3><div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['What turns the AC loop voltage into DC at the terminals?',['a transformer','the commutator + brushes','the field winding','saturation'],1],
+    ['In a DC machine, E_A is proportional to…',['flux only','flux × speed','current × speed','1/flux'],1],
+    ['Induced torque τ_ind equals…',['KφI_A','Kφω','I_A²R_A','V_T·I_L'],0],
+    ['A lap winding has current paths a =',['2m','m·P','2P','Z/2'],1],
+    ['A shunt DC motor\'s speed, as load rises, …',['rises sharply','drops slightly (nearly constant)','doubles','is unstable'],1],
+    ['A series DC motor at no load…',['stops','runs at rated speed','runs away (overspeeds)','draws no current'],2],
+    ['Series-motor torque is proportional to…',['I_A','I_A²','1/I_A','√I_A'],1],
+    ['Raising field resistance in a shunt motor makes it run…',['slower','faster (above base)','at the same speed','backwards'],1],
+    ['A self-excited shunt generator fails to build up if R_F is…',['below critical','above critical resistance','exactly zero','negative'],1],
+    ['Interpoles are used to…',['excite the field','improve commutation (cancel L·di/dt)','cool the machine','measure speed'],1],
+    ['The neutral-plane shift from armature reaction grows with…',['speed','load (armature current)','field only','frequency'],1],
+    ['A differentially compounded motor tends to…',['hold speed','run away / be unstable','have zero torque','act as a generator'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;$$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];$$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');$('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+const main=$('#main'),nav=$('#nav');
+function render(id){const s=SECTIONS.find(x=>x.id===id);if(!s)return;let el=$('#sec-'+id);if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}$$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));window.scrollTo(0,0);location.hash=id;}
+function go(id){render(id);}
+let lastGrp=null;SECTIONS.forEach(s=>{if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);});
+render((location.hash||'#dcintro').slice(1)||'dcintro');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 6;
+  var chCode = "CHAPTER 06";
+  var chTitle = "Chapter 6: DC Machines";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+{
+  "mapped": [
+    {
+      "sourceWeek": 1,
+      "sourceTopics": "Magnetic circuits and numerical examples",
+      "id": "UdS_qWUEynY",
+      "title": "Magnetic Circuits",
+      "url": "https://youtu.be/UdS_qWUEynY"
+    },
+    {
+      "sourceWeek": 1,
+      "sourceTopics": "Magnetic circuits and numerical examples",
+      "id": "aTKp-zjnnZM",
+      "title": "Magnetic Circuits Numerical Example",
+      "url": "https://youtu.be/aTKp-zjnnZM"
+    },
+    {
+      "sourceWeek": 1,
+      "sourceTopics": "Magnetic circuits and numerical examples",
+      "id": "_0SMkTzzHzs",
+      "title": "Magnetic Circuit Numerical 2",
+      "url": "https://youtu.be/_0SMkTzzHzs"
+    },
+    {
+      "sourceWeek": 3,
+      "sourceTopics": "Transformer equivalent circuit, voltage regulation and efficiency",
+      "id": "MGCTRL9GvIQ",
+      "title": "Equivalent Circuit Diagram of Transformers (Part 1)",
+      "url": "https://youtu.be/MGCTRL9GvIQ"
+    },
+    {
+      "sourceWeek": 3,
+      "sourceTopics": "Transformer equivalent circuit, voltage regulation and efficiency",
+      "id": "2OQQTiv9AgI",
+      "title": "Equivalent Circuit Diagram of Transformers (Part 2)",
+      "url": "https://youtu.be/2OQQTiv9AgI"
+    },
+    {
+      "sourceWeek": 3,
+      "sourceTopics": "Transformer equivalent circuit, voltage regulation and efficiency",
+      "id": "lEz4i2VlbT8",
+      "title": "Effect of loads on transformer",
+      "url": "https://youtu.be/lEz4i2VlbT8"
+    },
+    {
+      "sourceWeek": 3,
+      "sourceTopics": "Transformer equivalent circuit, voltage regulation and efficiency",
+      "id": "KKuoiivUDC4",
+      "title": "Open Circuit and Short Circuit test of transformer (Complete Numerical )",
+      "url": "https://youtu.be/KKuoiivUDC4"
+    },
+    {
+      "sourceWeek": 5,
+      "sourceTopics": "DC-machine losses, maximum efficiency and armature reaction",
+      "id": "8ucji-Af1S0",
+      "title": "Armature Reaction Effect on DC Machines",
+      "url": "https://youtu.be/8ucji-Af1S0"
+    },
+    {
+      "sourceWeek": 6,
+      "sourceTopics": "DC motors and speed control",
+      "id": "231etTEJANo",
+      "title": "Speed Control of DC Motor",
+      "url": "https://youtu.be/231etTEJANo"
+    },
+    {
+      "sourceWeek": 6,
+      "sourceTopics": "DC motors and speed control",
+      "id": "54GXQRYh3J4",
+      "title": "Torque Speed Characteristics of DC Motor",
+      "url": "https://youtu.be/54GXQRYh3J4"
+    },
+    {
+      "sourceWeek": 7,
+      "sourceTopics": "DC-motor speed/load and torque/load characteristics",
+      "id": "0jd7dSCKQtM",
+      "title": "EMF and Torque Equation Of DC Machines",
+      "url": "https://youtu.be/0jd7dSCKQtM"
+    },
+    {
+      "sourceWeek": 10,
+      "sourceTopics": "Induction-motor induced EMF, rotor frequency, speed and torque",
+      "id": "FHOJK_soS5Q",
+      "title": "REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR",
+      "url": "https://youtu.be/FHOJK_soS5Q"
+    },
+    {
+      "sourceWeek": 10,
+      "sourceTopics": "Induction-motor induced EMF, rotor frequency, speed and torque",
+      "id": "Zb1W9dB9Clk",
+      "title": "TYPES OF STATOR WINDING",
+      "url": "https://youtu.be/Zb1W9dB9Clk"
+    },
+    {
+      "sourceWeek": 10,
+      "sourceTopics": "Induction-motor induced EMF, rotor frequency, speed and torque",
+      "id": "E5Gcd-HuXWM",
+      "title": "Effect of poles and frequency on revolving magnetic field",
+      "url": "https://youtu.be/E5Gcd-HuXWM"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "8rraTyqqii8",
+      "title": "Slip",
+      "url": "https://youtu.be/8rraTyqqii8"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "4fFF58yJh3E",
+      "title": "Difference between squirrel cage and wound rotor induction motor.",
+      "url": "https://youtu.be/4fFF58yJh3E"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "V8RFq9ZgsQc",
+      "title": "Equivalent Circuit diagram of Induction Motor (part 1)",
+      "url": "https://youtu.be/V8RFq9ZgsQc"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "X_-z_wvXTfA",
+      "title": "Equivalent Circuit diagram of Induction Motor (part 2)",
+      "url": "https://youtu.be/X_-z_wvXTfA"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "IBR2Iei0aSs",
+      "title": "Equivalent Circuit diagram of Induction Motor (part 3)",
+      "url": "https://youtu.be/IBR2Iei0aSs"
+    },
+    {
+      "sourceWeek": 11,
+      "sourceTopics": "Induction-motor EMF, rotor types, slip, equivalent circuit and power flow",
+      "id": "RgsHqcyhGOg",
+      "title": "Approximate Equivalent Circuit diagram of Induction Motor",
+      "url": "https://youtu.be/RgsHqcyhGOg"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and power-loss calculations",
+      "id": "HCDqHBm53GQ",
+      "title": "Power Flow and Losses in Induction Motor",
+      "url": "https://youtu.be/HCDqHBm53GQ"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and power-loss calculations",
+      "id": "J-Rwq2nKIRs",
+      "title": "Power and Losses relations of Induction Motor",
+      "url": "https://youtu.be/J-Rwq2nKIRs"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and torque/speed characteristics",
+      "id": "uZ3HvgbYyoI",
+      "title": "Torque Speed Characteristics Part 1",
+      "url": "https://youtu.be/uZ3HvgbYyoI"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and torque/speed characteristics",
+      "id": "PNFDDfgmkXw",
+      "title": "Torque and Speed Characteristics part 2",
+      "url": "https://youtu.be/PNFDDfgmkXw"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and torque/speed characteristics",
+      "id": "0bagD_YDL58",
+      "title": "Maximum Torque Equation Derivation",
+      "url": "https://youtu.be/0bagD_YDL58"
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and torque/speed characteristics",
+      "id": "nDLLAzgrxQE",
+      "title": "Numerical 3 on Torque and Speed Characteristics",
+      "url": "https://youtu.be/nDLLAzgrxQE",
+      "sourceOccurrences": 2
+    }
+  ],
+  "unresolved": [
+    {
+      "sourceWeek": 1,
+      "sourceTopics": "Magnetic circuits and numerical examples",
+      "id": "5uOh2qeQXJQ",
+      "title": "Introduction to capacitors and inductors.",
+      "url": "https://youtu.be/5uOh2qeQXJQ",
+      "reason": "The verified title concerns capacitors and inductors, not the magnetic-circuit topics in this table cell."
+    },
+    {
+      "sourceWeek": 2,
+      "sourceTopics": "Transformer no-load phasor diagram",
+      "id": "SY8gxStbVbo",
+      "title": "Introduction to transformers",
+      "url": "https://youtu.be/SY8gxStbVbo",
+      "reason": "The title is a general transformer introduction and does not verify coverage of the no-load phasor topic."
+    },
+    {
+      "sourceWeek": 4,
+      "sourceTopics": "Transformer cooling, CT/PT and transformer applications",
+      "id": "_yxk7_lJ19o",
+      "title": "Dc Machines Introduction",
+      "url": "https://youtu.be/_yxk7_lJ19o",
+      "reason": "The verified DC-machine title conflicts with the transformer topics in the associated table cell."
+    },
+    {
+      "sourceWeek": 5,
+      "sourceTopics": "DC-machine losses, maximum efficiency and armature reaction",
+      "id": "l14RBEDpR5s",
+      "title": "DC Machine Poles and Speed Relation",
+      "url": "https://youtu.be/l14RBEDpR5s",
+      "reason": "The title concerns poles and speed, not the listed losses, efficiency or armature-reaction topics; no more specific registered topic is verified."
+    },
+    {
+      "sourceWeek": 9,
+      "sourceTopics": "Three-phase rotating magnetic field and synchronous speed",
+      "id": "d01KmYD-n6g",
+      "title": "voltage system",
+      "url": "https://youtu.be/d01KmYD-n6g",
+      "reason": "The verified title is too generic to establish a connection to rotating fields or synchronous speed."
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and parameter calculations",
+      "id": "XdbeV8Bd_28",
+      "title": "Numerical 1 Induction Motor",
+      "url": "https://youtu.be/XdbeV8Bd_28",
+      "reason": "The title confirms an induction-motor numerical but does not identify which registered topic or test it covers."
+    },
+    {
+      "sourceWeek": 12,
+      "sourceTopics": "Induction-motor tests and parameter calculations",
+      "id": "G90sTaOWMWc",
+      "title": "Induction motor Numerical 2",
+      "url": "https://youtu.be/G90sTaOWMWc",
+      "reason": "The title confirms an induction-motor numerical but does not identify which registered topic or test it covers."
+    },
+    {
+      "sourceWeek": 13,
+      "sourceTopics": "Synchronous-generator characteristics, phasors and parameter tests",
+      "id": "kNtMxY4h4x8",
+      "title": "Synchronous generator LEC1",
+      "url": "https://youtu.be/kNtMxY4h4x8",
+      "reason": "The lecture number alone does not establish which of the registered synchronous-generator topics it teaches."
+    },
+    {
+      "sourceWeek": 14,
+      "sourceTopics": "Parallel operation and load sharing of synchronous generators",
+      "id": "-aMkXcoZ_ok",
+      "title": "Synchronous Generator LEC2",
+      "url": "https://youtu.be/-aMkXcoZ_ok",
+      "reason": "The lecture number alone does not establish coverage of parallel operation or load sharing."
+    },
+    {
+      "sourceWeek": 15,
+      "sourceTopics": "Synchronous-machine operation and characteristics",
+      "id": "gE4bjtIUnWs",
+      "title": "Synchronous Generator LEC3",
+      "url": "https://youtu.be/gE4bjtIUnWs",
+      "reason": "The lecture number alone does not identify a specific registered topic."
+    },
+    {
+      "sourceWeek": 16,
+      "sourceTopics": "Hysteresis, shaded-pole and universal motors",
+      "id": "aivRFF_91IU",
+      "title": "Synchronous Generator LEC4",
+      "url": "https://youtu.be/aivRFF_91IU",
+      "reason": "The verified title concerns synchronous generators, not the special-motor topics in the associated table cell."
+    }
+  ],
+  "sourceNotes": [
+    "Titles were checked using YouTube's public oEmbed metadata on 2026-10-16.",
+    "The weekly-plan document repeats nDLLAzgrxQE; it is retained as one video with sourceOccurrences set to 2.",
+    "Unresolved links remain available here but are not assigned to a chapter topic.",
+    "Teacher-plan week/topic fields, not textbook chapter/topic IDs, are the authoritative grouping for the video library."
+  ]
+}

@@ -1,0 +1,1009 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF — Introduction: AC Systems & Reactive Components (Interactive)</title>
+<style>
+:root{--bg:#0f1220;--panel:#171a2b;--panel2:#1e2237;--ink:#e8ebf7;--muted:#9aa3c4;--acc:#5b8cff;--acc2:#38d39f;--warn:#ffcc66;--bad:#ff6b81;--line:#2a2f4a;--chip:#242a44;--good:#38d39f;--pa:#5b8cff;--pb:#38d39f;--pc:#ff6b81}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}.brand h1{font-size:16px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.brand a{font-size:12px}
+.nav{padding:8px;flex:1}.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}.credit b{color:var(--ink);font-weight:600}.credit a{color:var(--acc)}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}.frac .d{display:block;padding:0 6px}
+.vec{font-weight:700}sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.quiz .q{margin:10px 0}.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}.quiz .opt:hover{border-color:var(--acc)}.quiz .opt.correct{border-color:var(--good);background:#0c1a14}.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Introduction — AC Systems & Reactive Components<br><span style="color:#6b7398">prerequisites for the machine chapters</span></p>
+      <p><a href="chapter1.html">Chapter 1 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit"><div><b>Dr. Muhammad Salim Butt</b></div><a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{if(x===null||x===undefined||!isFinite(x))return '—';if(x!==0&&(Math.abs(x)<1e-3||Math.abs(x)>=1e5))return x.toExponential(Math.max(0,d-1));return (+x.toFixed(d)).toString();};
+const D2R=Math.PI/180,R2D=180/Math.PI;
+function axes(ctx,W,H,pad,xlab,ylab){ctx.clearRect(0,0,W,H);ctx.strokeStyle='#232a49';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}}
+function arrow(ctx,x0,y0,x1,y1,c,w=2.5,lab){ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();const a=Math.atan2(y1-y0,x1-x0);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a-0.4),y1-9*Math.sin(a-0.4));ctx.moveTo(x1,y1);ctx.lineTo(x1-9*Math.cos(a+0.4),y1-9*Math.sin(a+0.4));ctx.stroke();if(lab){ctx.fillStyle=c;ctx.font='12px system-ui';ctx.fillText(lab,x1+4,y1-2);}}
+/* ---- schematic symbol builders (return SVG string fragments) ---- */
+function resH(x1,x2,y,c='#ff6b81',lab='',ly){const w=x2-x1,z=x1+w*0.22,zw=w*0.56,n=6,seg=zw/n,a=7;let p=`M ${x1} ${y} H ${z}`;for(let i=1;i<n;i++)p+=` L ${z+seg*(i-0.5)} ${i%2?y-a:y+a}`;p+=` L ${z+zw} ${y} H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function indH(x1,x2,y,c='#ffcc66',lab='',ly){const w=x2-x1,z=x1+w*0.2,bw=w*0.6,n=4,r=bw/(2*n);let p=`M ${x1} ${y} H ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${z+2*r*(i+1)} ${y}`;p+=` H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function capH(x1,x2,y,c='#5b8cff',lab='',ly){const m=(x1+x2)/2,g=5,ph=12;return `<path d="M ${x1} ${y} H ${m-g} M ${m+g} ${y} H ${x2}" fill="none" stroke="${c}" stroke-width="2"/><line x1="${m-g}" y1="${y-ph}" x2="${m-g}" y2="${y+ph}" stroke="${c}" stroke-width="2"/><line x1="${m+g}" y1="${y-ph}" x2="${m+g}" y2="${y+ph}" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${m}" y="${ly||y-16}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function resV(x,y1,y2,c='#ff6b81',lab=''){const h=y2-y1,z=y1+h*0.22,zw=h*0.56,n=6,seg=zw/n,a=7;let p=`M ${x} ${y1} V ${z}`;for(let i=1;i<n;i++)p+=` L ${i%2?x-a:x+a} ${z+seg*(i-0.5)}`;p+=` L ${x} ${z+zw} V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${x-10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="end">${lab}</text>`:'');}
+function indV(x,y1,y2,c='#ffcc66',lab=''){const h=y2-y1,z=y1+h*0.2,bw=h*0.6,n=4,r=bw/(2*n);let p=`M ${x} ${y1} V ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${x} ${z+2*r*(i+1)}`;p+=` V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${x+10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="start">${lab}</text>`:'');}
+const SECTIONS=[];function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* ================= Function graphs (math toolkit) ================= */
+section('functions','Math Toolkit','0 · Function Graphs & Calculus',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Graphs of Common Functions</h2>
+  <p class="subttl">A visual math toolkit — the shapes, how they shift & stretch, and how the derivative / integral look</p>
+  <div class="card">
+    <div class="flex" style="gap:6px">
+      <span class="pill" style="color:var(--muted)">function:</span>
+      <div class="tabs" id="fn_tabs"></div>
+    </div>
+    <div class="grid2">
+      <div>
+        <div class="eq" id="fn_eq" style="font-size:17px">y = f(x)</div>
+        <h4>Axis shifting & scaling</h4>
+        <label class="ctl"><span class="lab">vertical shift &nbsp;+k (adds to y) <span class="val" id="fn_k_v"></span></span><input type="range" id="fn_k" min="-5" max="5" value="0" step="0.5"></label>
+        <label class="ctl"><span class="lab">horizontal shift &nbsp;h  (x → x−h) &nbsp;· also the c for “x = c” <span class="val" id="fn_h_v"></span></span><input type="range" id="fn_h" min="-5" max="5" value="0" step="0.5"></label>
+        <label class="ctl"><span class="lab">vertical stretch &nbsp;a (a·f) <span class="val" id="fn_a_v"></span></span><input type="range" id="fn_a" min="-3" max="3" value="1" step="0.25"></label>
+        <label class="ctl"><span class="lab">horizontal stretch &nbsp;b (f(b·x)) <span class="val" id="fn_b_v"></span></span><input type="range" id="fn_b" min="0.25" max="3" value="1" step="0.25"></label>
+        <h4>Calculus overlays</h4>
+        <div class="flex">
+          <label class="ctl" style="margin:3px 0"><input type="checkbox" id="fn_base" checked style="width:auto"> base f(x) (grey)</label>
+          <label class="ctl" style="margin:3px 0"><input type="checkbox" id="fn_der" style="width:auto"> derivative f′(x) (amber)</label>
+          <label class="ctl" style="margin:3px 0"><input type="checkbox" id="fn_int" style="width:auto"> integral ∫f dx (green)</label>
+        </div>
+        <div class="out" id="fn_out"></div>
+      </div>
+      <div><canvas id="fn_can" width="460" height="440"></canvas></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card tight"><b>Shifting rule</b> — <b>f(x)+k</b> moves the curve <b>up</b> by k (down if k&lt;0). <b>f(x−h)</b> moves it <b>right</b> by h (a minus inside x shifts the <i>opposite</i> way). <b>a·f(x)</b> stretches vertically (flips if a&lt;0); <b>f(b·x)</b> squeezes horizontally by b. <b>x = c</b> is a <i>vertical line</i> — not a function of x.</div>
+    <div class="card tight"><b>Calculus, visually</b> — the <b>derivative</b> f′(x) is the <b>slope</b> of the curve at each point (positive where rising, zero at peaks/troughs, negative where falling). The <b>integral</b> ∫f dx is the running <b>signed area</b> under the curve (rising where f&gt;0, falling where f&lt;0).</div>
+  </div>
+  <div class="card note"><b>Why this matters:</b> the machine equations later are written in these shapes — a <b>sinusoid</b> (AC voltage), an <b>exponential</b> (transient decay/charging), <b>1/x</b> (speed vs flux), <b>x²</b> (I²R losses, torque ∝ I²), <b>logs</b> (dB, saturation). Recognising a curve and how it transforms is half of reading them.</div>`;
+
+  const FUN={
+    'x':{f:x=>x, d:'1', i:'x²/2'},
+    'x²':{f:x=>x*x, d:'2x', i:'x³/3'},
+    'x³':{f:x=>x*x*x, d:'3x²', i:'x⁴/4'},
+    '1/x':{f:x=>1/x, d:'−1/x²', i:'ln|x|'},
+    '√x':{f:x=>Math.sqrt(x), d:'1/(2√x)', i:'⅔x^{3/2}'},
+    '|x|':{f:x=>Math.abs(x), d:'sign(x)', i:'x|x|/2'},
+    'ln x':{f:x=>Math.log(x), d:'1/x', i:'x ln x − x'},
+    'eˣ':{f:x=>Math.exp(x), d:'eˣ', i:'eˣ'},
+    'sin x':{f:x=>Math.sin(x), d:'cos x', i:'−cos x'},
+    'cos x':{f:x=>Math.cos(x), d:'−sin x', i:'sin x'},
+    'tan x':{f:x=>Math.tan(x), d:'sec²x', i:'−ln|cos x|'}
+  };
+  const KEYS=Object.keys(FUN).concat(['x = c']);
+  let cur='x²';
+  $('#fn_tabs').innerHTML=KEYS.map(k=>`<div class="t${k===cur?' on':''}" data-k="${k}">${k}</div>`).join('');
+  const can=$('#fn_can'),cx=can.getContext('2d');
+  const W=460,H=440,pad=24,X0=6,Y0=6;
+  const wx=x=>pad+(x+X0)/(2*X0)*(W-2*pad), wy=y=>H-pad-(y+Y0)/(2*Y0)*(H-2*pad);
+  const sx=px=>(px-pad)/(W-2*pad)*(2*X0)-X0;
+  function g(x){const a=+$('#fn_a').value,b=+$('#fn_b').value,h=+$('#fn_h').value,k=+$('#fn_k').value;return a*FUN[cur].f(b*(x-h))+k;}
+  function plot(fn,color,width){cx.save();cx.beginPath();cx.rect(pad,pad,W-2*pad,H-2*pad);cx.clip();
+    cx.strokeStyle=color;cx.lineWidth=width;cx.beginPath();let pen=false,prev=null;
+    for(let px=pad;px<=W-pad;px++){const x=sx(px),y=fn(x);if(!isFinite(y)){pen=false;prev=null;continue;}
+      if(pen&&Math.abs(y-prev)>2*Y0){pen=false;}
+      const py=wy(y);if(pen)cx.lineTo(px,py);else{cx.moveTo(px,py);pen=true;}prev=y;}
+    cx.stroke();cx.restore();}
+  function grid(){cx.clearRect(0,0,W,H);cx.strokeStyle='#1a1f38';cx.lineWidth=1;
+    for(let i=-X0;i<=X0;i++){cx.beginPath();cx.moveTo(wx(i),pad);cx.lineTo(wx(i),H-pad);cx.stroke();}
+    for(let i=-Y0;i<=Y0;i++){cx.beginPath();cx.moveTo(pad,wy(i));cx.lineTo(W-pad,wy(i));cx.stroke();}
+    cx.strokeStyle='#3a4570';cx.lineWidth=1.5;cx.beginPath();cx.moveTo(pad,wy(0));cx.lineTo(W-pad,wy(0));cx.moveTo(wx(0),pad);cx.lineTo(wx(0),H-pad);cx.stroke();
+    cx.fillStyle='#9aa3c4';cx.font='10px system-ui';cx.fillText('x',W-pad-8,wy(0)-4);cx.fillText('y',wx(0)+4,pad+8);cx.fillText('1',wx(1)+2,wy(0)+12);cx.fillText('1',wx(0)+4,wy(1)+3);}
+  function draw(){
+    const a=+$('#fn_a').value,b=+$('#fn_b').value,h=+$('#fn_h').value,k=+$('#fn_k').value;
+    $('#fn_k_v').textContent=(k>=0?'+':'')+k;$('#fn_h_v').textContent=(h>=0?'+':'')+h;$('#fn_a_v').textContent=a;$('#fn_b_v').textContent=b;
+    grid();
+    if(cur==='x = c'){
+      $('#fn_eq').innerHTML=`x = ${h} &nbsp;<span style="color:var(--muted);font-size:13px">a vertical line (constant c = the horizontal-shift slider)</span>`;
+      cx.save();cx.beginPath();cx.rect(pad,pad,W-2*pad,H-2*pad);cx.clip();cx.strokeStyle='#5b8cff';cx.lineWidth=2.6;cx.beginPath();cx.moveTo(wx(h),pad);cx.lineTo(wx(h),H-pad);cx.stroke();cx.restore();
+      $('#fn_out').innerHTML=`Selected: <span class="k">x = c</span> (vertical line at x = ${h})\nEvery point has the same x, any y → it <b>fails the vertical-line test</b>, so it is <b>not a function</b> y=f(x); slope & area don't apply.`;
+      return;
+    }
+    const aS=a===1?'':(a===-1?'−':a+'·'), bS=b===1?'':b+'·', hS=h===0?'x':(h>0?`(x−${h})`:`(x+${-h})`),
+      arg=bS?`${bS}${hS}`:hS, kS=k===0?'':(k>0?` + ${k}`:` − ${-k}`);
+    $('#fn_eq').innerHTML=`y = ${aS}f(${arg})${kS} &nbsp;<span style="color:var(--muted);font-size:13px">where f(x) = ${cur}</span>`;
+    if($('#fn_base').checked)plot(x=>FUN[cur].f(x),'#39507a',1.5);
+    if($('#fn_int').checked){const dx=(2*X0)/600,samp=[];for(let i=0;i<=600;i++){const xx=-X0+i*dx;let v=g(xx);samp.push(isFinite(v)?v:0);}
+      const cumu=[0];for(let i=1;i<=600;i++)cumu.push(cumu[i-1]+(samp[i]+samp[i-1])/2*dx);const c0=cumu[Math.round(X0/dx)];
+      plot(xx=>{const i=Math.max(0,Math.min(600,Math.round((xx+X0)/dx)));return cumu[i]-c0;},'#38d39f',2);}
+    if($('#fn_der').checked){const e=1e-3;plot(x=>(g(x+e)-g(x-e))/(2*e),'#ffcc66',2);}
+    plot(g,'#5b8cff',2.6);
+    $('#fn_out').innerHTML=`Selected: <span class="k">${cur}</span>\nderivative  d/dx = <span class="k">${FUN[cur].d}</span>\nintegral  ∫dx = <span class="k">${FUN[cur].i}</span> (+C)`;
+  }
+  $$('#fn_tabs .t').forEach(t=>t.onclick=()=>{$$('#fn_tabs .t').forEach(x=>x.classList.toggle('on',x===t));cur=t.dataset.k;draw();});
+  ['fn_k','fn_h','fn_a','fn_b'].forEach(id=>$('#'+id).oninput=draw);['fn_base','fn_der','fn_int'].forEach(id=>$('#'+id).onchange=draw);
+  draw();
+});
+
+/* ================= 1φ ================= */
+section('single','AC Voltage Systems','1 · Single-Phase — Waveform & RMS',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Single-Phase AC</h2>
+  <p class="subttl">The sinusoid, its rms value, and the rotating phasor behind it</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">v(t) = V<sub>m</sub> sin(ωt+φ)</div>
+    <div class="eq" style="text-align:center">V<sub>rms</sub> = <span class="frac"><span class="n">V<sub>m</sub></span><span class="d">√2</span></span> = 0.707 V<sub>m</sub></div>
+  </div>
+  <details class="deriv"><summary>Why V<sub>rms</sub> = V<sub>m</sub>/√2</summary>
+    <div class="step">① RMS = √(average of v²). For v=V<sub>m</sub>sin ωt, v² = V<sub>m</sub>²sin²ωt.<span class="why">RMS = the equivalent DC that delivers the same average power to a resistor.</span></div>
+    <div class="step">② Average of sin²ωt over a cycle = ½.<span class="why">sin²=(1−cos2ωt)/2; the cosine averages to 0.</span></div>
+    <div class="step">③ V<sub>rms</sub> = √(V<sub>m</sub>²·½) = V<sub>m</sub>/√2.<span class="why">Same for current. 230 V mains means 230 V rms → 325 V peak.</span></div>
+  </details>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Peak voltage V<sub>m</sub> (V) <span class="val" id="s_vm_v"></span></span><input type="range" id="s_vm" min="50" max="400" value="325" step="5"></label>
+        <label class="ctl"><span class="lab">Frequency f (Hz) <span class="val" id="s_f_v"></span></span><input type="range" id="s_f" min="10" max="100" value="50" step="1"></label>
+        <label class="ctl"><span class="lab">Phase φ (°) <span class="val" id="s_ph_v"></span></span><input type="range" id="s_ph" min="-180" max="180" value="0" step="5"></label>
+        <div class="flex"><button class="btn" id="s_run">⏸ Pause</button></div>
+        <div class="out" id="s_out"></div>
+      </div>
+      <div><canvas id="s_can" width="420" height="300"></canvas><div class="note" style="text-align:center">rotating phasor (left) traces the waveform (right)</div></div>
+    </div>
+  </div>`;
+  const can=$('#s_can'),cx=can.getContext('2d');let t=0,run=true,raf=null;
+  const upd=()=>{const Vm=+$('#s_vm').value,f=+$('#s_f').value,ph=+$('#s_ph').value;
+    $('#s_vm_v').textContent=Vm+' V';$('#s_f_v').textContent=f+' Hz';$('#s_ph_v').textContent=ph+'°';
+    $('#s_out').innerHTML=`V<sub>rms</sub> = V<sub>m</sub>/√2 = <span class="k">${fmt(Vm/Math.SQRT2,1)} V</span>\nω = 2πf = <span class="k">${fmt(2*Math.PI*f,1)} rad/s</span>   T = <span class="k">${fmt(1000/f,1)} ms</span>`;
+    draw(Vm,f,ph);};
+  function draw(Vm,f,ph){cx.clearRect(0,0,420,300);const cy=150,R=70,cxp=90;
+    cx.strokeStyle='#232a49';cx.beginPath();cx.arc(cxp,cy,R,0,7);cx.moveTo(160,cy);cx.lineTo(410,cy);cx.stroke();
+    const a=t+ph*D2R;const px=cxp+R*Math.cos(a),py=cy-R*Math.sin(a);
+    arrow(cx,cxp,cy,px,py,'#5b8cff',2.5,'V_m');
+    // waveform: scroll — v at time going right = value now, older to the right
+    cx.strokeStyle='#38d39f';cx.lineWidth=2;cx.beginPath();
+    for(let x=0;x<=250;x++){const ang=a-x/250*4*Math.PI;const y=cy-Math.sin(ang)*R;x===0?cx.moveTo(160+x,y):cx.lineTo(160+x,y);}cx.stroke();
+    cx.fillStyle='#38d39f';cx.beginPath();cx.arc(160,cy-Math.sin(a)*R,4,0,7);cx.fill();
+    // rms band
+    cx.strokeStyle='rgba(255,204,102,0.5)';cx.setLineDash([4,3]);cx.beginPath();cx.moveTo(160,cy-R/Math.SQRT2);cx.lineTo(410,cy-R/Math.SQRT2);cx.moveTo(160,cy+R/Math.SQRT2);cx.lineTo(410,cy+R/Math.SQRT2);cx.stroke();cx.setLineDash([]);
+    cx.fillStyle='#ffcc66';cx.font='10px system-ui';cx.fillText('±V_rms',370,cy-R/Math.SQRT2-3);
+    if(run)t+=0.05;}
+  function loop(){if($('#sec-single').classList.contains('on'))draw(+$('#s_vm').value,+$('#s_f').value,+$('#s_ph').value);raf=requestAnimationFrame(loop);}
+  $('#s_run').onclick=()=>{run=!run;$('#s_run').textContent=run?'⏸ Pause':'▶ Play';};
+  ['s_vm','s_f','s_ph'].forEach(id=>$('#'+id).oninput=upd);upd();loop();
+});
+
+/* ================= multiphase ================= */
+section('multiphase','AC Voltage Systems','2 · Two-Phase & Three-Phase',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Two-Phase & Three-Phase Systems</h2>
+  <p class="subttl">Several sinusoids, equal amplitude, evenly spaced in phase</p>
+  <div class="card">
+    <div class="flex">
+      <div class="tabs" id="mp_tabs"><div class="t" data-n="1">1‑phase</div><div class="t" data-n="2">2‑phase (90°)</div><div class="t on" data-n="3">3‑phase (120°)</div></div>
+      <button class="btn" id="mp_run">⏸ Pause</button>
+    </div>
+    <div class="grid2">
+      <div><canvas id="mp_wave" width="440" height="260"></canvas><div class="note" style="text-align:center">instantaneous voltages (grey = their sum)</div></div>
+      <div><canvas id="mp_ph" width="300" height="260"></canvas><div class="note" style="text-align:center">phasor diagram (rotating)</div></div>
+    </div>
+    <div class="out" id="mp_out"></div>
+  </div>
+  <div class="card note"><b>Balanced system:</b> equal magnitudes, equally spaced angles. For a balanced <b>3‑phase</b> set the three voltages <b>sum to zero at every instant</b> — that's why a balanced load needs no neutral current, and why 3‑phase power is smooth (constant total power) rather than pulsating like 1‑phase.</div>`;
+  let N=3,t=0,run=true,raf=null;
+  const cols=['#5b8cff','#38d39f','#ff6b81'];const wave=$('#mp_wave').getContext('2d'),ph=$('#mp_ph').getContext('2d');
+  function angs(){if(N===1)return[0];if(N===2)return[0,-90];return[0,-120,-240];}
+  function draw(){const A=angs();
+    // waveforms
+    const W=440,H=260,mid=H/2;wave.clearRect(0,0,W,H);wave.strokeStyle='#232a49';wave.beginPath();wave.moveTo(20,mid);wave.lineTo(W-10,mid);wave.stroke();
+    A.forEach((ph0,i)=>{wave.strokeStyle=cols[i];wave.lineWidth=2;wave.beginPath();for(let x=0;x<=W-30;x++){const a=t+x/(W-30)*4*Math.PI+ph0*D2R;const y=mid-Math.sin(a)*70;x===0?wave.moveTo(20+x,y):wave.lineTo(20+x,y);}wave.stroke();});
+    // sum
+    wave.strokeStyle='#9aa3c4';wave.lineWidth=1.5;wave.setLineDash([4,3]);wave.beginPath();for(let x=0;x<=W-30;x++){let sum=0;A.forEach(ph0=>sum+=Math.sin(t+x/(W-30)*4*Math.PI+ph0*D2R));const y=mid-sum*70/3;x===0?wave.moveTo(20+x,y):wave.lineTo(20+x,y);}wave.stroke();wave.setLineDash([]);
+    // phasors
+    ph.clearRect(0,0,300,260);const ox=150,oy=130,R=90;ph.strokeStyle='#232a49';ph.beginPath();ph.moveTo(0,oy);ph.lineTo(300,oy);ph.moveTo(ox,10);ph.lineTo(ox,250);ph.stroke();
+    let sx=0,sy=0;A.forEach((ph0,i)=>{const a=t+ph0*D2R;const x=ox+R*Math.cos(a),y=oy-R*Math.sin(a);arrow(ph,ox,oy,x,y,cols[i],2.5,'V'+(i+1));sx+=R*Math.cos(a);sy+=R*Math.sin(a);});
+    if(N===3){ph.fillStyle='#9aa3c4';ph.font='11px system-ui';ph.fillText('Σ ≈ 0',ox+6,oy+18);}
+    $('#mp_out').innerHTML=N===1?`Single sinusoid — total instantaneous power pulsates at 2f.`:N===2?`Two voltages 90° apart (Tesla's original polyphase). Sum is non‑zero.`:`Three voltages 120° apart. <b>Instantaneous sum ≈ 0</b> at all times → smooth power, no neutral current for a balanced load.`;
+    if(run)t+=0.04;}
+  function loop(){if($('#sec-multiphase').classList.contains('on'))draw();raf=requestAnimationFrame(loop);}
+  $$('#mp_tabs .t').forEach(x=>x.onclick=()=>{$$('#mp_tabs .t').forEach(y=>y.classList.toggle('on',y===x));N=+x.dataset.n;});
+  $('#mp_run').onclick=()=>{run=!run;$('#mp_run').textContent=run?'⏸ Pause':'▶ Play';};
+  draw();loop();
+});
+
+/* ================= 3φ Y/Δ ================= */
+section('threephase','AC Voltage Systems','3 · Y & Δ — Line vs Phase',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Three-Phase Connections: Wye & Delta</h2>
+  <p class="subttl">The √3 relationships between line and phase quantities</p>
+  <div class="grid2">
+    <div class="card tight"><b>Wye (Y / star)</b><br>V<sub>L</sub> = √3 · V<sub>φ</sub> (30° shift)<br>I<sub>L</sub> = I<sub>φ</sub><br>has a neutral point</div>
+    <div class="card tight"><b>Delta (Δ / mesh)</b><br>V<sub>L</sub> = V<sub>φ</sub><br>I<sub>L</sub> = √3 · I<sub>φ</sub><br>no neutral</div>
+  </div>
+  <div class="eq">S = √3 V<sub>L</sub> I<sub>L</sub> = 3 V<sub>φ</sub> I<sub>φ</sub>  ;  P = √3 V<sub>L</sub> I<sub>L</sub> cos θ</div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Connection</span><select id="tp_c"><option value="Y">Wye (Y)</option><option value="D">Delta (Δ)</option></select></label>
+        <label class="ctl"><span class="lab">Phase voltage V<sub>φ</sub> (V)</span><input type="number" id="tp_V" value="230" step="any"></label>
+        <label class="ctl"><span class="lab">Phase current I<sub>φ</sub> (A)</span><input type="number" id="tp_I" value="10" step="any"></label>
+        <label class="ctl"><span class="lab">Power factor</span><input type="number" id="tp_pf" value="0.8" step="0.01"></label>
+        <div class="out" id="tp_out"></div>
+      </div>
+      <div><canvas id="tp_can" width="360" height="300"></canvas><div class="note" style="text-align:center">phase phasors (colour) & a line voltage V<sub>ab</sub>=V<sub>a</sub>−V<sub>b</sub> (amber)</div></div>
+    </div>
+    <p class="note">For 400 V "three-phase" mains, 400 V is the <b>line</b> voltage and 230 V is the <b>phase</b> (line-to-neutral) voltage: 400 = √3 × 230.</p>
+  </div>`;
+  const cx=$('#tp_can').getContext('2d');
+  const upd=()=>{const c=$('#tp_c').value,V=+$('#tp_V').value,I=+$('#tp_I').value,pf=+$('#tp_pf').value;
+    const VL=c==='Y'?Math.sqrt(3)*V:V,IL=c==='Y'?I:Math.sqrt(3)*I,S=3*V*I,P=S*pf;
+    $('#tp_out').innerHTML=`${c==='Y'?'Wye':'Delta'} connection\nLine voltage V<sub>L</sub> = <span class="k">${fmt(VL,1)} V</span>\nLine current I<sub>L</sub> = <span class="k">${fmt(IL,1)} A</span>\nApparent power S = √3 V<sub>L</sub>I<sub>L</sub> = <span class="k">${fmt(S/1000,2)} kVA</span>\nReal power P = <span class="k">${fmt(P/1000,2)} kW</span>`;
+    cx.clearRect(0,0,360,300);const ox=180,oy=160,R=90;cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(0,oy);cx.lineTo(360,oy);cx.moveTo(ox,20);cx.lineTo(ox,290);cx.stroke();
+    const cols=['#5b8cff','#38d39f','#ff6b81'];const A=[90,-30,-150];const pts=A.map(a=>[ox+R*Math.cos(a*D2R),oy-R*Math.sin(a*D2R)]);
+    A.forEach((a,i)=>arrow(cx,ox,oy,pts[i][0],pts[i][1],cols[i],2.5,'V'+'abc'[i]));
+    // line voltage Va - Vb (from tip of Vb to tip of Va)
+    cx.strokeStyle='#ffcc66';cx.lineWidth=2;cx.setLineDash([4,3]);cx.beginPath();cx.moveTo(pts[1][0],pts[1][1]);cx.lineTo(pts[0][0],pts[0][1]);cx.stroke();cx.setLineDash([]);
+    cx.fillStyle='#ffcc66';cx.font='11px system-ui';cx.fillText('V_ab=√3·V_φ',(pts[0][0]+pts[1][0])/2-20,(pts[0][1]+pts[1][1])/2-6);};
+  ['tp_V','tp_I','tp_pf'].forEach(id=>$('#'+id).oninput=upd);$('#tp_c').onchange=upd;upd();
+});
+
+/* ================= R L C difference ================= */
+section('rlc','Reactive Components','4 · Capacitors vs Inductors',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Capacitors vs Inductors</h2>
+  <p class="subttl">The two energy-storage elements — and their 90° phase behaviour</p>
+  <div class="card">
+    <table>
+      <tr><th></th><th>Resistor R</th><th>Inductor L</th><th>Capacitor C</th></tr>
+      <tr><td>symbol</td>
+        <td><svg viewBox="0 0 80 30" width="80" height="30">${resH(6,74,15,'#ff6b81','')}</svg></td>
+        <td><svg viewBox="0 0 80 30" width="80" height="30">${indH(6,74,18,'#ffcc66','')}</svg></td>
+        <td><svg viewBox="0 0 80 34" width="80" height="34">${capH(6,74,17,'#5b8cff','')}</svg></td></tr>
+      <tr><td>stores energy in</td><td>— (dissipates)</td><td>magnetic field</td><td>electric field</td></tr>
+      <tr><td>v–i law</td><td>v = iR</td><td>v = L di/dt</td><td>i = C dv/dt</td></tr>
+      <tr><td>opposes change in</td><td>—</td><td>current</td><td>voltage</td></tr>
+      <tr><td>reactance</td><td>R (const)</td><td>X<sub>L</sub>=ωL</td><td>X<sub>C</sub>=1/ωC</td></tr>
+      <tr><td>phase (v vs i)</td><td>in phase</td><td>current <b>lags</b> 90°</td><td>current <b>leads</b> 90°</td></tr>
+      <tr><td>power factor</td><td>1</td><td>0 (lag)</td><td>0 (lead)</td></tr>
+    </table>
+    <div class="okbox">Mnemonic <b>“ELI the ICE man”</b>: in an <b>L</b>, <b>E</b> (voltage) leads <b>I</b>; in a <b>C</b>, <b>I</b> leads <b>E</b>.</div>
+  </div>
+
+  <style>@media(max-width:900px){.lcgrid{grid-template-columns:1fr!important}}</style>
+
+  <h3>i = C·dv/dt and v = L·di/dt — the derivative, live</h3>
+  <p class="note">The capacitor current is C times the <b>slope</b> of its voltage; the inductor voltage is L times the <b>slope</b> of its current. The amber tangent up top shows that slope — the dot below tracks it. Sliders sit beside the graph, so every change redraws <b>instantly</b>.</p>
+  <div class="card">
+    <div class="tabs" id="dv_tabs">
+      <div class="t on" data-e="C">Capacitor · i = C·dv/dt</div>
+      <div class="t" data-e="L">Inductor · v = L·di/dt</div>
+    </div>
+    <div class="lcgrid" style="display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start">
+      <div>
+        <div class="flex" id="dv_wave" style="gap:6px;margin:2px 0 8px">
+          <span class="note">Shape:</span>
+          <div class="t on" data-w="tri" style="background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px">Triangle</div>
+          <div class="t" data-w="sin" style="background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px">Sine</div>
+          <div class="t" data-w="trap" style="background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px">Trapezoid</div>
+        </div>
+        <label class="ctl"><span class="lab"><span id="dv_clab">Capacitance C</span> <span class="val" id="dv_cv"></span></span><input type="range" id="dv_c" min="0.1" max="10" step="0.1" value="1"></label>
+        <label class="ctl"><span class="lab"><span id="dv_alab">Amplitude</span> <span class="val" id="dv_av"></span></span><input type="range" id="dv_a" min="1" max="10" step="0.5" value="5"></label>
+        <label class="ctl"><span class="lab">Frequency f <span class="val" id="dv_fv"></span></span><input type="range" id="dv_f" min="10" max="200" step="5" value="50"></label>
+        <button class="btn" id="dv_run" style="width:100%">⏸ Pause</button>
+        <div class="out" id="dv_out" style="margin-top:12px;font-size:13px"></div>
+      </div>
+      <canvas id="dv_can" width="560" height="360" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>Sudden switching → dangerous spikes</h3>
+  <p class="note">Because i = C·dv/dt and v = L·di/dt, forcing a <b>fast</b> change makes the derivative enormous. Switching voltage onto a capacitor draws a huge <b>inrush current</b>; interrupting an inductor's current produces a huge <b>voltage spike</b> — the arc you see when a switch opens a coil, relay or motor. Drag <b>Δt</b> smaller and watch the spike grow.</p>
+  <div class="card">
+    <div class="tabs" id="sw_tabs">
+      <div class="t on" data-e="L">Inductor · voltage spike</div>
+      <div class="t" data-e="C">Capacitor · inrush current</div>
+    </div>
+    <div class="lcgrid" style="display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start">
+      <div>
+        <div id="sw_sch" style="background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px;margin-bottom:8px"></div>
+        <label class="ctl"><span class="lab"><span id="sw_Llab">Inductance L</span> <span class="val" id="sw_Lv"></span></span><input type="range" id="sw_L" min="1" max="300" step="1" value="50"></label>
+        <label class="ctl"><span class="lab"><span id="sw_Ilab">Interrupted current I₀</span> <span class="val" id="sw_Iv"></span></span><input type="range" id="sw_I" min="0.5" max="12" step="0.5" value="3"></label>
+        <label class="ctl"><span class="lab">Switching time Δt <span class="val" id="sw_dtv"></span></span><input type="range" id="sw_dt" min="0.05" max="5" step="0.05" value="1"></label>
+        <button class="btn" id="sw_trig" style="width:100%">⚡ Trigger the switch</button>
+        <div class="out" id="sw_out" style="margin-top:12px;font-size:13px"></div>
+      </div>
+      <canvas id="sw_can" width="560" height="360" style="width:100%"></canvas>
+    </div>
+  </div>
+
+  <h3>The 90° phase difference, live</h3>
+  <div class="card">
+    <div class="flex"><div class="tabs" id="lc_tabs"><div class="t on" data-e="L">Inductor (v = L di/dt)</div><div class="t" data-e="C">Capacitor (i = C dv/dt)</div></div><button class="btn" id="lc_run">⏸ Pause</button></div>
+    <canvas id="lc_can" width="820" height="240" style="width:100%"></canvas>
+    <div class="out" id="lc_out"></div>
+  </div>`;
+  /* ===== unit helpers ===== */
+  const showI=a=>{a=Math.abs(a);return a>=1?fmt(a,3)+' A':a>=1e-3?fmt(a*1e3,3)+' mA':fmt(a*1e6,2)+' µA';};
+  const showV=v=>{v=Math.abs(v);return v>=1000?fmt(v/1000,3)+' kV':fmt(v,2)+' V';};
+
+  /* ===== 1) derivative demo: i = C dv/dt , v = L di/dt ===== */
+  const dcx=$('#dv_can').getContext('2d');
+  let dmode='C',dwave='tri',drun=true,dphase=0,dmaxSp=1;
+  function wv(w,a){a=((a%(2*Math.PI))+2*Math.PI)%(2*Math.PI);const p=a/(2*Math.PI);
+    if(w==='sin')return Math.sin(a);
+    if(w==='tri')return p<0.5?(4*p-1):(3-4*p);
+    const r=0.12; // trapezoid
+    if(p<r)return -1+2*(p/r);
+    if(p<0.5)return 1;
+    if(p<0.5+r)return 1-2*((p-0.5)/r);
+    return -1;}
+  function dsh(w,a){const h=0.008;return (wv(w,a+h)-wv(w,a-h))/(2*h);}
+  function calcMaxSp(w){let m=0;for(let i=0;i<1600;i++){m=Math.max(m,Math.abs(dsh(w,i/1600*2*Math.PI)));}return m||1;}
+  dmaxSp=calcMaxSp('tri');
+  function updDvLabels(){const isC=dmode==='C';
+    $('#dv_clab').textContent=isC?'Capacitance C':'Inductance L';
+    $('#dv_cv').textContent=(+$('#dv_c').value)+(isC?' µF':' mH');
+    $('#dv_alab').textContent=isC?'Voltage amplitude':'Current amplitude';
+    $('#dv_av').textContent=(+$('#dv_a').value)+(isC?' V':' A');
+    $('#dv_fv').textContent=(+$('#dv_f').value)+' Hz';}
+  function dvDraw(){
+    const W=560,H=360;dcx.clearRect(0,0,W,H);
+    const padL=50,padR=14,plotW=W-padL-padR,cyc=2,dadx=cyc*2*Math.PI/plotW;
+    const isC=dmode==='C';
+    const elVal=+$('#dv_c').value,A=+$('#dv_a').value,f=+$('#dv_f').value;
+    const w_ang=2*Math.PI*f,elSI=isC?elVal*1e-6:elVal*1e-3,relMag=elVal*(A/5)*(f/50);
+    const yT=95,ampMax=58,yB=270,outMax=58,xc=padL+plotW/2;
+    const inC=isC?'#5b8cff':'#38d39f',outC=isC?'#38d39f':'#5b8cff';
+    dcx.strokeStyle='#232a49';dcx.lineWidth=1;
+    dcx.beginPath();dcx.moveTo(padL,yT);dcx.lineTo(W-padR,yT);dcx.stroke();
+    dcx.beginPath();dcx.moveTo(padL,yB);dcx.lineTo(W-padR,yB);dcx.stroke();
+    // input curve
+    dcx.lineWidth=2.2;dcx.strokeStyle=inC;dcx.beginPath();
+    for(let x=0;x<=plotW;x++){const a=x*dadx-dphase,y=yT-wv(dwave,a)*(A/10)*ampMax;x===0?dcx.moveTo(padL+x,y):dcx.lineTo(padL+x,y);}
+    dcx.stroke();
+    // output curve = scaled derivative
+    dcx.strokeStyle=outC;dcx.beginPath();
+    for(let x=0;x<=plotW;x++){const a=x*dadx-dphase;let h=(dsh(dwave,a)/dmaxSp)*0.5*relMag;h=Math.max(-0.95,Math.min(0.95,h));const y=yB-h*outMax;x===0?dcx.moveTo(padL+x,y):dcx.lineTo(padL+x,y);}
+    dcx.stroke();
+    // cursor + tangent
+    const a_c=(xc-padL)*dadx-dphase;
+    dcx.strokeStyle='rgba(255,204,102,.45)';dcx.setLineDash([4,4]);dcx.beginPath();dcx.moveTo(xc,18);dcx.lineTo(xc,338);dcx.stroke();dcx.setLineDash([]);
+    const yin=yT-wv(dwave,a_c)*(A/10)*ampMax,slope=-(A/10)*ampMax*dsh(dwave,a_c)*dadx;
+    dcx.strokeStyle='#ffcc66';dcx.lineWidth=2.6;dcx.beginPath();dcx.moveTo(xc-44,yin-slope*44);dcx.lineTo(xc+44,yin+slope*44);dcx.stroke();
+    dcx.fillStyle='#ffcc66';dcx.beginPath();dcx.arc(xc,yin,4,0,7);dcx.fill();
+    let hc=(dsh(dwave,a_c)/dmaxSp)*0.5*relMag;hc=Math.max(-0.95,Math.min(0.95,hc));
+    dcx.beginPath();dcx.arc(xc,yB-hc*outMax,4.5,0,7);dcx.fill();
+    // labels
+    dcx.font='12px system-ui';dcx.fillStyle=inC;dcx.fillText(isC?'input — capacitor voltage v (V)':'input — inductor current i (A)',padL,26);
+    dcx.fillStyle=outC;dcx.fillText(isC?'output — current i = C·dv/dt':'output — voltage v = L·di/dt',padL,yB-72);
+    dcx.fillStyle='#ffcc66';dcx.font='11px system-ui';dcx.fillText('slope = tangent here',xc+7,yin-9);
+    // readout
+    const peak=elSI*A*w_ang*dmaxSp,cur=elSI*A*w_ang*dsh(dwave,a_c),rate=A*w_ang*dsh(dwave,a_c);
+    $('#dv_out').innerHTML=isC?
+      `<b>i = C · dv/dt</b>\npeak i = C·A·ω = <span class="k">${showI(peak)}</span>\nat cursor: dv/dt = <span class="k">${fmt(rate,3)} V/s</span> → i = <span class="k">${showI(cur)}</span>\n↑ f, ↑ C, ↑ A  ⇒  ↑ current`
+     :`<b>v = L · di/dt</b>\npeak v = L·A·ω = <span class="k">${showV(peak)}</span>\nat cursor: di/dt = <span class="k">${fmt(rate,3)} A/s</span> → v = <span class="k">${showV(cur)}</span>\n↑ f, ↑ L, ↑ A  ⇒  ↑ voltage`;
+    if(drun)dphase+=0.03;
+  }
+  $$('#dv_tabs .t').forEach(x=>x.onclick=()=>{$$('#dv_tabs .t').forEach(y=>y.classList.toggle('on',y===x));dmode=x.dataset.e;updDvLabels();});
+  $$('#dv_wave .t').forEach(x=>x.onclick=()=>{$$('#dv_wave .t').forEach(y=>{y.classList.toggle('on',y===x);y.style.background=y===x?'var(--acc)':'var(--chip)';y.style.borderColor=y===x?'var(--acc)':'var(--line)';y.style.color=y===x?'#fff':'';});dwave=x.dataset.w;dmaxSp=calcMaxSp(dwave);});
+  $('#dv_run').onclick=()=>{drun=!drun;$('#dv_run').textContent=drun?'⏸ Pause':'▶ Play';};
+  ['dv_c','dv_a','dv_f'].forEach(id=>$('#'+id).oninput=updDvLabels);
+  updDvLabels();
+
+  /* ===== 2) sudden switching → spikes ===== */
+  const sxc=$('#sw_can').getContext('2d');
+  let smode='L',swGlow=0;
+  function schem(){const isL=smode==='L';
+    const wire='#3a4680';
+    $('#sw_sch').innerHTML=isL?
+      `<svg viewBox="0 0 250 118" style="width:100%;max-height:120px">
+        <path d="M35 26 H150 M188 26 H215 V92 H35 V26" fill="none" stroke="${wire}" stroke-width="2"/>
+        <circle cx="150" cy="26" r="3.2" fill="#9aa3c4"/><circle cx="188" cy="26" r="3.2" fill="#9aa3c4"/>
+        <line x1="150" y1="26" x2="176" y2="10" stroke="#9aa3c4" stroke-width="2.4"/>
+        <path id="sparkG" d="M152 26 L160 17 L166 28 L174 15 L182 27 L188 26" fill="none" stroke="#ffcc66" stroke-width="2.2"/>
+        ${indV(215,40,84,'#ffcc66','L')}
+        <line x1="27" y1="50" x2="43" y2="50" stroke="#e8ebf7" stroke-width="2"/><line x1="31" y1="60" x2="39" y2="60" stroke="#e8ebf7" stroke-width="3.2"/>
+        <text x="22" y="59" fill="#9aa3c4" font-size="10.5" text-anchor="end">Vs</text>
+        <text x="120" y="47" fill="#ffcc66" font-size="10.5">switch opens → spark</text>
+      </svg>`
+     :`<svg viewBox="0 0 250 118" style="width:100%;max-height:120px">
+        <path d="M35 26 H150 M188 26 H215 V49 M215 71 V92 H35 V26" fill="none" stroke="${wire}" stroke-width="2"/>
+        <line x1="150" y1="26" x2="188" y2="26" stroke="#9aa3c4" stroke-width="2.4"/>
+        <circle cx="150" cy="26" r="3.2" fill="#9aa3c4"/><circle cx="188" cy="26" r="3.2" fill="#9aa3c4"/>
+        <line x1="201" y1="49" x2="229" y2="49" stroke="#5b8cff" stroke-width="2.6"/><line x1="201" y1="71" x2="229" y2="71" stroke="#5b8cff" stroke-width="2.6"/>
+        <text x="234" y="64" fill="#5b8cff" font-size="11">C</text>
+        <line x1="27" y1="50" x2="43" y2="50" stroke="#e8ebf7" stroke-width="2"/><line x1="31" y1="60" x2="39" y2="60" stroke="#e8ebf7" stroke-width="3.2"/>
+        <text x="22" y="59" fill="#9aa3c4" font-size="10.5" text-anchor="end">Vs</text>
+        <path id="sparkG" d="M70 16 H118" fill="none" stroke="#38d39f" stroke-width="2.4" marker-end="url(#swar)"/>
+        <defs><marker id="swar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#38d39f"/></marker></defs>
+        <text x="70" y="10" fill="#38d39f" font-size="10.5">inrush i</text>
+      </svg>`;}
+  function updSwLabels(){const isL=smode==='L';
+    $('#sw_Llab').textContent=isL?'Inductance L':'Capacitance C';
+    $('#sw_Lv').textContent=(+$('#sw_L').value)+(isL?' mH':' µF');
+    $('#sw_Ilab').textContent=isL?'Interrupted current I₀':'Applied step ΔV';
+    $('#sw_Iv').textContent=(+$('#sw_I').value)+(isL?' A':' V');
+    $('#sw_dtv').textContent=(+$('#sw_dt').value)+' ms';}
+  function swDraw(){
+    const W=560,H=360;sxc.clearRect(0,0,W,H);
+    const padL=50,padR=14,plotW=W-padL-padR,T=10,tsw=3.2,xOf=ms=>padL+ms/T*plotW;
+    const isL=smode==='L';
+    const el=+$('#sw_L').value,q=+$('#sw_I').value,dtm=+$('#sw_dt').value;
+    const elSI=isL?el*1e-3:el*1e-6,dts=dtm*1e-3,spike=elSI*q/dts;
+    // top panel: the switched quantity
+    const yTb=150,tScale=100/12;
+    sxc.strokeStyle='#232a49';sxc.lineWidth=1;sxc.beginPath();sxc.moveTo(padL,yTb);sxc.lineTo(W-padR,yTb);sxc.stroke();
+    sxc.strokeStyle=isL?'#5b8cff':'#ffcc66';sxc.lineWidth=2.4;sxc.beginPath();
+    if(isL){sxc.moveTo(xOf(0),yTb-q*tScale);sxc.lineTo(xOf(tsw),yTb-q*tScale);sxc.lineTo(xOf(tsw+dtm),yTb);sxc.lineTo(xOf(T),yTb);}
+    else{sxc.moveTo(xOf(0),yTb);sxc.lineTo(xOf(tsw),yTb);sxc.lineTo(xOf(tsw+dtm),yTb-q*tScale);sxc.lineTo(xOf(T),yTb-q*tScale);}
+    sxc.stroke();
+    // bottom panel: the spike (height scales with value, width = Δt)
+    const yBb=330,pxScale=isL?0.55:300,h=Math.max(8,Math.min(135,spike*pxScale));
+    sxc.strokeStyle='#232a49';sxc.beginPath();sxc.moveTo(padL,yBb);sxc.lineTo(W-padR,yBb);sxc.stroke();
+    const x1=xOf(tsw),x2=Math.max(xOf(tsw+dtm),x1+2),sc=isL?'#ff6b81':'#38d39f';
+    sxc.globalAlpha=0.55+0.45*swGlow;sxc.fillStyle=sc;sxc.fillRect(x1,yBb-h,x2-x1,h);sxc.globalAlpha=1;
+    sxc.strokeStyle=sc;sxc.lineWidth=2;sxc.strokeRect(x1,yBb-h,x2-x1,h);
+    // labels
+    sxc.font='12px system-ui';sxc.fillStyle=isL?'#5b8cff':'#ffcc66';
+    sxc.fillText(isL?'switched — coil current i (A)':'switched — capacitor voltage v (V)',padL,26);
+    sxc.fillStyle=sc;sxc.fillText(isL?'induced — v = L·di/dt':'inrush — i = C·dv/dt',padL,178);
+    sxc.font='bold 13px system-ui';sxc.fillText(isL?showV(spike):showI(spike),Math.min(x2+8,W-96),yBb-h+4);
+    if(isL){sxc.font='18px system-ui';sxc.fillStyle='#ffcc66';sxc.fillText('⚡',(x1+x2)/2-6,yBb-h-7);}
+    // readout
+    $('#sw_out').innerHTML=isL?
+      `<b>v_spike = L · I₀ / Δt</b>\n= ${el} mH · ${q} A / ${dtm} ms\n= <span class="k">${showV(spike)}</span>\nHalve Δt → double the spike. A flyback diode or snubber clamps it.`
+     :`<b>i_inrush = C · ΔV / Δt</b>\n= ${el} µF · ${q} V / ${dtm} ms\n= <span class="k">${showI(spike)}</span>\nSmaller Δt → bigger inrush. Series R or soft-start limits it.`;
+    const sp=$('#sparkG');if(sp)sp.style.opacity=isL?(0.25+0.75*Math.min(1,spike/250)):Math.min(1,0.3+swGlow);
+    if(swGlow>0)swGlow=Math.max(0,swGlow-0.02);
+  }
+  $$('#sw_tabs .t').forEach(x=>x.onclick=()=>{$$('#sw_tabs .t').forEach(y=>y.classList.toggle('on',y===x));smode=x.dataset.e;schem();updSwLabels();});
+  ['sw_L','sw_I','sw_dt'].forEach(id=>$('#'+id).oninput=updSwLabels);
+  $('#sw_trig').onclick=()=>{swGlow=1;};
+  schem();updSwLabels();
+
+  /* ===== 3) 90° phase animation (unchanged) ===== */
+  const cx=$('#lc_can').getContext('2d');let mode='L',t=0,run=true,raf=null;
+  function draw(){const W=820,H=240,mid=H/2;cx.clearRect(0,0,W,H);cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(20,mid);cx.lineTo(W-10,mid);cx.stroke();
+    // voltage (blue), current (green) with 90 shift
+    const iShift=mode==='L'?-90:90; // L: i lags (i=sin(a-90)); C: i leads (i=sin(a+90))
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2;cx.beginPath();for(let x=0;x<=W-30;x++){const a=t+x/(W-30)*4*Math.PI;const y=mid-Math.sin(a)*80;x===0?cx.moveTo(20+x,y):cx.lineTo(20+x,y);}cx.stroke();
+    cx.strokeStyle='#38d39f';cx.beginPath();for(let x=0;x<=W-30;x++){const a=t+x/(W-30)*4*Math.PI;const y=mid-Math.sin(a+iShift*D2R)*70;x===0?cx.moveTo(20+x,y):cx.lineTo(20+x,y);}cx.stroke();
+    cx.fillStyle='#5b8cff';cx.font='12px system-ui';cx.fillText('voltage v',26,20);cx.fillStyle='#38d39f';cx.fillText('current i',110,20);
+    $('#lc_out').innerHTML=mode==='L'?`Inductor: v = L·di/dt. The current <b>lags</b> the voltage by <span class="k">90°</span> — the inductor resists the change in current (back‑emf).`:`Capacitor: i = C·dv/dt. The current <b>leads</b> the voltage by <span class="k">90°</span> — current flows fastest when the voltage is changing fastest (at the zero crossings).`;
+    if(run)t+=0.04;}
+  function loop(){if($('#sec-rlc').classList.contains('on')){draw();dvDraw();swDraw();}raf=requestAnimationFrame(loop);}
+  $$('#lc_tabs .t').forEach(x=>x.onclick=()=>{$$('#lc_tabs .t').forEach(y=>y.classList.toggle('on',y===x));mode=x.dataset.e;});
+  $('#lc_run').onclick=()=>{run=!run;$('#lc_run').textContent=run?'⏸ Pause':'▶ Play';};
+  draw();dvDraw();swDraw();loop();
+});
+
+/* ================= reactance vs frequency ================= */
+section('reactance','Reactive Components','5 · Reactance & the Effect of Frequency',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Reactance — the Effect of Voltage/Current & Frequency</h2>
+  <p class="subttl">How X<sub>L</sub> and X<sub>C</sub> depend on frequency, and the EMF/current relations</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">X<sub>L</sub> = ωL = 2πfL</div>
+    <div class="eq" style="text-align:center">X<sub>C</sub> = <span class="frac"><span class="n">1</span><span class="d">ωC</span></span> = <span class="frac"><span class="n">1</span><span class="d">2πfC</span></span></div>
+  </div>
+  <p class="note"><b>Inductor EMF:</b> v<sub>L</sub> = L di/dt — a faster-changing current (higher f) induces a bigger back-emf, so X<sub>L</sub> <b>rises</b> with frequency. <b>Capacitor:</b> i = C dv/dt — at higher f the voltage changes faster so more current flows, so X<sub>C</sub> <b>falls</b>. At DC (f=0): the inductor is a short (X<sub>L</sub>=0), the capacitor is open (X<sub>C</sub>=∞).</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Inductance L (mH)</span><input type="number" id="x_L" value="100" step="any"></label>
+        <label class="ctl"><span class="lab">Capacitance C (µF)</span><input type="number" id="x_C" value="50" step="any"></label>
+        <label class="ctl"><span class="lab">Frequency f (Hz) <span class="val" id="x_f_v"></span></span><input type="range" id="x_f" min="1" max="200" value="50" step="1"></label>
+        <div class="out" id="x_out"></div>
+      </div>
+      <div><canvas id="x_can" width="420" height="280"></canvas><div class="note" style="text-align:center">X<sub>L</sub> (amber) rises, X<sub>C</sub> (blue) falls; they cross at resonance</div></div>
+    </div>
+  </div>`;
+  const cx=$('#x_can').getContext('2d');
+  const upd=()=>{const L=+$('#x_L').value/1000,C=+$('#x_C').value/1e6,f=+$('#x_f').value;$('#x_f_v').textContent=f+' Hz';
+    const XL=2*Math.PI*f*L,XC=1/(2*Math.PI*f*C),fr=1/(2*Math.PI*Math.sqrt(L*C));
+    $('#x_out').innerHTML=`X<sub>L</sub> = 2πfL = <span class="k">${fmt(XL,2)} Ω</span>\nX<sub>C</sub> = 1/(2πfC) = <span class="k">${fmt(XC,2)} Ω</span>\nResonance (X<sub>L</sub>=X<sub>C</sub>) at f = <span class="k">${fmt(fr,1)} Hz</span>`;
+    axes(cx,420,280,{l:44,r:10,t:14,b:26},'frequency f (Hz)','reactance (Ω)');
+    const fmax=200,ymax=Math.max(2*Math.PI*fmax*L,1/(2*Math.PI*5*C))*0.6;const xX=fr2=>44+fr2/fmax*(420-54),yY=v=>(280-26)-Math.min(v,ymax)/ymax*(280-40);
+    cx.strokeStyle='#ffcc66';cx.lineWidth=2.5;cx.beginPath();for(let ff=1;ff<=fmax;ff+=1){const x=xX(ff),y=yY(2*Math.PI*ff*L);ff===1?cx.moveTo(x,y):cx.lineTo(x,y);}cx.stroke();
+    cx.strokeStyle='#5b8cff';cx.beginPath();let st=false;for(let ff=1;ff<=fmax;ff+=1){const v=1/(2*Math.PI*ff*C);if(v>ymax){st=false;continue;}const x=xX(ff),y=yY(v);st?cx.lineTo(x,y):(cx.moveTo(x,y),st=true);}cx.stroke();
+    cx.fillStyle='#ffcc66';cx.font='11px system-ui';cx.fillText('X_L',xX(fmax)-24,yY(2*Math.PI*fmax*L)+4);cx.fillStyle='#5b8cff';cx.fillText('X_C',xX(6),40);
+    if(fr<=fmax){cx.strokeStyle='#38d39f';cx.setLineDash([4,3]);cx.beginPath();cx.moveTo(xX(fr),14);cx.lineTo(xX(fr),280-26);cx.stroke();cx.setLineDash([]);}
+    const mx=xX(f);cx.fillStyle='#e8ebf7';cx.beginPath();cx.arc(mx,yY(XL),3,0,7);cx.arc(mx,yY(Math.min(XC,ymax)),3,0,7);cx.fill();};
+  ['x_L','x_C','x_f'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ================= impedance / power factor ================= */
+section('impedance','Reactive Components','6 · Impedance, Steady State & Power Factor',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Series RLC — Steady-State Response</h2>
+  <p class="subttl">Impedance, the phasor V=IZ, the impedance triangle and power factor</p>
+  <svg viewBox="0 0 520 90" width="100%">
+    <line x1="20" y1="45" x2="60" y2="45" stroke="#5b8cff" stroke-width="2"/>
+    ${resH(60,150,45,'#ff6b81','R')}${indH(160,260,45,'#ffcc66','L')}${capH(270,360,45,'#5b8cff','C')}
+    <line x1="360" y1="45" x2="440" y2="45" stroke="#5b8cff" stroke-width="2"/>
+    <line x1="440" y1="45" x2="440" y2="80" stroke="#5b8cff" stroke-width="2"/><line x1="20" y1="45" x2="20" y2="80" stroke="#5b8cff" stroke-width="2"/><line x1="20" y1="80" x2="440" y2="80" stroke="#5b8cff" stroke-width="2"/>
+    <circle cx="20" cy="62" r="12" fill="#0b0e1c" stroke="#38d39f"/><text x="20" y="66" fill="#38d39f" font-size="11" text-anchor="middle">V</text>
+    <text x="470" y="49" fill="#9aa3c4" font-size="11">I →</text>
+  </svg>
+  <div class="grid2">
+    <div class="eq" style="text-align:center"><span class="vec">Z</span> = R + j(X<sub>L</sub>−X<sub>C</sub>)</div>
+    <div class="eq" style="text-align:center">I = V/|Z|, θ = ∠Z, PF = cos θ</div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Source V<sub>rms</sub> (V)</span><input type="number" id="z_V" value="230" step="any"></label>
+        <label class="ctl"><span class="lab">R (Ω)</span><input type="number" id="z_R" value="20" step="any"></label>
+        <label class="ctl"><span class="lab">L (mH)</span><input type="number" id="z_L" value="100" step="any"></label>
+        <label class="ctl"><span class="lab">C (µF)</span><input type="number" id="z_C" value="80" step="any"></label>
+        <label class="ctl"><span class="lab">Frequency f (Hz) <span class="val" id="z_f_v"></span></span><input type="range" id="z_f" min="10" max="120" value="50" step="1"></label>
+        <div class="out" id="z_out"></div>
+      </div>
+      <div><canvas id="z_can" width="380" height="280"></canvas><div class="note" style="text-align:center">impedance triangle: R, (X<sub>L</sub>−X<sub>C</sub>), |Z|, θ</div></div>
+    </div>
+    <p class="note">Inductive (X<sub>L</sub>&gt;X<sub>C</sub>): current <b>lags</b>, θ&gt;0, lagging PF. Capacitive: current <b>leads</b>, θ&lt;0. At resonance X<sub>L</sub>=X<sub>C</sub> → Z=R, PF=1.</p>
+  </div>`;
+  const cx=$('#z_can').getContext('2d');
+  const upd=()=>{const V=+$('#z_V').value,R=+$('#z_R').value,L=+$('#z_L').value/1000,C=+$('#z_C').value/1e6,f=+$('#z_f').value;$('#z_f_v').textContent=f+' Hz';
+    const XL=2*Math.PI*f*L,XC=1/(2*Math.PI*f*C),X=XL-XC,Z=Math.hypot(R,X),th=Math.atan2(X,R)*R2D,I=V/Z,pf=Math.cos(th*D2R);
+    const kind=X>0.5?'inductive (lagging)':(X<-0.5?'capacitive (leading)':'resonant (unity)');
+    $('#z_out').innerHTML=`X<sub>L</sub>=<span class="k">${fmt(XL,1)}</span>  X<sub>C</sub>=<span class="k">${fmt(XC,1)}</span>  X=<span class="k">${fmt(X,1)} Ω</span>
+|Z| = <span class="k">${fmt(Z,2)} Ω</span>   θ = <span class="k">${fmt(th,1)}°</span>
+I = V/|Z| = <span class="k">${fmt(I,2)} A</span>
+PF = cos θ = <span class="k">${fmt(pf,3)}</span> → <span class="k">${kind}</span>
+P = VI·PF = <span class="k">${fmt(V*I*pf,0)} W</span>`;
+    cx.clearRect(0,0,380,280);const ox=60,oy=200,sc=Math.min(280/Math.max(R,1),120/Math.max(Math.abs(X),1),(380-90)/Math.max(Z,1));
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(20,oy);cx.lineTo(360,oy);cx.moveTo(ox,20);cx.lineTo(ox,270);cx.stroke();
+    arrow(cx,ox,oy,ox+R*sc,oy,'#ff6b81',2.5,'R');
+    arrow(cx,ox+R*sc,oy,ox+R*sc,oy-X*sc,'#ffcc66',2.5,'X');
+    arrow(cx,ox,oy,ox+R*sc,oy-X*sc,'#38d39f',2.5,'|Z|');
+    cx.fillStyle='#9aa3c4';cx.font='11px system-ui';cx.fillText('θ='+fmt(th,0)+'°',ox+R*sc/2-14,oy+ (X>0?16:-6));};
+  ['z_V','z_R','z_L','z_C','z_f'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ================= practice ================= */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — AC & reactive components</h2>
+  <p class="subttl">Fresh numbers each time; check against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="rms">1 · RMS from peak</option>
+        <option value="peak">1 · Peak from RMS</option>
+        <option value="vl">3 · Line voltage (Y)</option>
+        <option value="il">3 · Line current (Δ)</option>
+        <option value="p3">3 · Three-phase power</option>
+        <option value="xl">5 · Inductive reactance X_L</option>
+        <option value="xc">5 · Capacitive reactance X_C</option>
+        <option value="z">6 · Series impedance |Z|</option>
+        <option value="pf">6 · Power factor cos θ</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    rms:()=>{const Vm=rnd(50,400,5);return{q:`A sinusoid has peak V<sub>m</sub>=<b>${Vm} V</b>. Its rms value (V)?`,ans:Vm/Math.SQRT2,unit:'V',tol:0.02,sol:`V<sub>rms</sub>=V<sub>m</sub>/√2=${Vm}/1.414=<b>${fmt(Vm/Math.SQRT2,1)} V</b>`};},
+    peak:()=>{const Vr=rnd(50,300,5);return{q:`V<sub>rms</sub>=<b>${Vr} V</b>. Peak voltage V<sub>m</sub> (V)?`,ans:Vr*Math.SQRT2,unit:'V',tol:0.02,sol:`V<sub>m</sub>=√2·V<sub>rms</sub>=1.414·${Vr}=<b>${fmt(Vr*Math.SQRT2,1)} V</b>`};},
+    vl:()=>{const V=rnd(120,400,10);return{q:`A Y-connected source has phase voltage <b>${V} V</b>. Line voltage V<sub>L</sub> (V)?`,ans:Math.sqrt(3)*V,unit:'V',tol:0.02,sol:`V<sub>L</sub>=√3·V<sub>φ</sub>=1.732·${V}=<b>${fmt(Math.sqrt(3)*V,1)} V</b>`};},
+    il:()=>{const I=rnd(5,60,1);return{q:`A Δ-connected load has phase current <b>${I} A</b>. Line current I<sub>L</sub> (A)?`,ans:Math.sqrt(3)*I,unit:'A',tol:0.02,sol:`I<sub>L</sub>=√3·I<sub>φ</sub>=1.732·${I}=<b>${fmt(Math.sqrt(3)*I,1)} A</b>`};},
+    p3:()=>{const VL=rnd(200,600,10),IL=rnd(5,60,1),pf=rnd(0.7,1,0.05);return{q:`3‑φ: V<sub>L</sub>=<b>${VL} V</b>, I<sub>L</sub>=<b>${IL} A</b>, PF=<b>${pf}</b>. Real power P (kW)?`,ans:Math.sqrt(3)*VL*IL*pf/1000,unit:'kW',tol:0.02,sol:`P=√3·V<sub>L</sub>I<sub>L</sub>cos θ=<b>${fmt(Math.sqrt(3)*VL*IL*pf/1000,2)} kW</b>`};},
+    xl:()=>{const L=rnd(10,300,10),f=[50,60][Math.floor(Math.random()*2)];return{q:`L=<b>${L} mH</b> at f=<b>${f} Hz</b>. Inductive reactance X<sub>L</sub> (Ω)?`,ans:2*Math.PI*f*L/1000,unit:'Ω',tol:0.02,sol:`X<sub>L</sub>=2πfL=2π·${f}·${L/1000}=<b>${fmt(2*Math.PI*f*L/1000,2)} Ω</b>`};},
+    xc:()=>{const Cc=rnd(10,200,5),f=[50,60][Math.floor(Math.random()*2)];return{q:`C=<b>${Cc} µF</b> at f=<b>${f} Hz</b>. Capacitive reactance X<sub>C</sub> (Ω)?`,ans:1/(2*Math.PI*f*Cc/1e6),unit:'Ω',tol:0.02,sol:`X<sub>C</sub>=1/(2πfC)=<b>${fmt(1/(2*Math.PI*f*Cc/1e6),2)} Ω</b>`};},
+    z:()=>{const R=rnd(5,50,1),X=rnd(5,50,1);return{q:`R=<b>${R} Ω</b>, net reactance X=<b>${X} Ω</b>. Impedance |Z| (Ω)?`,ans:Math.hypot(R,X),unit:'Ω',tol:0.02,sol:`|Z|=√(R²+X²)=√(${R}²+${X}²)=<b>${fmt(Math.hypot(R,X),2)} Ω</b>`};},
+    pf:()=>{const R=rnd(5,50,1),X=rnd(-40,40,1);const th=Math.atan2(X,R);return{q:`R=<b>${R} Ω</b>, X=<b>${X} Ω</b>. Power factor cos θ?`,ans:Math.cos(th),unit:'',tol:0.02,sol:`θ=atan(X/R)=${fmt(th*R2D,1)}°; PF=cos θ=<b>${fmt(Math.cos(th),3)}</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;$('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;$('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;$('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ================= summary ================= */
+section('summary','Practice','Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self-Test</h2>
+  <div class="card"><table>
+    <tr><th>Relation</th><th>Meaning</th></tr>
+    <tr><td>V<sub>rms</sub>=V<sub>m</sub>/√2</td><td>rms of a sinusoid</td></tr>
+    <tr><td>Balanced 3φ: Σv=0</td><td>three 120°-spaced voltages sum to zero</td></tr>
+    <tr><td>Y: V<sub>L</sub>=√3V<sub>φ</sub>, I<sub>L</sub>=I<sub>φ</sub></td><td>wye</td></tr>
+    <tr><td>Δ: V<sub>L</sub>=V<sub>φ</sub>, I<sub>L</sub>=√3I<sub>φ</sub></td><td>delta</td></tr>
+    <tr><td>v=L di/dt (I lags), i=C dv/dt (I leads)</td><td>reactive elements, 90°</td></tr>
+    <tr><td>X<sub>L</sub>=2πfL, X<sub>C</sub>=1/2πfC</td><td>reactance vs frequency</td></tr>
+    <tr><td>Z=R+j(X<sub>L</sub>−X<sub>C</sub>), PF=cos∠Z</td><td>impedance & power factor</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3><div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['The rms value of a 325 V peak sinusoid is about…',['325 V','230 V','460 V','163 V'],1],
+    ['In a balanced three-phase system, the three phase voltages are spaced…',['90° apart','120° apart','180° apart','60° apart'],1],
+    ['The instantaneous sum of a balanced 3-φ voltage set is…',['3V_m','V_m','zero','1.5V_m'],2],
+    ['For a wye connection, V_line = …',['V_phase','√3·V_phase','3·V_phase','V_phase/√3'],1],
+    ['For a delta connection, I_line = …',['I_phase','√3·I_phase','3·I_phase','I_phase/√3'],1],
+    ['In a pure inductor, the current…',['leads voltage by 90°','lags voltage by 90°','is in phase','is zero'],1],
+    ['In a pure capacitor, the current…',['leads voltage by 90°','lags voltage by 90°','is in phase','is zero'],0],
+    ['As frequency rises, inductive reactance X_L…',['falls','rises','stays constant','becomes zero'],1],
+    ['At DC (f=0) a capacitor behaves as…',['a short','an open circuit','a resistor','an inductor'],1],
+    ['The power factor of a pure reactance (L or C) is…',['1','0.707','0','−1'],2],
+    ['“ELI the ICE man” means: in an inductor…',['I leads E','E leads I','no phase shift','E=0'],1],
+    ['At series resonance (X_L=X_C) the impedance equals…',['0','R','X_L','∞'],1],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;$$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];$$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');$('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+const main=$('#main'),nav=$('#nav');
+function render(id){const s=SECTIONS.find(x=>x.id===id);if(!s)return;let el=$('#sec-'+id);if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}$$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');$$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));window.scrollTo(0,0);location.hash=id;}
+function go(id){render(id);}
+let lastGrp=null;SECTIONS.forEach(s=>{if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);});
+render((location.hash||'#functions').slice(1)||'functions');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 0;
+  var chCode = "CHAPTER 00";
+  var chTitle = "Introduction: AC Systems & Reactive Components";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>

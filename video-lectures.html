@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Browse the teacher's weekly video lecture plan and watch selected lessons.">
+<meta name="theme-color" content="#070e1e">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Video Lectures — Electric Machinery Fundamentals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+<style>/* Navigation */
+.nav {
+  --nav-height: 60px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(8, 18, 38, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  height: var(--nav-height);
+}
+.nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: calc((min(100vw, 1200px) - 100vw) / 2);
+  min-width: 0;
+  gap: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .brand { font-size: 15px; }
+  .brand .brand-text { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+}
+.brand .mark {
+  color: var(--cyan-accent);
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+}
+.brand-text { font-weight: 700; }
+.nav-menu { display: flex; align-items: center; gap: 20px; margin-left: auto; }
+@media (min-width: 1201px) {
+  .nav-menu { margin-right: calc(592px - 50vw); }
+}
+.nav-links { display: flex; align-items: center; gap: 18px; list-style: none; margin: 0; padding: 0; }
+.nav-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 5px 3px;
+  position: relative;
+  transition: color 0.15s ease;
+}
+.nav-links a:hover, .nav-links a.active { color: #ffffff; }
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan-accent);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--cyan-accent);
+}
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+.icon-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.burger {
+  display: none;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  width: 40px;
+  height: 38px;
+  padding: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 860px) {
+  .burger { display: flex; }
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: var(--nav-height); left: 0; right: 0;
+    background: #081226;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 24px;
+    gap: 16px;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+  }
+  .nav-menu.open { display: flex; }
+  .nav-links { flex-direction: column; align-items: stretch; width: 100%; gap: 12px; }
+  .nav-links a { font-size: 16px; display: block; padding: 6px 0; }
+  .nav-actions { width: 100%; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); }
+}
+@media (max-width: 480px) {
+  .nav-wrap { gap: 12px; }
+}
+
+/* Search Dialog */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(7, 14, 30, 0.75);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: flex-start center;
+  padding: 80px 20px 20px;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.search-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 640px;
+  max-height: 75vh;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.search-header svg { color: var(--text-muted); flex-shrink: 0; }
+.search-header input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text-main);
+  font-family: inherit;
+}
+.search-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.search-results {
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.search-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: background 0.1s;
+}
+.search-item:hover {
+  background: var(--blue-light);
+  color: var(--blue-primary);
+}
+.search-item small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+.search-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+* { box-sizing: border-box; }
+:root { --cyan-accent: #38bdf8; --bg-card: #fff; --line: #e2e8f0; --radius-lg: 16px; --text-muted: #64748b; --text-main: #0f172a; --blue-light: #eff6ff; --blue-primary: #2563eb; --video-page-bg: #f4f7fb; --video-surface: #fff; --video-line: #dce4ef; --video-text: #172033; --video-heading: #10213f; --video-muted: #64748b; --video-subtle: #f8fafc; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--video-page-bg); color: var(--video-text); font-family: Inter, system-ui, sans-serif; }
+body.dark-mode { --video-page-bg: #0b132b; --video-surface: #111d3d; --video-line: #26385f; --video-text: #e2e8f0; --video-heading: #f8fafc; --video-muted: #a7b4ca; --video-subtle: #0b1730; --blue-light: rgba(37,99,235,.2); }
+a { color: inherit; }
+.wrap { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 24px; }
+@media(max-width:480px) { .wrap { padding: 0 16px; } }
+.video-top-nav-spacer { height: 64px; }
+.video-back-home-row { max-width: 1200px; margin: 0 auto; padding: 12px 24px 0; }
+.video-back-home { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 9px 14px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--video-surface); color: var(--video-text); font-size: 14px; font-weight: 650; text-decoration: none; }
+.video-back-home:hover { background: var(--video-subtle); }
+.video-main { width: min(100%, 1200px); min-height: calc(100vh - 185px); margin: auto; padding: 14px 24px 64px; }
+.breadcrumbs { margin: 0 0 18px; color: var(--video-muted); font-size: 14px; }
+.breadcrumbs a { color: #2563eb; text-decoration: none; }
+.inline-crumb { padding: 0; border: 0; background: transparent; color: #2563eb; font: inherit; cursor: pointer; }
+.video-hero { padding: clamp(22px, 3vw, 32px) clamp(22px, 4vw, 42px); margin-bottom: 28px; border: 1px solid var(--video-line); border-radius: 18px; background: linear-gradient(120deg,var(--blue-light),var(--video-surface) 68%); }
+.eyebrow { display: block; color: #2563eb; font-size: 12px; font-weight: 800; letter-spacing: .12em; line-height: 1.4; text-transform: uppercase; margin-bottom: 8px; }
+h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,40px); line-height: 1.12; }
+.video-hero p { max-width: 760px; margin: 0; color: var(--video-muted); font-size: clamp(14px,1.2vw,16px); line-height: 1.6; }
+.section-heading { margin: 0 0 14px; color: var(--video-heading); font-size: 22px; }
+.lecture-controls { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(2,minmax(150px,.55fr)) auto; gap: 10px; margin: 0 0 12px; }
+.lecture-controls > label { display: block; width: 100%; min-width: 0; }
+.lecture-controls input, .lecture-controls select, .lecture-reset { width: 100%; min-width: 0; min-height: 44px; padding: 9px 12px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--video-surface); color: var(--video-text); font: inherit; }
+.lecture-controls input:focus-visible, .lecture-controls select:focus-visible, .lecture-reset:focus-visible, .back-button:focus-visible, .watch-button:focus-visible, .youtube-link:focus-visible, .topic-video-title:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.lecture-reset { cursor: pointer; font-weight: 650; }
+.lecture-reset:hover { background: var(--video-subtle); }
+.lecture-result-count { margin: 0 0 14px; color: var(--video-muted); font-size: 14px; }
+.lecture-empty { margin: 0 0 14px; padding: 16px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--video-surface); color: var(--video-muted); }
+.week-topic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 20px; }
+.week-topic-card { min-width: 0; padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); box-shadow: 0 3px 12px rgba(15,23,42,.035); }
+.topic-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.week-label { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.week-topic-card h2 { min-width: 0; margin: 0; color: var(--video-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.topic-video-count { margin: 0; color: var(--video-muted); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.topic-video-list { display: grid; gap: 10px; margin-top: 14px; }
+.topic-video { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--video-line); border-radius: 10px; background: var(--video-subtle); }
+.topic-video-title { min-width: 0; flex: 1 1 auto; color: var(--video-text); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; text-decoration: none; }
+.topic-video-title:hover { color: #2563eb; text-decoration: underline; }
+.back-button, .watch-button, .youtube-link { min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 14px; border-radius: 9px; font: inherit; font-size: 14px; font-weight: 650; text-decoration: none; cursor: pointer; }
+.back-button { margin: 0 0 22px; border: 1px solid var(--video-line); background: var(--video-surface); color: var(--video-text); }
+.back-button:hover { background: var(--video-subtle); }
+.watch-button { flex: 0 0 auto; border: 0; background: #2563eb; color: #fff; white-space: nowrap; }
+.watch-button:hover { background: #1d4ed8; }
+.player-card { padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); }
+.player-card h2 { margin: 0 0 6px; color: var(--video-heading); font-size: 21px; }
+.player-card h3 { margin: 0 0 10px; color: var(--video-text); font-size: 16px; }
+.player-topic { margin: 0 0 16px; color: var(--video-muted); }
+.player-frame { overflow: hidden; width: 100%; aspect-ratio: 16/9; border-radius: 11px; background: #07101f; }
+.player-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+.player-fallback { margin: 14px 0 0; padding: 12px 14px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--blue-light); color: var(--video-text); font-size: 14px; line-height: 1.5; }
+.player-fallback a { color: #1d4ed8; font-weight: 700; }
+.player-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.youtube-link { border: 1px solid var(--video-line); background: var(--video-surface); color: var(--video-text); }
+.youtube-link:hover { background: var(--video-subtle); }
+.related-lectures { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--video-line); }
+.related-lectures h3 { margin: 0 0 10px; color: var(--video-heading); }
+.related-list { display: grid; gap: 8px; }
+.related-list a { color: #2563eb; overflow-wrap: anywhere; }
+.video-footer { padding: 23px 24px; color: #94a3b8; background: #070e1e; text-align: center; font-size: 13px; }
+[hidden] { display: none !important; }
+@media(max-width:680px) {
+  .video-back-home-row { padding: 10px 16px 0; }
+  .video-main { padding: 12px 16px 48px; }
+  .video-hero { padding: 23px 20px; }
+  .week-topic-card { padding: 16px; }
+  .topic-video { align-items: flex-start; flex-direction: column; }
+  .watch-button { align-self: flex-start; }
+  .lecture-controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .lecture-controls > label:first-child { grid-column: 1 / -1; }
+  .lecture-reset { width: auto; grid-column: 1 / -1; justify-self: end; }
+}
+@media(max-width:520px) {
+  .week-topic-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .video-hero { margin-bottom: 22px; }
+  .lecture-controls { grid-template-columns: minmax(0,1fr); }
+  .lecture-controls > label:first-child, .lecture-reset { grid-column: 1; }
+  .lecture-reset { width: 100%; }
+  .player-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<header class="nav" id="top-nav">
+  <div class="wrap nav-wrap">
+    <a class="brand" href="index.html#home">
+      <span class="mark">⚡</span>
+      <span class="brand-text">Electric Machinery Fundamentals</span>
+    </a>
+    <button class="burger" id="burger" aria-label="Toggle navigation" aria-controls="links">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu" id="links">
+      <ul class="nav-links">
+        <li><a href="index.html#home" class="">Home</a></li>
+        <li><a href="index.html#chapters" class="">Chapters</a></li>
+        <li><a href="index.html#video-lectures" class="active">Video Lectures</a></li>
+        <li><a href="index.html#about" class="">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button class="icon-btn" id="search-toggle" aria-label="Search topics" title="Search topics (Ctrl+K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="video-top-nav-spacer" aria-hidden="true"></div>
+<div class="video-back-home-row"><a class="video-back-home" href="index.html">← Back to Home</a></div>
+<main class="video-main">
+  <section id="lectures-view">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> <span aria-hidden="true">›</span> Video Lectures</nav>
+    <div class="video-hero">
+      <span class="eyebrow">DIGITAL LEARNING RESOURCES</span>
+      <h1>Video Lectures</h1>
+      <p>Explore topic-wise video lectures provided by your teacher to strengthen your understanding of Electric Machinery Fundamentals. Select a lecture to watch it directly on this website, or open it on YouTube.</p>
+    </div>
+    <div class="lecture-controls" role="group" aria-label="Search and filter lectures">
+      <label><span class="sr-only">Search lectures by title, topic, or week</span><input id="lecture-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="weekly-plan-list"></label>
+      <label><span class="sr-only">Filter by week</span><select id="lecture-week"><option value="">All weeks</option><option value="1">Week 1</option><option value="3">Week 3</option><option value="5">Week 5</option><option value="6">Week 6</option><option value="7">Week 7</option><option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option></select></label>
+      <label><span class="sr-only">Filter by topic</span><select id="lecture-topic"><option value="">All topics</option><option value="DC motors and speed control">DC motors and speed control</option><option value="DC-machine losses, maximum efficiency and armature reaction">DC-machine losses, maximum efficiency and armature reaction</option><option value="DC-motor speed/load and torque/load characteristics">DC-motor speed/load and torque/load characteristics</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and power-loss calculations">Induction-motor tests and power-loss calculations</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Transformer equivalent circuit, voltage regulation and efficiency">Transformer equivalent circuit, voltage regulation and efficiency</option></select></label>
+      <button class="lecture-reset" id="lecture-reset" type="button">Clear filters</button>
+    </div>
+    <p class="lecture-result-count" id="lecture-result-count" aria-live="polite"></p>
+    <p class="lecture-empty" id="lecture-empty" role="status" hidden>No matching lectures found</p>
+    <p class="lecture-empty" id="lecture-route-error" role="status" hidden>This lecture link is invalid or is not available in the current lecture list. No other video was substituted.</p>
+    <div id="weekly-plan-list"></div>
+  </section>
+  <section id="player-view" hidden>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> <span aria-hidden="true">›</span> <button type="button" class="inline-crumb" id="back-to-list-crumb">Video Lectures</button></nav>
+    <button class="back-button" type="button" id="back-to-list">← Back to Video Lectures</button>
+    <div class="player-card">
+      <h2 id="player-topic-title"></h2>
+      <p class="player-week" id="player-week"></p>
+      <h3 id="player-title"></h3>
+      <div class="player-frame" id="player-frame"></div>
+      <p class="player-fallback" id="player-fallback"></p>
+      <div class="player-actions"><a class="youtube-link" id="youtube-link" href="#" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a></div>
+      <section class="related-lectures" id="related-lectures" hidden>
+        <h3>Related lectures</h3>
+        <div class="related-list" id="related-list"></div>
+      </section>
+    </div>
+  </section>
+</main>
+<footer class="video-footer">Electric Machinery Fundamentals · Video Lectures</footer>
+<div class="search-overlay" id="search-overlay" style="display:none">
+  <div class="search-modal">
+    <div class="search-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="Search topics, equations, machines..." autocomplete="off">
+      <button class="search-close" id="search-close" aria-label="Close search">&times;</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+<script type="application/json" id="video-data">[{"week":1,"title":"Magnetic circuits and numerical examples","videos":[{"id":"UdS_qWUEynY","title":"Magnetic Circuits","url":"https://youtu.be/UdS_qWUEynY"},{"id":"aTKp-zjnnZM","title":"Magnetic Circuits Numerical Example","url":"https://youtu.be/aTKp-zjnnZM"},{"id":"_0SMkTzzHzs","title":"Magnetic Circuit Numerical 2","url":"https://youtu.be/_0SMkTzzHzs"}]},{"week":3,"title":"Transformer equivalent circuit, voltage regulation and efficiency","videos":[{"id":"MGCTRL9GvIQ","title":"Equivalent Circuit Diagram of Transformers (Part 1)","url":"https://youtu.be/MGCTRL9GvIQ"},{"id":"2OQQTiv9AgI","title":"Equivalent Circuit Diagram of Transformers (Part 2)","url":"https://youtu.be/2OQQTiv9AgI"},{"id":"lEz4i2VlbT8","title":"Effect of loads on transformer","url":"https://youtu.be/lEz4i2VlbT8"},{"id":"KKuoiivUDC4","title":"Open Circuit and Short Circuit test of transformer (Complete Numerical )","url":"https://youtu.be/KKuoiivUDC4"}]},{"week":5,"title":"DC-machine losses, maximum efficiency and armature reaction","videos":[{"id":"8ucji-Af1S0","title":"Armature Reaction Effect on DC Machines","url":"https://youtu.be/8ucji-Af1S0"}]},{"week":6,"title":"DC motors and speed control","videos":[{"id":"231etTEJANo","title":"Speed Control of DC Motor","url":"https://youtu.be/231etTEJANo"},{"id":"54GXQRYh3J4","title":"Torque Speed Characteristics of DC Motor","url":"https://youtu.be/54GXQRYh3J4"}]},{"week":7,"title":"DC-motor speed/load and torque/load characteristics","videos":[{"id":"0jd7dSCKQtM","title":"EMF and Torque Equation Of DC Machines","url":"https://youtu.be/0jd7dSCKQtM"}]},{"week":10,"title":"Induction-motor induced EMF, rotor frequency, speed and torque","videos":[{"id":"FHOJK_soS5Q","title":"REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR","url":"https://youtu.be/FHOJK_soS5Q"},{"id":"Zb1W9dB9Clk","title":"TYPES OF STATOR WINDING","url":"https://youtu.be/Zb1W9dB9Clk"},{"id":"E5Gcd-HuXWM","title":"Effect of poles and frequency on revolving magnetic field","url":"https://youtu.be/E5Gcd-HuXWM"}]},{"week":11,"title":"Induction-motor EMF, rotor types, slip, equivalent circuit and power flow","videos":[{"id":"8rraTyqqii8","title":"Slip","url":"https://youtu.be/8rraTyqqii8"},{"id":"4fFF58yJh3E","title":"Difference between squirrel cage and wound rotor induction motor.","url":"https://youtu.be/4fFF58yJh3E"},{"id":"V8RFq9ZgsQc","title":"Equivalent Circuit diagram of Induction Motor (part 1)","url":"https://youtu.be/V8RFq9ZgsQc"},{"id":"X_-z_wvXTfA","title":"Equivalent Circuit diagram of Induction Motor (part 2)","url":"https://youtu.be/X_-z_wvXTfA"},{"id":"IBR2Iei0aSs","title":"Equivalent Circuit diagram of Induction Motor (part 3)","url":"https://youtu.be/IBR2Iei0aSs"},{"id":"RgsHqcyhGOg","title":"Approximate Equivalent Circuit diagram of Induction Motor","url":"https://youtu.be/RgsHqcyhGOg"}]},{"week":12,"title":"Induction-motor tests and power-loss calculations","videos":[{"id":"HCDqHBm53GQ","title":"Power Flow and Losses in Induction Motor","url":"https://youtu.be/HCDqHBm53GQ"},{"id":"J-Rwq2nKIRs","title":"Power and Losses relations of Induction Motor","url":"https://youtu.be/J-Rwq2nKIRs"}]},{"week":12,"title":"Induction-motor tests and torque/speed characteristics","videos":[{"id":"uZ3HvgbYyoI","title":"Torque Speed Characteristics Part 1","url":"https://youtu.be/uZ3HvgbYyoI"},{"id":"PNFDDfgmkXw","title":"Torque and Speed Characteristics part 2","url":"https://youtu.be/PNFDDfgmkXw"},{"id":"0bagD_YDL58","title":"Maximum Torque Equation Derivation","url":"https://youtu.be/0bagD_YDL58"},{"id":"nDLLAzgrxQE","title":"Numerical 3 on Torque and Speed Characteristics","url":"https://youtu.be/nDLLAzgrxQE"}]}]</script>
+
+<script>
+(function(){
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.body.classList.add('emf-page-enter');
+  }
+
+  var deferredImages=document.querySelectorAll('img[data-src]');
+  if('IntersectionObserver' in window){
+    var imageObserver=new IntersectionObserver(function(entries,observer){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var image=entry.target;
+          image.src=image.dataset.src;
+          image.removeAttribute('data-src');
+          observer.unobserve(image);
+        }
+      });
+    },{rootMargin:'300px 0px'});
+    deferredImages.forEach(function(image){ imageObserver.observe(image); });
+  } else {
+    deferredImages.forEach(function(image){
+      image.src=image.dataset.src;
+      image.removeAttribute('data-src');
+    });
+  }
+
+  // Theme toggle
+  var themeBtn=document.getElementById('theme-toggle');
+  if(themeBtn){
+    var syncThemeIcon=function(){
+      var dark=document.body.classList.contains('dark-mode');
+      themeBtn.innerHTML=dark
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+    };
+    var savedTheme=localStorage.getItem('emf_theme');
+    if(savedTheme==='dark'){
+      document.body.classList.add('dark-mode');
+    } else if(savedTheme==='light'){
+      document.body.classList.remove('dark-mode');
+    }
+    syncThemeIcon();
+    new MutationObserver(syncThemeIcon).observe(document.body,{attributes:true,attributeFilter:['class']});
+    themeBtn.onclick=function(){
+      var isDark=document.body.classList.toggle('dark-mode');
+      localStorage.setItem('emf_theme', isDark ? 'dark' : 'light');
+      syncThemeIcon();
+    };
+  }
+
+  // Mobile menu
+  var burger=document.getElementById('burger'), menu=document.getElementById('links');
+  if(burger && menu){
+    burger.onclick=function(){ menu.classList.toggle('open'); };
+    menu.addEventListener('click',function(e){
+      if(e.target.tagName==='A') menu.classList.remove('open');
+    });
+  }
+
+  // Keep the primary navigation indicator in sync with routes and homepage sections.
+  var navLinks=Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var navBar=document.querySelector('.nav');
+  function normalizedPagePath(path){
+    path=path.toLowerCase();
+    if(path.endsWith('/index.html')) path=path.slice(0,-10);
+    if(!path.endsWith('/')) path+='/';
+    return path;
+  }
+  function setActiveNav(link){
+    navLinks.forEach(function(item){ item.classList.toggle('active',item===link); });
+  }
+  function navLinkFor(label){
+    return navLinks.find(function(link){ return link.textContent.trim().toLowerCase()===label; });
+  }
+  function updateActiveNav(){
+    if(!navLinks.length) return;
+    var path=window.location.pathname.toLowerCase();
+    if(path.endsWith('/video-lectures.html')){
+      setActiveNav(navLinkFor('video lectures'));
+      return;
+    }
+    if(path.endsWith('/chapters.html') || path.indexOf('/chapter-pages/')!==-1){
+      setActiveNav(navLinkFor('chapters'));
+      return;
+    }
+    if(!(path.endsWith('/index.html') || path.endsWith('/'))){
+      return;
+    }
+    if(window.scrollY<2 && location.hash){
+      var initialSection=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if(initialSection){
+        var initialId=initialSection.id;
+        if(initialId==='chapters' || initialId==='video-lectures' || initialId==='about' || initialId==='home'){
+          setActiveNav(navLinkFor(initialId==='video-lectures' ? 'video lectures' : initialId));
+          return;
+        }
+      }
+    }
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var marker=window.scrollY+headerHeight+Math.min(window.innerHeight*0.32,240);
+    var activeSection='home';
+    ['home','about','chapters','video-lectures'].forEach(function(id){
+      var section=document.getElementById(id);
+      if(section && section.getBoundingClientRect().top+window.scrollY<=marker){
+        activeSection=id;
+      }
+    });
+    setActiveNav(navLinkFor(activeSection==='chapters' ? 'chapters' : activeSection==='video-lectures' ? 'video lectures' : activeSection));
+  }
+  var navUpdatePending=false;
+  function scheduleActiveNavUpdate(){
+    if(navUpdatePending) return;
+    navUpdatePending=true;
+    window.requestAnimationFrame(function(){
+      navUpdatePending=false;
+      updateActiveNav();
+    });
+  }
+  function scrollToSection(section, instant){
+    var headerHeight=navBar ? navBar.getBoundingClientRect().height : 0;
+    var sectionTop=window.scrollY+section.getBoundingClientRect().top-headerHeight-8;
+    var reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:Math.max(0,sectionTop),behavior:instant?'instant':reducedMotion?'auto':'smooth'});
+    setActiveNav(navLinkFor(section.id==='video-lectures' ? 'video lectures' : section.id));
+  }
+  navLinks.forEach(function(link){
+    link.addEventListener('click',function(){
+      setActiveNav(link);
+      window.setTimeout(updateActiveNav,0);
+    });
+  });
+  document.addEventListener('click',function(event){
+    var anchor=event.target.closest&&event.target.closest('a[href]');
+    if(!anchor) return;
+    var targetUrl=new URL(anchor.href,window.location.href);
+    if(targetUrl.origin!==window.location.origin ||
+       normalizedPagePath(targetUrl.pathname)!==normalizedPagePath(window.location.pathname) ||
+       !targetUrl.hash) return;
+    var target=document.getElementById(decodeURIComponent(targetUrl.hash.slice(1)));
+    if(!target || !['home','about','chapters','video-lectures'].includes(target.id)) return;
+    event.preventDefault();
+    if(window.location.hash!==targetUrl.hash) history.pushState(null,'',targetUrl.hash);
+    scrollToSection(target);
+    scheduleActiveNavUpdate();
+  });
+  function scrollToInitialHash(){
+    if(!(window.location.pathname.toLowerCase().endsWith('/index.html') || window.location.pathname.endsWith('/')) || !window.location.hash) return;
+    var initialTarget=document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+    if(initialTarget && ['home','about','chapters','video-lectures'].includes(initialTarget.id)){
+      scrollToSection(initialTarget,true);
+      updateActiveNav();
+    }
+  }
+  var initialHashScrollTimer=0;
+  function scheduleInitialHashScroll(){
+    window.clearTimeout(initialHashScrollTimer);
+    initialHashScrollTimer=window.setTimeout(function(){
+      initialHashScrollTimer=0;
+      window.setTimeout(scrollToInitialHash,0);
+    },0);
+  }
+  scheduleInitialHashScroll();
+  window.addEventListener('pageshow',scheduleInitialHashScroll);
+  window.addEventListener('load',scheduleInitialHashScroll);
+  window.addEventListener('hashchange',scheduleInitialHashScroll);
+  window.addEventListener('scroll',scheduleActiveNavUpdate,{passive:true});
+  window.addEventListener('resize',scheduleActiveNavUpdate);
+  window.addEventListener('hashchange',scheduleActiveNavUpdate);
+  window.addEventListener('popstate',scheduleActiveNavUpdate);
+  window.addEventListener('pageshow',scheduleActiveNavUpdate);
+  updateActiveNav();
+
+  // Back to top
+  var topBtn=document.getElementById('top');
+  if(topBtn){
+    window.addEventListener('scroll',function(){
+      topBtn.classList.toggle('show', window.scrollY > 400);
+    },{passive:true});
+    topBtn.onclick=function(){ window.scrollTo({top:0,behavior:'smooth'}); };
+  }
+
+  // Search dialog
+  var searchOverlay=document.getElementById('search-overlay');
+  var searchBtn=document.getElementById('search-toggle');
+  var searchInput=document.getElementById('search-input');
+  var searchResults=document.getElementById('search-results');
+  var searchClose=document.getElementById('search-close');
+  var searchIndex=null;
+  var searchIndexRequest=null;
+  var rootPrefix='';
+
+  function loadSearchIndex(){
+    if(searchIndex) return Promise.resolve(searchIndex);
+    if(!searchIndexRequest){
+      searchIndexRequest=fetch(rootPrefix+'search-index.json').then(function(response){
+        if(!response.ok) throw new Error('Search index request failed with HTTP '+response.status);
+        return response.json();
+      }).then(function(data){
+        if(!Array.isArray(data)) throw new TypeError('Search index must contain an array');
+        searchIndex=data;
+        return searchIndex;
+      }).catch(function(error){
+        searchIndexRequest=null;
+        throw error;
+      });
+    }
+    return searchIndexRequest;
+  }
+
+  function showSearchLoadError(error){
+    console.error('Topic search could not be loaded.',error);
+    searchResults.innerHTML='';
+    var message=document.createElement('div');
+    message.className='search-empty';
+    message.appendChild(document.createTextNode('Could not load topic search. '));
+    var retry=document.createElement('button');
+    retry.type='button';
+    retry.textContent='Retry';
+    retry.onclick=loadAndRenderSearch;
+    message.appendChild(retry);
+    searchResults.appendChild(message);
+  }
+
+  function loadAndRenderSearch(){
+    if(!searchResults) return;
+    searchResults.innerHTML='<div class="search-empty">Loading topics…</div>';
+    loadSearchIndex().then(function(){ renderSearchResults(searchInput.value); }).catch(showSearchLoadError);
+  }
+
+  function openSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='grid';
+    searchInput.value='';
+    loadAndRenderSearch();
+    setTimeout(function(){ searchInput.focus(); }, 50);
+  }
+  function closeSearch(){
+    if(!searchOverlay) return;
+    searchOverlay.style.display='none';
+  }
+  if(searchBtn) searchBtn.onclick=openSearch;
+  if(searchClose) searchClose.onclick=closeSearch;
+  if(searchOverlay){
+    searchOverlay.onclick=function(e){
+      if(e.target===searchOverlay) closeSearch();
+    };
+  }
+  if(searchResults){
+    searchResults.addEventListener('click',function(e){
+      if(e.target.closest && e.target.closest('.search-item')) closeSearch();
+    });
+  }
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') closeSearch();
+    if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); openSearch(); }
+  });
+
+  function renderSearchResults(q){
+    if(!searchResults || !searchIndex) return;
+    q=(q||'').trim().toLowerCase();
+    var matches = searchIndex.filter(function(item){
+      return !q || item.title.toLowerCase().indexOf(q)!==-1 || item.chTitle.toLowerCase().indexOf(q)!==-1 || item.desc.toLowerCase().indexOf(q)!==-1;
+    }).slice(0, 20);
+
+    if(!matches.length){
+      searchResults.innerHTML='<div class="search-empty">No matching topics found</div>';
+      return;
+    }
+    searchResults.innerHTML=matches.map(function(m){
+      var linkUrl = rootPrefix + 'chapter-pages/view' + m.chIndex + '.html#' + encodeURIComponent(m.id);
+      return '<a href="' + linkUrl + '" class="search-item">' +
+             '<strong>' + m.title + '</strong>' +
+             '<small>' + m.chCode + ' · ' + m.chTitle + '</small>' +
+             '</a>';
+    }).join('');
+
+  }
+
+  if(searchInput){
+    searchInput.addEventListener('input',function(){
+      if(searchIndex) renderSearchResults(searchInput.value);
+    });
+  }
+})();
+</script>
+<script>
+const topics = JSON.parse(document.getElementById('video-data').textContent);
+const views = {
+  list: document.getElementById('lectures-view'),
+  player: document.getElementById('player-view')
+};
+const state = { view: 'list', videoId: null };
+const escapeHtml = value => String(value).replace(/[&<>"']/g, ch =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const topicForVideo = id => topics.find(topic => topic.videos.some(video => video.id === id));
+const videoFor = id => topicForVideo(id)?.videos.find(video => video.id === id);
+const searchInput = document.getElementById('lecture-search');
+const weekFilter = document.getElementById('lecture-week');
+const topicFilter = document.getElementById('lecture-topic');
+const resultCount = document.getElementById('lecture-result-count');
+const emptyState = document.getElementById('lecture-empty');
+const routeError = document.getElementById('lecture-route-error');
+function routeHash() {
+  return state.view === 'player' ? `#video/${state.videoId}` : '#lectures';
+}
+function navigate(view, videoId = null, push = true) {
+  if (view !== 'player') {
+    state.view = 'list';
+    state.videoId = null;
+    routeError.hidden = true;
+    if (push && location.hash !== '#lectures') history.pushState(null, '', '#lectures');
+  } else {
+    if (!videoFor(videoId)) {
+      showInvalidLecture();
+      return;
+    }
+    state.view = view;
+    state.videoId = videoId;
+    const hash = routeHash();
+    if (push && location.hash !== hash) history.pushState(null, '', hash);
+  }
+  render();
+  window.scrollTo(0, 0);
+}
+function renderList() {
+  document.title = 'Video Lectures — Electric Machinery Fundamentals';
+  document.getElementById('player-frame').replaceChildren();
+  document.getElementById('youtube-link').href = '#';
+  const grouped = new Map();
+  for (const topic of topics) {
+    if (!grouped.has(topic.week)) grouped.set(topic.week, []);
+    grouped.get(topic.week).push(topic);
+  }
+  const cards = [...grouped.entries()]
+    .sort(([weekA], [weekB]) => weekA - weekB)
+    .flatMap(([week, weekTopics]) => weekTopics.map(topic => `<article class="week-topic-card" data-topic-week="${week}" data-topic-title="${escapeHtml(topic.title)}">
+        <div class="topic-card-meta"><span class="week-label">Week ${week}</span>${topic.videos.length > 1 ? `<span class="topic-video-count">${topic.videos.length} videos</span>` : ''}</div>
+        <h2>${escapeHtml(topic.title)}</h2>
+        <div class="topic-video-list">${topic.videos.map(video => `<div class="topic-video">
+          <a class="topic-video-title" href="#video/${encodeURIComponent(video.id)}" data-watch="${escapeHtml(video.id)}">${escapeHtml(video.title)}</a>
+          <button type="button" class="watch-button" data-watch="${escapeHtml(video.id)}">▶ Play Video</button>
+        </div>`).join('')}</div>
+      </article>`));
+  document.getElementById('weekly-plan-list').innerHTML = `<div class="week-topic-grid">${cards.join('')}</div>`;
+  applyLectureFilters();
+}
+function applyLectureFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  let visibleCount = 0;
+  document.querySelectorAll('.week-topic-card').forEach(topic => {
+    const weekMatches = !weekFilter.value || topic.dataset.topicWeek === weekFilter.value;
+    const topicMatches = !topicFilter.value || topic.dataset.topicTitle === topicFilter.value;
+    let visibleInTopic = 0;
+    topic.querySelectorAll('.topic-video').forEach(card => {
+      const video = videoFor(card.querySelector('[data-watch]').dataset.watch);
+      const searchable = `${video.title} ${topic.dataset.topicTitle} week ${topic.dataset.topicWeek} ${video.id} ${video.url}`.toLowerCase();
+      const visible = weekMatches && topicMatches && (!query || searchable.includes(query));
+      card.hidden = !visible;
+      if (visible) visibleInTopic++;
+    });
+    topic.hidden = visibleInTopic === 0;
+    visibleCount += visibleInTopic;
+  });
+  resultCount.textContent = `${visibleCount} lecture${visibleCount === 1 ? '' : 's'} found`;
+  emptyState.hidden = visibleCount !== 0;
+}
+function showInvalidLecture() {
+  state.view = 'list';
+  state.videoId = null;
+  routeError.hidden = false;
+  render();
+}
+function renderPlayer() {
+  const topic = topicForVideo(state.videoId);
+  const video = videoFor(state.videoId);
+  if (!topic || !video) {
+    showInvalidLecture();
+    return;
+  }
+  document.getElementById('player-topic-title').textContent = topic.title;
+  document.getElementById('player-title').textContent = video.title;
+  document.getElementById('player-week').textContent = `Week ${topic.week}`;
+  document.title = `${video.title} — Video Lectures`;
+  document.getElementById('youtube-link').href = video.url;
+  const container = document.getElementById('player-frame');
+  const fallback = document.getElementById('player-fallback');
+  container.replaceChildren();
+  if (location.protocol === 'file:') {
+    container.hidden = true;
+    fallback.textContent = 'Embedded playback is unavailable when this site is opened directly from disk. Use Watch on YouTube to play the original lecture.';
+  } else {
+    container.hidden = false;
+    fallback.textContent = 'If embedded playback is unavailable or does not start, use Watch on YouTube to play the original lecture.';
+    const frame = document.createElement('iframe');
+    frame.src = `https://www.youtube.com/embed/${encodeURIComponent(video.id)}`;
+    frame.title = `YouTube video: ${video.title}`;
+    frame.loading = 'lazy';
+    frame.referrerPolicy = 'origin';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    frame.allowFullscreen = true;
+    frame.addEventListener('error', () => {
+      fallback.textContent = 'The video could not be embedded here. Use Watch on YouTube to play the original lecture.';
+    });
+    container.appendChild(frame);
+  }
+  const relatedSection = document.getElementById('related-lectures');
+  const relatedVideos = topic.videos.filter(item => item.id !== video.id);
+  relatedSection.hidden = relatedVideos.length === 0;
+  document.getElementById('related-list').innerHTML = relatedVideos.map(item =>
+    `<a href="#video/${encodeURIComponent(item.id)}" data-watch="${escapeHtml(item.id)}">${escapeHtml(item.title)}</a>`
+  ).join('');
+}
+function render() {
+  for (const [name, element] of Object.entries(views)) element.hidden = name !== state.view;
+  if (state.view === 'list') renderList();
+  if (state.view === 'player') renderPlayer();
+}
+function restoreRoute(hash) {
+  let route;
+  try {
+    route = decodeURIComponent(hash.replace(/^#/, ''));
+  } catch (error) {
+    showInvalidLecture();
+    return;
+  }
+  const match = route.match(/^video\/([^/]+)$/);
+  if (match) {
+    if (videoFor(match[1])) {
+      state.view = 'player';
+      state.videoId = match[1];
+      routeError.hidden = true;
+      render();
+      return;
+    }
+    showInvalidLecture();
+    return;
+  }
+  state.view = 'list';
+  state.videoId = null;
+  routeError.hidden = !!(route && route !== 'lectures');
+  render();
+}
+document.addEventListener('click', event => {
+  const watchLink = event.target.closest('[data-watch]');
+  if (watchLink) {
+    event.preventDefault();
+    navigate('player', watchLink.dataset.watch);
+  }
+});
+searchInput.addEventListener('input', applyLectureFilters);
+weekFilter.addEventListener('change', applyLectureFilters);
+topicFilter.addEventListener('change', applyLectureFilters);
+document.getElementById('lecture-reset').addEventListener('click', () => {
+  searchInput.value = '';
+  weekFilter.value = '';
+  topicFilter.value = '';
+  applyLectureFilters();
+  searchInput.focus();
+});
+document.getElementById('back-to-list').addEventListener('click', () => navigate('list'));
+document.getElementById('back-to-list-crumb').addEventListener('click', () => navigate('list'));
+window.addEventListener('popstate', () => restoreRoute(location.hash));
+document.getElementById('youtube-link').addEventListener('click', event => {
+  if (!videoFor(state.videoId)) event.preventDefault();
+});
+restoreRoute(location.hash);
+</script>
+</body>
+</html>

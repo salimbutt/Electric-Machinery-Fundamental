@@ -1,0 +1,1886 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMF Ch.2 — Transformers (Interactive)</title>
+<style>
+:root{
+  --bg:#0f1220; --panel:#171a2b; --panel2:#1e2237; --ink:#e8ebf7; --muted:#9aa3c4;
+  --acc:#5b8cff; --acc2:#38d39f; --warn:#ffcc66; --bad:#ff6b81; --line:#2a2f4a;
+  --chip:#242a44; --good:#38d39f; --p:#5b8cff; --s:#ff9f43;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 "Segoe UI",system-ui,Arial,sans-serif}
+a{color:var(--acc)}
+.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.side{background:var(--panel);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.brand{padding:18px 18px 8px}
+.brand h1{font-size:16px;margin:0}
+.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.brand a{font-size:12px}
+.nav{padding:8px;flex:1}
+.credit{border-top:1px solid var(--line);padding:12px 18px;font-size:12px;color:var(--muted)}
+.credit b{color:var(--ink);font-weight:600}
+.credit a{color:var(--acc)}
+.nav button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--ink);
+  padding:9px 12px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.nav button:hover{background:var(--panel2)}
+.nav button.active{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;font-weight:600}
+.nav .grp{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 12px 4px}
+.main{padding:26px 34px 80px;max-width:1040px}
+.sec{display:none;animation:fade .25s ease}
+.sec.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.title{font-size:24px;margin:0 0 4px}
+.subttl{color:var(--muted);margin:0 0 18px}
+h3{margin:26px 0 8px;font-size:18px;border-left:3px solid var(--acc);padding-left:10px}
+h4{margin:18px 0 6px;font-size:15px;color:var(--acc2)}
+p{margin:8px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.card.tight{padding:12px 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.grid2,.grid3{grid-template-columns:1fr}.main{padding:18px}}
+.eq{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;
+  font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;overflow-x:auto;text-align:center}
+.eq .tag{float:right;color:var(--muted);font-size:12px;font-family:system-ui}
+.frac{display:inline-block;vertical-align:middle;text-align:center;margin:0 3px}
+.frac .n{display:block;border-bottom:1.5px solid currentColor;padding:0 6px}
+.frac .d{display:block;padding:0 6px}
+.eq i,.m i,.dq i{font-style:italic;font-family:"Cambria Math","Times New Roman",Georgia,serif}
+.m{font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:17px;white-space:nowrap}
+.dq{display:block;text-align:center;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:19px;margin:8px 0 6px;line-height:1.35;color:var(--ink)}
+.dq .frac .n,.dq .frac .d{padding:0 8px}
+.sqrt{display:inline-block;vertical-align:middle;white-space:nowrap}
+.sqrt::before{content:"√";font-size:1.35em;vertical-align:top;line-height:.9;margin-right:-1px}
+.sqrt .rad{display:inline-block;border-top:1.5px solid currentColor;padding:2px 5px 0 4px;vertical-align:middle}
+.sqrt.tall{display:inline-flex;align-items:stretch}
+.sqrt.tall::before{font-size:2.6em;line-height:.62;align-self:flex-end;margin-right:-2px}
+.sqrt.tall .rad{padding-top:4px}
+.step{line-height:1.65}
+.vec{font-weight:700}
+sub,sup{font-size:.72em}
+label.ctl{display:block;margin:10px 0}
+label.ctl .lab{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:4px}
+label.ctl .val{color:var(--acc2);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--acc)}
+input[type=number],input[type=text],select{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+  border-radius:8px;padding:7px 9px;font-size:14px;width:100%}
+.inrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.btn{background:linear-gradient(90deg,var(--acc),#3a6cff);color:#fff;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-size:14px;font-weight:600}
+.btn.ghost{background:var(--chip);color:var(--ink);font-weight:500}
+.btn.warn{background:linear-gradient(90deg,#ff9f43,#ff6b81)}
+.btn:active{transform:translateY(1px)}
+.out{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:12px 14px;margin-top:12px;
+  font-variant-numeric:tabular-nums;white-space:pre-wrap;font-size:14px}
+.out .k{color:var(--acc2);font-weight:600}
+.pill{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+details{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:10px 0}
+details summary{cursor:pointer;color:var(--acc);font-weight:600}
+.deriv{background:#14182b;border:1px solid #2c3557}
+.deriv summary{color:var(--warn)}
+.step{margin:9px 0;padding:8px 12px;border-left:2px solid var(--acc);background:#12162a;border-radius:0 8px 8px 0}
+.step .why{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+canvas{max-width:100%;background:#0b0e1c;border:1px solid var(--line);border-radius:10px}
+svg{max-width:100%}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:center}
+th{background:var(--panel2);color:var(--muted)}
+.note{color:var(--muted);font-size:13px}
+.flex{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tabs .t{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px}
+.tabs .t.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.warnbox{background:#221a0c;border:1px solid #6b5320;border-radius:10px;padding:10px 14px;color:#ffe6a8;font-size:13.5px}
+.okbox{background:#0c1a14;border:1px solid #1f5c45;border-radius:10px;padding:10px 14px;color:#bff0dc;font-size:13.5px}
+.badbox{background:#1a0c10;border:1px solid #6b2530;border-radius:10px;padding:10px 14px;color:#ffc9d2;font-size:13.5px}
+.gauge{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:center}
+.gauge .g-l{color:var(--muted);font-size:12px}
+.gauge .g-v{font-size:19px;font-weight:700;color:var(--acc2);font-variant-numeric:tabular-nums}
+.quiz .q{margin:10px 0}
+.quiz .opt{display:block;margin:5px 0;padding:8px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.quiz .opt:hover{border-color:var(--acc)}
+.quiz .opt.correct{border-color:var(--good);background:#0c1a14}
+.quiz .opt.wrong{border-color:var(--bad);background:#1a0c10}
+.bar{height:22px;border-radius:5px;background:linear-gradient(90deg,var(--acc),#3a6cff);margin:3px 0;transition:width .15s}
+.bar.s{background:linear-gradient(90deg,#ff9f43,#ff6b81)}
+.badge{font-size:11px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <h1>⚡ Electric Machinery Fundamentals</h1>
+      <p>Ch.2 — Transformers · Chapman, 4th ed.<br>Interactive study lab</p>
+      <p><a href="chapter1.html">← Chapter 1</a> · <a href="chapter3.html">Chapter 3 →</a></p>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="credit">
+      <div><b>Dr. Muhammad Salim Butt</b></div>
+      <a href="mailto:salimbutt@uet.edu.pk">salimbutt@uet.edu.pk</a>
+    </div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+/* high-DPI canvases: every 2-D canvas is rendered at 2× device resolution and shown at its CSS size */
+(function(){const P=HTMLCanvasElement.prototype,orig=P.getContext,K=Math.min(4,Math.max(2,(window.devicePixelRatio||1)*1.5));
+  P.getContext=function(type,...a){const ctx=orig.call(this,type,...a);if(type!=='2d'||!ctx||this.dataset.hd)return ctx;
+    const w=this.width,h=this.height;this.dataset.hd='1';if(!this.style.width)this.style.width=w+'px';this.style.maxWidth='100%';this.style.height='auto';
+    this.width=w*K;this.height=h*K;ctx.scale(K,K);return ctx;};})();
+/* ================= helpers ================= */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=(x,d=4)=>{
+  if(x===null||x===undefined||!isFinite(x))return '—';
+  if(x!==0 && (Math.abs(x)<1e-3||Math.abs(x)>=1e5)) return x.toExponential(Math.max(0,d-1));
+  return (+x.toFixed(d)).toString();
+};
+const D2R=Math.PI/180, R2D=180/Math.PI;
+/* complex */
+const C=(re,im=0)=>({re,im});
+const cAdd=(a,b)=>C(a.re+b.re,a.im+b.im);
+const cSub=(a,b)=>C(a.re-b.re,a.im-b.im);
+const cMul=(a,b)=>C(a.re*b.re-a.im*b.im,a.re*b.im+a.im*b.re);
+const cDiv=(a,b)=>{const d=b.re*b.re+b.im*b.im;return C((a.re*b.re+a.im*b.im)/d,(a.im*b.re-a.re*b.im)/d);};
+const cAbs=a=>Math.hypot(a.re,a.im);
+const cAng=a=>Math.atan2(a.im,a.re)*R2D;
+const cPolar=(m,deg)=>C(m*Math.cos(deg*D2R),m*Math.sin(deg*D2R));
+
+/* schematic symbol builders */
+function resH(x1,x2,y,c='#ff6b81',lab='',ly){const w=x2-x1,z=x1+w*0.22,zw=w*0.56,n=6,seg=zw/n,a=7;let p=`M ${x1} ${y} H ${z}`;for(let i=1;i<n;i++)p+=` L ${z+seg*(i-0.5)} ${i%2?y-a:y+a}`;p+=` L ${z+zw} ${y} H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function indH(x1,x2,y,c='#ffcc66',lab='',ly){const w=x2-x1,z=x1+w*0.2,bw=w*0.6,n=4,r=bw/(2*n);let p=`M ${x1} ${y} H ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${z+2*r*(i+1)} ${y}`;p+=` H ${x2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${(x1+x2)/2}" y="${ly||y-11}" fill="${c}" font-size="11" text-anchor="middle">${lab}</text>`:'');}
+function indV(x,y1,y2,c='#5b8cff',lab='',lx){const h=y2-y1,z=y1+h*0.2,bw=h*0.6,n=4,r=bw/(2*n);let p=`M ${x} ${y1} V ${z}`;for(let i=0;i<n;i++)p+=` A ${r} ${r} 0 0 1 ${x} ${z+2*r*(i+1)}`;p+=` V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${lx||x-10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="${lx?'start':'end'}">${lab}</text>`:'');}
+function resV(x,y1,y2,c='#ff6b81',lab='',lx){const h=y2-y1,z=y1+h*0.22,zw=h*0.56,n=6,seg=zw/n,a=7;let p=`M ${x} ${y1} V ${z}`;for(let i=1;i<n;i++)p+=` L ${i%2?x-a:x+a} ${z+seg*(i-0.5)}`;p+=` L ${x} ${z+zw} V ${y2}`;return `<path d="${p}" fill="none" stroke="${c}" stroke-width="2"/>`+(lab?`<text x="${lx||x-10}" y="${(y1+y2)/2}" fill="${c}" font-size="11" text-anchor="${lx?'start':'end'}">${lab}</text>`:'');}
+const SECTIONS=[];
+function section(id,group,label,builder){SECTIONS.push({id,group,label,builder});}
+
+/* small canvas axis helper */
+function axes(ctx,W,H,pad,xlab,ylab){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#232a49';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.lineTo(W-pad.r,H-pad.b);ctx.stroke();
+  ctx.fillStyle='#9aa3c4';ctx.font='11px system-ui';
+  if(xlab)ctx.fillText(xlab,W-pad.r-ctx.measureText(xlab).width,H-6);
+  if(ylab){ctx.save();ctx.translate(12,pad.t+10);ctx.rotate(-Math.PI/2);ctx.fillText(ylab,0,0);ctx.restore();}
+}
+
+/* ===================================================================
+   2.1–2.2 Intro & Construction
+=================================================================== */
+section('intro','Foundations','2.1–2.2 · Intro & Construction',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Transformers — Introduction & Construction</h2>
+  <p class="subttl">§2.1 Why transformers matter · §2.2 Types and construction</p>
+  <div class="card">
+    <p>A <b>transformer</b> changes AC electric power at one voltage level to AC power at another level, at the <b>same frequency</b>, through a magnetic field — two (or more) coils on a common ferromagnetic core, coupled only by the shared flux.</p>
+    <div class="flex">
+      <span class="pill">Primary = input winding (from source)</span>
+      <span class="pill">Secondary = output winding (to load)</span>
+      <span class="pill">Tertiary = 3rd winding</span>
+    </div>
+  </div>
+  <h3>Why they changed the world — the transmission-loss argument</h3>
+  <div class="card">
+    <p>Line loss = I²R. Step voltage <b>up</b> by a factor and current drops by the same factor, so loss falls by the <b>square</b>. Drag the transmission voltage and watch losses collapse (this is exactly the point of Example 2‑1).</p>
+    <label class="ctl"><span class="lab">Transmission step-up factor <span class="val" id="i_a_v"></span></span><input type="range" id="i_a" min="1" max="30" value="1" step="1"></label>
+    <div class="grid2">
+      <div class="out" id="i_out"></div>
+      <div><canvas id="i_can" width="420" height="220"></canvas></div>
+    </div>
+    <p class="note">Fixed: 10 kW load, base line current 100 A at 1× voltage, line R = 0.5 Ω/conductor pair.</p>
+  </div>
+  <h3>Two core constructions</h3>
+  <div class="grid2">
+    <div class="card">
+      <b>Core form</b> — windings on two sides of a rectangular core.
+      <svg viewBox="0 0 240 170" width="100%">
+        <rect x="60" y="20" width="120" height="130" rx="6" fill="none" stroke="#5b8cff" stroke-width="16"/>
+        <g stroke="#38d39f" stroke-width="3">${Array.from({length:6},(_,k)=>`<line x1="46" y1="${40+k*16}" x2="82" y2="${40+k*16}"/>`).join('')}</g>
+        <g stroke="#ff9f43" stroke-width="3">${Array.from({length:6},(_,k)=>`<line x1="158" y1="${40+k*16}" x2="194" y2="${40+k*16}"/>`).join('')}</g>
+        <text x="40" y="16" fill="#38d39f" font-size="11">primary</text><text x="150" y="16" fill="#ff9f43" font-size="11">secondary</text>
+      </svg>
+    </div>
+    <div class="card">
+      <b>Shell form</b> — 3-legged core, both windings on the centre leg (less leakage).
+      <svg viewBox="0 0 240 170" width="100%">
+        <rect x="30" y="20" width="180" height="130" rx="6" fill="none" stroke="#5b8cff" stroke-width="14"/>
+        <line x1="120" y1="27" x2="120" y2="143" stroke="#5b8cff" stroke-width="16"/>
+        <g stroke="#38d39f" stroke-width="3">${Array.from({length:5},(_,k)=>`<line x1="96" y1="${48+k*15}" x2="144" y2="${48+k*15}"/>`).join('')}</g>
+        <text x="150" y="60" fill="#38d39f" font-size="11">both windings</text>
+      </svg>
+    </div>
+  </div>
+  <div class="card tight note">Cores are laminated to cut eddy currents. Low-voltage winding is wound innermost (easier insulation, less leakage). Names by use: <b>unit</b> (generator step-up), <b>substation</b> (step-down to distribution), <b>distribution</b> (final step-down). Special: <b>potential</b> & <b>current</b> transformers (instrument sampling).</div>`;
+  const can=$('#i_can'),cx=can.getContext('2d');
+  const upd=()=>{const a=+$('#i_a').value;$('#i_a_v').textContent=a+'×';
+    const I=100/a, loss=I*I*0.5, loss1=100*100*0.5;
+    $('#i_out').innerHTML=`Line current = 100/${a} = <span class="k">${fmt(I,2)} A</span>\nLine loss = I²R = <span class="k">${fmt(loss,1)} W</span>\nvs ${fmt(loss1)} W at 1× → <span class="k">${fmt(loss1/loss,1)}×</span> less loss`;
+    // bar chart of loss vs factor
+    axes(cx,420,220,{l:40,r:10,t:14,b:26},'step-up ×','loss (W)');
+    const maxL=loss1;
+    cx.strokeStyle='#ff6b81';cx.lineWidth=2.5;cx.beginPath();
+    for(let f=1;f<=30;f+=0.5){const x=40+(f-1)/29*(420-50),L=(100/f)**2*0.5,y=(220-26)-L/maxL*(220-40);f===1?cx.moveTo(x,y):cx.lineTo(x,y);}
+    cx.stroke();
+    const x=40+(a-1)/29*(420-50),y=(220-26)-loss/maxL*(220-40);cx.fillStyle='#38d39f';cx.beginPath();cx.arc(x,y,4,0,7);cx.fill();
+    cx.fillStyle='#9aa3c4';cx.fillText('loss ∝ 1/×²',260,40);};
+  $('#i_a').oninput=upd;upd();
+});
+
+/* ===================================================================
+   2.3 Ideal transformer
+=================================================================== */
+section('ideal','Ideal Transformer','2.3 · The Ideal Transformer',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Ideal Transformer</h2>
+  <p class="subttl">§2.3 · Turns ratio, power conservation, impedance transformation, dot convention</p>
+  <div class="grid3">
+    <div class="eq" style="text-align:center"><span class="frac"><span class="n">v<sub>p</sub></span><span class="d">v<sub>s</sub></span></span> = <span class="frac"><span class="n">N<sub>p</sub></span><span class="d">N<sub>s</sub></span></span> = a<span class="tag">2‑1,2‑2</span></div>
+    <div class="eq" style="text-align:center"><span class="frac"><span class="n">i<sub>p</sub></span><span class="d">i<sub>s</sub></span></span> = <span class="frac"><span class="n">1</span><span class="d">a</span></span><span class="tag">2‑3</span></div>
+    <div class="eq" style="text-align:center">Z′<sub>L</sub> = a²Z<sub>L</sub><span class="tag">2‑15</span></div>
+  </div>
+  <details class="deriv"><summary>Derive P<sub>in</sub> = P<sub>out</sub> and Z′ = a²Z</summary>
+    <div class="step">① Power out: P<sub>out</sub> = V<sub>s</sub>I<sub>s</sub>cos θ.<span class="why">θ is unchanged by the transformer (angles preserved).</span></div>
+    <div class="step">② Substitute V<sub>s</sub>=V<sub>p</sub>/a and I<sub>s</sub>=aI<sub>p</sub>: P<sub>out</sub> = (V<sub>p</sub>/a)(aI<sub>p</sub>)cos θ = V<sub>p</sub>I<sub>p</sub>cos θ = P<sub>in</sub>.<span class="why">The a's cancel — an ideal transformer is lossless (2‑9). Same for Q and S.</span></div>
+    <div class="step">③ Impedance seen at primary: Z′<sub>L</sub> = V<sub>p</sub>/I<sub>p</sub> = (aV<sub>s</sub>)/(I<sub>s</sub>/a) = a²(V<sub>s</sub>/I<sub>s</sub>) = a²Z<sub>L</sub>.<span class="why">The turns ratio scales impedance by a² — the basis of impedance matching (2‑15).</span></div>
+  </details>
+
+  <style>@media(max-width:900px){.fvgrid{grid-template-columns:1fr!important}}</style>
+  <h3>How the transformer works — voltage → flux → induced voltage</h3>
+  <div class="card">
+    <p>Put an AC voltage on the primary of a core that carries two windings and a loop of cause and effect starts — it is what makes the turns-ratio relations above true:</p>
+    <div class="grid2">
+      <div class="okbox"><b>① v(t) forces φ(t).</b> The coil has almost no resistance, so KVL says v = N·dφ/dt. The flux has no choice: <b>φ = (1/N)∫v dt</b>. For v = V<sub>m</sub> sin ωt this gives φ = −(V<sub>m</sub>/ωN) cos ωt — a flux of peak <b>φ<sub>m</sub> = V<sub>m</sub>/(ωN)</b> that <b>lags v by 90°</b>. The <em>voltage</em> sets the flux, not the current.</div>
+      <div class="okbox"><b>② φ needs a magnetising current.</b> By Ampère's law (Ch.1 §1.4) the core needs ℱ = ℛφ, so the coil draws <b>i<sub>m</sub> = ℛφ/N</b> — in phase with φ, i.e. lagging v by 90°. The coil looks like a pure inductor.</div>
+      <div class="okbox"><b>③ φ(t) induces a voltage back.</b> The same changing flux threads the coil, so Faraday gives <b>e<sub>ind</sub> = −N·dφ/dt = −v</b>: the same size as the applied voltage and <b>180° out of phase</b> — a <em>counter-emf</em> (Lenz) that exactly balances the source.</div>
+      <div class="okbox"><b>④ … and in the secondary on the same core.</b> The secondary winding sees <b>v<sub>s</sub> = N<sub>s</sub>·dφ/dt</b>. Same φ in both windings, so <b>v<sub>p</sub>/v<sub>s</sub> = N<sub>p</sub>/N<sub>s</sub> = a</b> — Eq. (2‑1) falls straight out of Faraday's law.</div>
+    </div>
+    <div class="fvgrid" style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;margin-top:12px">
+      <div>
+        <label class="ctl"><span class="lab">Peak voltage V<sub>m</sub> <span class="val" id="fv_V_v"></span></span><input type="range" id="fv_V" min="10" max="400" step="5" value="100"></label>
+        <label class="ctl"><span class="lab">Frequency f <span class="val" id="fv_f_v"></span></span><input type="range" id="fv_f" min="25" max="100" step="5" value="50"></label>
+        <label class="ctl"><span class="lab">Primary turns N<sub>p</sub> <span class="val" id="fv_N_v"></span></span><input type="range" id="fv_N" min="50" max="500" step="10" value="100"></label>
+        <button class="btn" id="fv_run" style="width:100%">⏸ Pause</button>
+        <div class="out" id="fv_out" style="font-size:12.5px"></div>
+      </div>
+      <div>
+        <canvas id="fv_core" width="540" height="300" style="width:100%"></canvas>
+        <canvas id="fv_ph" width="540" height="250" style="width:100%;margin-top:8px"></canvas>
+      </div>
+    </div>
+    <div class="warnbox" style="margin-top:12px"><b>Two ways to write the same thing.</b> With Lenz's sign, e<sub>ind</sub> = −N dφ/dt is drawn <b>opposite</b> to V (180°) — it is the voltage the coil generates <em>against</em> the source. Drop the sign (the book's usual practice once polarity is known) and |e<sub>ind</sub>| = N dφ/dt sits <b>on top of</b> V: the coil's induced voltage "holds up" the applied voltage. Either way, φ is always 90° behind V.</div>
+    <div class="eq">V<sub>rms</sub> = <span class="frac"><span class="n">ωNφ<sub>m</sub></span><span class="d">√2</span></span> = 4.44 f N φ<sub>m</sub> <span class="tag">the transformer emf equation</span></div>
+  </div>
+
+  <h3>▶ Live ideal transformer</h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Primary turns N<sub>p</sub> <span class="val" id="t_Np_v"></span></span><input type="range" id="t_Np" min="50" max="1000" value="500" step="10"></label>
+        <label class="ctl"><span class="lab">Secondary turns N<sub>s</sub> <span class="val" id="t_Ns_v"></span></span><input type="range" id="t_Ns" min="50" max="1000" value="250" step="10"></label>
+        <label class="ctl"><span class="lab">Primary voltage V<sub>p</sub> (V) <span class="val" id="t_Vp_v"></span></span><input type="range" id="t_Vp" min="60" max="480" value="240" step="10"></label>
+        <label class="ctl"><span class="lab">Load impedance |Z<sub>L</sub>| (Ω) <span class="val" id="t_Z_v"></span></span><input type="range" id="t_Z" min="2" max="100" value="10" step="1"></label>
+        <div class="grid3" style="margin-top:6px">
+          <div class="gauge"><div class="g-l">a = Np/Ns</div><div class="g-v" id="g_a">2</div></div>
+          <div class="gauge"><div class="g-l">V<sub>s</sub></div><div class="g-v" id="g_Vs">120</div><div class="note">V</div></div>
+          <div class="gauge"><div class="g-l">type</div><div class="g-v" id="g_type" style="font-size:14px">step-down</div></div>
+        </div>
+        <div class="out" id="t_out"></div>
+      </div>
+      <div><canvas id="t_can" width="420" height="300"></canvas></div>
+    </div>
+    <p class="note">Bars show V and I on each side; note that stepping voltage <b>down</b> steps current <b>up</b> (power constant). Z′ = a²Z<sub>L</sub> is the impedance the source "sees".</p>
+  </div>
+
+  <h3>Dot convention</h3>
+  <div class="card note">Dots mark like-polarity ends. (1) V is positive at the dotted end on both sides together. (2) Current <i>into</i> the dotted end of one winding flows <i>out of</i> the dotted end of the other. This fixes secondary polarity without opening the transformer.</div>
+
+  <h3>⭐ Properties &amp; uses of a transformer</h3>
+  <p class="note">Five things the ideal-transformer relations (V<sub>s</sub>=V<sub>p</sub>/a, I<sub>s</sub>=aI<sub>p</sub>, Z′=a²Z<sub>L</sub>) let a transformer do:</p>
+
+  <div class="card">
+    <h4>1 · Step-up / step-down voltage</h4>
+    <p>The core purpose. More secondary turns (a&lt;1) steps voltage <b>up</b>; fewer (a&gt;1) steps it <b>down</b>. Enables generation, high-voltage transmission and safe low-voltage use.</p>
+    <svg viewBox="0 0 320 120" width="320">
+      <rect x="120" y="20" width="80" height="80" fill="none" stroke="#3a4570" stroke-width="10"/>
+      <g stroke="#5b8cff" stroke-width="3">${Array.from({length:7},(_,k)=>`<line x1="104" y1="${30+k*10}" x2="126" y2="${30+k*10}"/>`).join('')}</g>
+      <g stroke="#ff9f43" stroke-width="3">${Array.from({length:3},(_,k)=>`<line x1="194" y1="${45+k*10}" x2="216" y2="${45+k*10}"/>`).join('')}</g>
+      <text x="40" y="55" fill="#5b8cff" font-size="12">11 kV</text><text x="30" y="70" fill="#9aa3c4" font-size="10">N_p (many)</text>
+      <text x="240" y="55" fill="#ff9f43" font-size="12">220 V</text><text x="240" y="70" fill="#9aa3c4" font-size="10">N_s (few)</text>
+    </svg>
+    <div class="okbox"><b>Example:</b> a distribution transformer N<sub>p</sub>:N<sub>s</sub> = 50:1 steps <b>11 kV → 220 V</b> (a=50). A generator step-up unit does the reverse (12 kV → 400 kV).</div>
+  </div>
+
+  <div class="card">
+    <h4>2 · Step-up / step-down current</h4>
+    <p>Because power is conserved, <b>current changes inversely to voltage</b>: I<sub>s</sub>=aI<sub>p</sub>. A voltage step-<i>down</i> is automatically a current step-<i>up</i> — the low-voltage side uses a thicker conductor.</p>
+    <svg viewBox="0 0 320 110" width="320">
+      <rect x="120" y="15" width="80" height="80" fill="none" stroke="#3a4570" stroke-width="10"/>
+      <line x1="40" y1="55" x2="110" y2="55" stroke="#5b8cff" stroke-width="2"/><text x="30" y="45" fill="#5b8cff" font-size="11">230 V, 10 A</text>
+      <line x1="210" y1="55" x2="290" y2="55" stroke="#ff9f43" stroke-width="8"/><text x="215" y="42" fill="#ff9f43" font-size="11">46 V, 50 A</text>
+      <text x="150" y="108" fill="#9aa3c4" font-size="10">thick low-V winding</text>
+    </svg>
+    <div class="okbox"><b>Example:</b> an arc-welding / spot-welding transformer (a=5) turns <b>230 V, 10 A → 46 V, 50 A</b> — the huge secondary current melts the metal, same ~2.3 kVA both sides. Current transformers use the same idea for metering.</div>
+  </div>
+
+  <div class="card">
+    <h4>3 · Impedance matching</h4>
+    <p>The primary "sees" Z′=a²Z<sub>L</sub>. Choosing a lets you <b>match a load to a source</b> for maximum power transfer (source resistance = reflected load).</p>
+    <svg viewBox="0 0 340 90" width="340">
+      <rect x="20" y="30" width="50" height="34" fill="#12162a" stroke="#5b8cff"/><text x="45" y="52" fill="#5b8cff" font-size="11" text-anchor="middle">amp</text>
+      <line x1="70" y1="47" x2="150" y2="47" stroke="#5b8cff" stroke-width="2"/>
+      <rect x="150" y="26" width="40" height="42" fill="none" stroke="#3a4570" stroke-width="6"/>
+      <line x1="190" y1="47" x2="260" y2="47" stroke="#ff9f43" stroke-width="2"/>
+      <rect x="260" y="30" width="60" height="34" fill="#12162a" stroke="#ff9f43"/><text x="290" y="52" fill="#ff9f43" font-size="11" text-anchor="middle">8 Ω spkr</text>
+      <text x="95" y="40" fill="#9aa3c4" font-size="10">Z′=a²·8</text>
+    </svg>
+    <div class="grid3">
+      <label class="ctl"><span class="lab">Source Z<sub>s</sub> (Ω)</span><input type="number" id="im_Zs" value="800" step="any"></label>
+      <label class="ctl"><span class="lab">Load Z<sub>L</sub> (Ω)</span><input type="number" id="im_ZL" value="8" step="any"></label>
+      <div></div>
+    </div>
+    <div class="out" id="im_out"></div>
+    <div class="okbox"><b>Example:</b> matching an <b>8 Ω speaker</b> to an amplifier whose output wants to see <b>800 Ω</b> needs a = √(800/8) = <b>10:1</b> audio output transformer.</div>
+  </div>
+
+  <div class="card">
+    <h4>4 · Filtering / blocking DC while passing AC</h4>
+    <p>A transformer couples only a <b>changing</b> flux (Faraday). A steady <b>DC</b> current makes a constant flux → <b>zero</b> induced secondary voltage, so DC cannot cross. The <b>AC</b> component passes normally. So the secondary carries the AC signal with any DC offset removed.</p>
+    <canvas id="dc_can" width="420" height="180"></canvas>
+    <div class="okbox"><b>Example:</b> an audio/signal <b>coupling transformer</b> passes the AC audio signal from one transistor stage to the next while <b>blocking the DC bias</b> voltage — protecting the following stage and removing the offset.</div>
+  </div>
+
+  <div class="card">
+    <h4>5 · Isolation</h4>
+    <p>Primary and secondary share <b>no electrical (galvanic) connection</b> — energy crosses only through the magnetic flux. This breaks ground loops and protects users from a live chassis while still delivering power.</p>
+    <svg viewBox="0 0 340 110" width="340">
+      <rect x="120" y="15" width="90" height="80" fill="none" stroke="#3a4570" stroke-width="10"/>
+      <g stroke="#5b8cff" stroke-width="3">${Array.from({length:5},(_,k)=>`<line x1="104" y1="${30+k*11}" x2="126" y2="${30+k*11}"/>`).join('')}</g>
+      <g stroke="#ff9f43" stroke-width="3">${Array.from({length:5},(_,k)=>`<line x1="204" y1="${30+k*11}" x2="226" y2="${30+k*11}"/>`).join('')}</g>
+      <line x1="165" y1="8" x2="165" y2="102" stroke="#ff6b81" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <text x="20" y="55" fill="#5b8cff" font-size="11">mains</text><text x="250" y="55" fill="#ff9f43" font-size="11">equipment</text>
+      <text x="120" y="110" fill="#ff6b81" font-size="10">no metallic path</text>
+    </svg>
+    <div class="okbox"><b>Example:</b> a <b>1:1 isolation transformer</b> (a=1, same voltage) on medical or test-bench equipment provides no voltage change — its whole job is safety isolation between the mains and the device.</div>
+  </div>
+
+  <h3>Worked example 2‑1 — transmission with vs without transformers</h3>
+  <div class="card">
+    <p>480 V source, load 4+j3 Ω, line 0.18+j0.24 Ω. Compare direct connection vs a 1:10 step-up + 10:1 step-down.</p>
+    <div class="okbox">Without transformers: I≈90.8 A, V<sub>load</sub>≈454 V, <b>line loss ≈ 1484 W</b>.<br>
+    With transformers: line current only 9.59 A, V<sub>load</sub>≈479.7 V, <b>line loss ≈ 16.7 W</b> — ~90× lower.</div>
+  </div>`;
+  /* ---- voltage → flux → induced voltage (animated core + phasors) ---- */
+  const fcv=$('#fv_core').getContext('2d'),fpv=$('#fv_ph').getContext('2d');let fth=0,frun=true;
+  const ahead2=(c,x,y,ang,col,s=7)=>{c.fillStyle=col;c.beginPath();c.moveTo(x+s*Math.cos(ang),y+s*Math.sin(ang));c.lineTo(x+s*Math.cos(ang+2.5),y+s*Math.sin(ang+2.5));c.lineTo(x+s*Math.cos(ang-2.5),y+s*Math.sin(ang-2.5));c.closePath();c.fill();};
+  const fvP=()=>({V:+$('#fv_V').value,f:+$('#fv_f').value,N:+$('#fv_N').value});
+  function fvUpd(){const {V,f,N}=fvP(),w=2*Math.PI*f,pm=V/(w*N);
+    $('#fv_V_v').textContent=V+' V';$('#fv_f_v').textContent=f+' Hz';$('#fv_N_v').textContent=N;
+    $('#fv_out').innerHTML=`v = V<sub>m</sub> sin ωt,  ω = 2πf = <span class="k">${fmt(w,1)} rad/s</span>\nφ = (1/N)∫v dt = −φ<sub>m</sub> cos ωt\nφ<sub>m</sub> = V<sub>m</sub>/(ωN) = <span class="k">${fmt(pm,4)} Wb</span>  ← lags v by 90°\ne<sub>ind</sub> = −N dφ/dt = −V<sub>m</sub> sin ωt = <span class="k">−v</span>  ← 180° from v\ncheck: 4.44·f·N·φ<sub>m</sub> = <span class="k">${fmt(4.44*f*N*pm,1)} V</span> = V<sub>m</sub>/√2 = ${fmt(V/Math.SQRT2,1)} V ✓`;}
+  function drawCore(){
+    const {V,f,N}=fvP(),th=fth,v=Math.sin(th),ph=-Math.cos(th),e=-Math.sin(th),c=fcv,W=540,H=300;c.clearRect(0,0,W,H);
+    c.fillStyle='#232a49';c.strokeStyle='#3a4680';c.lineWidth=1.5;c.beginPath();c.rect(170,40,260,220);c.rect(204,74,192,152);c.fill('evenodd');c.stroke();
+    c.setLineDash([3,4]);c.strokeStyle='rgba(255,204,102,.35)';c.strokeRect(187,57,226,186);c.setLineDash([]);
+    const mag=Math.abs(ph),dirF=ph>=0?1:-1,per=[[187,57,226,0],[413,57,0,186],[413,243,-226,0],[187,243,0,-186]],lens=[226,186,226,186],P=824;
+    for(let k=0;k<16;k++){let s=k*P/16+8,seg=0;while(s>lens[seg]){s-=lens[seg];seg++;}const [x0,y0,dx,dy]=per[seg],x=x0+dx*s/lens[seg],y=y0+dy*s/lens[seg];
+      ahead2(c,x,y,Math.atan2(dy,dx)+(dirF>0?0:Math.PI),`rgba(255,204,102,${(0.12+0.88*mag).toFixed(2)})`,7);}
+    c.fillStyle='#ffcc66';c.font='12px system-ui';c.fillText('φ(t): brightness = |φ|, arrows = direction',236,30);
+    c.strokeStyle='#5b8cff';c.lineWidth=2;for(let k=0;k<7;k++){c.beginPath();c.ellipse(187,112+k*13,26,5,0,0,7);c.stroke();}
+    c.lineWidth=1.5;c.beginPath();c.moveTo(80,132);c.lineTo(80,108);c.lineTo(161,108);c.moveTo(80,168);c.lineTo(80,192);c.lineTo(161,192);c.stroke();
+    c.fillStyle='#12162a';c.lineWidth=2;c.beginPath();c.arc(80,150,18,0,7);c.fill();c.stroke();
+    c.beginPath();for(let k=0;k<=20;k++){const x=68+k*1.2,y=150-6*Math.sin(k/20*2*Math.PI);k?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();
+    c.fillStyle='#5b8cff';c.font='12px system-ui';c.fillText('v(t)',40,154);
+    c.font='bold 14px system-ui';c.fillText(v>=0?'+':'−',92,126);c.fillText(v>=0?'−':'+',92,184);
+    const im=ph,len=30*Math.abs(im);if(Math.abs(im)>0.03){const d=im>=0?1:-1;c.strokeStyle='#38d39f';c.lineWidth=2.5;c.beginPath();c.moveTo(122-d*len/2,108);c.lineTo(122+d*len/2,108);c.stroke();ahead2(c,122+d*len/2,108,d>0?0:Math.PI,'#38d39f',7);}
+    c.fillStyle='#38d39f';c.font='12px system-ui';c.fillText('i_m(t) ∝ φ',104,98);
+    c.strokeStyle='#38d39f';c.lineWidth=2;for(let k=0;k<7;k++){c.beginPath();c.ellipse(413,112+k*13,26,5,0,0,7);c.stroke();}
+    c.lineWidth=1.5;c.beginPath();c.moveTo(439,108);c.lineTo(490,108);c.moveTo(439,192);c.lineTo(490,192);c.stroke();
+    c.fillStyle='#0b0e1c';c.beginPath();c.arc(490,108,4,0,7);c.fill();c.stroke();c.beginPath();c.arc(490,192,4,0,7);c.fill();c.stroke();
+    c.fillStyle='#ff6b81';c.font='bold 14px system-ui';c.fillText(v>=0?'+':'−',500,113);c.fillText(v>=0?'−':'+',500,197);
+    c.font='12px system-ui';c.fillText('v_s = N_s dφ/dt',438,215);
+    const w=2*Math.PI*f,pm=V/(w*N);
+    c.fillStyle='rgba(23,26,43,.9)';c.fillRect(8,8,215,64);c.strokeStyle='#2a2f4a';c.lineWidth=1;c.strokeRect(8,8,215,64);
+    c.font='12px system-ui';c.fillStyle='#5b8cff';c.fillText(`v = ${fmt(V*v,1)} V`,16,26);c.fillStyle='#ffcc66';c.fillText(`φ = ${fmt(pm*ph,4)} Wb`,16,44);c.fillStyle='#ff6b81';c.fillText(`e_ind = −N dφ/dt = ${fmt(V*e,1)} V`,16,62);
+    c.fillStyle='#5b8cff';c.fillText('N_p (primary)',150,278);c.fillStyle='#38d39f';c.fillText('N_s (secondary, open)',372,278);
+    c.fillStyle='#ff6b81';c.fillText('e_ind = −v : the coil pushes back on the source (counter-emf)',150,294);
+  }
+  function drawPh(){const c=fpv,W=540,H=250,th=fth,cx=110,cy=122,R=80;c.clearRect(0,0,W,H);
+    c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.arc(cx,cy,R,0,7);c.stroke();c.beginPath();c.moveTo(cx-R-8,cy);c.lineTo(cx+R+8,cy);c.moveTo(cx,cy-R-8);c.lineTo(cx,cy+R+8);c.stroke();
+    const phz=(len,ang,col,lab,dash)=>{const x=cx+len*Math.cos(ang),y=cy-len*Math.sin(ang);if(dash)c.setLineDash([4,4]);c.strokeStyle=col;c.lineWidth=dash?1.5:2.5;c.beginPath();c.moveTo(cx,cy);c.lineTo(x,y);c.stroke();c.setLineDash([]);
+      if(!dash){ahead2(c,x,y,-ang,col,8);c.fillStyle=col;c.font='12px system-ui';c.fillText(lab,x+10*Math.cos(ang)-8,y-10*Math.sin(ang)+4);}};
+    phz(R,th,'#5b8cff','V');phz(R*.7,th-Math.PI/2,'#ffcc66','φ');phz(R*.45,th-Math.PI/2,'#38d39f','Iₘ');phz(R,th+Math.PI,'#ff6b81','E_ind');phz(R,th,'#ff6b81','',true);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('phasors rotate at ω',12,14);c.fillText('dashed red = |E_ind| (sign dropped)',12,H-8);
+    const x0=225,x1=530,mid=118,A=68,span=4*Math.PI;c.strokeStyle='#232a49';c.beginPath();c.moveTo(x0,mid);c.lineTo(x1,mid);c.stroke();
+    const fns=[[t=>Math.sin(t),'#5b8cff',1],[t=>-Math.cos(t),'#ffcc66',.7],[t=>-Math.sin(t),'#ff6b81',1]];
+    fns.forEach(([fn,col,sc])=>{c.strokeStyle=col;c.lineWidth=2;c.beginPath();for(let k=0;k<=300;k++){const t=k/300*span,x=x0+(x1-x0)*k/300,y=mid-fn(t)*A*sc;k?c.lineTo(x,y):c.moveTo(x,y);}c.stroke();});
+    const tc=((th%span)+span)%span,xc=x0+(x1-x0)*tc/span;c.strokeStyle='rgba(255,255,255,.35)';c.setLineDash([3,3]);c.beginPath();c.moveTo(xc,mid-A-10);c.lineTo(xc,mid+A+10);c.stroke();c.setLineDash([]);
+    fns.forEach(([fn,col,sc])=>{c.fillStyle=col;c.beginPath();c.arc(xc,mid-fn(tc)*A*sc,4,0,7);c.fill();});
+    c.font='12px system-ui';c.fillStyle='#5b8cff';c.fillText('v(t)',x0,26);c.fillStyle='#ffcc66';c.fillText('φ(t) — lags 90°',x0+50,26);c.fillStyle='#ff6b81';c.fillText('e_ind = −N dφ/dt — 180°',x0+160,26);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText('0',x0-4,mid+A+22);c.fillText('T',x0+(x1-x0)/2-3,mid+A+22);c.fillText('2T',x1-10,mid+A+22);
+  }
+  function fLoop(){if($('#sec-ideal').classList.contains('on')){drawCore();drawPh();if(frun)fth+=0.025;}requestAnimationFrame(fLoop);}
+  ['fv_V','fv_f','fv_N'].forEach(id=>$('#'+id).oninput=fvUpd);
+  $('#fv_run').onclick=()=>{frun=!frun;$('#fv_run').textContent=frun?'⏸ Pause':'▶ Play';};
+  fvUpd();drawCore();drawPh();fLoop();
+
+  const can=$('#t_can'),cx=can.getContext('2d');let ph=0,raf=null;
+  const P=()=>({Np:+$('#t_Np').value,Ns:+$('#t_Ns').value,Vp:+$('#t_Vp').value,Z:+$('#t_Z').value});
+  function compute(){
+    const p=P(),a=p.Np/p.Ns,Vs=p.Vp/a,Is=Vs/p.Z,Ip=Is/a,Pw=Vs*Is,Zp=a*a*p.Z;
+    $('#t_Np_v').textContent=p.Np;$('#t_Ns_v').textContent=p.Ns;$('#t_Vp_v').textContent=p.Vp+' V';$('#t_Z_v').textContent=p.Z+' Ω';
+    $('#g_a').textContent=fmt(a,3);$('#g_Vs').textContent=fmt(Vs,1);
+    $('#g_type').textContent=a>1?'step-down':(a<1?'step-up':'isolation');
+    $('#t_out').innerHTML=`I<sub>s</sub>=V<sub>s</sub>/Z=<span class="k">${fmt(Is,2)} A</span>  I<sub>p</sub>=I<sub>s</sub>/a=<span class="k">${fmt(Ip,2)} A</span>\nP=V<sub>s</sub>I<sub>s</sub>=<span class="k">${fmt(Pw,1)} W</span> (=V<sub>p</sub>I<sub>p</sub>)\nZ′=a²Z<sub>L</sub>=<span class="k">${fmt(Zp,1)} Ω</span> (seen by source)`;
+    return{a,Vs,Is,Ip,Pw,p};
+  }
+  function draw(){
+    const {a,Vs,Is,Ip,p}=compute();
+    cx.clearRect(0,0,420,300);
+    // core
+    cx.strokeStyle='#3a4570';cx.lineWidth=14;cx.strokeRect(150,60,120,150);
+    // primary coils (count ~ Np), secondary (count ~ Ns)
+    const pc=Math.max(3,Math.round(p.Np/90)),sc=Math.max(3,Math.round(p.Ns/90));
+    cx.strokeStyle='#5b8cff';cx.lineWidth=3;for(let k=0;k<pc;k++){const y=80+k*(140/pc);cx.beginPath();cx.moveTo(136,y);cx.lineTo(164,y);cx.stroke();}
+    cx.strokeStyle='#ff9f43';for(let k=0;k<sc;k++){const y=80+k*(140/sc);cx.beginPath();cx.moveTo(256,y);cx.lineTo(284,y);cx.stroke();}
+    cx.fillStyle='#5b8cff';cx.font='12px system-ui';cx.fillText('N_p='+p.Np,90,74);cx.fillStyle='#ff9f43';cx.fillText('N_s='+p.Ns,290,74);
+    // animated flux arrow
+    const f=Math.sin(ph);cx.strokeStyle='rgba(255,107,129,'+(0.4+0.4*Math.abs(f))+')';cx.lineWidth=2;
+    cx.beginPath();cx.moveTo(210,70);cx.lineTo(210,200);cx.stroke();cx.fillStyle='#ff6b81';cx.fillText('φ',214,135);
+    // AC waveforms primary/secondary
+    const midy=250,amp=28;
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2;cx.beginPath();
+    for(let x=0;x<=140;x++){const t=x/140*4*Math.PI;const y=midy-Math.sin(t+ph)*amp*(p.Vp/480);x===0?cx.moveTo(20+x,y):cx.lineTo(20+x,y);}cx.stroke();
+    cx.strokeStyle='#ff9f43';cx.beginPath();
+    for(let x=0;x<=140;x++){const t=x/140*4*Math.PI;const y=midy-Math.sin(t+ph)*amp*(Vs/480);x===0?cx.moveTo(260+x,y):cx.lineTo(260+x,y);}cx.stroke();
+    cx.fillStyle='#5b8cff';cx.fillText('v_p',24,midy-34);cx.fillStyle='#ff9f43';cx.fillText('v_s',264,midy-34);
+    // bars for V and I
+    function bar(x,y,w,c,label){cx.fillStyle=c;cx.fillRect(x,y,w,12);cx.fillStyle='#9aa3c4';cx.fillText(label,x,y-2);}
+    bar(20,286,p.Vp/480*120,'#5b8cff','V_p '+fmt(p.Vp,0));
+    bar(260,286,Vs/480*120,'#ff9f43','V_s '+fmt(Vs,0));
+  }
+  function loop(){if($('#sec-ideal').classList.contains('on')){ph+=0.05;draw();}raf=requestAnimationFrame(loop);}
+  ['t_Np','t_Ns','t_Vp','t_Z'].forEach(id=>$('#'+id).oninput=draw);
+  draw();cancelAnimationFrame(raf);loop();
+
+  /* impedance-matching calculator */
+  const imUpd=()=>{const Zs=+$('#im_Zs').value,ZL=+$('#im_ZL').value,a=Math.sqrt(Zs/ZL);
+    $('#im_out').innerHTML=`For max power transfer, make Z′=a²Z<sub>L</sub> equal Z<sub>s</sub>:\na = √(Z<sub>s</sub>/Z<sub>L</sub>) = √(${fmt(Zs,2)}/${fmt(ZL,2)}) = <span class="k">${fmt(a,3)}</span>\n→ turns ratio N<sub>p</sub>:N<sub>s</sub> = <span class="k">${fmt(a,2)} : 1</span>`;};
+  ['im_Zs','im_ZL'].forEach(id=>$('#'+id).oninput=imUpd);imUpd();
+
+  /* DC-blocking waveform */
+  const dcCan=$('#dc_can'),dcx=dcCan.getContext('2d');
+  (function(){const W=420,Wm=W-30;dcx.clearRect(0,0,W,180);dcx.font='11px system-ui';
+    dcx.strokeStyle='#232a49';dcx.beginPath();dcx.moveTo(20,70);dcx.lineTo(W-10,70);dcx.stroke();dcx.fillStyle='#9aa3c4';dcx.fillText('0',6,73);
+    dcx.strokeStyle='#ffcc66';dcx.setLineDash([4,4]);dcx.beginPath();dcx.moveTo(20,45);dcx.lineTo(W-10,45);dcx.stroke();dcx.setLineDash([]);dcx.fillStyle='#ffcc66';dcx.fillText('DC level',W-70,42);
+    dcx.strokeStyle='#5b8cff';dcx.lineWidth=2;dcx.beginPath();for(let x=0;x<=Wm;x++){const t=x/Wm*4*Math.PI;const y=45-Math.sin(t)*18;x===0?dcx.moveTo(20+x,y):dcx.lineTo(20+x,y);}dcx.stroke();
+    dcx.fillStyle='#5b8cff';dcx.fillText('input: DC + AC (on primary)',24,18);
+    dcx.strokeStyle='#232a49';dcx.beginPath();dcx.moveTo(20,150);dcx.lineTo(W-10,150);dcx.stroke();dcx.fillStyle='#9aa3c4';dcx.fillText('0',6,153);
+    dcx.strokeStyle='#38d39f';dcx.lineWidth=2;dcx.beginPath();for(let x=0;x<=Wm;x++){const t=x/Wm*4*Math.PI;const y=150-Math.sin(t)*18;x===0?dcx.moveTo(20+x,y):dcx.lineTo(20+x,y);}dcx.stroke();
+    dcx.fillStyle='#38d39f';dcx.fillText('output: AC only — DC blocked (on secondary)',24,122);
+  })();
+});
+
+/* ===================================================================
+   2.4 Real transformer
+=================================================================== */
+section('real','Real Transformer','2.4 · Real Transformer & Excitation',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Theory of Real Single-Phase Transformers</h2>
+  <p class="subttl">§2.4 · Mutual & leakage flux, voltage/current ratios, the excitation current</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center">e<sub>ind</sub> = <span class="frac"><span class="n">dλ</span><span class="d">dt</span></span> = N<span class="frac"><span class="n">d φ̄</span><span class="d">dt</span></span><span class="tag">2‑17</span></div>
+    <div class="eq" style="text-align:center">φ̄ = <span class="frac"><span class="n">1</span><span class="d">N<sub>p</sub></span></span> ∫ v<sub>p</sub> dt<span class="tag">2‑18</span></div>
+  </div>
+  <details class="deriv"><summary>Why N<sub>p</sub>i<sub>p</sub> ≈ N<sub>s</sub>i<sub>s</sub> (current ratio)</summary>
+    <div class="step">① Net mmf drives the core flux: ℱ<sub>net</sub> = N<sub>p</sub>i<sub>p</sub> − N<sub>s</sub>i<sub>s</sub> = φ·ℛ.<span class="why">Dots: primary current in makes +mmf, secondary out makes −mmf (2‑32).</span></div>
+    <div class="step">② A good core has tiny reluctance ℛ ≈ 0 until saturation.<span class="why">Very high permeability.</span></div>
+    <div class="step">③ So ℱ<sub>net</sub> ≈ 0 → <b>N<sub>p</sub>i<sub>p</sub> ≈ N<sub>s</sub>i<sub>s</sub></b> → i<sub>p</sub>/i<sub>s</sub> ≈ N<sub>s</sub>/N<sub>p</sub>.<span class="why">This near-zero mmf is what gives the dot convention its meaning (2‑35).</span></div>
+  </details>
+  <div class="card">
+    <b>Flux split:</b> φ<sub>p</sub> = φ<sub>M</sub> + φ<sub>LP</sub> — mutual flux φ<sub>M</sub> links both windings; leakage φ<sub>L</sub> links only one (returns through air). Smaller leakage → closer to ideal ratio (2‑28).
+  </div>
+
+  <h3>🔬 The magnetization current is <i>not</i> sinusoidal</h3>
+  <p class="note">A sinusoidal voltage forces a sinusoidal flux (φ = −(V<sub>M</sub>/ωN)cos ωt). But the core saturates, so the <b>current</b> needed to make that flux is peaky and rich in harmonics. Push the core harder (raise V or lower turns) and watch the peaks grow — this is the origin of transformer harmonics and the voltage rating limit (§2.11).</p>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Applied voltage (drives peak flux) <span class="val" id="m_V_v"></span></span><input type="range" id="m_V" min="40" max="130" value="100" step="1"></label>
+        <label class="ctl"><span class="lab">Core saturation level φ<sub>sat</sub> <span class="val" id="m_sat_v"></span></span><input type="range" id="m_sat" min="105" max="180" value="120" step="1"></label>
+        <div class="out" id="m_out"></div>
+        <p class="note">Also shown: the flux (blue, always sinusoidal) and the magnetizing current (green). At high drive the current "spikes" near the flux peaks.</p>
+      </div>
+      <div><canvas id="m_can" width="420" height="300"></canvas></div>
+    </div>
+  </div>
+  <div class="card note"><b>Excitation current</b> i<sub>ex</sub> = i<sub>M</sub> (magnetizing, lags V by 90°, from saturation) + i<sub>h+e</sub> (core-loss, <i>in phase</i> with V, largest as flux crosses zero because eddy currents ∝ dφ/dt). Together they form the small no-load current.</div>`;
+  const can=$('#m_can'),cx=can.getContext('2d');
+  const upd=()=>{
+    const V=+$('#m_V').value/100, sat=+$('#m_sat').value/100;
+    $('#m_V_v').textContent=Math.round(V*100)+'%';$('#m_sat_v').textContent=fmt(sat,2);
+    const phiMax=V; // peak flux ∝ voltage
+    // magnetizing current from inverse-saturation: i = atanh(phi/sat)
+    const iOf=phi=>{const r=Math.max(-0.999,Math.min(0.999,phi/sat));return Math.atanh(r);};
+    // sample to get peak & rms
+    let peak=0,sum=0,n=200;const arr=[];
+    for(let k=0;k<n;k++){const t=k/n*2*Math.PI;const phi=phiMax*Math.sin(t);const i=iOf(phi);arr.push(i);peak=Math.max(peak,Math.abs(i));sum+=i*i;}
+    const rms=Math.sqrt(sum/n);
+    const crest=peak/rms;
+    $('#m_out').innerHTML=`Peak flux ∝ V (φ<sub>max</sub>=${fmt(phiMax,2)}), φ<sub>sat</sub>=${fmt(sat,2)}\nMagnetizing current peak = <span class="k">${fmt(peak,2)}</span> (rel.)\nrms = <span class="k">${fmt(rms,3)}</span>  ·  crest factor = <span class="k">${fmt(crest,2)}</span>\n${phiMax>sat*0.92?'⚠ heavily saturated — large harmonics':'moderate saturation'}`;
+    // draw
+    const W=420,H=300,mid=H/2,pad=30;cx.clearRect(0,0,W,H);
+    cx.strokeStyle='#232a49';cx.beginPath();cx.moveTo(pad,mid);cx.lineTo(W-10,mid);cx.stroke();
+    // flux (blue)
+    cx.strokeStyle='#5b8cff';cx.lineWidth=2;cx.beginPath();
+    for(let x=0;x<=W-pad-10;x++){const t=x/(W-pad-10)*4*Math.PI;const y=mid-phiMax*Math.sin(t)*90;x===0?cx.moveTo(pad+x,y):cx.lineTo(pad+x,y);}cx.stroke();
+    // current (green) scaled to peak
+    cx.strokeStyle='#38d39f';cx.beginPath();
+    for(let x=0;x<=W-pad-10;x++){const t=x/(W-pad-10)*4*Math.PI;const phi=phiMax*Math.sin(t);const i=iOf(phi);const y=mid-i/Math.max(peak,0.01)*100;x===0?cx.moveTo(pad+x,y):cx.lineTo(pad+x,y);}cx.stroke();
+    cx.fillStyle='#5b8cff';cx.font='12px system-ui';cx.fillText('flux φ (sinusoidal)',pad+4,18);
+    cx.fillStyle='#38d39f';cx.fillText('magnetizing current i_M (peaky!)',pad+4,34);
+  };
+  ['m_V','m_sat'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   2.5 Equivalent circuit  (the core topic)
+=================================================================== */
+section('eqcirc','Real Transformer','2.5 · Equivalent Circuit ★ (core)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Equivalent Circuit of a Transformer</h2>
+  <p class="subttl">§2.5 · The most important tool in the chapter — every real effect modeled as a circuit element</p>
+
+  <style>@media(max-width:900px){.pvgrid{grid-template-columns:1fr!important}} .cor g[data-k]{transition:opacity .2s} .cor.dim g[data-k]{opacity:.15} .cor.dim g[data-k].hi{opacity:1}</style>
+  <h3>Step 1 — Start on the primary side: where does the applied voltage go?</h3>
+  <div class="card">
+    <p>Apply <b>V<sub>p</sub></b> to the primary of a <em>real</em> transformer. The primary current I<sub>p</sub> has to pay two "tolls" before any voltage is left to drive the core:</p>
+    <div class="grid3">
+      <div class="okbox"><b>① Copper drop I<sub>p</sub>R<sub>p</sub>.</b> The winding is a long copper wire with resistance R<sub>p</sub>. Its drop is <b>in phase with I<sub>p</sub></b> and dissipates power (I²R heat).</div>
+      <div class="okbox"><b>② Leakage drop jI<sub>p</sub>X<sub>p</sub>.</b> Part of the flux the primary makes closes through <em>air</em> and links only the primary — the <b>leakage flux φ<sub>LP</sub></b>. It induces L<sub>p</sub>di<sub>p</sub>/dt in its own winding, i.e. a series reactance X<sub>p</sub> = ωL<sub>p</sub>. The drop is <b>90° ahead of I<sub>p</sub></b>; no power is lost.</div>
+      <div class="okbox"><b>③ What is left, E<sub>p</sub>, drives the core.</b> E<sub>p</sub> = N<sub>p</sub>dφ<sub>M</sub>/dt is the voltage induced by the <b>mutual flux φ<sub>M</sub></b> — the flux that actually reaches the secondary and induces E<sub>s</sub> = N<sub>s</sub>dφ<sub>M</sub>/dt there.</div>
+    </div>
+    <div class="eq">KVL around the primary:   <span class="vec">V</span><sub>p</sub> = <span class="vec">E</span><sub>p</sub> + <span class="vec">I</span><sub>p</sub>R<sub>p</sub> + j<span class="vec">I</span><sub>p</sub>X<sub>p</sub> <span class="tag">primary voltage equation</span></div>
+    <div class="eq" style="font-size:16px">and its mirror on the secondary:   <span class="vec">E</span><sub>s</sub> = <span class="vec">V</span><sub>s</sub> + <span class="vec">I</span><sub>s</sub>R<sub>s</sub> + j<span class="vec">I</span><sub>s</sub>X<sub>s</sub>,   linked by   E<sub>p</sub>/E<sub>s</sub> = N<sub>p</sub>/N<sub>s</sub> = a   (same φ<sub>M</sub>)</div>
+    <p class="note">Notice the pattern: on the primary the drops are <em>subtracted from</em> the applied voltage to leave E<sub>p</sub>; on the secondary the drops are <em>subtracted from</em> E<sub>s</sub> to leave the terminal voltage V<sub>s</sub>. The core in the middle only ever sees E<sub>p</sub> and E<sub>s</sub>.</p>
+  </div>
+
+  <h3>Step 2 — One-to-one: winding diagram ⇄ circuit diagram</h3>
+  <p class="note">Every physical effect on the left becomes exactly one element on the right, in the same order the current meets them. Click a tag to light up the pair.</p>
+  <div class="card">
+    <div class="tabs" id="cor_tabs">
+      <div class="t" data-k="1">① R<sub>p</sub> — primary copper</div>
+      <div class="t" data-k="2">② X<sub>p</sub> — primary leakage</div>
+      <div class="t" data-k="3">③ φ<sub>M</sub> — mutual flux, E<sub>p</sub>:E<sub>s</sub></div>
+      <div class="t" data-k="4">④ R<sub>C</sub>, X<sub>M</sub> — core</div>
+      <div class="t" data-k="5">⑤ X<sub>s</sub> — secondary leakage</div>
+      <div class="t" data-k="6">⑥ R<sub>s</sub> — secondary copper</div>
+      <div class="t on" data-k="0">show all</div>
+    </div>
+    <div class="grid2" style="align-items:center">
+      <svg class="cor" id="cor_mag" viewBox="0 0 340 250" style="width:100%">
+        <text x="8" y="14" fill="#9aa3c4" font-size="11">Physical transformer — two windings on one core</text>
+        <path d="M90 40 H250 V200 H90 Z M125 75 H215 V165 H125 Z" fill="#232a49" stroke="#3a4680" fill-rule="evenodd"/>
+        <circle cx="34" cy="120" r="13" fill="#0b0e1c" stroke="#5b8cff" stroke-width="2"/><text x="34" y="124" fill="#5b8cff" font-size="10" text-anchor="middle">V_p</text>
+        <path d="M34 107 V95 H83 M34 133 V145 H83" fill="none" stroke="#5b8cff" stroke-width="1.5"/>
+        <path d="M256 107 H296 V112 M256 133 H296 V128" fill="none" stroke="#ff9f43" stroke-width="1.5"/>
+        <rect x="289" y="112" width="14" height="16" fill="#12162a" stroke="#9aa3c4"/><text x="306" y="124" fill="#9aa3c4" font-size="10">Z_L</text><text x="262" y="102" fill="#ff9f43" font-size="10">V_s</text>
+        <g data-k="4"><path d="M90 40 H250 V200 H90 Z M125 75 H215 V165 H125 Z" fill="#38d39f" opacity=".22" fill-rule="evenodd"/>
+          <ellipse cx="150" cy="57" rx="9" ry="6" fill="none" stroke="#38d39f" stroke-width="1.2"/><ellipse cx="172" cy="57" rx="9" ry="6" fill="none" stroke="#38d39f" stroke-width="1.2"/><ellipse cx="194" cy="57" rx="9" ry="6" fill="none" stroke="#38d39f" stroke-width="1.2"/>
+          <text x="170" y="32" fill="#38d39f" font-size="10" text-anchor="middle">④ core: eddy + hysteresis → R_C · magnetising mmf → X_M</text></g>
+        <g data-k="3"><rect x="107.5" y="57.5" width="125" height="125" fill="none" stroke="#e8ebf7" stroke-dasharray="5 4"/>
+          <polygon points="178,57.5 170,53 170,62" fill="#e8ebf7"/><polygon points="232.5,128 228,120 237,120" fill="#e8ebf7"/><polygon points="162,182.5 170,178 170,187" fill="#e8ebf7"/><polygon points="107.5,112 103,120 112,120" fill="#e8ebf7"/>
+          <text x="170" y="122" fill="#e8ebf7" font-size="10" text-anchor="middle">③ φ_M</text><text x="170" y="134" fill="#9aa3c4" font-size="9" text-anchor="middle">links both → E_p, E_s</text></g>
+        <g data-k="1"><ellipse cx="107.5" cy="95" rx="24" ry="4.5" fill="none" stroke="#5b8cff" stroke-width="2"/><ellipse cx="107.5" cy="107.5" rx="24" ry="4.5" fill="none" stroke="#5b8cff" stroke-width="2"/><ellipse cx="107.5" cy="120" rx="24" ry="4.5" fill="none" stroke="#5b8cff" stroke-width="2"/><ellipse cx="107.5" cy="132.5" rx="24" ry="4.5" fill="none" stroke="#5b8cff" stroke-width="2"/><ellipse cx="107.5" cy="145" rx="24" ry="4.5" fill="none" stroke="#5b8cff" stroke-width="2"/>
+          <text x="107.5" y="86" fill="#5b8cff" font-size="10" text-anchor="middle">N_p</text>
+          <text x="8" y="228" fill="#ff6b81" font-size="10">① N_p turns of copper wire → R_p</text></g>
+        <g data-k="2"><path d="M98 86 C 58 92, 58 148, 98 154 M102 93 C 72 98, 72 142, 102 147" fill="none" stroke="#ffcc66" stroke-width="1.6"/>
+          <polygon points="58,124 61,114 66,123" fill="#ffcc66"/>
+          <text x="8" y="212" fill="#ffcc66" font-size="10">② leakage φ_LP through air → X_p</text></g>
+        <g data-k="5"><path d="M242 86 C 282 92, 282 148, 242 154" fill="none" stroke="#ffcc66" stroke-width="1.6"/>
+          <polygon points="282,116 279,126 274,117" fill="#ffcc66"/>
+          <text x="196" y="212" fill="#ffcc66" font-size="10">⑤ leakage φ_LS → X_s</text></g>
+        <g data-k="6"><ellipse cx="232.5" cy="107.5" rx="24" ry="4.5" fill="none" stroke="#ff9f43" stroke-width="2"/><ellipse cx="232.5" cy="120" rx="24" ry="4.5" fill="none" stroke="#ff9f43" stroke-width="2"/><ellipse cx="232.5" cy="132.5" rx="24" ry="4.5" fill="none" stroke="#ff9f43" stroke-width="2"/>
+          <text x="232.5" y="98" fill="#ff9f43" font-size="10" text-anchor="middle">N_s</text>
+          <text x="196" y="228" fill="#ff6b81" font-size="10">⑥ N_s turns of copper → R_s</text></g>
+      </svg>
+      <svg class="cor" id="cor_ckt" viewBox="0 0 400 250" style="width:100%">
+        <text x="8" y="14" fill="#9aa3c4" font-size="11">Equivalent circuit — one element per effect (not yet referred)</text>
+        <circle cx="28" cy="125" r="13" fill="#0b0e1c" stroke="#5b8cff" stroke-width="2"/><text x="28" y="129" fill="#5b8cff" font-size="10" text-anchor="middle">V_p</text>
+        <path d="M28 112 V60 H46 M28 138 V190 H206 M90 60 H96 M140 60 H200" fill="none" stroke="#5b8cff" stroke-width="1.5"/>
+        <circle cx="160" cy="60" r="2.5" fill="#5b8cff"/>
+        <g data-k="1">${resH(46,90,60,'#ff6b81','R_p',48)}<text x="68" y="34" fill="#ff6b81" font-size="10" text-anchor="middle">①</text></g>
+        <g data-k="2">${indH(96,140,60,'#ffcc66','jX_p',48)}<text x="118" y="34" fill="#ffcc66" font-size="10" text-anchor="middle">②</text></g>
+        <g data-k="4"><path d="M160 60 V80 M148 80 H174 M148 80 V88 M174 80 V88 M148 150 V170 M174 150 V170 M148 170 H174 M160 170 V190" fill="none" stroke="#38d39f" stroke-width="1.5"/>
+          ${resV(148,88,150,'#38d39f','R_C')}${indV(174,88,150,'#5b8cff','X_M')}
+          <text x="112" y="206" fill="#38d39f" font-size="10" text-anchor="middle">④ core loss ∥ magnetising</text></g>
+        <g data-k="3"><path d="M200 60 H206 V72 M206 178 V190 M234 72 V60 H250 M234 178 V190 H370" fill="none" stroke="#5b8cff" stroke-width="1.5"/>
+          ${indV(206,72,178,'#5b8cff','')}${indV(234,72,178,'#ff9f43','')}
+          <line x1="217" y1="70" x2="217" y2="180" stroke="#9aa3c4" stroke-width="1.5"/><line x1="223" y1="70" x2="223" y2="180" stroke="#9aa3c4" stroke-width="1.5"/>
+          <circle cx="199" cy="78" r="2.5" fill="#e8ebf7"/><circle cx="241" cy="78" r="2.5" fill="#e8ebf7"/>
+          <text x="220" y="50" fill="#e8ebf7" font-size="10" text-anchor="middle">③ ideal N_p : N_s</text>
+          <text x="196" y="130" fill="#5b8cff" font-size="10" text-anchor="end">E_p</text><text x="244" y="130" fill="#ff9f43" font-size="10">E_s</text>
+          <text x="236" y="222" fill="#e8ebf7" font-size="10" text-anchor="middle">same φ_M ⇒ E_p/E_s = a</text></g>
+        <g data-k="5">${indH(250,294,60,'#ffcc66','jX_s',48)}<text x="272" y="34" fill="#ffcc66" font-size="10" text-anchor="middle">⑤</text></g>
+        <path d="M294 60 H298 M342 60 H370 V90 M370 150 V190" fill="none" stroke="#ff9f43" stroke-width="1.5"/>
+        <g data-k="6">${resH(298,342,60,'#ff6b81','R_s',48)}<text x="320" y="34" fill="#ff6b81" font-size="10" text-anchor="middle">⑥</text></g>
+        ${resV(370,90,150,'#9aa3c4','Z_L')}<text x="376" y="124" fill="#ff9f43" font-size="10">V_s</text>
+        <text x="200" y="240" fill="#9aa3c4" font-size="10" text-anchor="middle">I_p meets ① then ② → node splits: ④ excitation vs ③ transfer → ⑤ ⑥ → load</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card">
+    <b>Step 3 — refer the secondary across the ideal transformer (×a²): the exact equivalent circuit on the primary side</b>
+    <p class="note" style="margin:4px 0 8px">Multiply R<sub>s</sub>, X<sub>s</sub>, Z<sub>L</sub> by a² and V<sub>s</sub> by a; the ideal transformer disappears and the whole machine is one loop at one voltage level.</p>
+    <svg viewBox="0 0 660 190" width="100%">
+      <line x1="30" y1="55" x2="30" y2="160" stroke="#5b8cff" stroke-width="2"/>
+      <circle cx="30" cy="107" r="16" fill="#0b0e1c" stroke="#5b8cff" stroke-width="2"/><text x="30" y="111" fill="#5b8cff" font-size="12" text-anchor="middle">V_p</text>
+      <line x1="30" y1="55" x2="90" y2="55" stroke="#5b8cff" stroke-width="2"/>
+      ${resH(90,140,55,'#ff6b81','R_p',40)}
+      ${indH(146,196,55,'#ffcc66','jX_p',40)}
+      <line x1="196" y1="55" x2="330" y2="55" stroke="#5b8cff" stroke-width="2"/>
+      <circle cx="250" cy="55" r="3" fill="#5b8cff"/>
+      <line x1="221" y1="75" x2="281" y2="75" stroke="#5b8cff" stroke-width="2"/>
+      <line x1="250" y1="55" x2="250" y2="75" stroke="#5b8cff" stroke-width="2"/>
+      <line x1="221" y1="75" x2="221" y2="92" stroke="#5b8cff" stroke-width="2"/><line x1="281" y1="75" x2="281" y2="92" stroke="#5b8cff" stroke-width="2"/>
+      ${resV(221,92,126,'#38d39f','R_C',206)}
+      ${indV(281,92,126,'#5b8cff','jX_M',296)}
+      <line x1="221" y1="126" x2="221" y2="160" stroke="#5b8cff" stroke-width="2"/><line x1="281" y1="126" x2="281" y2="160" stroke="#5b8cff" stroke-width="2"/>
+      ${resH(330,382,55,'#ff6b81','a²R_s',40)}
+      ${indH(392,444,55,'#ffcc66','ja²X_s',40)}
+      <line x1="444" y1="55" x2="540" y2="55" stroke="#5b8cff" stroke-width="2"/>
+      <line x1="540" y1="55" x2="540" y2="160" stroke="#38d39f" stroke-width="2"/>
+      <text x="548" y="100" fill="#38d39f" font-size="12">aV_s</text><text x="548" y="120" fill="#9aa3c4" font-size="10">load a²Z_L</text>
+      <line x1="30" y1="160" x2="540" y2="160" stroke="#5b8cff" stroke-width="2"/>
+      <text x="96" y="182" fill="#9aa3c4" font-size="10">series: copper R + leakage X</text>
+      <text x="360" y="182" fill="#9aa3c4" font-size="10">secondary referred (×a²)</text>
+      <text x="200" y="150" fill="#9aa3c4" font-size="10">shunt excitation branch</text>
+    </svg>
+    <p class="note">Four real effects, four elements: <b>winding copper loss</b> → R<sub>p</sub>,R<sub>s</sub>; <b>leakage flux</b> → X<sub>p</sub>,X<sub>s</sub>; <b>core loss</b> → R<sub>C</sub>; <b>magnetization</b> → X<sub>M</sub>. Work through each below.</p>
+  </div>
+
+  <div class="tabs" id="etabs">
+    <div class="t on" data-p="loss">1 · Losses</div>
+    <div class="t" data-p="leak">2 · Leakage reactance</div>
+    <div class="t" data-p="mag">3 · Magnetizing branch & I₀</div>
+    <div class="t" data-p="refer">4 · Refer to 1° / 2°</div>
+    <div class="t" data-p="approx">5 · Approximation</div>
+    <div class="t" data-p="tests">OC / SC tests</div>
+  </div>
+
+  <div id="ep_loss" class="epanel">
+    <h3>Core loss & copper loss</h3>
+    <div class="grid2">
+      <div class="card tight"><b>Copper (I²R) loss</b> — resistive heating in the windings, modeled by R<sub>p</sub>, R<sub>s</sub>. <b>Varies with load²</b> (P<sub>Cu</sub> = I²R<sub>eq</sub>).</div>
+      <div class="card tight"><b>Core (iron) loss</b> — hysteresis + eddy currents, modeled by R<sub>C</sub>. Set by the flux (voltage), so it is <b>essentially constant</b> from no-load to full-load.</div>
+    </div>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label class="ctl"><span class="lab">Rated apparent power (kVA) <span class="val" id="ls_S_v"></span></span><input type="range" id="ls_S" min="1" max="50" value="15" step="1"></label>
+          <label class="ctl"><span class="lab">Full-load copper loss P<sub>Cu,fl</sub> (W) <span class="val" id="ls_cu_v"></span></span><input type="range" id="ls_cu" min="50" max="500" value="189" step="1"></label>
+          <label class="ctl"><span class="lab">Core loss P<sub>core</sub> (W) <span class="val" id="ls_co_v"></span></span><input type="range" id="ls_co" min="10" max="300" value="53" step="1"></label>
+          <label class="ctl"><span class="lab">Load level <span class="val" id="ls_x_v"></span></span><input type="range" id="ls_x" min="0" max="100" value="100" step="1"></label>
+          <label class="ctl"><span class="lab">Power factor <span class="val" id="ls_pf_v"></span></span><input type="range" id="ls_pf" min="0.5" max="1" value="0.8" step="0.01"></label>
+          <div class="out" id="ls_out"></div>
+        </div>
+        <div><canvas id="ls_can" width="420" height="260"></canvas><div class="note" style="text-align:center">copper loss (∝ load²) vs constant core loss</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ep_leak" class="epanel" style="display:none">
+    <h3>Leakage flux → leakage reactance</h3>
+    <p>Not all flux links both windings — the part that escapes into air and links only one winding is <b>leakage flux</b>. Because its path is mostly air (constant reluctance), it is proportional to the winding current, so it behaves as a <b>series inductance</b>.</p>
+    <details class="deriv" open><summary>Derive X<sub>p</sub> = ωL<sub>p</sub></summary>
+      <div class="step">① Leakage flux ∝ current: φ<sub>LP</sub> = (𝒫·N<sub>p</sub>)i<sub>p</sub>.<span class="why">𝒫 = permeance of the (air) leakage path — nearly constant (2‑37).</span></div>
+      <div class="step">② Faraday on the leakage flux: e<sub>LP</sub> = N<sub>p</sub> dφ<sub>LP</sub>/dt = N<sub>p</sub>²𝒫 · di<sub>p</sub>/dt = L<sub>p</sub> di<sub>p</sub>/dt.<span class="why">L<sub>p</sub> = N<sub>p</sub>²𝒫 is the primary leakage inductance (2‑38,2‑39).</span></div>
+      <div class="step">③ In an AC circuit this inductance is a series reactance X<sub>p</sub> = ωL<sub>p</sub> = 2πf L<sub>p</sub>.<span class="why">Same for the secondary: X<sub>s</sub> = ωL<sub>s</sub>. These add to R to form the series branch.</span></div>
+    </details>
+    <div class="card">
+      <svg viewBox="0 0 460 150" width="100%">
+        <rect x="140" y="20" width="180" height="110" rx="6" fill="none" stroke="#3a4570" stroke-width="12"/>
+        <path d="M160 75 C 220 55, 260 55, 300 75" fill="none" stroke="#ff6b81" stroke-width="2" stroke-dasharray="4 4"/><text x="220" y="50" fill="#ff6b81" font-size="11">mutual φ_M (links both)</text>
+        <path d="M150 95 C 130 120, 120 60, 150 55" fill="none" stroke="#ffcc66" stroke-width="2"/><text x="60" y="130" fill="#ffcc66" font-size="11">leakage φ_LP (air)</text>
+        <g stroke="#38d39f" stroke-width="3">${Array.from({length:5},(_,k)=>`<line x1="128" y1="${40+k*15}" x2="152" y2="${40+k*15}"/>`).join('')}</g>
+        <g stroke="#ff9f43" stroke-width="3">${Array.from({length:5},(_,k)=>`<line x1="308" y1="${40+k*15}" x2="332" y2="${40+k*15}"/>`).join('')}</g>
+      </svg>
+      <h4>Reactance calculator</h4>
+      <div class="grid3">
+        <label class="ctl"><span class="lab">Leakage inductance L (mH)</span><input type="number" id="lk_L" value="2" step="any"></label>
+        <label class="ctl"><span class="lab">Frequency f (Hz)</span><input type="number" id="lk_f" value="60" step="any"></label>
+        <label class="ctl"><span class="lab">Winding current (A)</span><input type="number" id="lk_I" value="65" step="any"></label>
+      </div>
+      <div class="out" id="lk_out"></div>
+    </div>
+  </div>
+
+  <div id="ep_mag" class="epanel" style="display:none">
+    <h3>Magnetizing branch (R<sub>C</sub>, X<sub>M</sub>) & the no-load current</h3>
+    <p>With the secondary open, the small primary current is the <b>no-load / excitation current I₀</b>. It has two parts: a <b>core-loss (working) component I<sub>w</sub></b> in phase with V (through R<sub>C</sub>), and a <b>magnetizing component I<sub>μ</sub></b> lagging V by 90° (through X<sub>M</sub>).</p>
+    <div class="grid2">
+      <div class="eq" style="text-align:center">I<sub>w</sub> = I₀cos φ₀,  I<sub>μ</sub> = I₀sin φ₀</div>
+      <div class="eq" style="text-align:center">R<sub>C</sub> = V/I<sub>w</sub> = V²/P<sub>core</sub>,  X<sub>M</sub> = V/I<sub>μ</sub></div>
+    </div>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <label class="ctl"><span class="lab">No-load voltage V (V)</span><input type="number" id="mg_V" value="2300" step="any"></label>
+          <label class="ctl"><span class="lab">No-load current I₀ (A)</span><input type="number" id="mg_I" value="0.21" step="any"></label>
+          <label class="ctl"><span class="lab">No-load power P<sub>core</sub> (W)</span><input type="number" id="mg_P" value="50" step="any"></label>
+          <div class="out" id="mg_out"></div>
+          <p class="note">Defaults ≈ Example 2‑5 open-circuit data → R<sub>C</sub>≈105 kΩ, X<sub>M</sub>≈11 kΩ.</p>
+        </div>
+        <div><canvas id="mg_can" width="380" height="230"></canvas><div class="note" style="text-align:center">no-load current phasor (I₀ = I<sub>w</sub> + I<sub>μ</sub>)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ep_refer" class="epanel" style="display:none">
+    <h3>Referring the circuit to one side & converting between them</h3>
+    <p>To solve, collapse everything to a <b>single voltage level</b>. Moving an element <b>secondary → primary</b> multiplies impedance by a²; <b>primary → secondary</b> divides by a². (a = N<sub>p</sub>/N<sub>s</sub>.)</p>
+    <div class="grid2">
+      <div class="eq" style="text-align:center">R<sub>eq,p</sub> = R<sub>p</sub> + a²R<sub>s</sub><br>X<sub>eq,p</sub> = X<sub>p</sub> + a²X<sub>s</sub></div>
+      <div class="eq" style="text-align:center">R<sub>eq,s</sub> = R<sub>eq,p</sub>/a²<br>X<sub>eq,s</sub> = X<sub>eq,p</sub>/a²</div>
+    </div>
+    <div class="card">
+      <div class="grid3">
+        <label class="ctl"><span class="lab">a = N<sub>p</sub>/N<sub>s</sub></span><input type="number" id="rf_a" value="10" step="any"></label>
+        <label class="ctl"><span class="lab">R<sub>p</sub> (Ω)</span><input type="number" id="rf_Rp" value="4.45" step="any"></label>
+        <label class="ctl"><span class="lab">X<sub>p</sub> (Ω)</span><input type="number" id="rf_Xp" value="6.45" step="any"></label>
+        <label class="ctl"><span class="lab">R<sub>s</sub> (Ω)</span><input type="number" id="rf_Rs" value="0" step="any"></label>
+        <label class="ctl"><span class="lab">X<sub>s</sub> (Ω)</span><input type="number" id="rf_Xs" value="0" step="any"></label>
+      </div>
+      <div class="out" id="rf_out"></div>
+      <p class="note">Defaults ≈ Example 2‑5 series impedance (all on the primary): R<sub>eq,p</sub>=4.45 Ω, X<sub>eq,p</sub>=6.45 Ω → referred to secondary (a=10): 0.0445 Ω, 0.0645 Ω.</p>
+    </div>
+  </div>
+
+  <div id="ep_approx" class="epanel" style="display:none">
+    <h3>Approximate equivalent circuit</h3>
+    <p>The exact circuit has the excitation branch <i>between</i> the primary and secondary series impedances, which adds a node. Because I₀ is tiny (~2–5% of full load), we make two simplifications with negligible error:</p>
+    <div class="grid2">
+      <div class="card tight"><b>Approximate:</b> push the shunt branch to the input (or output) terminals, then the two series impedances simply add: Z<sub>eq</sub> = (R<sub>p</sub>+a²R<sub>s</sub>) + j(X<sub>p</sub>+a²X<sub>s</sub>).</div>
+      <div class="card tight"><b>Series-only:</b> for many calculations the excitation branch is dropped entirely — just Z<sub>eq</sub> in series with the load.</div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 560 120" width="100%">
+        <line x1="20" y1="40" x2="70" y2="40" stroke="#5b8cff" stroke-width="2"/>
+        <line x1="70" y1="40" x2="70" y2="95" stroke="#5b8cff" stroke-width="2"/>
+        ${resV(60,52,84,'#38d39f','R_C')}${indV(82,52,84,'#5b8cff','jX_M',92)}
+        <line x1="70" y1="40" x2="150" y2="40" stroke="#5b8cff" stroke-width="2"/>
+        ${resH(150,202,40,'#ff6b81','R_eq',24)}
+        ${indH(212,264,40,'#ffcc66','jX_eq',24)}
+        <line x1="264" y1="40" x2="360" y2="40" stroke="#5b8cff" stroke-width="2"/>
+        <line x1="360" y1="40" x2="360" y2="95" stroke="#38d39f" stroke-width="2"/><text x="368" y="72" fill="#38d39f" font-size="11">load</text>
+        <line x1="20" y1="95" x2="360" y2="95" stroke="#5b8cff" stroke-width="2"/>
+        <text x="20" y="112" fill="#9aa3c4" font-size="10">shunt moved to input · series impedances added</text>
+      </svg>
+    </div>
+  </div>
+
+  <div id="ep_tests" class="epanel" style="display:none">
+    <h3>🧪 Finding the elements — open-circuit & short-circuit tests <span class="badge">Example 2‑2</span></h3>
+    <details class="deriv"><summary>How the two tests isolate the two branches</summary>
+      <div class="step">① <b>OC test</b> (rated V, secondary open): only excitation current flows → all power is core loss → gives R<sub>C</sub>, X<sub>M</sub>.<span class="why">Y<sub>E</sub>=I<sub>OC</sub>/V<sub>OC</sub> ∠−θ; G<sub>C</sub>=1/R<sub>C</sub>, B<sub>M</sub>=1/X<sub>M</sub>.</span></div>
+      <div class="step">② <b>SC test</b> (secondary shorted, low V to rated I): excitation branch sees ~0 V → all power is copper loss → gives R<sub>eq</sub>, X<sub>eq</sub>.<span class="why">Z<sub>SE</sub>=V<sub>SC</sub>/I<sub>SC</sub> ∠θ.</span></div>
+    </details>
+    <div class="card">
+      <div class="grid2">
+        <div>
+          <h4>Open-circuit test</h4>
+          <div class="grid3">
+            <label class="ctl"><span class="lab">V<sub>OC</sub> (V)</span><input type="number" id="oc_V" value="8000" step="any"></label>
+            <label class="ctl"><span class="lab">I<sub>OC</sub> (A)</span><input type="number" id="oc_I" value="0.214" step="any"></label>
+            <label class="ctl"><span class="lab">P<sub>OC</sub> (W)</span><input type="number" id="oc_P" value="400" step="any"></label>
+          </div>
+          <h4>Short-circuit test</h4>
+          <div class="grid3">
+            <label class="ctl"><span class="lab">V<sub>SC</sub> (V)</span><input type="number" id="sc_V" value="489" step="any"></label>
+            <label class="ctl"><span class="lab">I<sub>SC</sub> (A)</span><input type="number" id="sc_I" value="2.5" step="any"></label>
+            <label class="ctl"><span class="lab">P<sub>SC</sub> (W)</span><input type="number" id="sc_P" value="240" step="any"></label>
+          </div>
+        </div>
+        <div class="out" id="test_out"></div>
+      </div>
+      <p class="note">Defaults = Example 2‑2 (20 kVA, 8000/240 V) → R<sub>C</sub>≈159 kΩ, X<sub>M</sub>≈38.4 kΩ, R<sub>eq</sub>≈38.4 Ω, X<sub>eq</sub>≈192 Ω.</p>
+    </div>
+  </div>
+
+`;
+
+  /* tab switching — redraw the panel's canvas on show (a canvas drawn while
+     display:none can paint blank until a repaint is forced) */
+  $$('#etabs .t').forEach(t=>t.onclick=()=>{
+    $$('#etabs .t').forEach(x=>x.classList.toggle('on',x===t));
+    $$('.epanel').forEach(p=>p.style.display='none');
+    $('#ep_'+t.dataset.p).style.display='';
+    const redraw={loss:()=>lsUpd(),mag:()=>mgUpd()}[t.dataset.p];
+    if(redraw)requestAnimationFrame(redraw);
+  });
+
+  /* 1 · losses */
+  const lsCan=$('#ls_can'),lsx=lsCan.getContext('2d');
+  const lsUpd=()=>{
+    const S=+$('#ls_S').value*1000,Cu=+$('#ls_cu').value,Co=+$('#ls_co').value,x=+$('#ls_x').value/100,pf=+$('#ls_pf').value;
+    $('#ls_S_v').textContent=(S/1000)+' kVA';$('#ls_cu_v').textContent=Cu+' W';$('#ls_co_v').textContent=Co+' W';$('#ls_x_v').textContent=Math.round(x*100)+'%';$('#ls_pf_v').textContent=fmt(pf,2);
+    const Pcu=x*x*Cu,Pout=x*S*pf,eff=Pout/(Pout+Pcu+Co)*100;
+    $('#ls_out').innerHTML=`P<sub>Cu</sub> = x²·P<sub>Cu,fl</sub> = <span class="k">${fmt(Pcu,1)} W</span>\nP<sub>core</sub> = <span class="k">${fmt(Co,1)} W</span> (constant)\nP<sub>out</sub> = xS·PF = <span class="k">${fmt(Pout,0)} W</span>\nη = <span class="k">${fmt(eff,2)} %</span>`;
+    axes(lsx,420,260,{l:44,r:10,t:14,b:26},'load','loss (W)');
+    const maxL=Math.max(Cu,Co)*1.1;const yY=v=>(260-26)-v/maxL*(260-40);
+    lsx.strokeStyle='#5b8cff';lsx.lineWidth=1.5;lsx.beginPath();lsx.moveTo(44,yY(Co));lsx.lineTo(420-10,yY(Co));lsx.stroke();
+    lsx.fillStyle='#5b8cff';lsx.font='11px system-ui';lsx.fillText('core (const)',50,yY(Co)-4);
+    lsx.strokeStyle='#ff6b81';lsx.lineWidth=2.5;lsx.beginPath();
+    for(let f=0;f<=1;f+=0.02){const xx=44+f*(420-54),yy=yY(f*f*Cu);f===0?lsx.moveTo(xx,yy):lsx.lineTo(xx,yy);}lsx.stroke();
+    lsx.fillStyle='#ff6b81';lsx.fillText('copper (∝ load²)',260,60);
+    const mx=44+x*(420-54);lsx.strokeStyle='#38d39f';lsx.setLineDash([4,4]);lsx.beginPath();lsx.moveTo(mx,14);lsx.lineTo(mx,260-26);lsx.stroke();lsx.setLineDash([]);
+  };
+  ['ls_S','ls_cu','ls_co','ls_x','ls_pf'].forEach(id=>$('#'+id).oninput=lsUpd);lsUpd();
+
+  /* 2 · leakage */
+  const lkUpd=()=>{const L=+$('#lk_L').value/1000,f=+$('#lk_f').value,I=+$('#lk_I').value,X=2*Math.PI*f*L,V=I*X;
+    $('#lk_out').innerHTML=`X = 2πfL = 2π·${f}·${fmt(L,4)} = <span class="k">${fmt(X,3)} Ω</span>\nLeakage voltage drop = I·X = <span class="k">${fmt(V,2)} V</span>`;};
+  ['lk_L','lk_f','lk_I'].forEach(id=>$('#'+id).oninput=lkUpd);lkUpd();
+
+  /* 3 · magnetizing branch */
+  const mgCan=$('#mg_can'),mgx=mgCan.getContext('2d');
+  const mgUpd=()=>{
+    const V=+$('#mg_V').value,I0=+$('#mg_I').value,P=+$('#mg_P').value;
+    const cos=Math.min(1,P/(V*I0)),phi=Math.acos(cos),Iw=I0*cos,Imu=I0*Math.sin(phi),Rc=V/Iw,Xm=V/Imu;
+    const ohm=v=>v>=1000?fmt(v/1000,2)+' kΩ':fmt(v,1)+' Ω';
+    $('#mg_out').innerHTML=`cos φ₀ = P/(V·I₀) = <span class="k">${fmt(cos,3)}</span>  (φ₀=${fmt(phi*R2D,1)}°)\nI<sub>w</sub> = I₀cos φ₀ = <span class="k">${fmt(Iw,4)} A</span>\nI<sub>μ</sub> = I₀sin φ₀ = <span class="k">${fmt(Imu,4)} A</span>\nR<sub>C</sub> = V/I<sub>w</sub> = <span class="k">${ohm(Rc)}</span>\nX<sub>M</sub> = V/I<sub>μ</sub> = <span class="k">${ohm(Xm)}</span>`;
+    // phasor
+    mgx.clearRect(0,0,380,230);const ox=50,oy=70,sc=Math.min(260/I0,120/Math.max(Imu,0.001));
+    mgx.strokeStyle='#232a49';mgx.beginPath();mgx.moveTo(ox,oy);mgx.lineTo(370,oy);mgx.stroke();
+    function arr(x1,y1,c,lab){mgx.strokeStyle=c;mgx.lineWidth=2.5;mgx.beginPath();mgx.moveTo(ox,oy);mgx.lineTo(x1,y1);mgx.stroke();
+      const a=Math.atan2(y1-oy,x1-ox);mgx.beginPath();mgx.moveTo(x1,y1);mgx.lineTo(x1-9*Math.cos(a-0.4),y1-9*Math.sin(a-0.4));mgx.moveTo(x1,y1);mgx.lineTo(x1-9*Math.cos(a+0.4),y1-9*Math.sin(a+0.4));mgx.stroke();
+      mgx.fillStyle=c;mgx.font='12px system-ui';mgx.fillText(lab,x1+4,y1);}
+    arr(ox+180,oy,'#38d39f','V (ref)');
+    arr(ox+Iw*sc,oy,'#5b8cff','I_w');
+    arr(ox,oy+Imu*sc,'#ffcc66','I_μ');
+    arr(ox+Iw*sc,oy+Imu*sc,'#ff6b81','I₀');
+  };
+  ['mg_V','mg_I','mg_P'].forEach(id=>$('#'+id).oninput=mgUpd);mgUpd();
+
+  /* 4 · refer */
+  const rfUpd=()=>{const a=+$('#rf_a').value,Rp=+$('#rf_Rp').value,Xp=+$('#rf_Xp').value,Rs=+$('#rf_Rs').value,Xs=+$('#rf_Xs').value;
+    const Reqp=Rp+a*a*Rs,Xeqp=Xp+a*a*Xs,Reqs=Reqp/(a*a),Xeqs=Xeqp/(a*a);
+    $('#rf_out').innerHTML=`Referred to PRIMARY (×a²):\n  R<sub>eq,p</sub> = R<sub>p</sub>+a²R<sub>s</sub> = <span class="k">${fmt(Reqp,4)} Ω</span>\n  X<sub>eq,p</sub> = X<sub>p</sub>+a²X<sub>s</sub> = <span class="k">${fmt(Xeqp,4)} Ω</span>\nReferred to SECONDARY (÷a²):\n  R<sub>eq,s</sub> = <span class="k">${fmt(Reqs,5)} Ω</span>\n  X<sub>eq,s</sub> = <span class="k">${fmt(Xeqs,5)} Ω</span>`;};
+  ['rf_a','rf_Rp','rf_Xp','rf_Rs','rf_Xs'].forEach(id=>$('#'+id).oninput=rfUpd);rfUpd();
+
+  /* OC/SC tests */
+  const testUpd=()=>{
+    const Voc=+$('#oc_V').value,Ioc=+$('#oc_I').value,Poc=+$('#oc_P').value;
+    const Vsc=+$('#sc_V').value,Isc=+$('#sc_I').value,Psc=+$('#sc_P').value;
+    const pfoc=Poc/(Voc*Ioc),toc=Math.acos(Math.min(1,pfoc));
+    const Ye=Ioc/Voc,Gc=Ye*Math.cos(toc),Bm=Ye*Math.sin(toc),Rc=1/Gc,Xm=1/Bm;
+    const pfsc=Psc/(Vsc*Isc),tsc=Math.acos(Math.min(1,pfsc));
+    const Zse=Vsc/Isc,Req=Zse*Math.cos(tsc),Xeq=Zse*Math.sin(tsc);
+    $('#test_out').innerHTML=
+`OPEN-CIRCUIT (excitation branch)
+ PF = ${fmt(pfoc,3)} lag  →  θ = ${fmt(toc*R2D,1)}°
+ R_C = <span class="k">${fmt(Rc,4)} Ω</span>  (${fmt(Rc/1000,1)} kΩ)
+ X_M = <span class="k">${fmt(Xm,4)} Ω</span>  (${fmt(Xm/1000,1)} kΩ)
+
+SHORT-CIRCUIT (series branch)
+ PF = ${fmt(pfsc,3)} lag  →  θ = ${fmt(tsc*R2D,1)}°
+ Z_SE = ${fmt(Zse,2)} ∠${fmt(tsc*R2D,1)}° Ω
+ R_eq = <span class="k">${fmt(Req,3)} Ω</span>   X_eq = <span class="k">${fmt(Xeq,3)} Ω</span>`;
+  };
+  ['oc_V','oc_I','oc_P','sc_V','sc_I','sc_P'].forEach(id=>$('#'+id).oninput=testUpd);testUpd();
+
+
+  /* ---- primary side: correspondence tags + voltage-equation phasors ---- */
+  const corSet=k=>{$$('#cor_tabs .t').forEach(t=>t.classList.toggle('on',t.dataset.k===k));['cor_mag','cor_ckt'].forEach(id=>{const s=$('#'+id);s.classList.toggle('dim',k!=='0');$$('g[data-k]',s).forEach(g=>g.classList.toggle('hi',g.dataset.k===k));});};
+  $$('#cor_tabs .t').forEach(t=>t.onclick=()=>corSet(t.dataset.k));corSet('0');
+});
+
+/* ===================================================================
+   2.6 Voltage regulation & efficiency  (big interactive)
+=================================================================== */
+section('voltreg','System Tools','2.6 · Voltage Regulation ★',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Voltage Regulation</h2>
+  <p class="subttl">§2.6 · Regulation phasors referred to the primary (Step 1) and to the secondary (Step 2), then Example 2‑5 with the VR-vs-load trend (Step 3) · efficiency has its own section, §2.7</p>
+  <div class="eq" style="text-align:center">VR = <span class="frac"><span class="n">V<sub>P</sub>/a − V<sub>S,fl</sub></span><span class="d">V<sub>S,fl</sub></span></span> ×100%<span class="tag">2‑61</span></div>
+  <div class="eq"><span class="vec">V<sub>P</sub></span>/a = <span class="vec">V<sub>S</sub></span> + (R<sub>eq</sub>+jX<sub>eq</sub>)<span class="vec">I<sub>S</sub></span> <span class="tag">(2‑64)</span></div>
+  <details class="deriv"><summary>Why PF sign flips the regulation</summary>
+    <div class="step">Lagging (inductive) load: I lags V; the jX<sub>eq</sub>I drop adds along V → V<sub>P</sub>/a > V<sub>S</sub> → <b>VR > 0</b>.</div>
+    <div class="step">Leading (capacitive) load: the reactive drop subtracts → V<sub>S</sub> can exceed V<sub>P</sub>/a → <b>VR < 0</b>.<span class="why">This is why capacitive loads can "boost" secondary voltage.</span></div>
+  </details>
+
+  <h3>Step 1 — Fix the primary voltage: the phasor diagram referred to the primary</h3>
+  <p class="note">Collapse the whole transformer onto the primary side (§2.5, Step 3): the series impedance is <b>R<sub>eq,p</sub> = R<sub>p</sub> + a²R<sub>s</sub></b>, <b>X<sub>eq,p</sub> = X<sub>p</sub> + a²X<sub>s</sub></b>, and the load voltage appears as <b>aV<sub>S</sub></b>. The supply fixes V<sub>P</sub>; the current I<sub>P</sub> pays the copper drop (along I<sub>P</sub>) and the leakage drop (90° ahead of I<sub>P</sub>); <b>aV<sub>S</sub> is whatever is left for the load</b>. V<sub>P</sub> is the reference. Drops are magnified in the drawing only.</p>
+  <div class="eq"><span class="vec">V</span><sub>P</sub> = a<span class="vec">V</span><sub>S</sub> + <span class="vec">I</span><sub>P</sub>R<sub>eq,p</sub> + j<span class="vec">I</span><sub>P</sub>X<sub>eq,p</sub> <span class="tag">referred to the primary</span></div>
+  <div class="card">
+    <div class="pvgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Primary voltage V<sub>P</sub> (held fixed)</span> <span class="val" id="pv_V_v"></span></span><input type="range" id="pv_V" min="500" max="5000" step="10" value="2300"></label>
+        <label class="ctl"><span class="lab"><span>Primary current I<sub>P</sub></span> <span class="val" id="pv_I_v"></span></span><input type="range" id="pv_I" min="0" max="20" step="0.01" value="6.52"></label>
+        <label class="ctl"><span class="lab"><span>Power-factor angle θ (+ lag / − lead)</span> <span class="val" id="pv_th_v"></span></span><input type="range" id="pv_th" min="-60" max="60" step="1" value="37"></label>
+        <label class="ctl"><span class="lab"><span>R<sub>eq,p</sub> (Ω, primary side)</span> <span class="val" id="pv_R_v"></span></span><input type="range" id="pv_R" min="0" max="20" step="0.05" value="4.45"></label>
+        <label class="ctl"><span class="lab"><span>X<sub>eq,p</sub> (Ω, primary side)</span> <span class="val" id="pv_X_v"></span></span><input type="range" id="pv_X" min="0" max="30" step="0.05" value="6.45"></label>
+        <div class="grid2">
+          <label class="ctl"><span class="lab"><span>Turns ratio a</span></span><input type="number" id="pv_a" value="10" step="any" min="0.01"></label>
+          <label class="ctl"><span class="lab"><span>Drop ×k (drawing)</span> <span class="val" id="pv_k_v"></span></span><input type="range" id="pv_k" min="1" max="40" step="1" value="8"></label>
+        </div>
+        <div class="out" id="pv_out" style="font-size:12.5px"></div>
+      </div>
+      <canvas id="pv_can" width="540" height="330" style="width:100%"></canvas>
+    </div>
+    <p class="note">Slide θ from lagging through zero to leading: for a lagging load aV<sub>S</sub> falls well short of V<sub>P</sub> (the load voltage sags); for a leading load the reactive drop turns backwards and aV<sub>S</sub> can even exceed V<sub>P</sub>.</p>
+  </div>
+
+  <style>@media(max-width:900px){.vsgrid{grid-template-columns:1fr!important}}</style>
+  <h3>Step 2 — Now fix the secondary voltage and see what the primary must be</h3>
+  <p class="note">Same picture, read from the other end. Refer everything to the secondary: <b>V<sub>P</sub>/a = V<sub>S</sub> + I<sub>S</sub>R<sub>eq</sub> + jI<sub>S</sub>X<sub>eq</sub></b>. Hold <b>V<sub>S</sub></b> fixed as the reference, set the load current and its power factor, and the triangle tells you the primary voltage the supply must provide. The gap between |V<sub>P</sub>/a| and V<sub>S</sub> <em>is</em> the voltage regulation. Slide the power-factor angle from lagging through zero to leading and watch the triangle swing round.</p>
+  <div class="card">
+    <div class="vsgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Secondary voltage V<sub>S</sub> (held fixed)</span> <span class="val" id="vs_V_v"></span></span><input type="range" id="vs_V" min="100" max="500" step="1" value="230"></label>
+        <label class="ctl"><span class="lab"><span>Load current I<sub>S</sub></span> <span class="val" id="vs_I_v"></span></span><input type="range" id="vs_I" min="0" max="100" step="0.1" value="65.2"></label>
+        <label class="ctl"><span class="lab"><span>Power-factor angle θ (+ lag / − lead)</span> <span class="val" id="vs_th_v"></span></span><input type="range" id="vs_th" min="-60" max="60" step="1" value="37"></label>
+        <label class="ctl"><span class="lab"><span>R<sub>eq</sub> (Ω, secondary side)</span> <span class="val" id="vs_R_v"></span></span><input type="range" id="vs_R" min="0" max="0.2" step="0.001" value="0.0445"></label>
+        <label class="ctl"><span class="lab"><span>X<sub>eq</sub> (Ω, secondary side)</span> <span class="val" id="vs_X_v"></span></span><input type="range" id="vs_X" min="0" max="0.3" step="0.001" value="0.0645"></label>
+        <label class="ctl"><span class="lab"><span>Drop magnification (drawing only)</span> <span class="val" id="vs_k_v"></span></span><input type="range" id="vs_k" min="1" max="40" step="1" value="8"></label>
+        <div class="out" id="vs_out" style="font-size:12.5px"></div>
+      </div>
+      <canvas id="vs_can" width="540" height="330" style="width:100%"></canvas>
+    </div>
+    <div class="grid3" style="margin-top:8px">
+      <div class="okbox"><b>Lagging (inductive), θ &gt; 0:</b> both drops lean forward along V<sub>S</sub> → |V<sub>P</sub>/a| &gt; V<sub>S</sub> → <b>VR positive</b> and largest.</div>
+      <div class="okbox"><b>Unity (resistive), θ = 0:</b> the resistive drop adds head-on, the reactive drop is sideways → small positive VR.</div>
+      <div class="okbox"><b>Leading (capacitive), θ &lt; 0:</b> the jX drop now points <em>backwards</em> → |V<sub>P</sub>/a| can be <em>less</em> than V<sub>S</sub> → <b>VR negative</b>.</div>
+    </div>
+  </div>
+  <h3>Step 3 — Live analysis <span class="badge">Example 2‑5</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab"><span>R<sub>eq</sub> (Ω, sec. side)</span> <span class="val" id="v_R_v"></span></span><input type="range" id="v_R" min="0" max="0.2" value="0.0445" step="0.001"></label>
+        <label class="ctl"><span class="lab"><span>X<sub>eq</sub> (Ω)</span> <span class="val" id="v_X_v"></span></span><input type="range" id="v_X" min="0" max="0.3" value="0.0645" step="0.001"></label>
+        <label class="ctl"><span class="lab"><span>V<sub>S</sub> (V)</span></span><input type="number" id="v_Vs" value="230" step="any"></label>
+        <label class="ctl"><span class="lab"><span>Rated I<sub>S</sub> (A)</span></span><input type="number" id="v_Is" value="65.2" step="any"></label>
+        <label class="ctl"><span class="lab"><span>Load level (fraction of rated I<sub>S</sub>)</span> <span class="val" id="v_load_v"></span></span><input type="range" id="v_load" min="0" max="100" value="100" step="1"></label>
+        <label class="ctl"><span class="lab"><span>Power-factor angle θ (+ lag / − lead)</span> <span class="val" id="v_pf_v"></span></span><input type="range" id="v_pf" min="-90" max="90" value="37" step="1"></label>
+        <label class="ctl"><span class="lab"><span>Drop ×k (drawing only)</span> <span class="val" id="v_k_v"></span></span><input type="range" id="v_k" min="1" max="40" value="8" step="1"></label>
+        <div class="out" id="v_out"></div>
+      </div>
+      <div>
+        <canvas id="v_phasor" width="540" height="330" style="width:100%"></canvas>
+        <div class="note" style="margin-top:6px">Same diagram as Step 2, now driven by the Example 2‑5 transformer at the load level you choose: <b>V<sub>S</sub></b> (green) is the rated secondary voltage held fixed; <b>I<sub>S</sub></b> (purple) = load level × rated current at the chosen power-factor angle; the red and amber drops are I<sub>S</sub>R<sub>eq</sub> and jI<sub>S</sub>X<sub>eq</sub>; <b>V<sub>P</sub>/a</b> (blue) is the primary voltage the supply must hold. VR compares the blue length with the green. Drag the load level to 0 and the triangle collapses — no-load, VR = 0.</div>
+      </div>
+    </div>
+  </div>
+  <h3>Trend across the whole load range</h3>
+  <div class="card"><b>Voltage regulation vs load</b><canvas id="v_vr" width="840" height="300" style="width:100%"></canvas><div class="note">Three curves for the Example 2‑5 transformer: 0.8 lagging (red) climbs steepest, unity (green) rises gently, 0.8 leading (blue) goes negative — Fig 2‑31. Efficiency is treated separately in §2.7.</div></div>`;
+  const ph=$('#v_phasor').getContext('2d'),vrC=$('#v_vr').getContext('2d');
+  const P=()=>({R:+$('#v_R').value,X:+$('#v_X').value,Vs:+$('#v_Vs').value,Irated:+$('#v_Is').value,load:+$('#v_load').value/100,pf:+$('#v_pf').value});
+  function VP(Vs,R,X,Is,ang){ // returns complex Vp/a with Vs as reference (0°)
+    const Ivec=cPolar(Is,ang);const Z=C(R,X);return cAdd(C(Vs,0),cMul(Z,Ivec));
+  }
+  function upd(){
+    const p=P();const Is=p.Irated*p.load;
+    $('#v_R_v').textContent=fmt(p.R,4)+' Ω';$('#v_X_v').textContent=fmt(p.X,4)+' Ω';
+    $('#v_load_v').textContent=Math.round(p.load*100)+'%';
+    $('#v_pf_v').textContent=thTxt(p.pf);$('#v_k_v').textContent='×'+$('#v_k').value;
+    const Vp=VP(p.Vs,p.R,p.X,Is,-p.pf);const VpMag=cAbs(Vp);
+    const VR=(VpMag-p.Vs)/p.Vs*100;
+    $('#v_out').innerHTML=`I<sub>S</sub> = ${Math.round(p.load*100)} % × ${p.Irated} = <span class="k">${fmt(Is,1)} A</span> at ${thTxt(p.pf)}\nV<sub>P</sub>/a = <span class="k">${fmt(VpMag,2)} V ∠${fmt(cAng(Vp),2)}°</span>\n<b>VR = (V<sub>P</sub>/a − V<sub>S</sub>)/V<sub>S</sub> = <span class="k">${fmt(VR,3)} %</span></b>`;
+    // phasor — same routine as Step 2
+    regPhasor(ph,540,330,p.Vs,Is,p.pf,p.R,p.X,+$('#v_k').value,'fwd',{ref:'V_S',out:'V_P/a',cur:'I_S',r:'I_S·R_eq',x:'jI_S·X_eq',refCol:'#38d39f',outCol:'#5b8cff',legend:'green V_S (rated, fixed)  ·  blue V_P/a (primary needed)  ·  red I_S·R_eq (∥ I_S)  ·  amber jI_S·X_eq (⟂ I_S)  ·  purple I_S = load × rated'});
+    // VR trend
+    drawVR(p);
+  }
+  function drawVR(p){
+    const W=840,H=300;axes(vrC,W,H,{l:44,r:10,t:14,b:26},'load (A)','VR (%)');
+    const pfs=[[-36.87,'#ff6b81','0.8 lag'],[0,'#38d39f','unity'],[36.87,'#5b8cff','0.8 lead']];
+    // find range
+    let vals=[];pfs.forEach(([ang])=>{for(let f=0;f<=1;f+=0.05){const Is=p.Irated*f;vals.push((cAbs(VP(p.Vs,p.R,p.X,Is,ang))-p.Vs)/p.Vs*100);}});
+    const vmax=Math.max(...vals,0.5),vmin=Math.min(...vals,-0.5);
+    const yY=v=>(H-26)-(v-vmin)/(vmax-vmin)*(H-40);
+    // zero line
+    vrC.strokeStyle='#333c60';vrC.beginPath();vrC.moveTo(44,yY(0));vrC.lineTo(W-10,yY(0));vrC.stroke();
+    pfs.forEach(([ang,c,lab],i)=>{vrC.strokeStyle=c;vrC.lineWidth=2;vrC.beginPath();
+      for(let f=0;f<=1;f+=0.02){const Is=p.Irated*f;const x=44+f*(W-54);const v=(cAbs(VP(p.Vs,p.R,p.X,Is,ang))-p.Vs)/p.Vs*100;const y=yY(v);f===0?vrC.moveTo(x,y):vrC.lineTo(x,y);}vrC.stroke();
+      vrC.fillStyle=c;vrC.font='11px system-ui';vrC.font='12px system-ui';vrC.fillText(lab,54,22+i*15);});
+  }
+  ['v_R','v_X','v_Vs','v_Is','v_load','v_pf','v_k'].forEach(id=>$('#'+id).oninput=upd);upd();
+
+  /* ---- shared regulation phasor: mode 'fwd' OUT = V + Z·I (V_S fixed) ; mode 'back' OUT = V − Z·I (V_P fixed) ---- */
+  function pvArr(c,x0,y0,x1,y1,col,w=2.5){c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-9*Math.cos(a-0.45),y1-9*Math.sin(a-0.45));c.lineTo(x1-9*Math.cos(a+0.45),y1-9*Math.sin(a+0.45));c.closePath();c.fill();}
+  function regPhasor(c,W,H,V,I,th,R,X,k,mode,L){
+    const ox=42,oy=Math.round(H*0.64),a=-th*Math.PI/180,Ir=I*Math.cos(a),Ii=I*Math.sin(a),dRr=Ir*R,dRi=Ii*R,dXr=-Ii*X,dXi=Ir*X,sg=mode==='fwd'?1:-1;
+    const Or=V+sg*(dRr+dXr),Oi=sg*(dRi+dXi),Om=Math.hypot(Or,Oi),Od=Math.atan2(Oi,Or)*180/Math.PI;
+    const Or2=V+sg*k*(dRr+dXr),Oi2=sg*k*(dRi+dXi),sc=(W-110)/Math.max(V,Math.hypot(Or2,Oi2),1e-9);
+    c.clearRect(0,0,W,H);
+    c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.moveTo(ox-20,oy);c.lineTo(W-10,oy);c.moveTo(ox,oy+95);c.lineTo(ox,32);c.stroke();
+    c.setLineDash([4,4]);c.strokeStyle='rgba(154,163,196,.45)';c.beginPath();c.arc(ox,oy,V*sc,-0.9,0.5);c.stroke();c.setLineDash([]);
+    const Rf=[ox+V*sc,oy],Ot=[ox+Or2*sc,oy-Oi2*sc],S=mode==='fwd'?Rf:Ot,P1=[S[0]+k*dRr*sc,S[1]-k*dRi*sc],E=mode==='fwd'?Ot:Rf;
+    pvArr(c,ox,oy,Rf[0],Rf[1],L.refCol,3);
+    if(I*R>0)pvArr(c,S[0],S[1],P1[0],P1[1],'#ff6b81',3);if(I*X>0)pvArr(c,P1[0],P1[1],E[0],E[1],'#ffcc66',3);
+    pvArr(c,ox,oy,Ot[0],Ot[1],L.outCol,3);
+    if(I*R>0&&I*X>0){let ux=P1[0]-S[0],uy=P1[1]-S[1],vx=E[0]-P1[0],vy=E[1]-P1[1];const um=Math.hypot(ux,uy)||1,vm=Math.hypot(vx,vy)||1;ux/=um;uy/=um;vx/=vm;vy/=vm;const m=9;c.strokeStyle='#9aa3c4';c.lineWidth=1;c.beginPath();c.moveTo(P1[0]-ux*m,P1[1]-uy*m);c.lineTo(P1[0]-ux*m+vx*m,P1[1]-uy*m+vy*m);c.lineTo(P1[0]+vx*m,P1[1]+vy*m);c.stroke();}
+    const Ix=ox+130*Math.cos(a),Iy=oy-130*Math.sin(a);pvArr(c,ox,oy,Ix,Iy,'#c774e6',2.5);
+    c.font='12px system-ui';
+    if(th!==0){c.strokeStyle='#c774e6';c.lineWidth=1.2;c.beginPath();c.arc(ox,oy,58,0,-a,th<0);c.stroke();c.fillStyle='#c774e6';c.fillText('θ',ox+63,oy+(th>0?16:-8));}
+    const d2=Math.atan2(Oi2,Or2);if(Math.abs(Od)>0.05){c.strokeStyle=L.outCol;c.lineWidth=1.2;c.beginPath();c.arc(ox,oy,150,0,-d2,d2>0);c.stroke();c.fillStyle=L.outCol;c.fillText('δ',ox+155,oy+(d2<0?14:-6));}
+    c.fillStyle='#c774e6';c.fillText(L.cur,Ix+6,Iy+4);
+    c.fillStyle=L.refCol;c.fillText(`${L.ref} = ${fmt(V,1)} V (fixed)`,Rf[0]-118,Rf[1]+(Ot[1]<oy?18:-10));
+    c.fillStyle=L.outCol;c.fillText(`${L.out} = ${fmt(Om,1)} V ∠${fmt(Od,1)}°`,ox+(Ot[0]-ox)*0.42,Ot[1]+(Ot[1]<oy?-10:20));
+    c.fillStyle='#ff6b81';c.fillText(`${L.r} = ${fmt(I*R,1)} V`,(S[0]+P1[0])/2+10,(S[1]+P1[1])/2+4);
+    c.fillStyle='#ffcc66';c.fillText(`${L.x} = ${fmt(I*X,1)} V`,(P1[0]+E[0])/2+10,(P1[1]+E[1])/2-6);
+    c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(L.legend,ox,22);
+    c.fillText(`dashed arc = |${L.ref}| ; drops drawn ×${k} so the triangle is visible — all numbers in the readout are exact`,ox,H-10);
+    return {Om,Od,Or,Oi,Ir,Ii};
+  }
+  function cjx(r,i){return `${fmt(r,2)} ${i>=0?'+':'−'} j${fmt(Math.abs(i),2)}`;}
+  function thTxt(th){return th>0?th+'° lagging (PF '+fmt(Math.cos(th*Math.PI/180),3)+')':th<0?(-th)+'° leading (PF '+fmt(Math.cos(th*Math.PI/180),3)+')':'0° unity (PF 1)';}
+
+  /* ---- Step 1: V_P fixed → aV_S (referred to primary) ---- */
+  const pvx=$('#pv_can').getContext('2d');
+  function pvUpd(){
+    const V=+$('#pv_V').value,I=+$('#pv_I').value,th=+$('#pv_th').value,R=+$('#pv_R').value,X=+$('#pv_X').value,k=+$('#pv_k').value,aT=+$('#pv_a').value||1;
+    $('#pv_V_v').textContent=V+' V';$('#pv_I_v').textContent=I+' A';$('#pv_th_v').textContent=thTxt(th);$('#pv_R_v').textContent=R+' Ω';$('#pv_X_v').textContent=X+' Ω';$('#pv_k_v').textContent='×'+k;
+    const r=regPhasor(pvx,540,330,V,I,th,R,X,k,'back',{ref:'V_P',out:'aV_S',cur:'I_P',r:'I_P·R_eq,p',x:'jI_P·X_eq,p',refCol:'#5b8cff',outCol:'#38d39f',legend:'blue V_P (reference, fixed)  ·  green aV_S (load voltage, referred)  ·  red I_P·R_eq,p (∥ I_P)  ·  amber jI_P·X_eq,p (⟂ I_P)  ·  purple I_P'});
+    const Vs=r.Om/aT,VR=(V-r.Om)/r.Om*100;
+    $('#pv_out').innerHTML=`<b>V<sub>P</sub> = aV<sub>S</sub> + I<sub>P</sub>R<sub>eq,p</sub> + jI<sub>P</sub>X<sub>eq,p</sub></b>\nV<sub>P</sub> = ${V}∠0° V (reference, fixed)\nI<sub>P</sub> = ${I}∠${-th}° = ${cjx(r.Ir,r.Ii)} A\nI<sub>P</sub>R<sub>eq,p</sub> = <span class="k">${fmt(I*R,2)} V</span> ∠${-th}°  (along I<sub>P</sub>)\njI<sub>P</sub>X<sub>eq,p</sub> = <span class="k">${fmt(I*X,2)} V</span> ∠${90-th}°  (90° ahead of I<sub>P</sub>)\naV<sub>S</sub> = V<sub>P</sub> − I<sub>P</sub>R<sub>eq,p</sub> − jI<sub>P</sub>X<sub>eq,p</sub>\n   = ${cjx(r.Or,r.Oi)} = <span class="k">${fmt(r.Om,2)} V ∠${fmt(r.Od,2)}°</span>\nV<sub>S</sub> = |aV<sub>S</sub>|/a = ${fmt(r.Om,2)}/${aT} = <span class="k">${fmt(Vs,2)} V</span>   (I<sub>S</sub> = aI<sub>P</sub> = ${fmt(aT*I,1)} A)\n<b>VR = (V<sub>P</sub>/a − V<sub>S</sub>)/V<sub>S</sub> = <span class="k">${fmt(VR,2)} %</span></b>  ${VR>0.005?'(load voltage sags below no-load)':VR<-0.005?'(negative: load voltage rises above no-load)':'(zero)'}`;
+  }
+  ['pv_V','pv_I','pv_th','pv_R','pv_X','pv_k','pv_a'].forEach(id=>$('#'+id).oninput=pvUpd);pvUpd();
+
+  /* ---- Step 2: V_S fixed → required V_P/a (referred to secondary) ---- */
+  const vsx=$('#vs_can').getContext('2d');
+  function vsUpd(){
+    const V=+$('#vs_V').value,I=+$('#vs_I').value,th=+$('#vs_th').value,R=+$('#vs_R').value,X=+$('#vs_X').value,k=+$('#vs_k').value;
+    $('#vs_V_v').textContent=V+' V';$('#vs_I_v').textContent=I+' A';$('#vs_th_v').textContent=thTxt(th);$('#vs_R_v').textContent=fmt(R,4)+' Ω';$('#vs_X_v').textContent=fmt(X,4)+' Ω';$('#vs_k_v').textContent='×'+k;
+    const r=regPhasor(vsx,540,330,V,I,th,R,X,k,'fwd',{ref:'V_S',out:'V_P/a',cur:'I_S',r:'I_S·R_eq',x:'jI_S·X_eq',refCol:'#38d39f',outCol:'#5b8cff',legend:'green V_S (reference, fixed)  ·  blue V_P/a (primary needed, referred)  ·  red I_S·R_eq (∥ I_S)  ·  amber jI_S·X_eq (⟂ I_S)  ·  purple I_S'});
+    const VR=(r.Om-V)/V*100;
+    $('#vs_out').innerHTML=`<b>V<sub>P</sub>/a = V<sub>S</sub> + I<sub>S</sub>R<sub>eq</sub> + jI<sub>S</sub>X<sub>eq</sub></b>\nV<sub>S</sub> = ${V}∠0° V (reference, fixed)\nI<sub>S</sub> = ${I}∠${-th}° = ${cjx(r.Ir,r.Ii)} A\nI<sub>S</sub>R<sub>eq</sub> = <span class="k">${fmt(I*R,2)} V</span> ∠${-th}°  (along I<sub>S</sub>)\njI<sub>S</sub>X<sub>eq</sub> = <span class="k">${fmt(I*X,2)} V</span> ∠${90-th}°  (90° ahead of I<sub>S</sub>)\nV<sub>P</sub>/a = ${cjx(r.Or,r.Oi)} = <span class="k">${fmt(r.Om,2)} V ∠${fmt(r.Od,2)}°</span>\n<b>VR = (V<sub>P</sub>/a − V<sub>S</sub>)/V<sub>S</sub> = <span class="k">${fmt(VR,2)} %</span></b>  ${VR>0.005?'(primary must be higher — voltage sags to the load)':VR<-0.005?'(negative: the load voltage rises above the no-load value)':'(zero)'}`;
+  }
+  ['vs_V','vs_I','vs_th','vs_R','vs_X','vs_k'].forEach(id=>$('#'+id).oninput=vsUpd);vsUpd();
+});
+
+/* ===================================================================
+   2.7 Efficiency & maximum efficiency
+=================================================================== */
+section('eff','System Tools','2.7 · Efficiency & Maximum Efficiency ★',(el)=>{
+  el.innerHTML=`
+  <style>@media(max-width:900px){.efgrid{grid-template-columns:1fr!important}}</style>
+  <h2 class="title">Efficiency & Maximum Efficiency</h2>
+  <p class="subttl">§2.7 · Where the losses come from, why efficiency peaks at a particular load, and what moves that peak</p>
+  <div class="grid3">
+    <div class="eq" style="text-align:center"><i>η</i> = <span class="frac"><span class="n"><i>P</i><sub>out</sub></span><span class="d"><i>P</i><sub>out</sub> + <i>P</i><sub>Cu</sub> + <i>P</i><sub>core</sub></span></span> × 100 %<span class="tag">2‑67</span></div>
+    <div class="eq" style="text-align:center"><i>P</i><sub>out</sub> = <i>V</i><sub>S</sub> <i>I</i><sub>S</sub> cos <i>θ</i></div>
+    <div class="eq" style="text-align:center"><i>P</i><sub>Cu</sub> = <i>I</i><sub>S</sub>² <i>R</i><sub>eq</sub>,    <i>P</i><sub>core</sub> = <span class="frac"><span class="n"><i>V</i><sub>S</sub>²</span><span class="d"><i>R</i><sub>C</sub></span></span></div>
+  </div>
+
+  <h3>Step 1 — Two kinds of loss, two different behaviours</h3>
+  <div class="card">
+    <div class="grid2">
+      <div class="okbox"><b>Core (iron) loss P<sub>core</sub> — constant.</b> Hysteresis + eddy currents in the laminations. It is set by the <em>flux</em>, i.e. by the applied voltage and frequency (P<sub>h</sub> ∝ f·B<sup>1.6</sup>, P<sub>e</sub> ∝ f²B²t²), not by the load current. From no load to full load it hardly changes — the transformer pays it every hour it is energised. Circuit model: R<sub>C</sub>.</div>
+      <div class="okbox"><b>Copper (I²R) loss P<sub>Cu</sub> — grows with load².</b> Heating of the two windings, I<sub>S</sub>²R<sub>eq</sub>. Zero at no load, P<sub>Cu,fl</sub> at rated current, and because it goes as I² it is four times larger at full load than at half load. It depends only on <em>how much</em> current flows, not on its phase angle. Circuit model: R<sub>eq</sub>.</div>
+    </div>
+    <div class="eq">At load fraction <i>x</i> = <span class="frac"><span class="n"><i>I</i><sub>S</sub></span><span class="d"><i>I</i><sub>S,rated</sub></span></span> :     <i>P</i><sub>out</sub> = <i>x</i> <i>S</i> cos <i>θ</i>,     <i>P</i><sub>Cu</sub> = <i>x</i>² <i>P</i><sub>Cu,fl</sub>,     <i>P</i><sub>core</sub> = constant</div>
+    <p class="note">So at light load the fixed core loss dominates and η is poor; at heavy load the fast-growing copper loss takes over. Somewhere in between the two are equal — and that is exactly where η is highest.</p>
+  </div>
+
+  <h3>Step 2 — Derivation: efficiency is maximum when P<sub>Cu</sub> = P<sub>core</sub></h3>
+  <details class="deriv" open><summary>Derive the condition and the load at which it happens</summary>
+    <div class="step">① Write the efficiency as a function of the load fraction <span class="m"><i>x</i> = <i>I</i><sub>S</sub>/<i>I</i><sub>S,rated</sub></span>:
+      <span class="dq"><i>η</i>(<i>x</i>) = <span class="frac"><span class="n"><i>x</i> <i>S</i> cos <i>θ</i></span><span class="d"><i>x</i> <i>S</i> cos <i>θ</i> + <i>x</i>² <i>P</i><sub>Cu,fl</sub> + <i>P</i><sub>core</sub></span></span></span>
+      <span class="why">Output grows in proportion to <i>x</i>, copper loss grows as <i>x</i>², core loss is fixed.</span></div>
+    <div class="step">② Divide numerator and denominator by <i>x</i>:
+      <span class="dq"><i>η</i> = <span class="frac"><span class="n"><i>S</i> cos <i>θ</i></span><span class="d"><i>S</i> cos <i>θ</i> + <i>L</i>(<i>x</i>)</span></span>,      where   <i>L</i>(<i>x</i>) = <i>x</i> <i>P</i><sub>Cu,fl</sub> + <span class="frac"><span class="n"><i>P</i><sub>core</sub></span><span class="d"><i>x</i></span></span></span>
+      <span class="why"><i>S</i> cos <i>θ</i> is constant for a given power factor, so <i>η</i> is largest exactly when <i>L</i>(<i>x</i>) — the loss per unit of output — is smallest.</span></div>
+    <div class="step">③ Minimise <i>L</i>(<i>x</i>):
+      <span class="dq"><span class="frac"><span class="n">d<i>L</i></span><span class="d">d<i>x</i></span></span> = <i>P</i><sub>Cu,fl</sub> − <span class="frac"><span class="n"><i>P</i><sub>core</sub></span><span class="d"><i>x</i>²</span></span> = 0     ⟹     <b><i>x</i>² <i>P</i><sub>Cu,fl</sub> = <i>P</i><sub>core</sub></b></span>
+      <span class="dq" style="font-size:16px;color:var(--muted)"><span class="frac"><span class="n">d²<i>L</i></span><span class="d">d<i>x</i>²</span></span> = <span class="frac"><span class="n">2 <i>P</i><sub>core</sub></span><span class="d"><i>x</i>³</span></span> &gt; 0     (a minimum of <i>L</i>, hence a maximum of <i>η</i>)</span>
+      <span class="why"><i>x</i>² <i>P</i><sub>Cu,fl</sub> is the copper loss at load <i>x</i>. So the condition reads: <b>copper loss = core loss</b>.</span></div>
+    <div class="step">④ Load for maximum efficiency:
+      <span class="dq"><i>x</i>* = <span class="sqrt tall"><span class="rad"><span class="frac"><span class="n"><i>P</i><sub>core</sub></span><span class="d"><i>P</i><sub>Cu,fl</sub></span></span></span></span>,       <i>S</i>* = <i>x</i>* <i>S</i>,       <i>I</i>* = <i>x</i>* <i>I</i><sub>rated</sub></span>
+      <span class="why">It depends only on the two loss figures — a property of the design, not of the load connected.</span></div>
+    <div class="step">⑤ The maximum efficiency itself (the total loss at <i>x</i>* is 2<i>P</i><sub>core</sub>):
+      <span class="dq"><i>η</i><sub>max</sub> = <span class="frac"><span class="n"><i>x</i>* <i>S</i> cos <i>θ</i></span><span class="d"><i>x</i>* <i>S</i> cos <i>θ</i> + 2 <i>P</i><sub>core</sub></span></span></span></div>
+    <div class="step">⑥ Two things to notice. <b><i>x</i>* does not depend on the power factor</b> — the losses only see |<i>I</i>|. But <b><i>η</i><sub>max</sub> does</b>: a lower cos <i>θ</i> delivers less output for the same current and the same losses, so the whole curve, peak included, moves down.</div>
+    <div class="step">The same result in terms of current:
+      <span class="dq"><i>η</i> = <span class="frac"><span class="n"><i>V</i> <i>I</i> cos <i>θ</i></span><span class="d"><i>V</i> <i>I</i> cos <i>θ</i> + <i>I</i>² <i>R</i><sub>eq</sub> + <i>P</i><sub>core</sub></span></span>,       <span class="frac"><span class="n">d<i>η</i></span><span class="d">d<i>I</i></span></span> = 0     ⟹     <b><i>I</i>² <i>R</i><sub>eq</sub> = <i>P</i><sub>core</sub></b></span></div>
+  </details>
+  <h3>▶ Efficiency lab — losses, η vs load, η vs power factor</h3>
+  <p class="note">Preset to the Example 2‑5 transformer (15 kVA, P<sub>Cu,fl</sub> = 189 W, P<sub>core</sub> = 52.5 W). Everything redraws as you move a slider.</p>
+  <div class="card">
+    <div class="efgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Rated power S</span> <span class="val" id="ef_S_v"></span></span><input type="range" id="ef_S" min="1" max="100" step="1" value="15"></label>
+        <label class="ctl"><span class="lab"><span>Full-load copper loss P<sub>Cu,fl</sub></span> <span class="val" id="ef_cu_v"></span></span><input type="range" id="ef_cu" min="20" max="1000" step="1" value="189"></label>
+        <label class="ctl"><span class="lab"><span>Core loss P<sub>core</sub></span> <span class="val" id="ef_co_v"></span></span><input type="range" id="ef_co" min="5" max="500" step="0.5" value="52.5"></label>
+        <label class="ctl"><span class="lab"><span>Power factor cos θ</span> <span class="val" id="ef_pf_v"></span></span><input type="range" id="ef_pf" min="0.3" max="1" step="0.01" value="0.8"></label>
+        <label class="ctl"><span class="lab"><span>Load x (% of rated current)</span> <span class="val" id="ef_x_v"></span></span><input type="range" id="ef_x" min="0" max="125" step="1" value="100"></label>
+        <div class="out" id="ef_out" style="font-size:12.5px"></div>
+      </div>
+      <div>
+        <canvas id="ef_can1" width="540" height="300" style="width:100%"></canvas>
+        <div class="grid2" style="margin-top:8px">
+          <canvas id="ef_can2" width="270" height="230" style="width:100%"></canvas>
+          <canvas id="ef_can3" width="270" height="230" style="width:100%"></canvas>
+        </div>
+        <canvas id="ef_can4" width="540" height="215" style="width:100%;margin-top:8px"></canvas>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:8px">
+      <div class="okbox"><b>Top graph — η vs load.</b> Every curve peaks at the <em>same</em> x* (dashed line); a lower power factor only pushes the whole curve down.</div>
+      <div class="okbox"><b>Left graph — the two losses.</b> Flat core loss, parabolic copper loss; they cross at x*. Right of the crossing copper loss wins, left of it core loss wins.</div>
+      <div class="okbox"><b>Phasor — why PF matters.</b> Only the component of I<sub>S</sub> in phase with V<sub>S</sub> delivers power; the quadrature part still heats the copper (I² counts both) but produces nothing.</div>
+    </div>
+  </div>
+
+  <h3>Step 3 — What moves the efficiency, and what moves its peak</h3>
+  <div class="card">
+    <table>
+      <tr><th>Factor</th><th>Effect on η at a given load</th><th>Effect on x* (load for η<sub>max</sub>)</th><th>Effect on η<sub>max</sub></th></tr>
+      <tr><td>Load level x</td><td>rises steeply from zero, peaks at x*, then falls slowly as I²R grows</td><td>—</td><td>—</td></tr>
+      <tr><td>Power factor cos θ</td><td>lower PF → same current, same losses, less useful output → lower η</td><td><b>none</b></td><td>lower</td></tr>
+      <tr><td>Core loss (steel grade, lamination thickness, flux density)</td><td>lowers η at every load; dominates at light load</td><td>higher P<sub>core</sub> → x* moves <b>up</b></td><td>lower</td></tr>
+      <tr><td>Copper loss (conductor size; temperature — R rises ≈0.4 %/°C)</td><td>lowers η mainly at heavy load</td><td>higher P<sub>Cu,fl</sub> → x* moves <b>down</b></td><td>lower</td></tr>
+      <tr><td>Applied voltage ↑ (same f)</td><td>B ↑ → core loss ↑ (≈ V²), saturation near the knee</td><td>x* up</td><td>lower</td></tr>
+      <tr><td>Frequency ↓ (same V)</td><td>B ↑ → core loss ↑ (see §2.11 ratings)</td><td>x* up</td><td>lower</td></tr>
+    </table>
+    <div class="okbox" style="margin-top:8px"><b>Design consequence.</b> A <b>distribution transformer</b> is energised 24 h but heavily loaded only a few hours, so it is built with low core loss and its peak placed at light load (x* ≈ 0.4–0.6). A <b>power transformer</b> in a substation runs near full load, so its peak is placed near x* ≈ 0.8–1.0. The designer chooses x* by choosing the ratio P<sub>core</sub>/P<sub>Cu,fl</sub>.</div>
+  </div>
+
+  <h3>Step 4 — Energy (all-day) efficiency: why the peak is placed where it is</h3>
+  <p class="note">Power efficiency is an instant snapshot. Over a day the core loss is paid for all 24 h while copper loss is paid only when current flows — so the <b>all-day efficiency</b> η<sub>ad</sub> = (energy out)/(energy out + energy lost) can differ a lot from the full-load figure. Uses S, P<sub>Cu,fl</sub>, P<sub>core</sub> from the lab above.</p>
+  <div class="card">
+    <div class="efgrid" style="display:grid;grid-template-columns:270px 1fr;gap:16px;align-items:start">
+      <div>
+        <label class="ctl"><span class="lab"><span>Hours at heavy load, h<sub>1</sub></span> <span class="val" id="ad_h1_v"></span></span><input type="range" id="ad_h1" min="0" max="24" step="0.5" value="8"></label>
+        <label class="ctl"><span class="lab"><span>Heavy-load level x<sub>1</sub></span> <span class="val" id="ad_x1_v"></span></span><input type="range" id="ad_x1" min="0" max="125" step="1" value="100"></label>
+        <label class="ctl"><span class="lab"><span>PF during heavy load</span> <span class="val" id="ad_p1_v"></span></span><input type="range" id="ad_p1" min="0.3" max="1" step="0.01" value="0.8"></label>
+        <label class="ctl"><span class="lab"><span>Light-load level x<sub>2</sub> (rest of the day)</span> <span class="val" id="ad_x2_v"></span></span><input type="range" id="ad_x2" min="0" max="125" step="1" value="25"></label>
+        <label class="ctl"><span class="lab"><span>PF during light load</span> <span class="val" id="ad_p2_v"></span></span><input type="range" id="ad_p2" min="0.3" max="1" step="0.01" value="0.9"></label>
+      </div>
+      <div>
+        <canvas id="ad_can" width="540" height="200" style="width:100%"></canvas>
+        <div class="out" id="ad_out" style="font-size:12.5px"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Worked example — Example 2‑5 transformer (15 kVA, 2300/230 V)</h3>
+  <div class="card">
+    <div class="step">① Rated secondary current I<sub>S</sub> = 15 000/230 = 65.2 A. Full-load copper loss P<sub>Cu,fl</sub> = I<sub>S</sub>²R<sub>eq,s</sub> = 65.2² × 0.0445 = <b>189 W</b>.</div>
+    <div class="step">② Core loss P<sub>core</sub> = (V<sub>P</sub>/a)²/R<sub>C,s</sub> = 234.85²/1050 = <b>52.5 W</b> (treated as constant).</div>
+    <div class="step">③ Full-load efficiency at 0.8 PF: P<sub>out</sub> = 15 000 × 0.8 = 12 000 W → η = 12 000/(12 000 + 189 + 52.5) = <b>98.03 %</b>.</div>
+    <div class="step">④ Load for maximum efficiency: x* = √(52.5/189) = <b>0.527</b> → 7.9 kVA, I* = 34.4 A (copper loss there = 0.527² × 189 = 52.5 W = core loss ✓).</div>
+    <div class="step">⑤ η<sub>max</sub> at 0.8 PF = 0.527 × 12 000/(0.527 × 12 000 + 2 × 52.5) = 6324/6429 = <b>98.37 %</b>; at unity PF the same peak load gives 7905/(7905 + 105) = <b>98.69 %</b>.</div>
+    <p class="note">Set the lab sliders to x = 53 % and compare 0.8 and 1.0 PF to see both numbers.</p>
+  </div>`;
+
+  const c1=$('#ef_can1').getContext('2d'),c2=$('#ef_can2').getContext('2d'),c3=$('#ef_can3').getContext('2d'),c4=$('#ef_can4').getContext('2d'),cad=$('#ad_can').getContext('2d');
+  const eP=()=>({S:+$('#ef_S').value*1000,Cu:+$('#ef_cu').value,Co:+$('#ef_co').value,pf:+$('#ef_pf').value,x:+$('#ef_x').value/100});
+  const effAt=(x,pf,S,Cu,Co)=>{const Po=x*S*pf;return Po>0?Po/(Po+x*x*Cu+Co)*100:0;};
+  const frame=(c,W,H,pad,xl,yl)=>{c.clearRect(0,0,W,H);c.strokeStyle='#232a49';c.lineWidth=1;c.beginPath();c.moveTo(pad.l,pad.t);c.lineTo(pad.l,H-pad.b);c.lineTo(W-pad.r,H-pad.b);c.stroke();c.fillStyle='#9aa3c4';c.font='12px system-ui';c.fillText(xl,W-pad.r-c.measureText(xl).width,H-6);c.save();c.translate(12,pad.t+c.measureText(yl).width+4);c.rotate(-Math.PI/2);c.fillText(yl,0,0);c.restore();};
+  const dot=(c,x,y,col,r=4)=>{c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,7);c.fill();};
+  function efUpd(){
+    const p=eP(),xs=Math.sqrt(p.Co/p.Cu),emax=effAt(xs,p.pf,p.S,p.Cu,p.Co),Pout=p.x*p.S*p.pf,Pcu=p.x*p.x*p.Cu,eta=effAt(p.x,p.pf,p.S,p.Cu,p.Co);
+    $('#ef_S_v').textContent=(p.S/1000)+' kVA';$('#ef_cu_v').textContent=p.Cu+' W';$('#ef_co_v').textContent=p.Co+' W';$('#ef_pf_v').textContent=fmt(p.pf,2)+' (θ = '+fmt(Math.acos(p.pf)*180/Math.PI,1)+'°)';$('#ef_x_v').textContent=Math.round(p.x*100)+' %';
+    $('#ef_out').innerHTML=`<b>At this load (x = ${Math.round(p.x*100)} %, PF ${fmt(p.pf,2)})</b>\nP<sub>out</sub> = x·S·cosθ = <span class="k">${fmt(Pout,0)} W</span>\nP<sub>Cu</sub> = x²·P<sub>Cu,fl</sub> = <span class="k">${fmt(Pcu,1)} W</span>   P<sub>core</sub> = <span class="k">${fmt(p.Co,1)} W</span>\nP<sub>loss</sub> = <span class="k">${fmt(Pcu+p.Co,1)} W</span>  →  <b>η = <span class="k">${fmt(eta,2)} %</span></b>\n${p.x>0?(Pcu>p.Co*1.02?'copper loss &gt; core loss → you are <b>above</b> x*':Pcu<p.Co*0.98?'core loss &gt; copper loss → you are <b>below</b> x*':'copper loss ≈ core loss → <b>at the peak</b>'):'no load: all output zero, core loss still paid'}\n\n<b>Maximum-efficiency point</b>\nx* = √(P<sub>core</sub>/P<sub>Cu,fl</sub>) = √(${p.Co}/${p.Cu}) = <span class="k">${fmt(xs*100,1)} %</span> = <span class="k">${fmt(xs*p.S/1000,2)} kVA</span>\nη<sub>max</sub> (PF ${fmt(p.pf,2)}) = <span class="k">${fmt(emax,2)} %</span>   η<sub>max</sub> (PF 1) = <span class="k">${fmt(effAt(xs,1,p.S,p.Cu,p.Co),2)} %</span>\nη at full load (PF ${fmt(p.pf,2)}) = <span class="k">${fmt(effAt(1,p.pf,p.S,p.Cu,p.Co),2)} %</span>`;
+    // --- graph 1: η vs load for several PFs ---
+    {const c=c1,W=540,H=300,pad={l:46,r:14,t:30,b:30};frame(c,W,H,pad,'load x (% of rated current)','η (%)');
+      const curves=[[1,'#e8ebf7','PF 1.0'],[0.8,'#5b8cff','PF 0.8'],[0.6,'#ffcc66','PF 0.6']];if(![1,0.8,0.6].includes(p.pf))curves.push([p.pf,'#38d39f','PF '+fmt(p.pf,2)+' (yours)']);
+      let ymin=100;curves.forEach(([pf])=>{for(let x=0.05;x<=1.25;x+=0.05)ymin=Math.min(ymin,effAt(x,pf,p.S,p.Cu,p.Co));});ymin=Math.max(0,Math.floor(ymin/5)*5-5);
+      const X=x=>pad.l+x/1.25*(W-pad.l-pad.r),Y=e=>H-pad.b-(e-ymin)/(100-ymin)*(H-pad.t-pad.b);
+      for(let g=Math.ceil(ymin/5)*5;g<=100;g+=5){const y=Y(g);c.strokeStyle='#1a1f38';c.beginPath();c.moveTo(pad.l,y);c.lineTo(W-pad.r,y);c.stroke();c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(g,22,y+3);}
+      [0,25,50,75,100,125].forEach(g=>{c.fillStyle='#9aa3c4';c.fillText(g,X(g/100)-8,H-pad.b+12);});
+      c.setLineDash([5,4]);c.strokeStyle='#ff6b81';c.beginPath();c.moveTo(X(xs),pad.t);c.lineTo(X(xs),H-pad.b);c.stroke();c.setLineDash([]);c.fillStyle='#ff6b81';c.font='12px system-ui';c.fillText('x* = '+fmt(xs*100,0)+' % — same for every PF',X(xs)+6,pad.t+10);
+      curves.forEach(([pf,col,lab],i)=>{const mine=Math.abs(pf-p.pf)<1e-9;c.strokeStyle=col;c.lineWidth=mine?3:1.6;c.beginPath();let st=false;for(let x=0.01;x<=1.25;x+=0.01){const y=Y(Math.max(ymin,effAt(x,pf,p.S,p.Cu,p.Co)));st?c.lineTo(X(x),y):(c.moveTo(X(x),y),st=true);}c.stroke();dot(c,X(xs),Y(effAt(xs,pf,p.S,p.Cu,p.Co)),col,3.5);c.fillStyle=col;c.font=mine?'bold 11px system-ui':'12px system-ui';c.fillText(lab+(mine?' ◄':''),W-pad.r-150,H-pad.b-14-i*14);});
+      if(p.x>0){dot(c,X(p.x),Y(Math.max(ymin,eta)),'#38d39f',5.5);c.fillStyle='#38d39f';c.font='bold 11px system-ui';c.fillText('η = '+fmt(eta,2)+' %',X(p.x)+8,Y(Math.max(ymin,eta))-8);}
+    }
+    // --- graph 2: losses vs load ---
+    {const c=c2,W=270,H=230,pad={l:40,r:10,t:22,b:30};frame(c,W,H,pad,'load x (%)','W');
+      const ymax=Math.max(p.Cu*1.5625,p.Co)*1.15,X=x=>pad.l+x/1.25*(W-pad.l-pad.r),Y=v=>H-pad.b-v/ymax*(H-pad.t-pad.b);
+      [0,50,100].forEach(g=>{c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(g,X(g/100)-6,H-pad.b+12);});
+      c.strokeStyle='#ffcc66';c.lineWidth=2;c.beginPath();c.moveTo(X(0),Y(p.Co));c.lineTo(X(1.25),Y(p.Co));c.stroke();
+      c.strokeStyle='#ff6b81';c.beginPath();for(let x=0;x<=1.25;x+=0.02){const y=Y(x*x*p.Cu);x===0?c.moveTo(X(x),y):c.lineTo(X(x),y);}c.stroke();
+      c.strokeStyle='#e8ebf7';c.lineWidth=1.5;c.beginPath();for(let x=0;x<=1.25;x+=0.02){const y=Y(x*x*p.Cu+p.Co);x===0?c.moveTo(X(x),y):c.lineTo(X(x),y);}c.stroke();
+      c.setLineDash([5,4]);c.strokeStyle='#ff6b81';c.lineWidth=1;c.beginPath();c.moveTo(X(xs),pad.t);c.lineTo(X(xs),H-pad.b);c.stroke();c.setLineDash([]);
+      dot(c,X(xs),Y(p.Co),'#e8ebf7',4);c.fillStyle='#e8ebf7';c.font='11px system-ui';c.fillText('P_Cu = P_core',X(xs)+6,Y(p.Co)-6);
+      if(p.x>0){c.strokeStyle='rgba(56,211,159,.6)';c.setLineDash([2,3]);c.beginPath();c.moveTo(X(p.x),pad.t);c.lineTo(X(p.x),H-pad.b);c.stroke();c.setLineDash([]);dot(c,X(p.x),Y(Pcu),'#38d39f',4);}
+      c.font='11px system-ui';c.fillStyle='#ffcc66';c.fillText('core (const)',pad.l+4,pad.t-8);c.fillStyle='#ff6b81';c.fillText('copper ∝ x²',pad.l+74,pad.t-8);c.fillStyle='#e8ebf7';c.fillText('total',pad.l+150,pad.t-8);
+    }
+    // --- graph 3: η vs PF ---
+    {const c=c3,W=270,H=230,pad={l:40,r:10,t:22,b:30};frame(c,W,H,pad,'power factor cos θ','η (%)');
+      let ymin=100;for(let pf=0.3;pf<=1;pf+=0.05){ymin=Math.min(ymin,effAt(Math.max(p.x,0.05),pf,p.S,p.Cu,p.Co),effAt(xs,pf,p.S,p.Cu,p.Co));}ymin=Math.max(0,Math.floor(ymin/5)*5-5);
+      const X=pf=>pad.l+(pf-0.3)/0.7*(W-pad.l-pad.r),Y=e=>H-pad.b-(e-ymin)/(100-ymin)*(H-pad.t-pad.b);
+      [0.4,0.6,0.8,1].forEach(g=>{c.fillStyle='#9aa3c4';c.font='11px system-ui';c.fillText(g,X(g)-8,H-pad.b+12);});
+      for(let g=Math.ceil(ymin/5)*5;g<=100;g+=5){const y=Y(g);c.strokeStyle='#1a1f38';c.beginPath();c.moveTo(pad.l,y);c.lineTo(W-pad.r,y);c.stroke();c.fillStyle='#9aa3c4';c.fillText(g,16,y+3);}
+      c.setLineDash([4,4]);c.strokeStyle='#e8ebf7';c.lineWidth=1.5;c.beginPath();let st=false;for(let pf=0.3;pf<=1.0001;pf+=0.01){const y=Y(Math.max(ymin,effAt(xs,pf,p.S,p.Cu,p.Co)));st?c.lineTo(X(pf),y):(c.moveTo(X(pf),y),st=true);}c.stroke();c.setLineDash([]);
+      if(p.x>0){c.strokeStyle='#38d39f';c.lineWidth=2.5;c.beginPath();st=false;for(let pf=0.3;pf<=1.0001;pf+=0.01){const y=Y(Math.max(ymin,effAt(p.x,pf,p.S,p.Cu,p.Co)));st?c.lineTo(X(pf),y):(c.moveTo(X(pf),y),st=true);}c.stroke();dot(c,X(p.pf),Y(Math.max(ymin,eta)),'#38d39f',5);}
+      c.font='11px system-ui';c.fillStyle='#38d39f';c.fillText('η at your load',pad.l+4,pad.t-8);c.fillStyle='#e8ebf7';c.fillText('η_max (at x*) — dashed',pad.l+90,pad.t-8);
+    }
+    // --- graph 4: phasor — why PF matters ---
+    {const c=c4,W=540,H=215,ox=50,oy=78;c.clearRect(0,0,W,H);const th=Math.acos(p.pf),L=118*Math.max(p.x,0.1);
+      c.strokeStyle='#232a49';c.beginPath();c.moveTo(ox-16,oy);c.lineTo(250,oy);c.stroke();
+      const arr=(x0,y0,x1,y1,col,w,dash)=>{if(dash)c.setLineDash([4,4]);c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke();c.setLineDash([]);const a=Math.atan2(y1-y0,x1-x0);c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x1-8*Math.cos(a-0.45),y1-8*Math.sin(a-0.45));c.lineTo(x1-8*Math.cos(a+0.45),y1-8*Math.sin(a+0.45));c.closePath();c.fill();};
+      c.font='12px system-ui';c.fillStyle='#9aa3c4';c.fillText('why the power factor matters',ox-16,16);
+      arr(ox,oy,ox+180,oy,'#38d39f',3);c.fillStyle='#38d39f';c.fillText('V_S',ox+184,oy+4);
+      const Ix=ox+L*Math.cos(th),Iy=oy+L*Math.sin(th);
+      arr(ox,oy,Ix,Iy,'#c774e6',3);c.fillStyle='#c774e6';c.fillText('I_S',Ix+6,Iy+12);
+      arr(ox,oy,Ix,oy,'#5b8cff',2.5);c.fillStyle='#5b8cff';c.fillText('I_S cos θ → does the work',ox+4,oy-8);
+      if(th>0.02){arr(Ix,oy,Ix,Iy,'#ff6b81',2.5,true);c.fillStyle='#ff6b81';c.fillText('I_S sin θ → no output',Ix+8,(oy+Iy)/2+4);
+        c.strokeStyle='#ffcc66';c.lineWidth=1.2;c.beginPath();c.arc(ox,oy,34,0,th);c.stroke();c.fillStyle='#ffcc66';c.fillText('θ',ox+38,oy+20);}
+      const tx=280,pct=Math.round(p.pf*100);c.fillStyle='#e8ebf7';c.font='12px system-ui';
+      ['Copper loss I²R counts the WHOLE current.','Output V·I·cos θ counts only the in-phase part.',`At PF ${fmt(p.pf,2)}: ${pct} % of the current does`,`${pct} % of the work — for 100 % of the heat.`].forEach((t,i)=>c.fillText(t,tx,38+i*20));
+      c.fillStyle='#9aa3c4';c.font='12px system-ui';c.fillText('Fixed kW: I ∝ 1/cos θ → copper loss ∝ 1/cos²θ.',tx,138);
+      c.fillText(`Same current: η = ${fmt(effAt(p.x,1,p.S,p.Cu,p.Co),2)} % at PF 1, ${fmt(eta,2)} % at PF ${fmt(p.pf,2)}.`,tx,160);
+    }
+    adUpd();
+  }
+  function adUpd(){
+    const p=eP(),h1=+$('#ad_h1').value,x1=+$('#ad_x1').value/100,p1=+$('#ad_p1').value,x2=+$('#ad_x2').value/100,p2=+$('#ad_p2').value,h2=24-h1;
+    $('#ad_h1_v').textContent=h1+' h (light load '+h2+' h)';$('#ad_x1_v').textContent=Math.round(x1*100)+' %';$('#ad_p1_v').textContent=fmt(p1,2);$('#ad_x2_v').textContent=Math.round(x2*100)+' %';$('#ad_p2_v').textContent=fmt(p2,2);
+    const Eout=(h1*x1*p.S*p1+h2*x2*p.S*p2)/1000,Ecore=24*p.Co/1000,Ecu=(h1*x1*x1*p.Cu+h2*x2*x2*p.Cu)/1000,ead=Eout>0?Eout/(Eout+Ecore+Ecu)*100:0,xs=Math.sqrt(p.Co/p.Cu);
+    const xavg=Math.sqrt((h1*x1*x1+h2*x2*x2)/24);
+    $('#ad_out').innerHTML=`Energy out = ${h1}h×${Math.round(x1*100)}%×${p.S/1000} kVA×${fmt(p1,2)} + ${h2}h×${Math.round(x2*100)}%×${p.S/1000} kVA×${fmt(p2,2)} = <span class="k">${fmt(Eout,1)} kWh</span>\nCore-loss energy (24 h, always) = 24 × ${p.Co} W = <span class="k">${fmt(Ecore,2)} kWh</span>\nCopper-loss energy = ${h1}h×${fmt(x1*x1*p.Cu,0)} W + ${h2}h×${fmt(x2*x2*p.Cu,1)} W = <span class="k">${fmt(Ecu,2)} kWh</span>\n<b>All-day efficiency η<sub>ad</sub> = <span class="k">${fmt(ead,2)} %</span></b>   (compare: full-load power efficiency ${fmt(effAt(1,p1,p.S,p.Cu,p.Co),2)} %)\nrms load over the day ≈ <span class="k">${fmt(xavg*100,0)} %</span> — a transformer with x* near this (yours: ${fmt(xs*100,0)} %) wastes the least energy for this duty.`;
+    const c=cad,W=540,H=200;c.clearRect(0,0,W,H);c.font='12px system-ui';
+    const tot=Ecore+Ecu,bx=160,bw=W-180,by=60,bh=26;
+    c.fillStyle='#e8ebf7';c.fillText('Energy lost over the day (kWh)',14,24);
+    c.fillStyle='#ffcc66';c.fillRect(bx,by,tot>0?bw*Ecore/tot:0,bh);c.fillStyle='#ff6b81';c.fillRect(bx+(tot>0?bw*Ecore/tot:0),by,tot>0?bw*Ecu/tot:0,bh);
+    c.fillStyle='#ffcc66';c.fillText('core '+fmt(Ecore,2)+' kWh ('+(tot>0?fmt(100*Ecore/tot,0):0)+' %)',bx,by-8);c.fillStyle='#ff6b81';c.fillText('copper '+fmt(Ecu,2)+' kWh ('+(tot>0?fmt(100*Ecu/tot,0):0)+' %)',bx+bw-200,by-8);
+    c.fillStyle='#9aa3c4';c.fillText('loss split',14,by+18);
+    // 24-h load profile strip
+    const sy=130,sh=40;c.fillStyle='#9aa3c4';c.fillText('load profile (24 h)',14,sy+24);
+    c.fillStyle='rgba(56,211,159,.55)';c.fillRect(bx,sy+sh-sh*Math.min(1,x1/1.25),bw*h1/24,sh*Math.min(1,x1/1.25));
+    c.fillStyle='rgba(56,211,159,.3)';c.fillRect(bx+bw*h1/24,sy+sh-sh*Math.min(1,x2/1.25),bw*h2/24,sh*Math.min(1,x2/1.25));
+    c.strokeStyle='#2a2f4a';c.strokeRect(bx,sy,bw,sh);c.fillStyle='#38d39f';c.font='12px system-ui';c.fillText(Math.round(x1*100)+' % for '+h1+' h',bx+4,sy-4);c.fillText(Math.round(x2*100)+' % for '+h2+' h',bx+bw*h1/24+4,sy+sh+14);
+  }
+  ['ef_S','ef_cu','ef_co','ef_pf','ef_x'].forEach(id=>$('#'+id).oninput=efUpd);
+  ['ad_h1','ad_x1','ad_p1','ad_x2','ad_p2'].forEach(id=>$('#'+id).oninput=adUpd);
+  efUpd();
+});
+
+/* ===================================================================
+   2.8 Taps
+=================================================================== */
+section('taps','System Tools','2.8 · Taps',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Transformer Taps & Voltage Regulators</h2>
+  <p class="subttl">§2.8 · Small turns-ratio adjustments</p>
+  <div class="card note">Distribution transformers have <b>taps</b> (often ±2.5% steps, ±5% total) to trim the ratio in the field. A <b>TCUL</b> (tap-changing-under-load) transformer / voltage regulator changes taps live with automatic sensing.</div>
+  <h3>Tap calculator <span class="badge">Example 2‑6</span></h3>
+  <div class="card">
+    <div class="grid3">
+      <label class="ctl"><span class="lab">Nominal primary (V)</span><input type="number" id="tp_P" value="13200" step="any"></label>
+      <label class="ctl"><span class="lab">Secondary (V)</span><input type="number" id="tp_S" value="480" step="any"></label>
+      <label class="ctl"><span class="lab">Step size (%)</span><input type="number" id="tp_st" value="2.5" step="any"></label>
+    </div>
+    <div class="out" id="tp_out"></div>
+  </div>`;
+  const upd=()=>{const Pv=+$('#tp_P').value,Sv=+$('#tp_S').value,st=+$('#tp_st').value;
+    let rows='';for(let k=2;k>=-2;k--){const pv=Pv*(1+k*st/100);rows+=`  ${k>0?'+':''}${(k*st).toFixed(1)}% tap:  <span class="k">${fmt(pv,0)}/${Sv} V</span>  (a=${fmt(pv/Sv,3)})\n`;}
+    $('#tp_out').innerHTML=rows;};
+  ['tp_P','tp_S','tp_st'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   2.9 Autotransformer
+=================================================================== */
+section('auto','Special Transformers','2.9 · Autotransformer',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">The Autotransformer</h2>
+  <p class="subttl">§2.9 · One connected winding — big power-rating advantage, no isolation</p>
+  <div class="grid2">
+    <div class="eq" style="text-align:center"><span class="frac"><span class="n">V<sub>L</sub></span><span class="d">V<sub>H</sub></span></span> = <span class="frac"><span class="n">N<sub>C</sub></span><span class="d">N<sub>SE</sub>+N<sub>C</sub></span></span><span class="tag">2‑76</span></div>
+    <div class="eq" style="text-align:center"><span class="frac"><span class="n">S<sub>IO</sub></span><span class="d">S<sub>W</sub></span></span> = <span class="frac"><span class="n">N<sub>SE</sub>+N<sub>C</sub></span><span class="d">N<sub>SE</sub></span></span><span class="tag">2‑86</span></div>
+  </div>
+  <details class="deriv"><summary>Where the power-rating advantage comes from</summary>
+    <div class="step">① Only the common winding carries transformed power; the rest passes straight through the connection.<span class="why">S<sub>W</sub> = V<sub>C</sub>I<sub>C</sub> is the winding VA; S<sub>IO</sub> is the through VA.</span></div>
+    <div class="step">② S<sub>IO</sub>/S<sub>W</sub> = (N<sub>SE</sub>+N<sub>C</sub>)/N<sub>SE</sub>. Smaller series winding → bigger advantage.<span class="why">Eq.(2‑86). Great when the two voltages are close.</span></div>
+    <div class="step">③ Cost: the primary–secondary electrical isolation is lost, and internal impedance drops by the same factor (can raise fault currents).</div>
+  </details>
+  <h3>Autotransformer explorer <span class="badge">Example 2‑7 / 2‑8</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Common turns N<sub>C</sub> <span class="val" id="a_Nc_v"></span></span><input type="range" id="a_Nc" min="10" max="500" value="120" step="5"></label>
+        <label class="ctl"><span class="lab">Series turns N<sub>SE</sub> <span class="val" id="a_Nse_v"></span></span><input type="range" id="a_Nse" min="5" max="300" value="12" step="1"></label>
+        <label class="ctl"><span class="lab">Winding VA rating S<sub>W</sub> (VA)</span><input type="number" id="a_Sw" value="100" step="any"></label>
+        <label class="ctl"><span class="lab">Low-side voltage V<sub>L</sub> (V)</span><input type="number" id="a_Vl" value="120" step="any"></label>
+        <div class="out" id="a_out"></div>
+      </div>
+      <div>
+        <canvas id="a_can" width="400" height="240"></canvas>
+        <div class="note" style="text-align:center">Through-power (S<sub>IO</sub>) vs winding-power (S<sub>W</sub>)</div>
+      </div>
+    </div>
+    <p class="note">Ex 2‑7 (120/12): advantage 11. Ex 2‑8: reconnecting a conventional transformer as an autotransformer raises its rating by the same factor and divides its series impedance by it.</p>
+  </div>`;
+  const can=$('#a_can'),cx=can.getContext('2d');
+  const upd=()=>{const Nc=+$('#a_Nc').value,Nse=+$('#a_Nse').value,Sw=+$('#a_Sw').value,Vl=+$('#a_Vl').value;
+    $('#a_Nc_v').textContent=Nc;$('#a_Nse_v').textContent=Nse;
+    const adv=(Nse+Nc)/Nse,Vh=(Nse+Nc)/Nc*Vl,Sio=Sw*adv;
+    $('#a_out').innerHTML=`V<sub>H</sub> = (N<sub>SE</sub>+N<sub>C</sub>)/N<sub>C</sub> · V<sub>L</sub> = <span class="k">${fmt(Vh,1)} V</span>\nPower advantage S<sub>IO</sub>/S<sub>W</sub> = <span class="k">${fmt(adv,2)}×</span>\nThrough rating S<sub>IO</sub> = <span class="k">${fmt(Sio,0)} VA</span> (windings only ${fmt(Sw,0)} VA)`;
+    // bar viz
+    cx.clearRect(0,0,400,240);const maxS=Sio;
+    cx.fillStyle='#5b8cff';cx.fillRect(40,40,Sio/maxS*320,50);cx.fillStyle='#9aa3c4';cx.font='12px system-ui';cx.fillText('S_IO (through power) '+fmt(Sio,0)+' VA',44,34);
+    cx.fillStyle='#ff9f43';cx.fillRect(40,130,Sw/maxS*320,50);cx.fillText('S_W (in windings) '+fmt(Sw,0)+' VA',44,124);
+    cx.fillStyle='#38d39f';cx.font='13px system-ui';cx.fillText(fmt(adv,1)+'× advantage',150,215);
+  };
+  ['a_Nc','a_Nse','a_Sw','a_Vl'].forEach(id=>$('#'+id).oninput=upd);upd();
+});
+
+/* ===================================================================
+   2.10 Three-phase
+=================================================================== */
+section('three','Special Transformers','2.10 · Three-Phase',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Three-Phase Transformers</h2>
+  <p class="subttl">§2.10 · Connections, and two-transformer (open-Δ) schemes</p>
+  <div class="card">
+    <p>Any 3-φ bank = three single-phase units. Analyze <b>one transformer / per phase</b>, then apply the connection's line↔phase relations (√3 factors).</p>
+    <div class="tabs" id="cn">
+      <div class="t on" data-c="YY">Y–Y</div><div class="t" data-c="YD">Y–Δ</div><div class="t" data-c="DY">Δ–Y</div><div class="t" data-c="DD">Δ–Δ</div>
+    </div>
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Per-transformer turns ratio a = N<sub>p</sub>/N<sub>s</sub> <span class="val" id="c_a_v"></span></span><input type="range" id="c_a" min="0.5" max="20" value="10" step="0.5"></label>
+        <label class="ctl"><span class="lab">Primary line voltage V<sub>LP</sub> (V)</span><input type="number" id="c_V" value="13800" step="any"></label>
+        <div class="out" id="c_out"></div>
+      </div>
+      <div><canvas id="c_can" width="380" height="240"></canvas></div>
+    </div>
+  </div>
+  <h3>Open-Δ (V–V) — running on two transformers</h3>
+  <div class="card okbox">Lose one phase of a Δ–Δ bank and it still works (the "ghost phase" voltage reappears), but the bank delivers only <b>57.7%</b> (1/√3) of the full three-phase rating — because the two remaining units exchange reactive power. Put another way: 86.6% of the two units' combined rating.</div>
+  <div class="card note"><b>Y–Δ / Δ–Y</b> introduce a <b>30° phase shift</b> (secondary lags for abc sequence in the US standard) and handle harmonics/unbalance better than Y–Y. Y–Y needs a grounded neutral or a Δ tertiary to tame third harmonics. <b>Δ–Δ</b>: no phase shift, robust. <span class="badge">Ex 2‑9: Δ–Y VR ≈ 5.1%</span></div>`;
+  const conns={YY:['Y–Y','a','V_LS = V_LP / a','no shift'],YD:['Y–Δ','√3·a','V_LS = V_LP/(√3a)','30° shift'],
+    DY:['Δ–Y','a/√3','V_LS = √3·V_LP/a','30° shift'],DD:['Δ–Δ','a','V_LS = V_LP/a','no shift']};
+  let cur='YY';
+  const can=$('#c_can'),cx=can.getContext('2d');
+  const upd=()=>{const a=+$('#c_a').value,V=+$('#c_V').value;$('#c_a_v').textContent=fmt(a,2);
+    const [name,ratio,form,shift]=conns[cur];
+    let VLS;if(cur==='YY'||cur==='DD')VLS=V/a;else if(cur==='YD')VLS=V/(Math.sqrt(3)*a);else VLS=V*Math.sqrt(3)/a;
+    $('#c_out').innerHTML=`Connection: <span class="k">${name}</span>\nOverall line ratio V<sub>LP</sub>/V<sub>LS</sub> = <span class="k">${ratio}</span>\n${form}\nV<sub>LS</sub> = <span class="k">${fmt(VLS,1)} V</span>\nPhase shift: <span class="k">${shift}</span>`;
+    // draw phasors: primary (blue) 3 at 120, secondary (orange) possibly shifted 30
+    cx.clearRect(0,0,380,240);const ox=110,oy=120,R=70;
+    function star(cx0,c,ang0,lab){cx.strokeStyle=c;cx.lineWidth=2;for(let k=0;k<3;k++){const a=ang0+k*120;cx.beginPath();cx.moveTo(cx0,oy);cx.lineTo(cx0+R*Math.cos(a*D2R),oy-R*Math.sin(a*D2R));cx.stroke();}cx.fillStyle=c;cx.font='11px system-ui';cx.fillText(lab,cx0-20,oy+95);}
+    star(110,'#5b8cff',90,'primary');
+    const sh=(cur==='YD'||cur==='DY')?-30:0;
+    star(270,'#ff9f43',90+sh,'secondary'+(sh?' (−30°)':''));
+    cx.fillStyle='#9aa3c4';cx.fillText('120° apart',70,20);
+  };
+  $$('#cn .t').forEach(t=>t.onclick=()=>{$$('#cn .t').forEach(x=>x.classList.toggle('on',x===t));cur=t.dataset.c;upd();});
+  $('#c_a').oninput=upd;$('#c_V').oninput=upd;upd();
+});
+
+/* ===================================================================
+   2.11 Ratings: V/f, inrush
+=================================================================== */
+section('ratings','Special Transformers','2.11 · Ratings, V/f & Inrush',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Transformer Ratings — Voltage/Frequency & Inrush</h2>
+  <p class="subttl">§2.11 · Why V and f are tied together; the starting current surge</p>
+  <div class="eq">φ<sub>max</sub> = <span class="frac"><span class="n">V<sub>M</sub></span><span class="d">ω N<sub>p</sub></span></span> = <span class="frac"><span class="n">V<sub>M</sub></span><span class="d">2π f N<sub>p</sub></span></span> <span class="tag">(2‑101)</span></div>
+  <p class="note">Peak flux ∝ V/f. To keep φ<sub>max</sub> (and magnetizing current) safe, if you drop frequency you must drop voltage in proportion — <b>derating</b>. A 60 Hz transformer on 50 Hz needs ~1/6 less voltage.</p>
+  <h3>▶ V/f effect on peak flux <span class="badge">Example 2‑10</span></h3>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Applied voltage (% rated) <span class="val" id="r_V_v"></span></span><input type="range" id="r_V" min="60" max="130" value="100" step="1"></label>
+        <label class="ctl"><span class="lab">Frequency (Hz) <span class="val" id="r_f_v"></span></span><input type="range" id="r_f" min="40" max="70" value="60" step="1"></label>
+        <div class="out" id="r_out"></div>
+        <p class="note">φ<sub>max</sub> shown relative to the 100%/60 Hz design point. Above ~110% the core saturates → magnetizing current explodes (Ex 2‑10: rms mag current +60% going 60→50 Hz).</p>
+      </div>
+      <div><canvas id="r_can" width="420" height="240"></canvas></div>
+    </div>
+  </div>
+  <h3>▶ Inrush current at switch-on</h3>
+  <div class="card">
+    <p class="note">Flux can reach <b>twice</b> steady-state if the transformer is energized as the voltage passes through zero (worst case), briefly looking like a short circuit. Energizing at the voltage peak → no offset. Drag the switch-on angle.</p>
+    <div class="grid2">
+      <div>
+        <label class="ctl"><span class="lab">Switch-on angle θ (°) <span class="val" id="in_a_v"></span></span><input type="range" id="in_a" min="0" max="90" value="0" step="5"></label>
+        <div class="out" id="in_out"></div>
+      </div>
+      <div><canvas id="in_can" width="420" height="240"></canvas></div>
+    </div>
+  </div>`;
+  // V/f
+  const rc=$('#r_can').getContext('2d');
+  const rUpd=()=>{const V=+$('#r_V').value/100,f=+$('#r_f').value;$('#r_V_v').textContent=Math.round(V*100)+'%';$('#r_f_v').textContent=f+' Hz';
+    const phi=V/(f/60);const derate=(f/60);
+    $('#r_out').innerHTML=`φ<sub>max</sub> ∝ V/f = <span class="k">${fmt(phi,3)}×</span> design\nFor safe flux at ${f} Hz, keep V ≤ <span class="k">${Math.round(derate*100)}%</span>\n${phi>1.1?'⚠ core saturating — excessive magnetizing current':'ok'}`;
+    // flux waveform amplitude
+    const W=420,H=240,mid=H/2;rc.clearRect(0,0,W,H);rc.strokeStyle='#232a49';rc.beginPath();rc.moveTo(20,mid);rc.lineTo(W-10,mid);rc.stroke();
+    // saturation band
+    rc.fillStyle='rgba(255,107,129,0.12)';rc.fillRect(20,mid-100,W-30,10);rc.fillRect(20,mid+90,W-30,10);
+    rc.strokeStyle=phi>1.1?'#ff6b81':'#5b8cff';rc.lineWidth=2;rc.beginPath();
+    for(let x=0;x<=W-30;x++){const t=x/(W-30)*4*Math.PI;const y=mid-Math.sin(t)*phi*90;x===0?rc.moveTo(20+x,y):rc.lineTo(20+x,y);}rc.stroke();
+    rc.fillStyle='#ff6b81';rc.font='11px system-ui';rc.fillText('saturation limit',W-110,mid-95);};
+  ['r_V','r_f'].forEach(id=>$('#'+id).oninput=rUpd);rUpd();
+  // inrush
+  const ic=$('#in_can').getContext('2d');
+  const inUpd=()=>{const th=+$('#in_a').value;$('#in_a_v').textContent=th+'°';
+    // flux = -cos(wt+th)+cos(th) offset (starting from zero flux). peak up to 1+cos... worst at th=0 -> 2x
+    const offset=Math.cos(th*D2R);const peak=1+Math.abs(offset);
+    $('#in_out').innerHTML=`Flux offset = cos θ = <span class="k">${fmt(offset,3)}</span>\nPeak flux ≈ <span class="k">${fmt(peak,2)}×</span> steady state\n${th<=15?'⚠ near worst case — huge inrush current':(th>=75?'≈ no offset, minimal inrush':'partial offset')}`;
+    const W=420,H=240,mid=H/2;ic.clearRect(0,0,W,H);ic.strokeStyle='#232a49';ic.beginPath();ic.moveTo(20,mid);ic.lineTo(W-10,mid);ic.stroke();
+    // steady-state flux (reference) and actual offset flux
+    ic.strokeStyle='#39507a';ic.lineWidth=1.5;ic.setLineDash([4,4]);ic.beginPath();
+    for(let x=0;x<=W-30;x++){const wt=x/(W-30)*4*Math.PI;const y=mid-(-Math.cos(wt+th*D2R))*70;x===0?ic.moveTo(20+x,y):ic.lineTo(20+x,y);}ic.stroke();ic.setLineDash([]);
+    ic.strokeStyle='#ff6b81';ic.lineWidth=2.5;ic.beginPath();
+    for(let x=0;x<=W-30;x++){const wt=x/(W-30)*4*Math.PI;const flux=-Math.cos(wt+th*D2R)+offset;const y=mid-flux*70;x===0?ic.moveTo(20+x,y):ic.lineTo(20+x,y);}ic.stroke();
+    ic.fillStyle='#39507a';ic.font='11px system-ui';ic.fillText('steady-state flux',24,18);ic.fillStyle='#ff6b81';ic.fillText('actual flux (offset)',150,18);};
+  $('#in_a').oninput=inUpd;inUpd();
+});
+
+/* ===================================================================
+   2.12 Instrument transformers
+=================================================================== */
+section('instr','Special Transformers','2.12 · Instrument Transformers',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Instrument Transformers</h2>
+  <p class="subttl">§2.12 · Sampling voltage and current safely for meters and relays</p>
+  <div class="grid2">
+    <div class="card"><h4>Potential transformer (PT)</h4>High-voltage primary, low-voltage secondary, very low power — provides an accurate scaled <b>voltage</b> sample for instruments.</div>
+    <div class="card"><h4>Current transformer (CT)</h4>Secondary wound on a ring, the line passes through the centre. Provides a scaled <b>current</b> sample (e.g. 600:5, 800:5). Loosely coupled — the usual ratio equations don't apply.
+    <div class="badbox" style="margin-top:8px">⚠ Never open-circuit a CT secondary under load — dangerous high voltage appears. Keep it shorted through the meter/relay.</div></div>
+  </div>`;
+});
+
+/* ===================================================================
+   Practice mode
+=================================================================== */
+section('practice','Practice','★ Practice Mode (random)',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Practice Mode — randomized transformer problems</h2>
+  <p class="subttl">Pick a topic, get fresh numbers, check your answer against the worked solution.</p>
+  <div class="card">
+    <div class="flex">
+      <select id="pk_type" style="max-width:340px">
+        <option value="turns">2.3 · Turns ratio & secondary voltage</option>
+        <option value="current">2.3 · Current from turns ratio</option>
+        <option value="imp">2.3 · Impedance transformation Z′=a²Z</option>
+        <option value="power">2.3 · Power through ideal transformer</option>
+        <option value="oc">2.5 · Open-circuit test → R_C, X_M</option>
+        <option value="sc">2.5 · Short-circuit test → R_eq, X_eq</option>
+        <option value="noload">2.5 · No-load current → R_C</option>
+        <option value="maxeff">2.7 · Load for maximum efficiency</option>
+        <option value="vr">2.6 · Voltage regulation</option>
+        <option value="eff">2.7 · Efficiency</option>
+        <option value="auto">2.9 · Autotransformer advantage</option>
+        <option value="three">2.10 · Three-phase line ratio</option>
+      </select>
+      <button class="btn" id="pk_new">🎲 New problem</button>
+      <span class="pill">Score: <b id="pk_score">0</b> / <b id="pk_tot">0</b></span>
+    </div>
+    <div id="pk_q" class="card tight" style="margin-top:12px"></div>
+    <div class="inrow" style="margin-top:8px"><input type="number" id="pk_ans" placeholder="your answer" step="any"><button class="btn" id="pk_check">Check</button></div>
+    <div id="pk_fb"></div><div id="pk_sol"></div>
+  </div>`;
+  const rnd=(a,b,s=1)=>+((Math.round((a+Math.random()*(b-a))/s)*s)).toFixed(6);
+  let cur=null,score=0,tot=0;
+  const G={
+    turns:()=>{const Np=rnd(200,1000,50),Ns=rnd(50,500,50),Vp=rnd(120,480,10),a=Np/Ns;return{q:`N<sub>p</sub>=<b>${Np}</b>, N<sub>s</sub>=<b>${Ns}</b>, V<sub>p</sub>=<b>${Vp} V</b>. Find <b>V<sub>s</sub></b> (V).`,ans:Vp/a,unit:'V',sol:`a=Np/Ns=${fmt(a,3)}; V<sub>s</sub>=V<sub>p</sub>/a=<b>${fmt(Vp/a,2)} V</b>`};},
+    current:()=>{const Np=rnd(200,1000,50),Ns=rnd(50,500,50),Is=rnd(2,40,1),a=Np/Ns;return{q:`N<sub>p</sub>=<b>${Np}</b>, N<sub>s</sub>=<b>${Ns}</b>, I<sub>s</sub>=<b>${Is} A</b>. Find <b>I<sub>p</sub></b> (A).`,ans:Is/a,unit:'A',sol:`a=${fmt(a,3)}; I<sub>p</sub>=I<sub>s</sub>/a=<b>${fmt(Is/a,3)} A</b>`};},
+    imp:()=>{const a=rnd(2,15,1),Z=rnd(2,50,1);return{q:`Turns ratio a=<b>${a}</b>, load Z<sub>L</sub>=<b>${Z} Ω</b>. Find the impedance <b>Z′</b> seen at the primary.`,ans:a*a*Z,unit:'Ω',sol:`Z′=a²Z<sub>L</sub>=${a}²·${Z}=<b>${fmt(a*a*Z,1)} Ω</b>`};},
+    power:()=>{const V=rnd(120,480,10),I=rnd(2,30,1),pf=rnd(0.7,1,0.05);return{q:`Ideal transformer secondary: V<sub>s</sub>=<b>${V} V</b>, I<sub>s</sub>=<b>${I} A</b>, PF=<b>${pf}</b>. Find real power <b>P</b> (=P<sub>in</sub>) in W.`,ans:V*I*pf,unit:'W',sol:`P=V<sub>s</sub>I<sub>s</sub>cosθ=${V}·${I}·${pf}=<b>${fmt(V*I*pf,1)} W</b>`};},
+    oc:()=>{const V=rnd(2000,8000,100),I=rnd(0.1,0.5,0.01),P=rnd(200,600,10);const pf=P/(V*I),t=Math.acos(Math.min(1,pf)),Rc=1/((I/V)*Math.cos(t));return{q:`OC test: V<sub>OC</sub>=<b>${V} V</b>, I<sub>OC</sub>=<b>${I} A</b>, P<sub>OC</sub>=<b>${P} W</b>. Find <b>R<sub>C</sub></b> (Ω).`,ans:Rc,unit:'Ω',tol:0.02,sol:`PF=${fmt(pf,3)}, θ=${fmt(t*R2D,1)}°; R<sub>C</sub>=1/(Y<sub>E</sub>cosθ)=V<sub>OC</sub>²·? → <b>${fmt(Rc,0)} Ω</b>`};},
+    sc:()=>{const V=rnd(100,500,10),I=rnd(2,8,0.5),P=rnd(150,300,10);const pf=P/(V*I),t=Math.acos(Math.min(1,pf)),Req=(V/I)*Math.cos(t);return{q:`SC test: V<sub>SC</sub>=<b>${V} V</b>, I<sub>SC</sub>=<b>${I} A</b>, P<sub>SC</sub>=<b>${P} W</b>. Find <b>R<sub>eq</sub></b> (Ω).`,ans:Req,unit:'Ω',tol:0.02,sol:`PF=${fmt(pf,3)}, Z<sub>SE</sub>=V/I=${fmt(V/I,2)} Ω; R<sub>eq</sub>=Z<sub>SE</sub>cosθ=<b>${fmt(Req,3)} Ω</b>`};},
+    noload:()=>{const V=rnd(2000,8000,100),I=rnd(0.1,0.6,0.01),P=rnd(200,600,10);const cos=P/(V*I),Iw=I*cos,Rc=V/Iw;return{q:`No-load test: V=<b>${V} V</b>, I₀=<b>${I} A</b>, P<sub>core</sub>=<b>${P} W</b>. Find core-loss resistance <b>R<sub>C</sub></b> (Ω).`,ans:Rc,unit:'Ω',tol:0.02,sol:`cos φ₀=P/(V·I₀)=${fmt(cos,3)}; I<sub>w</sub>=I₀cos φ₀=${fmt(Iw,4)} A; R<sub>C</sub>=V/I<sub>w</sub>=<b>${fmt(Rc,0)} Ω</b>`};},
+    maxeff:()=>{const Cu=rnd(100,500,10),Co=rnd(30,250,10);const x=Math.sqrt(Co/Cu);return{q:`Full-load copper loss=<b>${Cu} W</b>, core loss=<b>${Co} W</b>. At what <b>fraction of full load</b> is efficiency maximum?`,ans:x,unit:'× full load',tol:0.02,sol:`Max η when P<sub>Cu</sub>=P<sub>core</sub>: x*=√(P<sub>core</sub>/P<sub>Cu,fl</sub>)=√(${Co}/${Cu})=<b>${fmt(x,3)}</b> (${fmt(x*100,1)}% load)`};},
+    vr:()=>{const Vs=rnd(120,480,10),R=rnd(0.02,0.15,0.01),X=rnd(0.03,0.2,0.01),I=rnd(20,80,5),ang=-36.87;const Vp=cAbs(cAdd(C(Vs,0),cMul(C(R,X),cPolar(I,ang))));return{q:`V<sub>S</sub>=<b>${Vs} V</b>, I<sub>S</sub>=<b>${I} A</b> at 0.8 PF lagging, R<sub>eq</sub>=<b>${R} Ω</b>, X<sub>eq</sub>=<b>${X} Ω</b>. Find <b>VR</b> (%).`,ans:(Vp-Vs)/Vs*100,unit:'%',tol:0.05,sol:`V<sub>P</sub>/a=V<sub>S</sub>+(R+jX)I=${fmt(Vp,2)} V; VR=(${fmt(Vp,2)}−${Vs})/${Vs}·100=<b>${fmt((Vp-Vs)/Vs*100,2)}%</b>`};},
+    eff:()=>{const Pout=rnd(5000,20000,500),Pcu=rnd(80,300,10),Pc=rnd(30,120,5);return{q:`P<sub>out</sub>=<b>${Pout} W</b>, P<sub>Cu</sub>=<b>${Pcu} W</b>, P<sub>core</sub>=<b>${Pc} W</b>. Find <b>efficiency</b> (%).`,ans:Pout/(Pout+Pcu+Pc)*100,unit:'%',tol:0.01,sol:`η=P<sub>out</sub>/(P<sub>out</sub>+P<sub>Cu</sub>+P<sub>core</sub>)=${Pout}/${Pout+Pcu+Pc}·100=<b>${fmt(Pout/(Pout+Pcu+Pc)*100,2)}%</b>`};},
+    auto:()=>{const Nc=rnd(80,300,10),Nse=rnd(10,60,2);return{q:`Autotransformer: N<sub>C</sub>=<b>${Nc}</b>, N<sub>SE</sub>=<b>${Nse}</b>. Find the power-rating <b>advantage</b> S<sub>IO</sub>/S<sub>W</sub>.`,ans:(Nse+Nc)/Nse,unit:'×',tol:0.01,sol:`(N<sub>SE</sub>+N<sub>C</sub>)/N<sub>SE</sub>=(${Nse}+${Nc})/${Nse}=<b>${fmt((Nse+Nc)/Nse,2)}×</b>`};},
+    three:()=>{const a=rnd(2,15,1),V=rnd(4000,34500,100),type=['YY','YD','DY'][Math.floor(Math.random()*3)];const names={YY:'Y–Y',YD:'Y–Δ',DY:'Δ–Y'};let VLS;if(type==='YY')VLS=V/a;else if(type==='YD')VLS=V/(Math.sqrt(3)*a);else VLS=V*Math.sqrt(3)/a;return{q:`A <b>${names[type]}</b> bank, per-transformer turns ratio a=<b>${a}</b>, primary line V<sub>LP</sub>=<b>${V} V</b>. Find secondary line voltage <b>V<sub>LS</sub></b> (V).`,ans:VLS,unit:'V',tol:0.02,sol:`${names[type]}: V<sub>LS</sub>=${type==='YY'?'V/a':type==='YD'?'V/(√3a)':'√3V/a'}=<b>${fmt(VLS,1)} V</b>`};}
+  };
+  function neu(){cur=G[$('#pk_type').value]();$('#pk_q').innerHTML=cur.q;$('#pk_ans').value='';$('#pk_fb').innerHTML='';$('#pk_sol').innerHTML='';}
+  function check(){if(!cur||$('#pk_ans').value==='')return;const g=+$('#pk_ans').value,tol=cur.tol||0.02,ok=Math.abs(g-cur.ans)<=Math.abs(cur.ans)*tol+1e-9;
+    tot++;if(ok)score++;$('#pk_score').textContent=score;$('#pk_tot').textContent=tot;
+    $('#pk_fb').innerHTML=ok?`<div class="okbox">✅ Correct — ≈ <b>${fmt(cur.ans)} ${cur.unit}</b></div>`:`<div class="badbox">❌ You entered ${fmt(g)}; answer is <b>${fmt(cur.ans)} ${cur.unit}</b></div>`;
+    $('#pk_sol').innerHTML=`<details open><summary>Worked solution</summary><div class="step">${cur.sol}</div></details>`;}
+  $('#pk_new').onclick=neu;$('#pk_check').onclick=check;$('#pk_type').onchange=neu;
+  $('#pk_ans').addEventListener('keydown',e=>{if(e.key==='Enter')check();});neu();
+});
+
+/* ===================================================================
+   Summary & quiz
+=================================================================== */
+section('summary','Practice','2.13 · Summary & Quiz',(el)=>{
+  el.innerHTML=`
+  <h2 class="title">Summary & Self-Test</h2>
+  <p class="subttl">§2.13</p>
+  <div class="card"><table>
+    <tr><th>#</th><th>Equation</th><th>Meaning</th></tr>
+    <tr><td>2‑1/2</td><td>V<sub>p</sub>/V<sub>s</sub>=N<sub>p</sub>/N<sub>s</sub>=a</td><td>voltage ratio</td></tr>
+    <tr><td>2‑3</td><td>I<sub>p</sub>/I<sub>s</sub>=1/a</td><td>current ratio</td></tr>
+    <tr><td>2‑9</td><td>P<sub>in</sub>=P<sub>out</sub></td><td>ideal = lossless</td></tr>
+    <tr><td>2‑15</td><td>Z′=a²Z</td><td>impedance transform</td></tr>
+    <tr><td>2‑35</td><td>N<sub>p</sub>i<sub>p</sub>≈N<sub>s</sub>i<sub>s</sub></td><td>mmf balance</td></tr>
+    <tr><td>2‑61</td><td>VR=(V<sub>P</sub>/a−V<sub>S</sub>)/V<sub>S</sub></td><td>voltage regulation</td></tr>
+    <tr><td>2‑67</td><td>η=P<sub>out</sub>/(P<sub>out</sub>+P<sub>loss</sub>)</td><td>efficiency</td></tr>
+    <tr><td>max η</td><td>P<sub>Cu</sub>=P<sub>core</sub></td><td>peak efficiency</td></tr>
+    <tr><td>2‑86</td><td>S<sub>IO</sub>/S<sub>W</sub>=(N<sub>SE</sub>+N<sub>C</sub>)/N<sub>SE</sub></td><td>auto advantage</td></tr>
+    <tr><td>2‑101</td><td>φ<sub>max</sub>=V<sub>M</sub>/(ωN<sub>p</sub>)</td><td>V/f flux limit</td></tr>
+  </table></div>
+  <h3>Self-test quiz</h3>
+  <div class="card quiz" id="quiz"></div>`;
+  const QZ=[
+    ['If a transformer steps voltage down by 2, the current is…',['halved','doubled','unchanged','quadrupled'],1],
+    ['An ideal transformer conserves…',['voltage','current','apparent power','turns'],2],
+    ['Impedance referred through a transformer scales by…',['a','1/a','a²','√a'],2],
+    ['The open-circuit test primarily measures…',['copper losses','core (excitation) branch','turns ratio','leakage only'],1],
+    ['The short-circuit test primarily measures…',['R_eq & X_eq (series)','R_C & X_M','turns ratio','magnetizing current'],0],
+    ['A lagging (inductive) load gives a voltage regulation that is…',['negative','zero','positive','undefined'],2],
+    ['Maximum transformer efficiency occurs when…',['copper loss = core loss','load is maximum','PF = 1','core loss = 0'],0],
+    ['To refer a secondary impedance to the primary, multiply by…',['a','1/a','a²','1/a²'],2],
+    ['An autotransformer’s main disadvantage is…',['high cost','loss of electrical isolation','low efficiency','large size'],1],
+    ['Open-Δ delivers what fraction of full 3-φ rating?',['66.7%','86.6%','57.7%','50%'],2],
+    ['Peak core flux is proportional to…',['V·f','V/f','f/V','V only'],1],
+    ['Worst-case inrush occurs when switched on at voltage…',['peak','zero crossing','45°','any angle'],1],
+    ['A current transformer secondary must never be…',['shorted','loaded','grounded','open-circuited'],3],
+  ];
+  $('#quiz').innerHTML=QZ.map((q,i)=>`<div class="q"><b>${i+1}. ${q[0]}</b>${q[1].map((o,j)=>`<span class="opt" data-q="${i}" data-o="${j}">${o}</span>`).join('')}</div>`).join('')+`<div class="out" id="qscore">Score: 0 / ${QZ.length}</div>`;
+  let ans={},sc=0;
+  $$('#quiz .opt').forEach(o=>o.onclick=()=>{const q=+o.dataset.q,j=+o.dataset.o;if(ans[q]!==undefined)return;ans[q]=j;const c=QZ[q][2];
+    $$(`#quiz .opt[data-q="${q}"]`).forEach(x=>{if(+x.dataset.o===c)x.classList.add('correct');});if(j===c)sc++;else o.classList.add('wrong');
+    $('#qscore').textContent=`Score: ${sc} / ${QZ.length}`;});
+});
+
+/* ================= build nav + routing ================= */
+const main=$('#main'),nav=$('#nav');
+function render(id){
+  const s=SECTIONS.find(x=>x.id===id);if(!s)return;
+  let el=$('#sec-'+id);
+  if(!el){el=document.createElement('div');el.className='sec';el.id='sec-'+id;main.appendChild(el);s.builder(el);}
+  $$('.sec').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  window.scrollTo(0,0);location.hash=id;
+}
+function go(id){render(id);}
+let lastGrp=null;
+SECTIONS.forEach(s=>{
+  if(s.group!==lastGrp){const g=document.createElement('div');g.className='grp';g.textContent=s.group;nav.appendChild(g);lastGrp=s.group;}
+  const b=document.createElement('button');b.textContent=s.label;b.dataset.id=s.id;b.onclick=()=>go(s.id);nav.appendChild(b);
+});
+render((location.hash||'#intro').slice(1)||'intro');
+</script>
+
+
+<!-- EMF Topic-Detail Navigation Extension -->
+<script id="emf-topic-nav-script">
+(function(){
+  var chIdx = 2;
+  var chCode = "CHAPTER 02";
+  var chTitle = "Chapter 2: Transformers";
+  var chPageUrl = "../chapter-pages/chapter" + chIdx + ".html";
+
+  // Navigation Styling with Full Mobile Responsiveness (1440px -> 360px)
+  var style = document.createElement('style');
+  style.id = 'emf-nav-styles';
+  style.textContent = `
+    /* Prevent horizontal page overflow on mobile viewports */
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .main {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    table {
+      max-width: 100%;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .eq {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    canvas, svg {
+      max-width: 100% !important;
+      height: auto;
+    }
+
+    .emf-topic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel, #171a2b);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      font-size: 13.5px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .emf-crumbs a {
+      color: var(--muted, #9aa3c4);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .emf-crumbs a:hover {
+      color: var(--acc, #5b8cff);
+    }
+    .emf-crumbs .sep {
+      color: var(--muted, #9aa3c4);
+      opacity: 0.5;
+    }
+    .emf-crumbs .curr {
+      color: var(--ink, #e8ebf7);
+      font-weight: 600;
+    }
+    .emf-btn-next-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--acc, #5b8cff);
+      color: #ffffff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      border: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .emf-btn-next-top:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .emf-topic-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line, #2a2f4a);
+      flex-wrap: wrap;
+    }
+    .emf-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel2, #1e2237);
+      color: var(--ink, #e8ebf7);
+      border: 1px solid var(--line, #2a2f4a);
+      border-radius: 9px;
+      padding: 11px 18px;
+      cursor: pointer;
+      font: 600 13.5px system-ui, sans-serif;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      min-height: 42px;
+    }
+    .emf-nav-btn:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+      border-color: var(--acc, #5b8cff);
+      transform: translateY(-1px);
+    }
+    .emf-nav-btn.disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .emf-overview-link {
+      color: var(--muted, #9aa3c4);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 10px;
+    }
+    .emf-overview-link:hover {
+      color: var(--acc, #5b8cff);
+      text-decoration: underline;
+    }
+
+    .emf-side-back {
+      padding: 12px 14px 6px;
+    }
+    .emf-side-back a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--acc, #5b8cff);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--panel2, #1e2237);
+      border: 1px solid var(--line, #2a2f4a);
+      transition: all 0.15s ease;
+    }
+    .emf-side-back a:hover {
+      background: var(--acc, #5b8cff);
+      color: #ffffff;
+    }
+
+    /* Mobile Viewports (<= 640px, 390px, 360px) */
+    @media (max-width: 640px) {
+      .emf-topic-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .emf-btn-next-top {
+        width: 100%;
+        justify-content: center;
+      }
+      .emf-topic-footer-nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 36px;
+      }
+      .emf-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+      .emf-overview-link {
+        text-align: center;
+        width: 100%;
+      }
+      .main {
+        padding: 14px 12px 60px !important;
+      }
+    }
+  `;
+  if (!document.getElementById('emf-nav-styles')) {
+    document.head.appendChild(style);
+  }
+
+  // Sidebar Back Link
+  var brand = document.querySelector('.side .brand');
+  if (brand && !document.querySelector('.emf-side-back')) {
+    var backBox = document.createElement('div');
+    backBox.className = 'emf-side-back';
+    backBox.innerHTML = '<a href="' + chPageUrl + '">← Back to Overview</a>';
+    brand.parentNode.insertBefore(backBox, brand.nextSibling);
+  }
+
+  var mainEl = document.getElementById('main');
+
+  function updateNavigation(activeId) {
+    if (!window.SECTIONS || !mainEl) return;
+    var idx = -1;
+    for (var k = 0; k < SECTIONS.length; k++) {
+      if (SECTIONS[k].id === activeId) { idx = k; break; }
+    }
+    if (idx === -1) idx = 0;
+
+    var curSec = SECTIONS[idx];
+    var prevSec = idx > 0 ? SECTIONS[idx - 1] : null;
+    var nextSec = idx < SECTIONS.length - 1 ? SECTIONS[idx + 1] : null;
+
+    // 1. Top bar
+    var topBar = document.getElementById('emf-top-bar');
+    if (!topBar) {
+      topBar = document.createElement('div');
+      topBar.id = 'emf-top-bar';
+      topBar.className = 'emf-topic-header';
+      mainEl.insertBefore(topBar, mainEl.firstChild);
+    }
+    var topNextBtn = nextSec
+      ? '<button type="button" class="emf-btn-next-top" id="emf-top-next">Next Topic →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-btn-next-top">Chapter Overview →</a>';
+
+    topBar.innerHTML =
+      '<div class="emf-crumbs">' +
+        '<a href="../index.html">Home</a><span class="sep">›</span>' +
+        '<a href="' + chPageUrl + '">' + chTitle + '</a><span class="sep">›</span>' +
+        '<span class="curr">' + curSec.label + '</span>' +
+      '</div>' +
+      '<div>' + topNextBtn + '</div>';
+
+    var btnTopNext = document.getElementById('emf-top-next');
+    if (btnTopNext && nextSec) {
+      btnTopNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+
+    // 2. Bottom bar
+    var bottomBar = document.getElementById('emf-bottom-bar');
+    if (!bottomBar) {
+      bottomBar = document.createElement('div');
+      bottomBar.id = 'emf-bottom-bar';
+      bottomBar.className = 'emf-topic-footer-nav';
+      mainEl.appendChild(bottomBar);
+    }
+
+    var prevHtml = prevSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-prev">← Previous: ' + prevSec.label + '</button>'
+      : '<span class="emf-nav-btn disabled">← First Topic</span>';
+
+    var nextHtml = nextSec
+      ? '<button type="button" class="emf-nav-btn" id="emf-bot-next">Next: ' + nextSec.label + ' →</button>'
+      : '<a href="' + chPageUrl + '" class="emf-nav-btn">Complete Chapter Overview →</a>';
+
+    bottomBar.innerHTML =
+      '<div>' + prevHtml + '</div>' +
+      '<a href="' + chPageUrl + '" class="emf-overview-link">Back to Chapter Overview</a>' +
+      '<div>' + nextHtml + '</div>';
+
+    var btnBotPrev = document.getElementById('emf-bot-prev');
+    if (btnBotPrev && prevSec) {
+      btnBotPrev.onclick = function() { if (typeof render === 'function') render(prevSec.id); };
+    }
+    var btnBotNext = document.getElementById('emf-bot-next');
+    if (btnBotNext && nextSec) {
+      btnBotNext.onclick = function() { if (typeof render === 'function') render(nextSec.id); };
+    }
+  }
+
+  // Hook render
+  var origRender = window.render;
+  if (typeof origRender === 'function') {
+    window.render = function(id) {
+      origRender(id);
+      updateNavigation(id);
+    };
+  }
+
+  // Hashchange listener for direct URL changes and browser back/forward
+  window.addEventListener('hashchange', function() {
+    var raw = (location.hash || '').slice(1);
+    if (raw && window.SECTIONS) {
+      var found = SECTIONS.some(function(s) { return s.id === raw; });
+      if (found && typeof render === 'function') {
+        render(raw);
+      }
+    }
+  });
+
+  // Initial update
+  var initHash = (location.hash || '').slice(1);
+  if (initHash && window.SECTIONS && SECTIONS.some(function(s) { return s.id === initHash; })) {
+    updateNavigation(initHash);
+  } else if (window.SECTIONS && SECTIONS.length > 0) {
+    updateNavigation(SECTIONS[0].id);
+  }
+})();
+</script>
+
+</body>
+</html>
