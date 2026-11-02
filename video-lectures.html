@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Browse the teacher's weekly video lecture plan and watch selected lessons.">
+<meta name="description" content="Browse the teacher's module-based video lecture plan and watch selected lessons.">
 <meta name="theme-color" content="#070e1e">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>Video Lectures — Electric Machinery Fundamentals</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -255,11 +255,11 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
 .lecture-reset:hover { background: var(--video-subtle); }
 .lecture-result-count { margin: 0 0 14px; color: var(--video-muted); font-size: 14px; }
 .lecture-empty { margin: 0 0 14px; padding: 16px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--video-surface); color: var(--video-muted); }
-.week-topic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 20px; }
-.week-topic-card { min-width: 0; padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); box-shadow: 0 3px 12px rgba(15,23,42,.035); }
+.module-topic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 20px; }
+.module-topic-card { min-width: 0; padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); box-shadow: 0 3px 12px rgba(15,23,42,.035); }
 .topic-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.week-label { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.week-topic-card h2 { min-width: 0; margin: 0; color: var(--video-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.module-label { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.module-topic-card h2 { min-width: 0; margin: 0; color: var(--video-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
 .topic-video-count { margin: 0; color: var(--video-muted); font-size: 12px; font-weight: 600; white-space: nowrap; }
 .topic-video-list { display: grid; gap: 10px; margin-top: 14px; }
 .topic-video { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--video-line); border-radius: 10px; background: var(--video-subtle); }
@@ -291,7 +291,7 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
   .video-back-home-row { padding: 10px 16px 0; }
   .video-main { padding: 12px 16px 48px; }
   .video-hero { padding: 23px 20px; }
-  .week-topic-card { padding: 16px; }
+  .module-topic-card { padding: 16px; }
   .topic-video { align-items: flex-start; flex-direction: column; }
   .watch-button { align-self: flex-start; }
   .lecture-controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -299,7 +299,7 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
   .lecture-reset { width: auto; grid-column: 1 / -1; justify-self: end; }
 }
 @media(max-width:520px) {
-  .week-topic-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .module-topic-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
   .video-hero { margin-bottom: 22px; }
   .lecture-controls { grid-template-columns: minmax(0,1fr); }
   .lecture-controls > label:first-child, .lecture-reset { grid-column: 1; }
@@ -347,22 +347,22 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
       <p>Explore topic-wise video lectures provided by your teacher to strengthen your understanding of Electric Machinery Fundamentals. Select a lecture to watch it directly on this website, or open it on YouTube.</p>
     </div>
     <div class="lecture-controls" role="group" aria-label="Search and filter lectures">
-      <label><span class="sr-only">Search lectures by title, topic, or week</span><input id="lecture-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="weekly-plan-list"></label>
-      <label><span class="sr-only">Filter by week</span><select id="lecture-week"><option value="">All weeks</option><option value="1">Week 1</option><option value="3">Week 3</option><option value="5">Week 5</option><option value="6">Week 6</option><option value="7">Week 7</option><option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option></select></label>
-      <label><span class="sr-only">Filter by topic</span><select id="lecture-topic"><option value="">All topics</option><option value="DC motors and speed control">DC motors and speed control</option><option value="DC-machine losses, maximum efficiency and armature reaction">DC-machine losses, maximum efficiency and armature reaction</option><option value="DC-motor speed/load and torque/load characteristics">DC-motor speed/load and torque/load characteristics</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and power-loss calculations">Induction-motor tests and power-loss calculations</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Transformer equivalent circuit, voltage regulation and efficiency">Transformer equivalent circuit, voltage regulation and efficiency</option></select></label>
+      <label><span class="sr-only">Search lectures by title, topic, or module</span><input id="lecture-search" type="search" placeholder="Search lectures, topics or modules" autocomplete="off" aria-controls="module-plan-list"></label>
+      <label><span class="sr-only">Filter by module</span><select id="lecture-module"><option value="">All modules</option><option value="1">Module 1</option><option value="2">Module 2</option><option value="3">Module 3</option><option value="4">Module 4</option><option value="5">Module 5</option><option value="6">Module 6</option><option value="7">Module 7</option><option value="8">Module 8</option></select></label>
+      <label><span class="sr-only">Filter by topic</span><select id="lecture-topic"><option value="">All topics</option><option value="DC Machines">DC Machines</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Synchronous Generator">Synchronous Generator</option><option value="Transformers">Transformers</option></select></label>
       <button class="lecture-reset" id="lecture-reset" type="button">Clear filters</button>
     </div>
     <p class="lecture-result-count" id="lecture-result-count" aria-live="polite"></p>
     <p class="lecture-empty" id="lecture-empty" role="status" hidden>No matching lectures found</p>
     <p class="lecture-empty" id="lecture-route-error" role="status" hidden>This lecture link is invalid or is not available in the current lecture list. No other video was substituted.</p>
-    <div id="weekly-plan-list"></div>
+    <div id="module-plan-list"></div>
   </section>
   <section id="player-view" hidden>
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> <span aria-hidden="true">›</span> <button type="button" class="inline-crumb" id="back-to-list-crumb">Video Lectures</button></nav>
     <button class="back-button" type="button" id="back-to-list">← Back to Video Lectures</button>
     <div class="player-card">
       <h2 id="player-topic-title"></h2>
-      <p class="player-week" id="player-week"></p>
+      <p class="player-module" id="player-module"></p>
       <h3 id="player-title"></h3>
       <div class="player-frame" id="player-frame"></div>
       <p class="player-fallback" id="player-fallback"></p>
@@ -385,7 +385,7 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
     <div class="search-results" id="search-results"></div>
   </div>
 </div>
-<script type="application/json" id="video-data">[{"week":1,"title":"Magnetic circuits and numerical examples","videos":[{"id":"UdS_qWUEynY","title":"Magnetic Circuits","url":"https://youtu.be/UdS_qWUEynY"},{"id":"aTKp-zjnnZM","title":"Magnetic Circuits Numerical Example","url":"https://youtu.be/aTKp-zjnnZM"},{"id":"_0SMkTzzHzs","title":"Magnetic Circuit Numerical 2","url":"https://youtu.be/_0SMkTzzHzs"}]},{"week":3,"title":"Transformer equivalent circuit, voltage regulation and efficiency","videos":[{"id":"MGCTRL9GvIQ","title":"Equivalent Circuit Diagram of Transformers (Part 1)","url":"https://youtu.be/MGCTRL9GvIQ"},{"id":"2OQQTiv9AgI","title":"Equivalent Circuit Diagram of Transformers (Part 2)","url":"https://youtu.be/2OQQTiv9AgI"},{"id":"lEz4i2VlbT8","title":"Effect of loads on transformer","url":"https://youtu.be/lEz4i2VlbT8"},{"id":"KKuoiivUDC4","title":"Open Circuit and Short Circuit test of transformer (Complete Numerical )","url":"https://youtu.be/KKuoiivUDC4"}]},{"week":5,"title":"DC-machine losses, maximum efficiency and armature reaction","videos":[{"id":"8ucji-Af1S0","title":"Armature Reaction Effect on DC Machines","url":"https://youtu.be/8ucji-Af1S0"}]},{"week":6,"title":"DC motors and speed control","videos":[{"id":"231etTEJANo","title":"Speed Control of DC Motor","url":"https://youtu.be/231etTEJANo"},{"id":"54GXQRYh3J4","title":"Torque Speed Characteristics of DC Motor","url":"https://youtu.be/54GXQRYh3J4"}]},{"week":7,"title":"DC-motor speed/load and torque/load characteristics","videos":[{"id":"0jd7dSCKQtM","title":"EMF and Torque Equation Of DC Machines","url":"https://youtu.be/0jd7dSCKQtM"}]},{"week":10,"title":"Induction-motor induced EMF, rotor frequency, speed and torque","videos":[{"id":"FHOJK_soS5Q","title":"REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR","url":"https://youtu.be/FHOJK_soS5Q"},{"id":"Zb1W9dB9Clk","title":"TYPES OF STATOR WINDING","url":"https://youtu.be/Zb1W9dB9Clk"},{"id":"E5Gcd-HuXWM","title":"Effect of poles and frequency on revolving magnetic field","url":"https://youtu.be/E5Gcd-HuXWM"}]},{"week":11,"title":"Induction-motor EMF, rotor types, slip, equivalent circuit and power flow","videos":[{"id":"8rraTyqqii8","title":"Slip","url":"https://youtu.be/8rraTyqqii8"},{"id":"4fFF58yJh3E","title":"Difference between squirrel cage and wound rotor induction motor.","url":"https://youtu.be/4fFF58yJh3E"},{"id":"V8RFq9ZgsQc","title":"Equivalent Circuit diagram of Induction Motor (part 1)","url":"https://youtu.be/V8RFq9ZgsQc"},{"id":"X_-z_wvXTfA","title":"Equivalent Circuit diagram of Induction Motor (part 2)","url":"https://youtu.be/X_-z_wvXTfA"},{"id":"IBR2Iei0aSs","title":"Equivalent Circuit diagram of Induction Motor (part 3)","url":"https://youtu.be/IBR2Iei0aSs"},{"id":"RgsHqcyhGOg","title":"Approximate Equivalent Circuit diagram of Induction Motor","url":"https://youtu.be/RgsHqcyhGOg"}]},{"week":12,"title":"Induction-motor tests and power-loss calculations","videos":[{"id":"HCDqHBm53GQ","title":"Power Flow and Losses in Induction Motor","url":"https://youtu.be/HCDqHBm53GQ"},{"id":"J-Rwq2nKIRs","title":"Power and Losses relations of Induction Motor","url":"https://youtu.be/J-Rwq2nKIRs"}]},{"week":12,"title":"Induction-motor tests and torque/speed characteristics","videos":[{"id":"uZ3HvgbYyoI","title":"Torque Speed Characteristics Part 1","url":"https://youtu.be/uZ3HvgbYyoI"},{"id":"PNFDDfgmkXw","title":"Torque and Speed Characteristics part 2","url":"https://youtu.be/PNFDDfgmkXw"},{"id":"0bagD_YDL58","title":"Maximum Torque Equation Derivation","url":"https://youtu.be/0bagD_YDL58"},{"id":"nDLLAzgrxQE","title":"Numerical 3 on Torque and Speed Characteristics","url":"https://youtu.be/nDLLAzgrxQE"}]}]</script>
+<script type="application/json" id="video-data">[{"module":1,"title":"Introduction","videos":[{"id":"5uOh2qeQXJQ","title":"Introduction","url":"https://www.youtube.com/watch?v=5uOh2qeQXJQ"}]},{"module":2,"title":"Magnetic circuits and numerical examples","videos":[{"id":"UdS_qWUEynY","title":"Magnetic Circuits","url":"https://youtu.be/UdS_qWUEynY"},{"id":"aTKp-zjnnZM","title":"Magnetic Circuits Numerical Example","url":"https://youtu.be/aTKp-zjnnZM"},{"id":"_0SMkTzzHzs","title":"Magnetic Circuit Numerical 2","url":"https://youtu.be/_0SMkTzzHzs"}]},{"module":3,"title":"Transformers","videos":[{"id":"SY8gxStbVbo","title":"Introduction to Transformer","url":"https://www.youtube.com/watch?v=SY8gxStbVbo"},{"id":"MGCTRL9GvIQ","title":"Equivalent Circuit Diagram of Transformers (Part 1)","url":"https://youtu.be/MGCTRL9GvIQ"},{"id":"2OQQTiv9AgI","title":"Equivalent Circuit Diagram of Transformers (Part 2)","url":"https://youtu.be/2OQQTiv9AgI"},{"id":"lEz4i2VlbT8","title":"Effect of loads on transformer","url":"https://youtu.be/lEz4i2VlbT8"},{"id":"KKuoiivUDC4","title":"Open Circuit and Short Circuit test of transformer (Complete Numerical )","url":"https://youtu.be/KKuoiivUDC4"}]},{"module":4,"title":"DC Machines","videos":[{"id":"_yxk7_lJ19o","title":"Introduction to DC Machines","url":"https://www.youtube.com/watch?v=_yxk7_lJ19o"},{"id":"l14RBEDpR5s","title":"DC Machine Poles and Speed Relation","url":"https://www.youtube.com/watch?v=l14RBEDpR5s"},{"id":"8ucji-Af1S0","title":"Armature Reaction Effect on DC Machines","url":"https://youtu.be/8ucji-Af1S0"},{"id":"0jd7dSCKQtM","title":"EMF and Torque Equation Of DC Machines","url":"https://youtu.be/0jd7dSCKQtM"},{"id":"54GXQRYh3J4","title":"Torque Speed Characteristics of DC Motor","url":"https://youtu.be/54GXQRYh3J4"},{"id":"231etTEJANo","title":"Speed Control of DC Motor","url":"https://youtu.be/231etTEJANo"}]},{"module":5,"title":"Induction-motor induced EMF, rotor frequency, speed and torque","videos":[{"id":"d01KmYD-n6g","title":"Voltage System","url":"https://www.youtube.com/watch?v=d01KmYD-n6g"},{"id":"FHOJK_soS5Q","title":"REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR","url":"https://youtu.be/FHOJK_soS5Q"},{"id":"Zb1W9dB9Clk","title":"TYPES OF STATOR WINDING","url":"https://youtu.be/Zb1W9dB9Clk"},{"id":"E5Gcd-HuXWM","title":"Effect of poles and frequency on revolving magnetic field","url":"https://youtu.be/E5Gcd-HuXWM"},{"id":"8rraTyqqii8","title":"Slip","url":"https://youtu.be/8rraTyqqii8"},{"id":"4fFF58yJh3E","title":"Difference between squirrel cage and wound rotor induction motor.","url":"https://youtu.be/4fFF58yJh3E"}]},{"module":6,"title":"Induction-motor EMF, rotor types, slip, equivalent circuit and power flow","videos":[{"id":"V8RFq9ZgsQc","title":"Equivalent Circuit diagram of Induction Motor (part 1)","url":"https://youtu.be/V8RFq9ZgsQc"},{"id":"X_-z_wvXTfA","title":"Equivalent Circuit diagram of Induction Motor (part 2)","url":"https://youtu.be/X_-z_wvXTfA"},{"id":"IBR2Iei0aSs","title":"Equivalent Circuit diagram of Induction Motor (part 3)","url":"https://youtu.be/IBR2Iei0aSs"},{"id":"RgsHqcyhGOg","title":"Approximate Equivalent Circuit diagram of Induction Motor","url":"https://youtu.be/RgsHqcyhGOg"},{"id":"HCDqHBm53GQ","title":"Power Flow and Losses in Induction Motor","url":"https://youtu.be/HCDqHBm53GQ"},{"id":"J-Rwq2nKIRs","title":"Power and Losses relations of Induction Motor","url":"https://youtu.be/J-Rwq2nKIRs"},{"id":"XdbeV8Bd_28","title":"Induction motor Numerical 1","url":"https://www.youtube.com/watch?v=XdbeV8Bd_28"},{"id":"G90sTaOWMWc","title":"Induction motor Numerical 2","url":"https://www.youtube.com/watch?v=G90sTaOWMWc"}]},{"module":7,"title":"Induction-motor tests and torque/speed characteristics","videos":[{"id":"uZ3HvgbYyoI","title":"Torque Speed Characteristics Part 1","url":"https://youtu.be/uZ3HvgbYyoI"},{"id":"PNFDDfgmkXw","title":"Torque and Speed Characteristics part 2","url":"https://youtu.be/PNFDDfgmkXw"},{"id":"0bagD_YDL58","title":"Maximum Torque Equation Derivation","url":"https://youtu.be/0bagD_YDL58"},{"id":"nDLLAzgrxQE","title":"Numerical 3 on Torque and Speed Characteristics","url":"https://youtu.be/nDLLAzgrxQE"}]},{"module":8,"title":"Synchronous Generator","videos":[{"id":"kNtMxY4h4x8","title":"Synchronous Generator Lecture 1","url":"https://www.youtube.com/watch?v=kNtMxY4h4x8"},{"id":"-aMkXcoZ_ok","title":"Synchronous Generator Leccture 2","url":"http://youtube.com/watch?v=-aMkXcoZ_ok"},{"id":"gE4bjtIUnWs","title":"Synchronous Generator Lecture 3","url":"https://www.youtube.com/watch?v=gE4bjtIUnWs"},{"id":"aivRFF_91IU","title":"Synchronous Generator Lecture 4","url":"https://www.youtube.com/watch?v=aivRFF_91IU"}]}]</script>
 
 <script>
 (function(){
@@ -684,7 +684,7 @@ const escapeHtml = value => String(value).replace(/[&<>"']/g, ch =>
 const topicForVideo = id => topics.find(topic => topic.videos.some(video => video.id === id));
 const videoFor = id => topicForVideo(id)?.videos.find(video => video.id === id);
 const searchInput = document.getElementById('lecture-search');
-const weekFilter = document.getElementById('lecture-week');
+const moduleFilter = document.getElementById('lecture-module');
 const topicFilter = document.getElementById('lecture-topic');
 const resultCount = document.getElementById('lecture-result-count');
 const emptyState = document.getElementById('lecture-empty');
@@ -717,33 +717,33 @@ function renderList() {
   document.getElementById('youtube-link').href = '#';
   const grouped = new Map();
   for (const topic of topics) {
-    if (!grouped.has(topic.week)) grouped.set(topic.week, []);
-    grouped.get(topic.week).push(topic);
+    if (!grouped.has(topic.module)) grouped.set(topic.module, []);
+    grouped.get(topic.module).push(topic);
   }
   const cards = [...grouped.entries()]
-    .sort(([weekA], [weekB]) => weekA - weekB)
-    .flatMap(([week, weekTopics]) => weekTopics.map(topic => `<article class="week-topic-card" data-topic-week="${week}" data-topic-title="${escapeHtml(topic.title)}">
-        <div class="topic-card-meta"><span class="week-label">Week ${week}</span>${topic.videos.length > 1 ? `<span class="topic-video-count">${topic.videos.length} videos</span>` : ''}</div>
+    .sort(([moduleA], [moduleB]) => moduleA - moduleB)
+    .flatMap(([module, moduleTopics]) => moduleTopics.map(topic => `<article class="module-topic-card" data-topic-module="${module}" data-topic-title="${escapeHtml(topic.title)}">
+        <div class="topic-card-meta"><span class="module-label">Module ${module}</span>${topic.videos.length > 1 ? `<span class="topic-video-count">${topic.videos.length} videos</span>` : ''}</div>
         <h2>${escapeHtml(topic.title)}</h2>
         <div class="topic-video-list">${topic.videos.map(video => `<div class="topic-video">
           <a class="topic-video-title" href="#video/${encodeURIComponent(video.id)}" data-watch="${escapeHtml(video.id)}">${escapeHtml(video.title)}</a>
           <button type="button" class="watch-button" data-watch="${escapeHtml(video.id)}">▶ Play Video</button>
         </div>`).join('')}</div>
       </article>`));
-  document.getElementById('weekly-plan-list').innerHTML = `<div class="week-topic-grid">${cards.join('')}</div>`;
+  document.getElementById('module-plan-list').innerHTML = `<div class="module-topic-grid">${cards.join('')}</div>`;
   applyLectureFilters();
 }
 function applyLectureFilters() {
   const query = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
-  document.querySelectorAll('.week-topic-card').forEach(topic => {
-    const weekMatches = !weekFilter.value || topic.dataset.topicWeek === weekFilter.value;
+  document.querySelectorAll('.module-topic-card').forEach(topic => {
+    const moduleMatches = !moduleFilter.value || topic.dataset.topicModule === moduleFilter.value;
     const topicMatches = !topicFilter.value || topic.dataset.topicTitle === topicFilter.value;
     let visibleInTopic = 0;
     topic.querySelectorAll('.topic-video').forEach(card => {
       const video = videoFor(card.querySelector('[data-watch]').dataset.watch);
-      const searchable = `${video.title} ${topic.dataset.topicTitle} week ${topic.dataset.topicWeek} ${video.id} ${video.url}`.toLowerCase();
-      const visible = weekMatches && topicMatches && (!query || searchable.includes(query));
+      const searchable = `${video.title} ${topic.dataset.topicTitle} module ${topic.dataset.topicModule} ${video.id} ${video.url}`.toLowerCase();
+      const visible = moduleMatches && topicMatches && (!query || searchable.includes(query));
       card.hidden = !visible;
       if (visible) visibleInTopic++;
     });
@@ -768,7 +768,7 @@ function renderPlayer() {
   }
   document.getElementById('player-topic-title').textContent = topic.title;
   document.getElementById('player-title').textContent = video.title;
-  document.getElementById('player-week').textContent = `Week ${topic.week}`;
+  document.getElementById('player-module').textContent = `Module ${topic.module}`;
   document.title = `${video.title} — Video Lectures`;
   document.getElementById('youtube-link').href = video.url;
   const container = document.getElementById('player-frame');
@@ -837,11 +837,11 @@ document.addEventListener('click', event => {
   }
 });
 searchInput.addEventListener('input', applyLectureFilters);
-weekFilter.addEventListener('change', applyLectureFilters);
+moduleFilter.addEventListener('change', applyLectureFilters);
 topicFilter.addEventListener('change', applyLectureFilters);
 document.getElementById('lecture-reset').addEventListener('click', () => {
   searchInput.value = '';
-  weekFilter.value = '';
+  moduleFilter.value = '';
   topicFilter.value = '';
   applyLectureFilters();
   searchInput.focus();

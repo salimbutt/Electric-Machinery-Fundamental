@@ -1014,7 +1014,7 @@ body.dark-mode .section-kicker { color: var(--cyan-accent); }
   }
 }
 .home-lecture-topic-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.week-label {
+.module-label {
   display: inline-flex;
   align-items: center;
   min-height: 26px;
@@ -3029,7 +3029,10 @@ def group_video_topics(video_data):
             "title": video.get("title"),
             "url": video.get("url"),
         })
-    return sorted(topics_by_source.values(), key=lambda topic: topic["week"])
+    topics = sorted(topics_by_source.values(), key=lambda topic: topic["week"])
+    for module, topic in enumerate(topics, start=1):
+        topic["module"] = module
+    return topics
 
 
 def build_legacy_chapters_redirect():
@@ -3052,10 +3055,10 @@ def build_legacy_chapters_redirect():
 
 def build_home_video_section(video_data):
     topics = group_video_topics(video_data)
-    weeks = sorted({topic["week"] for topic in topics})
+    modules = [topic["module"] for topic in topics]
     topic_options = sorted({topic["title"] for topic in topics}, key=str.casefold)
-    week_options_html = "".join(
-        f'<option value="{week}">Week {week}</option>' for week in weeks
+    module_options_html = "".join(
+        f'<option value="{module}">Module {module}</option>' for module in modules
     )
     topic_options_html = "".join(
         f'<option value="{html.escape(title, quote=True)}">{html.escape(title)}</option>'
@@ -3069,13 +3072,13 @@ def build_home_video_section(video_data):
             title = html.escape(video["title"])
             url = html.escape(player_url, quote=True)
             search_text = html.escape(
-                f'week {topic["week"]} {topic["title"]} {video["title"]} {video["url"]} {video["id"]}'.lower(),
+                f'module {topic["module"]} {topic["title"]} {video["title"]} {video["url"]} {video["id"]}'.lower(),
                 quote=True,
             )
             topic_attr = html.escape(topic["title"], quote=True)
             thumbnail = f'https://img.youtube.com/vi/{video["id"]}/hqdefault.jpg'
             lecture_cards.append(f'''
-          <article class="home-lecture-card" data-lecture-search="{search_text}" data-lecture-week="{topic["week"]}" data-lecture-topic="{topic_attr}">
+          <article class="home-lecture-card" data-lecture-search="{search_text}" data-lecture-module="{topic["module"]}" data-lecture-topic="{topic_attr}">
             <a class="home-lecture-thumbnail" href="{url}" aria-label="Play {title}">
               <img src="{thumbnail}" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -3086,7 +3089,7 @@ def build_home_video_section(video_data):
         topic_cards.append(f'''
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week {topic["week"]}</span>
+          <span class="module-label">Module {topic["module"]}</span>
           <span class="topic-video-count">{len(topic["videos"])} lecture{"s" if len(topic["videos"]) != 1 else ""}</span>
         </div>
         <h3>{html.escape(topic["title"])}</h3>
@@ -3103,12 +3106,12 @@ def build_home_video_section(video_data):
         <p class="home-video-result-count" id="home-video-result-count" aria-live="polite"></p>
       </div>
       <div class="home-video-filters" role="group" aria-label="Filter video lectures">
-        <label><span class="sr-only">Filter by week</span><select id="home-video-week"><option value="">All weeks</option>{week_options_html}</select></label>
+        <label><span class="sr-only">Filter by module</span><select id="home-video-module"><option value="">All modules</option>{module_options_html}</select></label>
         <label><span class="sr-only">Filter by topic</span><select id="home-video-topic"><option value="">All topics</option>{topic_options_html}</select></label>
         <label class="home-video-search">
           <span class="sr-only">Search video lectures</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-          <input id="home-video-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="home-video-topic-grid">
+          <input id="home-video-search" type="search" placeholder="Search lectures, topics or modules" autocomplete="off" aria-controls="home-video-topic-grid">
         </label>
         <button class="home-video-reset" id="home-video-reset" type="button">Clear filters</button>
       </div>
@@ -3123,7 +3126,7 @@ def build_home_video_section(video_data):
 (function(){{
   var returnKey='emfVideoListReturn';
   var search=document.getElementById('home-video-search');
-  var weekFilter=document.getElementById('home-video-week');
+  var moduleFilter=document.getElementById('home-video-module');
   var topicFilter=document.getElementById('home-video-topic');
   var reset=document.getElementById('home-video-reset');
   var resultCount=document.getElementById('home-video-result-count');
@@ -3131,15 +3134,15 @@ def build_home_video_section(video_data):
     if(sessionStorage.getItem(returnKey)!=='1') return;
     sessionStorage.removeItem(returnKey);
     var savedQuery=sessionStorage.getItem('emfVideoListSearch')||'';
-    var savedWeek=sessionStorage.getItem('emfVideoListWeek')||'';
+    var savedModule=sessionStorage.getItem('emfVideoListModule')||'';
     var savedTopic=sessionStorage.getItem('emfVideoListTopic')||'';
     var savedScroll=Number(sessionStorage.getItem('emfVideoListScrollY'));
     sessionStorage.removeItem('emfVideoListSearch');
-    sessionStorage.removeItem('emfVideoListWeek');
+    sessionStorage.removeItem('emfVideoListModule');
     sessionStorage.removeItem('emfVideoListTopic');
     sessionStorage.removeItem('emfVideoListScrollY');
     search.value=savedQuery;
-    weekFilter.value=savedWeek;
+    moduleFilter.value=savedModule;
     topicFilter.value=savedTopic;
     search.dispatchEvent(new Event('input'));
     if(Number.isFinite(savedScroll)) window.requestAnimationFrame(function(){{window.scrollTo(0,savedScroll);}});
@@ -3148,7 +3151,7 @@ def build_home_video_section(video_data):
     link.addEventListener('click',function(){{
       sessionStorage.setItem(returnKey,'1');
       sessionStorage.setItem('emfVideoListSearch',search.value);
-      sessionStorage.setItem('emfVideoListWeek',weekFilter.value);
+      sessionStorage.setItem('emfVideoListModule',moduleFilter.value);
       sessionStorage.setItem('emfVideoListTopic',topicFilter.value);
       sessionStorage.setItem('emfVideoListScrollY',String(window.scrollY));
     }});
@@ -3164,7 +3167,7 @@ def build_home_video_section(video_data):
       var visibleInTopic=0;
       cards.forEach(function(card){{
         var visible=(!query || card.dataset.lectureSearch.indexOf(query)!==-1) &&
-          (!weekFilter.value || card.dataset.lectureWeek===weekFilter.value) &&
+          (!moduleFilter.value || card.dataset.lectureModule===moduleFilter.value) &&
           (!topicFilter.value || card.dataset.lectureTopic===topicFilter.value);
         card.hidden=!visible;
         if(visible) visibleInTopic++;
@@ -3176,11 +3179,11 @@ def build_home_video_section(video_data):
     resultCount.textContent=visibleCount+' lecture'+(visibleCount===1?'':'s')+' found';
   }}
   search.addEventListener('input',updateLectureResults);
-  weekFilter.addEventListener('change',updateLectureResults);
+  moduleFilter.addEventListener('change',updateLectureResults);
   topicFilter.addEventListener('change',updateLectureResults);
   reset.addEventListener('click',function(){{
     search.value='';
-    weekFilter.value='';
+    moduleFilter.value='';
     topicFilter.value='';
     updateLectureResults();
     search.focus();
@@ -3191,17 +3194,20 @@ def build_home_video_section(video_data):
 
 
 def build_video_lectures_page(video_data):
-    weekly_topics = group_video_topics(video_data)
-    weeks = sorted({topic["week"] for topic in weekly_topics})
-    topic_options = sorted({topic["title"] for topic in weekly_topics}, key=str.casefold)
-    week_options_html = "".join(
-        f'<option value="{week}">Week {week}</option>' for week in weeks
+    module_topics = [
+        {"module": topic["module"], "title": topic["title"], "videos": topic["videos"]}
+        for topic in group_video_topics(video_data)
+    ]
+    modules = sorted({topic["module"] for topic in module_topics})
+    topic_options = sorted({topic["title"] for topic in module_topics}, key=str.casefold)
+    module_options_html = "".join(
+        f'<option value="{module}">Module {module}</option>' for module in modules
     )
     topic_options_html = "".join(
         f'<option value="{html.escape(title, quote=True)}">{html.escape(title)}</option>'
         for title in topic_options
     )
-    embedded_data = json.dumps(weekly_topics, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    embedded_data = json.dumps(module_topics, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     css = r"""
 * { box-sizing: border-box; }
 :root { --cyan-accent: #38bdf8; --bg-card: #fff; --line: #e2e8f0; --radius-lg: 16px; --text-muted: #64748b; --text-main: #0f172a; --blue-light: #eff6ff; --blue-primary: #2563eb; --video-page-bg: #f4f7fb; --video-surface: #fff; --video-line: #dce4ef; --video-text: #172033; --video-heading: #10213f; --video-muted: #64748b; --video-subtle: #f8fafc; }
@@ -3232,11 +3238,11 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
 .lecture-reset:hover { background: var(--video-subtle); }
 .lecture-result-count { margin: 0 0 14px; color: var(--video-muted); font-size: 14px; }
 .lecture-empty { margin: 0 0 14px; padding: 16px; border: 1px solid var(--video-line); border-radius: 9px; background: var(--video-surface); color: var(--video-muted); }
-.week-topic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 20px; }
-.week-topic-card { min-width: 0; padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); box-shadow: 0 3px 12px rgba(15,23,42,.035); }
+.module-topic-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 20px; }
+.module-topic-card { min-width: 0; padding: 22px; border: 1px solid var(--video-line); border-radius: 14px; background: var(--video-surface); box-shadow: 0 3px 12px rgba(15,23,42,.035); }
 .topic-card-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.week-label { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.week-topic-card h2 { min-width: 0; margin: 0; color: var(--video-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
+.module-label { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.module-topic-card h2 { min-width: 0; margin: 0; color: var(--video-heading); font-size: 17px; line-height: 1.45; overflow-wrap: anywhere; }
 .topic-video-count { margin: 0; color: var(--video-muted); font-size: 12px; font-weight: 600; white-space: nowrap; }
 .topic-video-list { display: grid; gap: 10px; margin-top: 14px; }
 .topic-video { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--video-line); border-radius: 10px; background: var(--video-subtle); }
@@ -3268,7 +3274,7 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
   .video-back-home-row { padding: 10px 16px 0; }
   .video-main { padding: 12px 16px 48px; }
   .video-hero { padding: 23px 20px; }
-  .week-topic-card { padding: 16px; }
+  .module-topic-card { padding: 16px; }
   .topic-video { align-items: flex-start; flex-direction: column; }
   .watch-button { align-self: flex-start; }
   .lecture-controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -3276,7 +3282,7 @@ h1 { margin: 0 0 10px; color: var(--video-heading); font-size: clamp(28px,3.5vw,
   .lecture-reset { width: auto; grid-column: 1 / -1; justify-self: end; }
 }
 @media(max-width:520px) {
-  .week-topic-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .module-topic-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
   .video-hero { margin-bottom: 22px; }
   .lecture-controls { grid-template-columns: minmax(0,1fr); }
   .lecture-controls > label:first-child, .lecture-reset { grid-column: 1; }
@@ -3297,7 +3303,7 @@ const escapeHtml = value => String(value).replace(/[&<>"']/g, ch =>
 const topicForVideo = id => topics.find(topic => topic.videos.some(video => video.id === id));
 const videoFor = id => topicForVideo(id)?.videos.find(video => video.id === id);
 const searchInput = document.getElementById('lecture-search');
-const weekFilter = document.getElementById('lecture-week');
+const moduleFilter = document.getElementById('lecture-module');
 const topicFilter = document.getElementById('lecture-topic');
 const resultCount = document.getElementById('lecture-result-count');
 const emptyState = document.getElementById('lecture-empty');
@@ -3330,33 +3336,33 @@ function renderList() {
   document.getElementById('youtube-link').href = '#';
   const grouped = new Map();
   for (const topic of topics) {
-    if (!grouped.has(topic.week)) grouped.set(topic.week, []);
-    grouped.get(topic.week).push(topic);
+    if (!grouped.has(topic.module)) grouped.set(topic.module, []);
+    grouped.get(topic.module).push(topic);
   }
   const cards = [...grouped.entries()]
-    .sort(([weekA], [weekB]) => weekA - weekB)
-    .flatMap(([week, weekTopics]) => weekTopics.map(topic => `<article class="week-topic-card" data-topic-week="${week}" data-topic-title="${escapeHtml(topic.title)}">
-        <div class="topic-card-meta"><span class="week-label">Week ${week}</span>${topic.videos.length > 1 ? `<span class="topic-video-count">${topic.videos.length} videos</span>` : ''}</div>
+    .sort(([moduleA], [moduleB]) => moduleA - moduleB)
+    .flatMap(([module, moduleTopics]) => moduleTopics.map(topic => `<article class="module-topic-card" data-topic-module="${module}" data-topic-title="${escapeHtml(topic.title)}">
+        <div class="topic-card-meta"><span class="module-label">Module ${module}</span>${topic.videos.length > 1 ? `<span class="topic-video-count">${topic.videos.length} videos</span>` : ''}</div>
         <h2>${escapeHtml(topic.title)}</h2>
         <div class="topic-video-list">${topic.videos.map(video => `<div class="topic-video">
           <a class="topic-video-title" href="#video/${encodeURIComponent(video.id)}" data-watch="${escapeHtml(video.id)}">${escapeHtml(video.title)}</a>
           <button type="button" class="watch-button" data-watch="${escapeHtml(video.id)}">▶ Play Video</button>
         </div>`).join('')}</div>
       </article>`));
-  document.getElementById('weekly-plan-list').innerHTML = `<div class="week-topic-grid">${cards.join('')}</div>`;
+  document.getElementById('module-plan-list').innerHTML = `<div class="module-topic-grid">${cards.join('')}</div>`;
   applyLectureFilters();
 }
 function applyLectureFilters() {
   const query = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
-  document.querySelectorAll('.week-topic-card').forEach(topic => {
-    const weekMatches = !weekFilter.value || topic.dataset.topicWeek === weekFilter.value;
+  document.querySelectorAll('.module-topic-card').forEach(topic => {
+    const moduleMatches = !moduleFilter.value || topic.dataset.topicModule === moduleFilter.value;
     const topicMatches = !topicFilter.value || topic.dataset.topicTitle === topicFilter.value;
     let visibleInTopic = 0;
     topic.querySelectorAll('.topic-video').forEach(card => {
       const video = videoFor(card.querySelector('[data-watch]').dataset.watch);
-      const searchable = `${video.title} ${topic.dataset.topicTitle} week ${topic.dataset.topicWeek} ${video.id} ${video.url}`.toLowerCase();
-      const visible = weekMatches && topicMatches && (!query || searchable.includes(query));
+      const searchable = `${video.title} ${topic.dataset.topicTitle} module ${topic.dataset.topicModule} ${video.id} ${video.url}`.toLowerCase();
+      const visible = moduleMatches && topicMatches && (!query || searchable.includes(query));
       card.hidden = !visible;
       if (visible) visibleInTopic++;
     });
@@ -3381,7 +3387,7 @@ function renderPlayer() {
   }
   document.getElementById('player-topic-title').textContent = topic.title;
   document.getElementById('player-title').textContent = video.title;
-  document.getElementById('player-week').textContent = `Week ${topic.week}`;
+  document.getElementById('player-module').textContent = `Module ${topic.module}`;
   document.title = `${video.title} — Video Lectures`;
   document.getElementById('youtube-link').href = video.url;
   const container = document.getElementById('player-frame');
@@ -3450,11 +3456,11 @@ document.addEventListener('click', event => {
   }
 });
 searchInput.addEventListener('input', applyLectureFilters);
-weekFilter.addEventListener('change', applyLectureFilters);
+moduleFilter.addEventListener('change', applyLectureFilters);
 topicFilter.addEventListener('change', applyLectureFilters);
 document.getElementById('lecture-reset').addEventListener('click', () => {
   searchInput.value = '';
-  weekFilter.value = '';
+  moduleFilter.value = '';
   topicFilter.value = '';
   applyLectureFilters();
   searchInput.focus();
@@ -3472,7 +3478,7 @@ restoreRoute(location.hash);
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Browse the teacher's weekly video lecture plan and watch selected lessons.">
+<meta name="description" content="Browse the teacher's module-based video lecture plan and watch selected lessons.">
 <meta name="theme-color" content="#070e1e">
 <title>Video Lectures — Electric Machinery Fundamentals</title>
 {generate_favicon_link()}
@@ -3494,22 +3500,22 @@ restoreRoute(location.hash);
       <p>Explore topic-wise video lectures provided by your teacher to strengthen your understanding of Electric Machinery Fundamentals. Select a lecture to watch it directly on this website, or open it on YouTube.</p>
     </div>
     <div class="lecture-controls" role="group" aria-label="Search and filter lectures">
-      <label><span class="sr-only">Search lectures by title, topic, or week</span><input id="lecture-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="weekly-plan-list"></label>
-      <label><span class="sr-only">Filter by week</span><select id="lecture-week"><option value="">All weeks</option>{week_options_html}</select></label>
+      <label><span class="sr-only">Search lectures by title, topic, or module</span><input id="lecture-search" type="search" placeholder="Search lectures, topics or modules" autocomplete="off" aria-controls="module-plan-list"></label>
+      <label><span class="sr-only">Filter by module</span><select id="lecture-module"><option value="">All modules</option>{module_options_html}</select></label>
       <label><span class="sr-only">Filter by topic</span><select id="lecture-topic"><option value="">All topics</option>{topic_options_html}</select></label>
       <button class="lecture-reset" id="lecture-reset" type="button">Clear filters</button>
     </div>
     <p class="lecture-result-count" id="lecture-result-count" aria-live="polite"></p>
     <p class="lecture-empty" id="lecture-empty" role="status" hidden>No matching lectures found</p>
     <p class="lecture-empty" id="lecture-route-error" role="status" hidden>This lecture link is invalid or is not available in the current lecture list. No other video was substituted.</p>
-    <div id="weekly-plan-list"></div>
+    <div id="module-plan-list"></div>
   </section>
   <section id="player-view" hidden>
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> <span aria-hidden="true">›</span> <button type="button" class="inline-crumb" id="back-to-list-crumb">Video Lectures</button></nav>
     <button class="back-button" type="button" id="back-to-list">← Back to Video Lectures</button>
     <div class="player-card">
       <h2 id="player-topic-title"></h2>
-      <p class="player-week" id="player-week"></p>
+      <p class="player-module" id="player-module"></p>
       <h3 id="player-title"></h3>
       <div class="player-frame" id="player-frame"></div>
       <p class="player-fallback" id="player-fallback"></p>

@@ -825,6 +825,25 @@ body.dark-mode .section-kicker { color: var(--cyan-accent); }
 .home-video-section input:focus-visible, .home-video-section select:focus-visible, .home-video-section button:focus-visible {
   outline: 3px solid var(--blue-primary); outline-offset: 2px;
 }
+.acknowledgements-section { padding: 0 0 56px; }
+.acknowledgements-card {
+  max-width: 760px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 22px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--feature-card-shadow), 0 0 18px var(--feature-glow);
+}
+.acknowledgements-card h2 { margin: 0 0 8px; color: var(--navy-heading); font-size: 19px; font-weight: 700; }
+.acknowledgements-card p { margin: 0; color: var(--text-muted); font-size: 14.5px; line-height: 1.55; overflow-wrap: anywhere; }
+.acknowledgements-card a { color: inherit; font: inherit; text-decoration: none; transition: text-shadow 0.15s ease; }
+.acknowledgements-card a:hover { text-shadow: 0 0 7px rgba(37, 99, 235, 0.32); }
+.acknowledgements-card a:focus-visible { outline: none; box-shadow: none; }
+body.dark-mode .acknowledgements-card a:hover { text-shadow: 0 0 8px rgba(56, 189, 248, 0.48); }
+.acknowledgements-credit { margin-top: 12px !important; color: var(--text-main) !important; }
+.acknowledgements-credit strong { color: var(--blue-primary); }
 .sr-only {
   position: absolute;
   width: 1px;
@@ -854,7 +873,7 @@ body.dark-mode .section-kicker { color: var(--cyan-accent); }
   }
 }
 .home-lecture-topic-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.week-label {
+.module-label {
   display: inline-flex;
   align-items: center;
   min-height: 26px;
@@ -1491,12 +1510,12 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
         <p class="home-video-result-count" id="home-video-result-count" aria-live="polite"></p>
       </div>
       <div class="home-video-filters" role="group" aria-label="Filter video lectures">
-        <label><span class="sr-only">Filter by week</span><select id="home-video-week"><option value="">All weeks</option><option value="1">Week 1</option><option value="3">Week 3</option><option value="5">Week 5</option><option value="6">Week 6</option><option value="7">Week 7</option><option value="10">Week 10</option><option value="11">Week 11</option><option value="12">Week 12</option></select></label>
-        <label><span class="sr-only">Filter by topic</span><select id="home-video-topic"><option value="">All topics</option><option value="DC motors and speed control">DC motors and speed control</option><option value="DC-machine losses, maximum efficiency and armature reaction">DC-machine losses, maximum efficiency and armature reaction</option><option value="DC-motor speed/load and torque/load characteristics">DC-motor speed/load and torque/load characteristics</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and power-loss calculations">Induction-motor tests and power-loss calculations</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Transformer equivalent circuit, voltage regulation and efficiency">Transformer equivalent circuit, voltage regulation and efficiency</option></select></label>
+        <label><span class="sr-only">Filter by module</span><select id="home-video-module"><option value="">All modules</option><option value="1">Module 1</option><option value="2">Module 2</option><option value="3">Module 3</option><option value="4">Module 4</option><option value="5">Module 5</option><option value="6">Module 6</option><option value="7">Module 7</option><option value="8">Module 8</option></select></label>
+        <label><span class="sr-only">Filter by topic</span><select id="home-video-topic"><option value="">All topics</option><option value="DC Machines">DC Machines</option><option value="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</option><option value="Induction-motor induced EMF, rotor frequency, speed and torque">Induction-motor induced EMF, rotor frequency, speed and torque</option><option value="Induction-motor tests and torque/speed characteristics">Induction-motor tests and torque/speed characteristics</option><option value="Introduction">Introduction</option><option value="Magnetic circuits and numerical examples">Magnetic circuits and numerical examples</option><option value="Synchronous Generator">Synchronous Generator</option><option value="Transformers">Transformers</option></select></label>
         <label class="home-video-search">
           <span class="sr-only">Search video lectures</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-          <input id="home-video-search" type="search" placeholder="Search lectures, topics or weeks" autocomplete="off" aria-controls="home-video-topic-grid">
+          <input id="home-video-search" type="search" placeholder="Search lectures, topics or modules" autocomplete="off" aria-controls="home-video-topic-grid">
         </label>
         <button class="home-video-reset" id="home-video-reset" type="button">Clear filters</button>
       </div>
@@ -1506,12 +1525,28 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
       
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week 1</span>
+          <span class="module-label">Module 1</span>
+          <span class="topic-video-count">1 lecture</span>
+        </div>
+        <h3>Introduction</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="module 1 introduction introduction https://www.youtube.com/watch?v=5uoh2qeqxjq 5uoh2qeqxjq" data-lecture-module="1" data-lecture-topic="Introduction">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/5uOh2qeQXJQ" aria-label="Play Introduction">
+              <img src="https://img.youtube.com/vi/5uOh2qeQXJQ/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Introduction</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/5uOh2qeQXJQ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="module-label">Module 2</span>
           <span class="topic-video-count">3 lectures</span>
         </div>
         <h3>Magnetic circuits and numerical examples</h3>
         <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuits https://youtu.be/uds_qwueyny uds_qwueyny" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+          <article class="home-lecture-card" data-lecture-search="module 2 magnetic circuits and numerical examples magnetic circuits https://youtu.be/uds_qwueyny uds_qwueyny" data-lecture-module="2" data-lecture-topic="Magnetic circuits and numerical examples">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/UdS_qWUEynY" aria-label="Play Magnetic Circuits">
               <img src="https://img.youtube.com/vi/UdS_qWUEynY/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1519,7 +1554,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Magnetic Circuits</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/UdS_qWUEynY"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuits numerical example https://youtu.be/atkp-zjnnzm atkp-zjnnzm" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+          <article class="home-lecture-card" data-lecture-search="module 2 magnetic circuits and numerical examples magnetic circuits numerical example https://youtu.be/atkp-zjnnzm atkp-zjnnzm" data-lecture-module="2" data-lecture-topic="Magnetic circuits and numerical examples">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/aTKp-zjnnZM" aria-label="Play Magnetic Circuits Numerical Example">
               <img src="https://img.youtube.com/vi/aTKp-zjnnZM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1527,7 +1562,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Magnetic Circuits Numerical Example</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/aTKp-zjnnZM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 1 magnetic circuits and numerical examples magnetic circuit numerical 2 https://youtu.be/_0smktzzhzs _0smktzzhzs" data-lecture-week="1" data-lecture-topic="Magnetic circuits and numerical examples">
+          <article class="home-lecture-card" data-lecture-search="module 2 magnetic circuits and numerical examples magnetic circuit numerical 2 https://youtu.be/_0smktzzhzs _0smktzzhzs" data-lecture-module="2" data-lecture-topic="Magnetic circuits and numerical examples">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/_0SMkTzzHzs" aria-label="Play Magnetic Circuit Numerical 2">
               <img src="https://img.youtube.com/vi/_0SMkTzzHzs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1538,12 +1573,20 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
       </article>
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week 3</span>
-          <span class="topic-video-count">4 lectures</span>
+          <span class="module-label">Module 3</span>
+          <span class="topic-video-count">5 lectures</span>
         </div>
-        <h3>Transformer equivalent circuit, voltage regulation and efficiency</h3>
+        <h3>Transformers</h3>
         <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency equivalent circuit diagram of transformers (part 1) https://youtu.be/mgctrl9gviq mgctrl9gviq" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+          <article class="home-lecture-card" data-lecture-search="module 3 transformers introduction to transformer https://www.youtube.com/watch?v=sy8gxstbvbo sy8gxstbvbo" data-lecture-module="3" data-lecture-topic="Transformers">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/SY8gxStbVbo" aria-label="Play Introduction to Transformer">
+              <img src="https://img.youtube.com/vi/SY8gxStbVbo/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Introduction to Transformer</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/SY8gxStbVbo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 3 transformers equivalent circuit diagram of transformers (part 1) https://youtu.be/mgctrl9gviq mgctrl9gviq" data-lecture-module="3" data-lecture-topic="Transformers">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/MGCTRL9GvIQ" aria-label="Play Equivalent Circuit Diagram of Transformers (Part 1)">
               <img src="https://img.youtube.com/vi/MGCTRL9GvIQ/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1551,7 +1594,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Equivalent Circuit Diagram of Transformers (Part 1)</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/MGCTRL9GvIQ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency equivalent circuit diagram of transformers (part 2) https://youtu.be/2oqqtiv9agi 2oqqtiv9agi" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+          <article class="home-lecture-card" data-lecture-search="module 3 transformers equivalent circuit diagram of transformers (part 2) https://youtu.be/2oqqtiv9agi 2oqqtiv9agi" data-lecture-module="3" data-lecture-topic="Transformers">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/2OQQTiv9AgI" aria-label="Play Equivalent Circuit Diagram of Transformers (Part 2)">
               <img src="https://img.youtube.com/vi/2OQQTiv9AgI/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1559,7 +1602,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Equivalent Circuit Diagram of Transformers (Part 2)</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/2OQQTiv9AgI"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency effect of loads on transformer https://youtu.be/lez4i2vlbt8 lez4i2vlbt8" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+          <article class="home-lecture-card" data-lecture-search="module 3 transformers effect of loads on transformer https://youtu.be/lez4i2vlbt8 lez4i2vlbt8" data-lecture-module="3" data-lecture-topic="Transformers">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/lEz4i2VlbT8" aria-label="Play Effect of loads on transformer">
               <img src="https://img.youtube.com/vi/lEz4i2VlbT8/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1567,7 +1610,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Effect of loads on transformer</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/lEz4i2VlbT8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 3 transformer equivalent circuit, voltage regulation and efficiency open circuit and short circuit test of transformer (complete numerical ) https://youtu.be/kkuoiivudc4 kkuoiivudc4" data-lecture-week="3" data-lecture-topic="Transformer equivalent circuit, voltage regulation and efficiency">
+          <article class="home-lecture-card" data-lecture-search="module 3 transformers open circuit and short circuit test of transformer (complete numerical ) https://youtu.be/kkuoiivudc4 kkuoiivudc4" data-lecture-module="3" data-lecture-topic="Transformers">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/KKuoiivUDC4" aria-label="Play Open Circuit and Short Circuit test of transformer (Complete Numerical )">
               <img src="https://img.youtube.com/vi/KKuoiivUDC4/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1578,68 +1621,76 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
       </article>
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week 5</span>
-          <span class="topic-video-count">1 lecture</span>
+          <span class="module-label">Module 4</span>
+          <span class="topic-video-count">6 lectures</span>
         </div>
-        <h3>DC-machine losses, maximum efficiency and armature reaction</h3>
+        <h3>DC Machines</h3>
         <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 5 dc-machine losses, maximum efficiency and armature reaction armature reaction effect on dc machines https://youtu.be/8ucji-af1s0 8ucji-af1s0" data-lecture-week="5" data-lecture-topic="DC-machine losses, maximum efficiency and armature reaction">
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines introduction to dc machines https://www.youtube.com/watch?v=_yxk7_lj19o _yxk7_lj19o" data-lecture-module="4" data-lecture-topic="DC Machines">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/_yxk7_lJ19o" aria-label="Play Introduction to DC Machines">
+              <img src="https://img.youtube.com/vi/_yxk7_lJ19o/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Introduction to DC Machines</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/_yxk7_lJ19o"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines dc machine poles and speed relation https://www.youtube.com/watch?v=l14rbedpr5s l14rbedpr5s" data-lecture-module="4" data-lecture-topic="DC Machines">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/l14RBEDpR5s" aria-label="Play DC Machine Poles and Speed Relation">
+              <img src="https://img.youtube.com/vi/l14RBEDpR5s/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>DC Machine Poles and Speed Relation</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/l14RBEDpR5s"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines armature reaction effect on dc machines https://youtu.be/8ucji-af1s0 8ucji-af1s0" data-lecture-module="4" data-lecture-topic="DC Machines">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/8ucji-Af1S0" aria-label="Play Armature Reaction Effect on DC Machines">
               <img src="https://img.youtube.com/vi/8ucji-Af1S0/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Armature Reaction Effect on DC Machines</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/8ucji-Af1S0"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
-          </article></div>
-      </article>
-      <article class="home-lecture-topic">
-        <div class="home-lecture-topic-header">
-          <span class="week-label">Week 6</span>
-          <span class="topic-video-count">2 lectures</span>
-        </div>
-        <h3>DC motors and speed control</h3>
-        <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 6 dc motors and speed control speed control of dc motor https://youtu.be/231ettejano 231ettejano" data-lecture-week="6" data-lecture-topic="DC motors and speed control">
-            <a class="home-lecture-thumbnail" href="video-lectures.html#video/231etTEJANo" aria-label="Play Speed Control of DC Motor">
-              <img src="https://img.youtube.com/vi/231etTEJANo/hqdefault.jpg" alt="" loading="lazy" decoding="async">
-              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
-            </a>
-            <h4>Speed Control of DC Motor</h4>
-            <a class="home-lecture-button" href="video-lectures.html#video/231etTEJANo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 6 dc motors and speed control torque speed characteristics of dc motor https://youtu.be/54gxqryh3j4 54gxqryh3j4" data-lecture-week="6" data-lecture-topic="DC motors and speed control">
-            <a class="home-lecture-thumbnail" href="video-lectures.html#video/54GXQRYh3J4" aria-label="Play Torque Speed Characteristics of DC Motor">
-              <img src="https://img.youtube.com/vi/54GXQRYh3J4/hqdefault.jpg" alt="" loading="lazy" decoding="async">
-              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
-            </a>
-            <h4>Torque Speed Characteristics of DC Motor</h4>
-            <a class="home-lecture-button" href="video-lectures.html#video/54GXQRYh3J4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
-          </article></div>
-      </article>
-      <article class="home-lecture-topic">
-        <div class="home-lecture-topic-header">
-          <span class="week-label">Week 7</span>
-          <span class="topic-video-count">1 lecture</span>
-        </div>
-        <h3>DC-motor speed/load and torque/load characteristics</h3>
-        <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 7 dc-motor speed/load and torque/load characteristics emf and torque equation of dc machines https://youtu.be/0jd7dsckqtm 0jd7dsckqtm" data-lecture-week="7" data-lecture-topic="DC-motor speed/load and torque/load characteristics">
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines emf and torque equation of dc machines https://youtu.be/0jd7dsckqtm 0jd7dsckqtm" data-lecture-module="4" data-lecture-topic="DC Machines">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/0jd7dSCKQtM" aria-label="Play EMF and Torque Equation Of DC Machines">
               <img src="https://img.youtube.com/vi/0jd7dSCKQtM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>EMF and Torque Equation Of DC Machines</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/0jd7dSCKQtM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines torque speed characteristics of dc motor https://youtu.be/54gxqryh3j4 54gxqryh3j4" data-lecture-module="4" data-lecture-topic="DC Machines">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/54GXQRYh3J4" aria-label="Play Torque Speed Characteristics of DC Motor">
+              <img src="https://img.youtube.com/vi/54GXQRYh3J4/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Torque Speed Characteristics of DC Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/54GXQRYh3J4"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 4 dc machines speed control of dc motor https://youtu.be/231ettejano 231ettejano" data-lecture-module="4" data-lecture-topic="DC Machines">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/231etTEJANo" aria-label="Play Speed Control of DC Motor">
+              <img src="https://img.youtube.com/vi/231etTEJANo/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Speed Control of DC Motor</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/231etTEJANo"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article></div>
       </article>
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week 10</span>
-          <span class="topic-video-count">3 lectures</span>
+          <span class="module-label">Module 5</span>
+          <span class="topic-video-count">6 lectures</span>
         </div>
         <h3>Induction-motor induced EMF, rotor frequency, speed and torque</h3>
         <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque revolving magnetic field in ac machine stator https://youtu.be/fhojk_sos5q fhojk_sos5q" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque voltage system https://www.youtube.com/watch?v=d01kmyd-n6g d01kmyd-n6g" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/d01KmYD-n6g" aria-label="Play Voltage System">
+              <img src="https://img.youtube.com/vi/d01KmYD-n6g/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Voltage System</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/d01KmYD-n6g"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque revolving magnetic field in ac machine stator https://youtu.be/fhojk_sos5q fhojk_sos5q" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/FHOJK_soS5Q" aria-label="Play REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR">
               <img src="https://img.youtube.com/vi/FHOJK_soS5Q/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1647,7 +1698,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>REVOLVING MAGNETIC FIELD IN AC MACHINE STATOR</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/FHOJK_soS5Q"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque types of stator winding https://youtu.be/zb1w9db9clk zb1w9db9clk" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque types of stator winding https://youtu.be/zb1w9db9clk zb1w9db9clk" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/Zb1W9dB9Clk" aria-label="Play TYPES OF STATOR WINDING">
               <img src="https://img.youtube.com/vi/Zb1W9dB9Clk/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1655,23 +1706,15 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>TYPES OF STATOR WINDING</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/Zb1W9dB9Clk"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 10 induction-motor induced emf, rotor frequency, speed and torque effect of poles and frequency on revolving magnetic field https://youtu.be/e5gcd-huxwm e5gcd-huxwm" data-lecture-week="10" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque effect of poles and frequency on revolving magnetic field https://youtu.be/e5gcd-huxwm e5gcd-huxwm" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/E5Gcd-HuXWM" aria-label="Play Effect of poles and frequency on revolving magnetic field">
               <img src="https://img.youtube.com/vi/E5Gcd-HuXWM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Effect of poles and frequency on revolving magnetic field</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/E5Gcd-HuXWM"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
-          </article></div>
-      </article>
-      <article class="home-lecture-topic">
-        <div class="home-lecture-topic-header">
-          <span class="week-label">Week 11</span>
-          <span class="topic-video-count">6 lectures</span>
-        </div>
-        <h3>Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</h3>
-        <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow slip https://youtu.be/8rratyqqii8 8rratyqqii8" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque slip https://youtu.be/8rratyqqii8 8rratyqqii8" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/8rraTyqqii8" aria-label="Play Slip">
               <img src="https://img.youtube.com/vi/8rraTyqqii8/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1679,15 +1722,23 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Slip</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/8rraTyqqii8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow difference between squirrel cage and wound rotor induction motor. https://youtu.be/4fff58yjh3e 4fff58yjh3e" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          <article class="home-lecture-card" data-lecture-search="module 5 induction-motor induced emf, rotor frequency, speed and torque difference between squirrel cage and wound rotor induction motor. https://youtu.be/4fff58yjh3e 4fff58yjh3e" data-lecture-module="5" data-lecture-topic="Induction-motor induced EMF, rotor frequency, speed and torque">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/4fFF58yJh3E" aria-label="Play Difference between squirrel cage and wound rotor induction motor.">
               <img src="https://img.youtube.com/vi/4fFF58yJh3E/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Difference between squirrel cage and wound rotor induction motor.</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/4fFF58yJh3E"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
-          </article>
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 1) https://youtu.be/v8rfq9zgsqc v8rfq9zgsqc" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="module-label">Module 6</span>
+          <span class="topic-video-count">8 lectures</span>
+        </div>
+        <h3>Induction-motor EMF, rotor types, slip, equivalent circuit and power flow</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 1) https://youtu.be/v8rfq9zgsqc v8rfq9zgsqc" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/V8RFq9ZgsQc" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 1)">
               <img src="https://img.youtube.com/vi/V8RFq9ZgsQc/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1695,7 +1746,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Equivalent Circuit diagram of Induction Motor (part 1)</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/V8RFq9ZgsQc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 2) https://youtu.be/x_-z_wvxtfa x_-z_wvxtfa" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 2) https://youtu.be/x_-z_wvxtfa x_-z_wvxtfa" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/X_-z_wvXTfA" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 2)">
               <img src="https://img.youtube.com/vi/X_-z_wvXTfA/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1703,7 +1754,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Equivalent Circuit diagram of Induction Motor (part 2)</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/X_-z_wvXTfA"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 3) https://youtu.be/ibr2iei0ass ibr2iei0ass" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow equivalent circuit diagram of induction motor (part 3) https://youtu.be/ibr2iei0ass ibr2iei0ass" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/IBR2Iei0aSs" aria-label="Play Equivalent Circuit diagram of Induction Motor (part 3)">
               <img src="https://img.youtube.com/vi/IBR2Iei0aSs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1711,23 +1762,15 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Equivalent Circuit diagram of Induction Motor (part 3)</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/IBR2Iei0aSs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 11 induction-motor emf, rotor types, slip, equivalent circuit and power flow approximate equivalent circuit diagram of induction motor https://youtu.be/rgshqcyhgog rgshqcyhgog" data-lecture-week="11" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow approximate equivalent circuit diagram of induction motor https://youtu.be/rgshqcyhgog rgshqcyhgog" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/RgsHqcyhGOg" aria-label="Play Approximate Equivalent Circuit diagram of Induction Motor">
               <img src="https://img.youtube.com/vi/RgsHqcyhGOg/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Approximate Equivalent Circuit diagram of Induction Motor</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/RgsHqcyhGOg"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
-          </article></div>
-      </article>
-      <article class="home-lecture-topic">
-        <div class="home-lecture-topic-header">
-          <span class="week-label">Week 12</span>
-          <span class="topic-video-count">2 lectures</span>
-        </div>
-        <h3>Induction-motor tests and power-loss calculations</h3>
-        <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and power-loss calculations power flow and losses in induction motor https://youtu.be/hcdqhbm53gq hcdqhbm53gq" data-lecture-week="12" data-lecture-topic="Induction-motor tests and power-loss calculations">
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow power flow and losses in induction motor https://youtu.be/hcdqhbm53gq hcdqhbm53gq" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/HCDqHBm53GQ" aria-label="Play Power Flow and Losses in Induction Motor">
               <img src="https://img.youtube.com/vi/HCDqHBm53GQ/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1735,23 +1778,39 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Power Flow and Losses in Induction Motor</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/HCDqHBm53GQ"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and power-loss calculations power and losses relations of induction motor https://youtu.be/j-rwq2nkirs j-rwq2nkirs" data-lecture-week="12" data-lecture-topic="Induction-motor tests and power-loss calculations">
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow power and losses relations of induction motor https://youtu.be/j-rwq2nkirs j-rwq2nkirs" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/J-Rwq2nKIRs" aria-label="Play Power and Losses relations of Induction Motor">
               <img src="https://img.youtube.com/vi/J-Rwq2nKIRs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Power and Losses relations of Induction Motor</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/J-Rwq2nKIRs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow induction motor numerical 1 https://www.youtube.com/watch?v=xdbev8bd_28 xdbev8bd_28" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/XdbeV8Bd_28" aria-label="Play Induction motor Numerical 1">
+              <img src="https://img.youtube.com/vi/XdbeV8Bd_28/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Induction motor Numerical 1</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/XdbeV8Bd_28"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 6 induction-motor emf, rotor types, slip, equivalent circuit and power flow induction motor numerical 2 https://www.youtube.com/watch?v=g90staowmwc g90staowmwc" data-lecture-module="6" data-lecture-topic="Induction-motor EMF, rotor types, slip, equivalent circuit and power flow">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/G90sTaOWMWc" aria-label="Play Induction motor Numerical 2">
+              <img src="https://img.youtube.com/vi/G90sTaOWMWc/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Induction motor Numerical 2</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/G90sTaOWMWc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article></div>
       </article>
       <article class="home-lecture-topic">
         <div class="home-lecture-topic-header">
-          <span class="week-label">Week 12</span>
+          <span class="module-label">Module 7</span>
           <span class="topic-video-count">4 lectures</span>
         </div>
         <h3>Induction-motor tests and torque/speed characteristics</h3>
         <div class="home-lecture-grid">
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics torque speed characteristics part 1 https://youtu.be/uz3hvgbyyoi uz3hvgbyyoi" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+          <article class="home-lecture-card" data-lecture-search="module 7 induction-motor tests and torque/speed characteristics torque speed characteristics part 1 https://youtu.be/uz3hvgbyyoi uz3hvgbyyoi" data-lecture-module="7" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/uZ3HvgbYyoI" aria-label="Play Torque Speed Characteristics Part 1">
               <img src="https://img.youtube.com/vi/uZ3HvgbYyoI/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1759,7 +1818,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Torque Speed Characteristics Part 1</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/uZ3HvgbYyoI"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics torque and speed characteristics part 2 https://youtu.be/pnfddfgmkxw pnfddfgmkxw" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+          <article class="home-lecture-card" data-lecture-search="module 7 induction-motor tests and torque/speed characteristics torque and speed characteristics part 2 https://youtu.be/pnfddfgmkxw pnfddfgmkxw" data-lecture-module="7" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/PNFDDfgmkXw" aria-label="Play Torque and Speed Characteristics part 2">
               <img src="https://img.youtube.com/vi/PNFDDfgmkXw/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1767,7 +1826,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Torque and Speed Characteristics part 2</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/PNFDDfgmkXw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics maximum torque equation derivation https://youtu.be/0bagd_ydl58 0bagd_ydl58" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+          <article class="home-lecture-card" data-lecture-search="module 7 induction-motor tests and torque/speed characteristics maximum torque equation derivation https://youtu.be/0bagd_ydl58 0bagd_ydl58" data-lecture-module="7" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/0bagD_YDL58" aria-label="Play Maximum Torque Equation Derivation">
               <img src="https://img.youtube.com/vi/0bagD_YDL58/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
@@ -1775,13 +1834,53 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
             <h4>Maximum Torque Equation Derivation</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/0bagD_YDL58"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article>
-          <article class="home-lecture-card" data-lecture-search="week 12 induction-motor tests and torque/speed characteristics numerical 3 on torque and speed characteristics https://youtu.be/ndllazgrxqe ndllazgrxqe" data-lecture-week="12" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
+          <article class="home-lecture-card" data-lecture-search="module 7 induction-motor tests and torque/speed characteristics numerical 3 on torque and speed characteristics https://youtu.be/ndllazgrxqe ndllazgrxqe" data-lecture-module="7" data-lecture-topic="Induction-motor tests and torque/speed characteristics">
             <a class="home-lecture-thumbnail" href="video-lectures.html#video/nDLLAzgrxQE" aria-label="Play Numerical 3 on Torque and Speed Characteristics">
               <img src="https://img.youtube.com/vi/nDLLAzgrxQE/hqdefault.jpg" alt="" loading="lazy" decoding="async">
               <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
             </a>
             <h4>Numerical 3 on Torque and Speed Characteristics</h4>
             <a class="home-lecture-button" href="video-lectures.html#video/nDLLAzgrxQE"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article></div>
+      </article>
+      <article class="home-lecture-topic">
+        <div class="home-lecture-topic-header">
+          <span class="module-label">Module 8</span>
+          <span class="topic-video-count">4 lectures</span>
+        </div>
+        <h3>Synchronous Generator</h3>
+        <div class="home-lecture-grid">
+          <article class="home-lecture-card" data-lecture-search="module 8 synchronous generator synchronous generator lecture 1 https://www.youtube.com/watch?v=kntmxy4h4x8 kntmxy4h4x8" data-lecture-module="8" data-lecture-topic="Synchronous Generator">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/kNtMxY4h4x8" aria-label="Play Synchronous Generator Lecture 1">
+              <img src="https://img.youtube.com/vi/kNtMxY4h4x8/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Synchronous Generator Lecture 1</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/kNtMxY4h4x8"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 8 synchronous generator synchronous generator leccture 2 http://youtube.com/watch?v=-amkxcoz_ok -amkxcoz_ok" data-lecture-module="8" data-lecture-topic="Synchronous Generator">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/-aMkXcoZ_ok" aria-label="Play Synchronous Generator Leccture 2">
+              <img src="https://img.youtube.com/vi/-aMkXcoZ_ok/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Synchronous Generator Leccture 2</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/-aMkXcoZ_ok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 8 synchronous generator synchronous generator lecture 3 https://www.youtube.com/watch?v=ge4bjtiunws ge4bjtiunws" data-lecture-module="8" data-lecture-topic="Synchronous Generator">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/gE4bjtIUnWs" aria-label="Play Synchronous Generator Lecture 3">
+              <img src="https://img.youtube.com/vi/gE4bjtIUnWs/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Synchronous Generator Lecture 3</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/gE4bjtIUnWs"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
+          </article>
+          <article class="home-lecture-card" data-lecture-search="module 8 synchronous generator synchronous generator lecture 4 https://www.youtube.com/watch?v=aivrff_91iu aivrff_91iu" data-lecture-module="8" data-lecture-topic="Synchronous Generator">
+            <a class="home-lecture-thumbnail" href="video-lectures.html#video/aivRFF_91IU" aria-label="Play Synchronous Generator Lecture 4">
+              <img src="https://img.youtube.com/vi/aivRFF_91IU/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+              <span class="home-lecture-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5z"></path></svg></span>
+            </a>
+            <h4>Synchronous Generator Lecture 4</h4>
+            <a class="home-lecture-button" href="video-lectures.html#video/aivRFF_91IU"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"></path></svg>Play Lecture</a>
           </article></div>
       </article>
     </div>
@@ -1791,7 +1890,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
 (function(){
   var returnKey='emfVideoListReturn';
   var search=document.getElementById('home-video-search');
-  var weekFilter=document.getElementById('home-video-week');
+  var moduleFilter=document.getElementById('home-video-module');
   var topicFilter=document.getElementById('home-video-topic');
   var reset=document.getElementById('home-video-reset');
   var resultCount=document.getElementById('home-video-result-count');
@@ -1799,15 +1898,15 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
     if(sessionStorage.getItem(returnKey)!=='1') return;
     sessionStorage.removeItem(returnKey);
     var savedQuery=sessionStorage.getItem('emfVideoListSearch')||'';
-    var savedWeek=sessionStorage.getItem('emfVideoListWeek')||'';
+    var savedModule=sessionStorage.getItem('emfVideoListModule')||'';
     var savedTopic=sessionStorage.getItem('emfVideoListTopic')||'';
     var savedScroll=Number(sessionStorage.getItem('emfVideoListScrollY'));
     sessionStorage.removeItem('emfVideoListSearch');
-    sessionStorage.removeItem('emfVideoListWeek');
+    sessionStorage.removeItem('emfVideoListModule');
     sessionStorage.removeItem('emfVideoListTopic');
     sessionStorage.removeItem('emfVideoListScrollY');
     search.value=savedQuery;
-    weekFilter.value=savedWeek;
+    moduleFilter.value=savedModule;
     topicFilter.value=savedTopic;
     search.dispatchEvent(new Event('input'));
     if(Number.isFinite(savedScroll)) window.requestAnimationFrame(function(){window.scrollTo(0,savedScroll);});
@@ -1816,7 +1915,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
     link.addEventListener('click',function(){
       sessionStorage.setItem(returnKey,'1');
       sessionStorage.setItem('emfVideoListSearch',search.value);
-      sessionStorage.setItem('emfVideoListWeek',weekFilter.value);
+      sessionStorage.setItem('emfVideoListModule',moduleFilter.value);
       sessionStorage.setItem('emfVideoListTopic',topicFilter.value);
       sessionStorage.setItem('emfVideoListScrollY',String(window.scrollY));
     });
@@ -1832,7 +1931,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
       var visibleInTopic=0;
       cards.forEach(function(card){
         var visible=(!query || card.dataset.lectureSearch.indexOf(query)!==-1) &&
-          (!weekFilter.value || card.dataset.lectureWeek===weekFilter.value) &&
+          (!moduleFilter.value || card.dataset.lectureModule===moduleFilter.value) &&
           (!topicFilter.value || card.dataset.lectureTopic===topicFilter.value);
         card.hidden=!visible;
         if(visible) visibleInTopic++;
@@ -1844,11 +1943,11 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
     resultCount.textContent=visibleCount+' lecture'+(visibleCount===1?'':'s')+' found';
   }
   search.addEventListener('input',updateLectureResults);
-  weekFilter.addEventListener('change',updateLectureResults);
+  moduleFilter.addEventListener('change',updateLectureResults);
   topicFilter.addEventListener('change',updateLectureResults);
   reset.addEventListener('click',function(){
     search.value='';
-    weekFilter.value='';
+    moduleFilter.value='';
     topicFilter.value='';
     updateLectureResults();
     search.focus();
@@ -1856,6 +1955,15 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
   updateLectureResults();
 })();
 </script>
+
+<section class="acknowledgements-section" aria-labelledby="website-acknowledgements-heading">
+  <div class="wrap">
+    <article class="acknowledgements-card">
+      <h2 id="website-acknowledgements-heading">Acknowledgements</h2>
+      <p>This website was designed and developed by <a href="https://www.linkedin.com/in/muhammad-rusab-chaudhary-494a0038a" target="_blank" rel="noopener noreferrer">Muhammad Rusab Chaudhary</a>, an Electrical Engineering student at UET Lahore. Special thanks to Sir Salim Butt for his valuable guidance and support throughout the development of this project.</p>
+    </article>
+  </div>
+</section>
 
 <footer class="site-footer">
   <div class="wrap footer-wrap">
@@ -1875,7 +1983,7 @@ body.dark-mode .ch-info-note { color: var(--cyan-accent); }
     </div>
   </div>
   <div class="wrap footer-sub">
-    <p>© Dr. Muhammad Salim Butt · University of Engineering &amp; Technology · Built as a teaching aid for <em>Electric Machinery Fundamentals</em> (S. J. Chapman). Stand-alone chapter modules are in the <code>chapters/</code> directory.</p>
+    <p>© Dr. Muhammad Salim Butt · University of Engineering &amp; Technology · Built as a teaching aid for <em>Electric Machinery Fundamentals</em> (S. J. Chapman).</p>
   </div>
 </footer>
 
