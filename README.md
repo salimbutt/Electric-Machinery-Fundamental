@@ -1,6 +1,6 @@
-# Electric Machinery Fundamentals — Interactive Course
+﻿# Electric Machinery Fundamentals — Interactive Course
 
-A fully client-side course website built around Chapman's *Electric Machinery Fundamentals* (4th ed.):
+A fully client-side course website built around Chapman's *Electric Machinery Fundamentals* (5th ed.):
 eight chapters of live simulations, animated phasor diagrams, step-by-step derivations and worked examples.
 
 **Author:** Dr. Muhammad Salim Butt · University of Engineering & Technology · salimbutt@uet.edu.pk
@@ -78,3 +78,4 @@ This keeps the independent chapter apps separate and preserves their behavior. T
 
 Teaching material © Dr. Muhammad Salim Butt. Figures, derivations and simulations are original;
 equation numbers follow Chapman's text for ease of cross-reference.
+
